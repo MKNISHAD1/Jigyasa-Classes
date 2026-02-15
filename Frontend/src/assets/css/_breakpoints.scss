@@ -1,0 +1,183 @@
+// global Color variables 
+$primary-color:#1363b8;
+$secondary-color:#ebf1f5;
+$optional-color:#f7f9fc;
+$third-color:#162521;
+$forth-color:#047ba7;
+$fifth-color:#FFFFFF;
+
+
+
+/* Extra small devices (phones) */
+@media (max-width: 575.98px) {
+  .line { background-color: red; }
+  ////////////////////////////////          Exam Section         ////////////////////////////////////
+  .Exam-Section{
+
+    .exampic {
+      display: block;
+      width: 100%;
+    }
+    .exams-block{
+      display: none;     
+    }
+  }
+
+  ////////////////////////////////     Latest Course Section     ////////////////////////////////////
+  
+}
+
+
+
+
+/* Small devices (large phones) */
+@media (min-width: 576px) and (max-width: 767.98px) {
+  .line { background-color: green; }
+
+  ////////////////////////////////          Exam Section         ////////////////////////////////////
+  .Exam-Section{
+    .exampic {
+      display: none;
+    }
+    .exams-block{
+      padding: 0 30px;
+      img{
+        width: 90px;
+        height: 90px;
+      }
+      h3{
+        padding-top: 10px;
+        font-size: medium;
+      }      
+    }
+  }
+
+}
+
+
+
+
+
+/* Medium devices (tablets) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .line { background-color: yellow; }
+
+  ////////////////////////////////          Exam Section         ////////////////////////////////////
+  .Exam-Section{
+    .exampic {
+      display: none;
+    }
+    .exams-block{
+      padding: 0 50px;
+      img{
+        width: 90px;
+        height: 90px;
+      }
+      h3{
+        font-weight: 500;
+        color: $third-color ;
+        padding-top: 10px;
+        font-size: large;
+      }      
+    }
+  }
+}
+
+
+
+
+
+/* Large devices (laptops) */
+@media (min-width: 992px) and (max-width: 1199.98px) {
+  .line { background-color: purple; }
+  
+  .Menu_Items_Gap {
+    gap: 0 !important;
+    font-size: 0.9rem;
+  }
+  ////////////////////////////////          Exam Section         ////////////////////////////////////
+  .Exam-Section{
+    .exampic {
+      display: none;
+    }
+    .exams-block{
+      padding: 0 30px;
+      img{
+        width: 100px;
+        height: 100px;
+      }
+      h3{
+        padding-top: 10px;
+        font-size: x-large;
+      }      
+    }
+  }
+
+  ////////////////////////////////     Latest Course Section     ////////////////////////////////////
+
+}
+
+
+
+
+
+/* Extra large devices (desktops) */
+@media (min-width: 1200px) and (max-width: 1399.98px) {
+  .line { background-color: blue; }
+
+  .Menu_Items_Gap {
+    gap: 1rem !important;
+  }
+  
+  ////////////////////////////////          Exam Section         ////////////////////////////////////
+  .Exam-Section{
+    .exampic {
+      display: none;
+    }
+    .exams-block{
+
+      padding: 0 40px;
+      img{
+        width: 120px;
+        height: 120px;
+      }
+      h3{
+        padding-top: 10px;
+        font-size: 1.1rem;
+      }      
+    }
+  }
+}
+
+
+
+
+
+/* XXL devices (large screens) */
+@media (min-width: 1400px) {
+  .line { background-color: pink; }
+
+  .Menu_Items_Gap {
+    gap: 3rem !important;
+  }
+
+  ////////////////////////////////          Exam Section         ////////////////////////////////////
+  .Exam-Section{
+    .exampic {
+      display: none;
+    }
+    .exams-block{
+
+      padding: 0 60px;
+      img{
+        width: 120px;
+        height: 120px;
+      }
+      h3{
+        padding-top: 10px;
+        font-size: 1.3rem;
+      }      
+    }
+  }
+  
+}

@@ -1,0 +1,29 @@
+{
+    "header": {
+      "home": "Home",
+      "about": "About Us",
+      "services": "Services",
+      "projects": "Projects",
+      "signup": "Signup",
+      "login": "Login"
+    },
+
+    "Logo":{
+      "title" : "JIGYASA CLASSES",
+      "tagline" : "Learn • Grow • Succeed"
+    },
+
+    "footer": {
+      "rights": "All rights reserved © Jigyasa Classes"
+    },
+
+    "home": {
+      "welcome": "Welcome to Jigyasa Classes",
+      "tagline": "Learn • Grow • Succeed"
+    },
+
+    "about": {
+      "title": "About Us",
+      "description": "We help students learn, grow, and succeed."
+    }
+}

@@ -1,0 +1,116 @@
+/* NavbarOffcanvas.css */
+
+/* General dropdown menu box style */
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1000;
+  min-width: 12rem;
+  padding: 0.5rem 0;
+  margin-top: 0.25rem;
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 0.5rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-hover:hover > .dropdown-menu {
+  display: block;
+}
+
+/* Submenu inside submenu */
+.dropdown-submenu {
+  top: 0;
+  left: 100%;
+  margin-left: 0.1rem;
+  margin-top: -0.4rem;
+  position: absolute;
+  border-radius: 0.5rem;
+  background-color: #f8f9fa;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+  white-space: nowrap;
+  min-width: 12rem;
+  border: 1px solid #dee2e6;
+}
+
+/* Hover styles for dropdown items */
+.dropdown-item:hover {
+  background-color: #e9ecef;
+  color: #000;
+}
+
+/* Show indicator arrows */
+.dropdown-toggle::after {
+  display: none;
+}
+
+.float-end{
+  padding-top: 6px;
+}
+
+.small, small {
+     font-size: 1.2em;
+}
+.arrow {
+ 
+  float: right;
+  padding-top: 6px;
+}
+
+/* Nested offcanvas menu */
+.nested-menu {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.nested-menu li {
+  border-bottom: 1px solid #ddd;
+  padding: 0.5rem 0.75rem;
+}
+
+.nested-menu li:last-child {
+  border-bottom: none;
+}
+
+.nested-title {
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nested-link {
+  text-decoration: none;
+  color: #000;
+  display: block;
+}
+
+.nested-link:hover {
+  text-decoration: underline;
+  color: #0d6efd;
+}
+
+/* Responsive dropdown direction handling */
+@media (max-width: 767.98px) {
+  .dropdown-menu,
+  .dropdown-submenu {
+    position: static;
+    box-shadow: none;
+    border: none;
+    background: none;
+    margin: 0;
+  }
+
+  .dropdown-hover:hover > .dropdown-menu {
+    display: none;
+  }
+}
+
+/* Optional: smoother transitions (can be customized further) */
+.dropdown-menu,
+.dropdown-submenu {
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}

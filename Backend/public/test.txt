@@ -1,0 +1,13 @@
+
+// for admin role token test
+{
+    "status": true,
+    "token": "15|7wu2kSng5r34W8j03x55TsC0uAA0LMr4iP9krB3R034f8eeb",
+    "id": 7
+}
+
+// for  mormal student 
+
+14|1WxjB3jsa6YTLKYYxSyQFNmvmOWnmIV0szBkWNwZe2972d67
+
+app\Http\Kernel.php

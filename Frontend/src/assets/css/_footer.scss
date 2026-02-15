@@ -1,0 +1,60 @@
+
+
+// global variables 
+$primary-color:#1363b8;
+$secondary-color:#ebf1f5;
+$third-color:#162521;
+$forth-color:#047ba7;
+$fifth-color:#FFFFFF;
+
+
+.Footer_Section{
+    background-color: $secondary-color;
+    padding: 40px 15px;
+
+    .Brand_Logo {
+        border-radius: 50%;
+        width: 75px;
+        height: 75px;
+    }
+    .Brand_Name {
+        color: $primary-color;
+        padding: 15px 0 5px 10px;
+        width: max-content;
+        text-transform: uppercase;
+        font-weight: 500;
+        margin: 0;
+        font-size: 1.2rem;
+        text-align: center;
+    }
+
+    .Brand_Tagline{
+        color: $third-color;
+        padding-left: 35px;
+        text-transform: capitalize;
+        font-weight: 400;
+        font-size: 10px;
+    }
+
+    h3 {
+        padding: 0 3rem;
+    }
+    ul li {
+        text-decoration: none;
+        color: $third-color;
+        list-style: none;
+        text-transform: capitalize;
+        padding: 5px 20px;
+    }
+    .nav-link:hover{
+        padding-left: 10px;
+        color: $primary-color;
+        font-weight: bold;
+    }
+
+}
+
+.Footer_Label{
+    background-color: $forth-color;
+    padding: 8px;
+}

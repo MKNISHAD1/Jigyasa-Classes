@@ -1,0 +1,492 @@
+///////////////////////////  MY ROUTES CODING (App.jsx) \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+<BrowserRouter>
+    <Routes>
+      <Route path="/" element= {<Home />}/>
+      <Route path="/about" element= {<About />}/>
+      <Route path="/register" element= {<Registration />}/>
+      <Route path="/login" element={<Login/>}/>
+      <Route path="/forgot-password" element={<Forgotpassword/>}/>
+      <Route path="/reset-password" element={<Resetpassword/>}/>
+      {/* Email Verification Link  */}
+      <Route path="/email-verified" element={<EmailVerified />} />
+
+      <Route path="/unauthorized" element={<OffcanvasNavbar/>}/>
+      
+      {/* Dashboard Page  */}
+          <Route path='/dash' element={
+            <RequireAuth>
+              <Dashboard />
+            </RequireAuth>
+            } />
+
+            {/* View profile page  */}
+            <Route path='/viewprofile' element={
+            <RequireAuth>
+              <Profile />
+            </RequireAuth>
+            } />
+
+            {/* Change Password page  */}
+            <Route path='/changepassword' element={
+            <RequireAuth>
+              <Changepassword />
+            </RequireAuth>
+            } />
+
+          {/* Testing rolebased redirect  */}
+            <Route path='/admin' element={
+            <RequireAuth allowedRoles={["admin"]}>
+              <Test />
+            </RequireAuth>
+            } />
+
+            {/* Manage Users by admin only  */}
+            <Route path='/admin/users' element={
+            <RequireAuth allowedRoles={["admin"]}>
+              <Showusers />
+            </RequireAuth>
+            } />
+
+          {/* Create Users by admin only  */}
+            <Route path='/admin/users/createuser' element={
+            <RequireAuth allowedRoles={["admin"]}>
+              <Createuser />
+            </RequireAuth>
+            } />
+
+          {/* Edit Users by admin only  */}
+            <Route path='/admin/users/edituser/:id' element={
+            <RequireAuth allowedRoles={["admin"]}>
+              <Edituser />
+            </RequireAuth>
+            } />
+
+          <Route path='/admin/users/deletedusers' element={
+            <RequireAuth allowedRoles={["admin"]}>
+              <Deletedusers />
+            </RequireAuth>
+            } />
+
+
+    </Routes>
+    </BrowserRouter>
+    
+{/* Toaster */}
+    <ToastContainer
+    position="top-center"
+    />
+
+---------------------------------------------------------------------------------------------------------------------
+
+Auth.jsx
+
+
+// My code 
+// import { Children, createContext, useState } from "react";
+
+// export const AuthContext = createContext(null);
+
+// export const AuthProvider= ({children}) => {
+//     const userInfo = localStorage.getItem('userInfo')
+//     const[user,setUser] = useState(userInfo);
+
+//     const login = (user) =>{
+//         setUser(user)
+//     }
+
+//     const logout = () =>{
+//         localStorage.removeItem('userInfo');
+//         setUser(null)
+//     }
+
+//         return (
+//         <AuthContext.Provider value={{
+//             user,
+//             login,
+//             logout
+//         }}>
+//             {children}
+//         </AuthContext.Provider>
+//     )
+// }
+
+// til here 
+
+========================================= updated auth.jsx =============================
+
+// New code testing\\
+
+import { createContext, useState, useEffect } from "react";
+
+export const AuthContext = createContext(null);
+
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(() => {
+    const savedUser = localStorage.getItem("userInfo");
+    return savedUser ? JSON.parse(savedUser) : null;
+  });
+
+  // Sync localStorage when user changes
+  useEffect(() => {
+    if (user) {
+      localStorage.setItem("userInfo", JSON.stringify(user));
+    } else {
+      localStorage.removeItem("userInfo");
+    }
+  }, [user]);
+
+  const login = (userData) => {
+    setUser(userData); // userData should include role
+  };
+
+  const logout = () => {
+    setUser(null);
+  };
+
+  // Helper: check if user has one of the allowed roles
+  const hasRole = (allowedRoles) => {
+    if (!user || !user.role) return false;
+    return allowedRoles.includes(user.role);
+  };
+
+    // Listen for localStorage changes across tabs
+    useEffect(() => {
+      const handleStorageChange = () => {
+      const saved = localStorage.getItem("userInfo");
+      setUser(saved ? JSON.parse(saved) : null);
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+      return () => {
+        window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
+
+
+  return (
+    <AuthContext.Provider
+      value={{
+        user,
+        login,
+        logout,
+        hasRole,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
+};
+
+
+/////////////////////////////////////// API>PHP ///////////////////////////////////
+
+<?php
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Auth\Events\Verified;
+use App\Http\Controllers\AuthenticationController;
+use App\Http\Controllers\RegistrationController;
+use App\Http\Controllers\admin\DashboardController;
+use App\Http\Controllers\admin\UserProfileController;
+use App\Http\Controllers\admin\UserManagementController;
+use App\Models\User;
+
+// Route::get('/user', function (Request $request) {
+//     return $request->user();
+// })->middleware('auth:sanctum');
+
+
+// Pubically accessable no need to login 
+Route::post('login',[AuthenticationController::class,'authenticate']); // earlier link = authuser, nowlink = login
+Route::post('register',[RegistrationController::class,'register']);
+
+
+
+// Check email uniqueness
+Route::get('/check-email', function(Request $request) {
+    $email = $request->query('email');
+    $id = $request->query('id'); // optional user id
+    $query = User::where('email', $email);
+    if ($id) {
+        $query->where('id', '!=', $id);
+     }
+    $exists = $query->exists();
+    return response()->json(['exists' => $exists]);
+});
+
+// Check username uniqueness
+Route::get('/check-username', function(Request $request) {
+    $username = $request->query('username');
+    $id = $request->query('id'); // optional user id
+    $query = User::where('username', $username);
+    if ($id) {
+        $query->where('id', '!=', $id);
+    }
+    $exists = $query->exists();
+    return response()->json(['exists' => $exists]);
+});
+
+// Get the current loggedin User
+Route::middleware('auth:sanctum')->get('user', function (Request $request) {
+    $user = $request->user();
+
+    return response()->json([
+        'id' => $user->id,
+        'name' => $user->name,
+        'email' => $user->email,
+        'roles' => $user->getRoleNames()->toArray(), // array like ["admin"] or ["superadmin]
+        'email_verified_at' => $user->email_verified_at,
+        'is_suspended' => (bool) $user->is_suspended,
+        'suspended_until' => $user->suspended_until,
+        'profile_pic' => $user->profile_pic
+    ]);
+});
+
+
+// Forgt passward and reset password 
+Route::post('forgot-password', [UserProfileController::class, 'forgotPassword']);
+Route::post('reset-password-link', [UserProfileController::class, 'resetPasswordlink']);
+Route::post('reset-password-otp', [UserProfileController::class, 'resetPasswordWithOtp']);
+
+
+
+// 1) Handle the verification link clicked from email (no auth needed, just signed)
+Route::get('verify-email/{id}/{hash}', function (Request $request, $id, $hash) {
+    $user = User::findOrFail($id);
+
+    // Validate signature and email hash
+    if (! $request->hasValidSignature()) {
+        return redirect(config('app.frontend_url', env('FRONTEND_URL')).'/email-verified?status=invalid-signature');
+    }
+    if (! hash_equals(sha1($user->getEmailForVerification()), $hash)) {
+        return redirect(config('app.frontend_url', env('FRONTEND_URL')).'/email-verified?status=invalid-hash');
+    }
+
+    // Already verified?
+    if ($user->hasVerifiedEmail()) {
+        return redirect(config('app.frontend_url', env('FRONTEND_URL')).'/email-verified?status=already-verified');
+    }
+
+    // Mark verified
+    $user->markEmailAsVerified();
+    event(new Verified($user));
+
+    return redirect(config('app.frontend_url', env('FRONTEND_URL')).'/email-verified?status=verified');
+})->name('verification.verify')->middleware('signed');
+
+// 2) Resend verification email (must be logged in but NOT verified)
+Route::post('email/verification-notification', function (Request $request) {
+    $user = $request->user();
+
+    if ($user->hasVerifiedEmail()) {
+        return response()->json([
+            'status' => false,
+            'message' => 'Email already verified.'
+        ], 400);
+    }
+
+    // This uses Laravel’s built-in notification and generates a signed URL
+    $user->sendEmailVerificationNotification();
+
+    return response()->json([
+        'status' => true,
+        'message' => 'Verification link sent!'
+    ]);
+})->middleware('auth:sanctum');
+
+//2 Factor Authetication Route 
+Route::post('2fa-otp-verify',[AuthenticationController::class,'otpverify']);
+
+
+//Protected Routes only logged in user can visit
+Route::group(['middleware'=>['auth:sanctum','suspenduser']],function(){
+
+    //logging in and logout the user by api
+    Route::get('dashurl',[DashboardController::class,'index']);
+    Route::get('logout',[AuthenticationController::class,'logout']);
+
+    // Profile pages for  Student and  Teachers
+    Route::get('viewprofile', [UserProfileController::class, 'viewProfile']);
+    Route::put('updateprofile', [UserProfileController::class, 'updateProfile']);
+    Route::put('changepassword', [UserProfileController::class, 'changePassword']);
+
+    // SUspension status
+    Route::get('suspension-status', [UserProfileController::class, 'suspensionStatus']);
+
+});
+
+//Role based for admin
+Route::middleware(['auth:sanctum','role:admin|moderator|super_admin','2fa'])->group(function () {
+    Route::get('get-users', [UserManagementController::class, 'alluser']); // This will return all users data 
+    Route::post('add-user', [UserManagementController::class, 'newuser']); // This will create new user
+    Route::get('view-user/{id}', [UserManagementController::class, 'viewuser']); // This will return user data by User_Id
+    Route::put('update-user/{id}', [UserManagementController::class, 'updateuser']); // This will Update user by User_Id
+    Route::delete('delete-user/{id}', [UserManagementController::class, 'deleteuser']); // This will Update user by User_Id
+    Route::get('deleted-users', [UserManagementController::class, 'trashedUsers']); // This will Update user by User_Id
+    Route::post('user-restore/{id}', [UserManagementController::class, 'restoreUser']); // This will Update user by User_Id
+    Route::delete('user-force-delete/{id}', [UserManagementController::class, 'forceDeleteUser']); // This will Update user by User_Id    
+    Route::post('user-suspended/{id}', [UserManagementController::class, 'suspendUser']); // This will suspend user by User_Id  
+    Route::get("suspended-users-list", [UserManagementController::class, "suspendedUsersList"]); // This will return Lis of suspendeed Users
+    Route::post('user-unsuspended/{id}', [UserManagementController::class, 'unsuspendUser']); // This will remove suspention on user by User_Id  
+});
+
+
+///////////////////////////////////////////////////////////// 26/12 - benefits section 
+
+<section className="benefits-layout" >
+  <div className="gradi2"  style={myStyle1}>
+    
+    <div className="benefits-header text-center mb-5">
+      <h2>Benefits of Learning with Jigyasa Classes</h2>
+      <p>Your learning is simplified with us, designed for serious aspirants</p>
+    </div>
+
+    <div className="benefits-grid">
+
+      {/* LEFT */}
+      <div className="benefits-col left">
+        <div className="benefit-card">
+          <h3>Learn Anytime, Anywhere</h3>
+          <p>
+            Access your courses on mobile or desktop and study at your own pace
+            without time or location barriers.
+          </p>
+        </div>
+
+        <div className="benefit-card">
+          <h3>Exam-Focused & Practical Approach</h3>
+          <p>
+            Courses are designed to match real exam patterns with clear
+            explanations and step-by-step guidance.
+          </p>
+        </div>
+      </div>
+
+      {/* CENTER */}
+      <div className="benefits-col center">
+        <div className="benefit-card highlight">
+          <h3>One Platform for Multiple Exams</h3>
+          <p>
+            Prepare for UPSC, SSC, JEE, Banking and more — all from one trusted
+            learning platform.
+          </p>
+        </div>
+
+        <img src={bfs3} alt="Learning Illustration" />
+      </div>
+
+      {/* RIGHT */}
+      <div className="benefits-col right">
+        <div className="benefit-card">
+          <h3>Flexible & Pressure-Free Learning</h3>
+          <p>
+            Recorded lessons and structured modules allow revision anytime
+            without stress.
+          </p>
+        </div>
+
+        <div className="benefit-card">
+          <h3>Interactive & Easy-to-Follow Content</h3>
+          <p>
+            Engaging lessons, materials and practical examples make learning
+            simple and effective.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+.css
+
+// Ground 2
+
+benefits-layout {
+
+  padding: 80px 0;
+  // background: linear-gradient(180deg, #f8fbff 0%, #ffffff 60%);
+}
+
+.benefits-header h2 {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.benefits-header p {
+  color: #6b7280;
+  max-width: 620px;
+  margin: 0 auto;
+}
+
+.benefits-grid {
+  display: grid;
+  grid-template-columns: 1fr 340px 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+.benefits-col {
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+}
+
+.benefit-card {
+  background: #ffffff;
+  padding: 22px;
+  border-radius: 14px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+}
+
+.benefit-card h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.benefit-card p {
+  font-size: 0.92rem;
+  color: #6b7280;
+  line-height: 1.6;
+}
+
+.benefit-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* Center highlight */
+.benefit-card.highlight {
+  border: 2px solid #2563eb;
+  background: #f0f6ff;
+}
+
+.benefits-col.center img {
+  max-width: 100%;
+  margin-top: 10px;
+  filter: drop-shadow(0 25px 35px rgba(0, 0, 0, 0.08));
+}
+
+/* Mobile */
+@media (max-width: 992px) {
+  .benefits-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .benefits-col.center {
+    order: -1;
+    align-items: center;
+    text-align: center;
+  }
+
+  .benefits-col.center img {
+    max-width: 260px;
+  }
+}
+

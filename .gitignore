@@ -1,0 +1,11 @@
+Frontend/node_modules/
+Frontend/dist/
+Frontend/.env
+
+Backend/vendor/
+Backend/.env
+Backend/storage/logs/
+
+.DS_Store
+Thumbs.db
+*.log
