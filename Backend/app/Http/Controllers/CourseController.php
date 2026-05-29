@@ -145,6 +145,16 @@ class CourseController extends Controller
             'title_hi'         => 'nullable|string|max:255',
             'description_en'   => 'required|string',
             'description_hi'   => 'nullable|string',
+
+            'language' => 'required|in:Hindi,English,Both',
+            'difficulty_level' => 'required|in:Beginner,Intermediate,Advanced,All Levels',
+
+            'highlights' => 'nullable|array',
+            'highlights.*' => 'string|max:255',
+
+            'highlights_hi' => 'nullable|array',
+            'highlights_hi.*' => 'string|max:255',
+
             'category_id'   => 'required|exists:categories,id',
             'subcategory_id'=> 'nullable|exists:subcategories,id',
             'price'         => 'nullable|numeric|min:0',
@@ -167,16 +177,21 @@ class CourseController extends Controller
             // 'thumbnail_id' => $thumbnailId,
             'created_by'   => $user->id,
             'teacher_id' => $request->teacher_id ?? $user->id,
+
+            'language' => $request->language,
+            'difficulty_level' => $request->difficulty_level,
+            'highlights' => $request->highlights,
+            'rating' => 0,
         ]);
 
         // Save translations
         $course->saveTranslation('title', 'hi', $request->title_hi);
         $course->saveTranslation('description', 'hi', $request->description_hi);
-
+        $course->saveTranslation('highlights', 'hi', $request->highlights_hi);
 
         // Auto-generate Hindi translations for empty
-        if (!$request->title_hi || !$request->description_hi) {
-            $course->translateFields(['title', 'description'], 'hi');
+        if (!$request->title_hi || !$request->description_hi || !$request->highlights_hi) {
+            $course->translateFields(['title', 'description','highlights'], 'hi');
         }
 
 
@@ -263,29 +278,46 @@ class CourseController extends Controller
             'thumbnail'   => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'teacher_id' => 'sometimes|exists:users,id',
 
+            'language' => 'sometimes|in:Hindi,English,Both',
+
+            'difficulty_level' => 'sometimes|in:Beginner,Intermediate,Advanced,All Levels',
+
+            'highlights' => 'nullable|array',
+            'highlights.*' => 'string|max:255',
+
+            'highlights_hi' => 'nullable|array',
+            'highlights_hi.*' => 'string|max:255',
+
         ]);
 
 
         // -------------------- 2. LOAD OLD VALUES ------------------
         $oldTitleEn = $course->title;
         $oldDescEn  = $course->description;
+        $oldHighlightsEn = $course->highlights ?? [];
 
         $translationHi = $course->translations()->where('locale', 'hi')->first();
-        $oldTitleHi = $translationHi->title ?? null;
-        $oldDescHi  = $translationHi->description ?? null;
+        $oldTitleHi = $translationHi?->title ?? null;
+        $oldDescHi  = $translationHi?->description ?? null;
+        $oldHighlightsHi = $translationHi?->highlights ?? [];
 
 
         // -------------------- 3. NEW VALUES -----------------------
         $newTitleEn = $request->title_en;
         $newDescEn  = $request->description_en;
+        $newHighlightsEn = $request->highlights;
 
         $newTitleHi = $request->title_hi;
         $newDescHi  = $request->description_hi;
+        $newHighlightsHi = $request->highlights_hi;
 
 
         // -------------------- 4. DETECT ENGLISH CHANGES -----------
         $titleEnChanged = $request->has('title_en') && $newTitleEn !== $oldTitleEn;
         $descEnChanged  = $request->has('description_en') && $newDescEn !== $oldDescEn;
+        $highlightsEnChanged =
+            $request->has('highlights') &&
+            $newHighlightsEn != $oldHighlightsEn;
 
 
         // -------------------- 5. DETECT REAL MANUAL HINDI INPUT ---
@@ -301,6 +333,10 @@ class CourseController extends Controller
             $newDescHi !== '' &&
             $newDescHi !== $oldDescHi;
 
+        $highlightsHiManuallyChanged =
+            $request->has('highlights_hi') &&
+            $newHighlightsHi != $oldHighlightsHi;
+
 
         // -------------------- 6. SAVE MANUAL HINDI ----------------
         if ($titleHiManuallyChanged) {
@@ -311,17 +347,56 @@ class CourseController extends Controller
             $course->saveTranslation('description', 'hi', $newDescHi);
         }
 
+        if ($highlightsHiManuallyChanged) {
+            $course->saveTranslation(
+                'highlights',
+                'hi',
+                $newHighlightsHi
+            );
+        }
 
         // -------------------- 7. UPDATE MAIN COURSE FIELDS --------
         $course->update([
-            'title'          => $newTitleEn,
-            'description'    => $newDescEn,
-            'category_id'    => $request->category_id,
-            'subcategory_id' => $request->subcategory_id,
-            'price'          => $request->price,
-            'status'         => $request->status,
-            'published_at'   => $request->status === 'published' ? now() : null,
-            'teacher_id'     => $request->teacher_id ?? $course->teacher_id,
+            // 'title'          => $newTitleEn,
+            // 'description'    => $newDescEn,
+            // 'category_id'    => $request->category_id,
+            // 'subcategory_id' => $request->subcategory_id,
+            // 'price'          => $request->price,
+            // 'status'         => $request->status,
+            // 'published_at'   => $request->status === 'published' ? now() : null,
+            // 'teacher_id'     => $request->teacher_id ?? $course->teacher_id,
+            // 'language' => $request->language,
+            // 'difficulty_level' => $request->difficulty_level,
+            // 'highlights' => $request->highlights,
+
+                'title' => $request->title_en ?? $course->title,
+
+                'description' => $request->description_en ?? $course->description,
+
+                'category_id' => $request->category_id ?? $course->category_id,
+
+                'subcategory_id' => $request->subcategory_id ?? $course->subcategory_id,
+
+                'price' => $request->price ?? $course->price,
+
+                'status' => $request->status ?? $course->status,
+
+                'published_at' =>
+                    ($request->status ?? $course->status) === 'published'
+                        ? ($course->published_at ?? now())
+                        : null,
+
+                'teacher_id' =>
+                    $request->teacher_id ?? $course->teacher_id,
+
+                'language' =>
+                    $request->language ?? $course->language,
+
+                'difficulty_level' =>
+                    $request->difficulty_level ?? $course->difficulty_level,
+
+                'highlights' =>
+                    $request->highlights ?? $course->highlights,
         ]);
 
 
@@ -335,6 +410,13 @@ class CourseController extends Controller
 
         if ($descEnChanged && !$descHiManuallyChanged) {
             $fieldsToTranslate[] = 'description';
+        }
+
+        if (
+            $highlightsEnChanged &&
+            !$highlightsHiManuallyChanged
+        ) {
+            $fieldsToTranslate[] = 'highlights';
         }
 
         if (!empty($fieldsToTranslate)) {
@@ -554,6 +636,13 @@ class CourseController extends Controller
             'description' => [
                 'en' => $course->description,
                 'hi' => $course->translateField('description', 'hi') ?? $course->description,
+            ],
+
+            'highlights' => [
+                'en' => $course->highlights ?? [],
+                'hi' => $course->translateField('highlights', 'hi')
+                        ?? $course->highlights
+                        ?? [],
             ],
 
             'price' => $course->price,

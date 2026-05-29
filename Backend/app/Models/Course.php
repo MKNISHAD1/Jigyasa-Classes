@@ -25,6 +25,10 @@ class Course extends Model
         'thumbnail_id',
         'is_featured',
         'is_archived',
+        'language',
+        'difficulty_level',
+        'highlights',
+        'rating',
     ];
 
     protected $casts = [
@@ -32,6 +36,8 @@ class Course extends Model
         'is_featured' => 'boolean',
         'is_archived' => 'boolean',
         'published_at' => 'datetime',
+        'highlights' => 'array',
+        'rating' => 'decimal:2',
     ];
 
     /* ---------------- Relations ---------------- */
@@ -50,6 +56,14 @@ class Course extends Model
     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+
+    public function modules()
+    {
+        return $this->hasMany(
+            CourseModule::class
+        )->orderBy('order');
     }
 
     public function lessons()

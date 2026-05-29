@@ -45,11 +45,35 @@ trait HasTranslations
                 continue;
             }
 
+            // try {
+            //     $tr = new GoogleTranslate($locale);
+            //     $translatedData[$field] = $tr->translate($value);
+            // } catch (\Exception $e) {
+            //     $translatedData[$field] = $value;
+            // }
+
             try {
+
                 $tr = new GoogleTranslate($locale);
-                $translatedData[$field] = $tr->translate($value);
+
+                // Handle array/json fields like highlights
+                if (is_array($value)) {
+
+                    $translatedData[$field] = array_map(
+                        fn ($item) => $tr->translate($item),
+                        $value
+                    );
+
+                } else {
+
+                    $translatedData[$field] = $tr->translate($value);
+
+                }
+
             } catch (\Exception $e) {
+
                 $translatedData[$field] = $value;
+
             }
         }
 

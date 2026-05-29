@@ -16,6 +16,7 @@ class Lesson extends Model
 
     protected $fillable = [
         'course_id',
+        'module_id',
         'title',
         'bunny_video_url',
         'storage_object_name',
@@ -55,6 +56,13 @@ class Lesson extends Model
     public function course()
     {
         return $this->belongsTo(Course::class);
+    }
+
+    public function module()
+    {
+        return $this->belongsTo(
+            CourseModule::class
+        );
     }
 
     public function uploader()
