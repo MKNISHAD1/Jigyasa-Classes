@@ -38,6 +38,11 @@ import Videotest from "./Component/Common/videotest";
 import LessonViewer from "./Component/backend/Lessons/LessonViewer";
 import ManageCategory from "./Component/backend/ManageCategory";
 import HomeUi from "./Component/Frontend/Ui for Frontend/HomeUi";
+import AboutUi from "./Component/Frontend/Ui for Frontend/AboutUi";
+import ContactUi from "./Component/Frontend/Ui for Frontend/ContactUi";
+import AllCoursesUi from "./Component/Frontend/Ui for Frontend/AllCoursesUi";
+import CourseCardUi from "./Component/Common/CommonUI/CourseCardUi";
+import ViewCourseUi from "./Component/Frontend/Ui for Frontend/ViewCourseUi";
 
 
 function App() {
@@ -76,7 +81,11 @@ function App() {
             <Routes>
               {/* <Route path="/" element={<Home />} /> */}
               <Route path="/" element={<HomeUi />} />
-              <Route path="/about" element={<About />} />
+              <Route path="/About" element={<AboutUi />} />
+              <Route path="Contact-Us" element={<ContactUi />}/>
+              <Route path="/Courses" element={<AllCoursesUi />}/>
+              <Route path="/CourseCard" element={<CourseCardUi />}/>
+              <Route path="/CourseView/:id/:title" element={<ViewCourseUi />}/>
               <Route
                 path="/register"
                 element={<Registration handleLogin={login} />}

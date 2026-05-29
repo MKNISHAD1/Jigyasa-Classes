@@ -43,19 +43,19 @@ const HeaderUi = () => {
 </div> */}
 
 <div className="py-3">
-<div className="line p-2 text-center text-light">TESTING </div>
+<div className="line p-2 text-center text-light">Responsive Test</div>
 </div>
 
       {/* Production Code  */}
 
-      <div>
+      {/* <div>
         <div className="media_label">
           <Link to="/about  ">
             <FontAwesomeIcon icon={faHouse} className=" text-light px-2" />
           </Link>
           <FontAwesomeIcon icon={faCircleUser} className="px-4 text-light" />
         </div>
-      </div>
+      </div> */}
 
       <div className="container-fluid m-0 p-0">
         <Navbar expand="lg" className="shadow">
@@ -84,13 +84,13 @@ const HeaderUi = () => {
               </li>
 
               <li>
-                <Link to="/about" className="nav-link">
+                <Link to="/About" className="nav-link">
                   {t("header.about")}
                 </Link>
               </li>
 
               <li>
-                <Link to="/courses" className="nav-link">
+                <Link to="/Courses" className="nav-link">
                   Courses
                 </Link>
               </li>
@@ -149,8 +149,8 @@ const HeaderUi = () => {
 
                 <ul className="dropdown-menu-custom">
                   <li>
-                    <Link to="/about" className="dropdown-item">
-                      About Us
+                    <Link to="/CourseCard" className="dropdown-item">
+                      Course Card
                     </Link>
                   </li>
 
@@ -196,7 +196,7 @@ const HeaderUi = () => {
               </li>
 
               <li>
-                <Link to="/privacy-policy" className="nav-link">
+                <Link to="/Contact-Us" className="nav-link">
                   Contact Us
                 </Link>
               </li>

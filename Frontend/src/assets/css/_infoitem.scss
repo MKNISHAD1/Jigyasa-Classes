@@ -1,0 +1,62 @@
+// global variables 
+$primary-color:#1363b8;
+$secondary-color:#ebf1f5;
+$third-color:#162521;
+$forth-color:#047ba7;
+$fifth-color:#FFFFFF;
+
+//optinal color 
+  // background-color: #d5e7f3;
+
+.info-icon-card {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  .icon {
+    // width: 50px;
+    // height: 50px;
+    // min-width: 50px;
+
+    border-radius: 50%;
+    background: #d5e7f3;
+
+    border: 1px solid $primary-color;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: $primary-color;
+    font-size: 1.3rem;
+
+    transition: 0.3s ease;
+  }
+
+  .body {
+
+    h4 {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 700;
+      color: $primary-color;
+      // margin-right: 10px;
+      padding: 0 20px 0 5px;
+      // background-color: red;
+    }
+ 
+    small {
+      color: $third-color;
+      line-height: 1.6;
+      padding: 0 20px 0 5px; ;
+    }
+  }
+
+  &:hover {
+    .icon {
+      transform: translateY(-3px);
+      background: $primary-color;
+      color: white;
+    }
+  }
+}

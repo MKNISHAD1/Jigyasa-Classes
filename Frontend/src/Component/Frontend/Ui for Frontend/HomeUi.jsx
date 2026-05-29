@@ -667,9 +667,10 @@ It helped me manage my studies along with my college schedule effortlessly.”
     </section>
 
 
-{/* Gradient Strip */}
+{/* Gradient Strips */}
 
-<div className="gradi">
+          {/* gradi 1 */}
+{/* <div className="gradi">
   <div className='container'>
       <div className='p-4 text-center'>
         <br /><br /><br /><br />
@@ -678,9 +679,10 @@ It helped me manage my studies along with my college schedule effortlessly.”
   </div>
 
 </div>
-<br /><br />
+<br /><br /> */}
 
-<div className="gradi2">
+          {/* gradi 2 */}
+{/* <div className="gradi2">
   <div className='container'>
       <div className='p-4 text-center'>
         <br /><br /><br /><br />
@@ -688,9 +690,10 @@ It helped me manage my studies along with my college schedule effortlessly.”
       </div>
   </div>
 
-</div>
+</div> */}
 
-<br /><br />
+          {/* gradi 3 */}
+{/* <br /><br />
 <div className="gradi3">
   <div className='container'>
       <div className='p-4 text-center'>
@@ -699,7 +702,7 @@ It helped me manage my studies along with my college schedule effortlessly.”
       </div>
   </div>
 
-</div>
+</div> */}
 
   {/* Footer  */}
   <FooterUi />

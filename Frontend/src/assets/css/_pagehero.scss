@@ -1,0 +1,28 @@
+// global variables 
+$primary-color:#1363b8;
+$secondary-color:#ebf1f5;
+$optional-color:#f7f9fc;
+$third-color:#162521;
+$forth-color:#047ba7;
+$fifth-color:#FFFFFF;
+
+.hero-content{
+    h4{
+        color: $primary-color;
+    }
+    span{
+        color: $primary-color;
+    }
+
+    p {
+    font-size: 0.9rem;
+    }
+
+    .line{
+      height: 4px;
+      background-color: $primary-color;
+      width: 100px;
+      border-radius: 20px;
+      margin-bottom: 15px;
+    }
+}

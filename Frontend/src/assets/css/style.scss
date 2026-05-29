@@ -9,8 +9,17 @@ $fifth-color:#FFFFFF;
 
 // Importing Partial CSS Files
 @use 'navbar';
+@use 'pagehero' ;
+@use 'infoitem' ;
 @use 'footer';
 @use 'breakpoints' ;
+@use 'aboutpage' ;
+@use 'contactus' ;
+@use 'allcourses' ;
+@use 'coursecard' ;
+@use 'viewcourseui' ;
+@use 'coursecurriculum';
+@use  'coursefaqui' ;
 
 // Primary Font Family : Inter
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
@@ -43,13 +52,25 @@ body{
     font-size: medium;
     text-decoration: none;
     border-radius: 10px;
-
 }
-
 .Button_Style:hover{
     background-color: $secondary-color;
     color:$primary-color;
 }
+
+  .Button-opposite{
+    background-color: $fifth-color;
+    border-radius: 10px;
+    color : $primary-color;
+    font-weight: 600;
+    padding: 10px;
+  }
+
+  .Button-opposite:hover{
+    color : $fifth-color;
+    background-color: $primary-color;
+    border: $secondary-color solid 2px;
+  }
 
 ////🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶🔶
 

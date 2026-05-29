@@ -99,6 +99,32 @@ class CourseController extends Controller
             'courses' => $courses
         ]);
     }
+
+     /**
+     * View Courses publicly (for frontend)
+     */
+    public function publicCourseView($id)
+    {
+        $course = Course::with([
+            'lessons', 
+            'thumbnail', 
+            'teacher',
+            'category',
+            'subcategory'])->findOrFail($id);
+
+        if (!$course) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Course not found'
+            ], 404);
+        }
+
+        return response()->json([
+            'status' => true,
+            'course' => $this->formatCourseResponse($course)
+        ]);
+    }
+
     /**
      * Store a new course
      * - Only teacher/moderator/admin/superadmin allowed

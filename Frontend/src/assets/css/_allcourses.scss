@@ -1,0 +1,124 @@
+// global variables 
+$primary-color:#1363b8;
+$secondary-color:#ebf1f5;
+$third-color:#162521;
+$forth-color:#047ba7;
+$fifth-color:#FFFFFF;
+
+//optinal color 
+  // background-color: #d5e7f3;
+.Courses-Hero{
+    background-color: $secondary-color;
+    // padding: 2%;
+}
+
+.course-category-strip {
+  padding: 2rem 0;
+
+  .category-strip-wrapper {
+    background: white;
+    border-radius: 22px;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    border: 1px solid #edf2f7;
+  }
+
+  .category-list {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    flex-wrap: wrap;
+  }
+
+  .category-btn {
+    border: 1px solid #dbe4f0;
+    background: white;
+    color: #334155;
+    padding: 0.8rem 1.1rem;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.92rem;
+    font-weight: 600;
+    transition: 0.3s ease;
+    white-space: nowrap;
+
+    i {
+      color: #0d47a1;
+      font-size: 0.9rem;
+    }
+
+    &:hover {
+      transform: translateY(-2px);
+      border-color: #0d47a1;
+      color: #0d47a1;
+      background: rgba(13, 71, 161, 0.04);
+    }
+  }
+
+  .category-btn.active {
+    background: linear-gradient(to right, #0039a6, #0d47a1);
+    color: white;
+    border-color: transparent;
+
+    i {
+      color: white;
+    }
+  }
+
+  .sort-wrapper {
+    min-width: 220px;
+
+    select {
+      width: 100%;
+      border: 1px solid #dbe4f0;
+      border-radius: 12px;
+      padding: 0.9rem 1rem;
+      outline: none;
+      background: white;
+      color: #334155;
+      font-weight: 600;
+      cursor: pointer;
+    }
+  }
+
+  /* TABLET */
+  @media (max-width: 992px) {
+    .category-strip-wrapper {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .sort-wrapper {
+      width: 100%;
+    }
+  }
+
+  /* MOBILE */
+  @media (max-width: 768px) {
+
+    .category-list {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      padding-bottom: 0.4rem;
+
+      &::-webkit-scrollbar {
+        height: 4px;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: rgba(13, 71, 161, 0.25);
+        border-radius: 20px;
+      }
+    }
+
+    .category-btn {
+      flex-shrink: 0;
+    }
+  }
+}

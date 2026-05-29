@@ -27,39 +27,40 @@ use App\Mail\AccountUnsuspendedMail;
 class UserManagementController extends Controller
 {
 
-    // It will All Register user in database
+    // It will Register All user in database
 
-public function alluser()
-{
-    $users = User::with('roles','media')->latest()->get()->map(function($user) {
-        $roles = $user->getRoleNames()->toArray();
-        $priority = [
-            'super_admin' => 100,
-            'admin'       => 80,
-            'moderator'   => 60,
-            'teacher'     => 40,
-            'student'     => 20,
-        ];
+    public function alluser()
+    {
+        $users = User::with('roles','media')->latest()->get()->map(function($user) {
+            $roles = $user->getRoleNames()->toArray();
+            $priority = [
+                'super_admin' => 100,
+                'admin'       => 80,
+                'moderator'   => 60,
+                'teacher'     => 40,
+                'student'     => 20,
+            ];
 
-        // sort roles based on priority
-        usort($roles, fn($a, $b) => $priority[$b] <=> $priority[$a]);
-        $highest = $roles[0] ?? null;
+            // sort roles based on priority
+            usort($roles, fn($a, $b) => $priority[$b] <=> $priority[$a]);
+            $highest = $roles[0] ?? null;
 
-        return [
-            'id'       => $user->id,
-            'name'     => $user->name,
-            'email'    => $user->email,
-            'username' => $user->username,
-            'role'     => $highest, // ✅ single highest role only
-        ];
-    });
+            return [
+                'id'       => $user->id,
+                'name'     => $user->name,
+                'email'    => $user->email,
+                'username' => $user->username,
+                'professional_title' => $user->professional_title,
+                'role'     => $highest, // ✅ single highest role only
+            ];
+        });
 
-    // ✅ Return JSON response
-    return response()->json([
-        'status' => true,
-        'user'   => $users
-    ]);
-}
+        // ✅ Return JSON response
+        return response()->json([
+            'status' => true,
+            'user'   => $users
+        ]);
+    }
 
     // This will add  user in database by admin or moderator only
     
@@ -72,13 +73,13 @@ public function alluser()
         'password' => 'required|string|min:8',
         'mobile_no' => 'required|string',
         'role'      => 'required|in:student,teacher,moderator,admin'
-    ]);
-    if ($validator-> fails()) {
-        return response()->json([
-            'status' =>false,
-            'error' => $validator->errors()
         ]);
-    }
+        if ($validator-> fails()) {
+            return response()->json([
+                'status' =>false,
+                'error' => $validator->errors()
+            ]);
+        }
     
         $user = new User();
         $user->name = $request->name;
@@ -91,6 +92,19 @@ public function alluser()
         // Assigning Role with fallback role for new created ser
         $role = $request->role ?? 'student';
         $user->assignRole($role);
+
+        $defaultTitles = [
+            'student' => 'Student',
+            'teacher' => 'Instructor',
+            'moderator' => 'Moderator',
+            'admin' => 'Administrator',
+            'super_admin' => 'Super Administrator',
+        ];
+
+        $user->professional_title =
+            $defaultTitles[$role] ?? 'Member';
+
+        $user->save();
 
 
         // Log the activity
@@ -110,8 +124,9 @@ public function alluser()
     // It will show the  all details about specific User by Userid   
     public function viewuser($id)
     {
-        $user = User::with('roles')->find($id);
-            
+        // $user = User::with('roles')->find($id); //  changes here 
+        $user = User::with('roles','media')->find($id); 
+        
         if(!$user) {
             return response()->json([
                 'status' =>false,
@@ -125,10 +140,10 @@ public function alluser()
             'roles' => $user->roles->pluck('name'), // current role(s)
             'all_roles' => \Spatie\Permission\Models\Role::pluck('name'), // for dropdown
             ]);
-        }
+    } 
         
-        
-    // This will Update User data 
+     // This will Update User data 
+
     public function updateuser(Request $request, $id)
     {     
         $user = User::find($id);
@@ -167,8 +182,11 @@ public function alluser()
             'password' => 'sometimes|string|min:8',
             'mobile_no' => 'sometimes|string',
             'address'    => 'sometimes|string|nullable',
+            'professional_title' => 'sometimes|string|max:255|nullable',
+            'bio' => 'sometimes|string|nullable',
+            'social_links' => 'sometimes|array|nullable',
             'profile_pic' => 'sometimes|image|mimes:jpg,jpeg,png,webp|max:2048',
-            'role'      => 'sometimes|in:student,teacher,moderator,admin'
+            'role'      => 'sometimes|in:student,teacher,moderator,admin',
             ]);
 
         if ($validator->fails()) {
@@ -197,52 +215,67 @@ public function alluser()
             $oldMedia->delete();
         }
 
-        // Step 2: Store new profile picture
-        $image = $request->file('profile_pic');
-        $filename = Str::slug($user->name) . '_' . time() . '.' . $image->getClientOriginalExtension();
-        $path = $image->storeAs('uploads/profiles', $filename, 'public');
+            // Step 2: Store new profile picture
+            $image = $request->file('profile_pic');
+            $filename = Str::slug($user->name) . '_' . time() . '.' . $image->getClientOriginalExtension();
+            $path = $image->storeAs('uploads/profiles', $filename, 'public');
 
-        // Step 3: Create new media record
-        $user->media()->create([
-        'url' => 'storage/' . $path,
-        'type' => 'profile_pic',
+            // Step 3: Create new media record
+            $user->media()->create([
+            'url' => 'storage/' . $path,
+            'type' => 'profile_pic',
+            ]);
+        }
+
+        // Get updated profile pic
+        // $profilePic = $user->media()->where('type', 'profile_pic')->first();
+        // $profilePicUrl = $profilePic
+        //     ? asset($profilePic->url)
+        //     : asset('uploads/profiles/default/' . ($user->getRoleNames()->firt()??'student') . '.png');
+
+        // Updating in database
+        $user->fill($validator->validated());
+        // If null on effect on curren password
+        if($request->filled('password')){
+            $user->password = Hash::make($request->password);
+        }
+
+        $user->save();
+
+        // Update Role if provided
+        if ($request->has('role')) {
+
+            $user->syncRoles([$request->role]);
+
+            $defaultTitles = [
+                'student' => 'Student',
+                'teacher' => 'Instructor',
+                'moderator' => 'Moderator',
+                'admin' => 'Administrator',
+                'super_admin' => 'Super Administrator',
+            ];
+
+
+            $user->professional_title =
+                $defaultTitles[$request->role] ?? 'Member';
+
+            $user->save();
+        }
+
+        //Log activity 
+        ActivityLogger::log('Updated_User',$user, [
+        'updated_fields' => array_keys($validator->validated()),
         ]);
+
+
+        return response()->json([
+            'status' => true,
+            'message' => 'User Details Updated Successfully..',
+            'user' => $user -> load('roles'),
+            'profile_pic' => $user->profile_pic
+
+            ]);
     }
-
-    // Get updated profile pic
-    // $profilePic = $user->media()->where('type', 'profile_pic')->first();
-    // $profilePicUrl = $profilePic
-    //     ? asset($profilePic->url)
-    //     : asset('uploads/profiles/default/' . ($user->getRoleNames()->firt()??'student') . '.png');
-
-    // Updating in database
-    $user->fill($validator->validated());
-    // If null on effect on curren password
-    if($request->filled('password')){
-        $user->password = Hash::make($request->password);
-    }
-
-    $user->save();
-
-    // Update Role if provided
-    if($request->has('role')){
-        $user->syncRoles([$request->role]);// replace old role with new
-    }
-
-    //Log activity 
-    ActivityLogger::log('Updated_User',$user, [
-    'updated_fields' => array_keys($validator->validated()),
-    ]);
-
-
-    return response()->json([
-        'status' => true,
-        'message' => 'User Details Updated Successfully..',
-        'user' => $user -> load('roles'),
-        'profile_pic' => $user->profile_pic
-
-        ]);
-  }
 
 
    // Delete User from database 
@@ -431,7 +464,7 @@ public function alluser()
 
     public function getTeachers()
     {
-        $teachers = User::role('teacher')->select('id', 'name', 'email')->get();
+        $teachers = User::role('teacher')->select('id', 'name', 'email','professional_title')->get();
 
         return response()->json([
             'status' => true,

@@ -1,0 +1,42 @@
+.course-faqs{
+
+  margin-top: 30px;
+
+  .section-title{
+    margin-bottom: 20px;
+
+    h4{
+      font-weight: 700;
+      color: #162521;
+    }
+  }
+
+  .accordion-item{
+    border: 1px solid #edf0f7;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 15px;
+  }
+
+  .accordion-button{
+    font-weight: 600;
+    padding: 18px;
+    background: #fff;
+
+    &:focus{
+      box-shadow: none;
+    }
+
+    &:not(.collapsed){
+      background: #f7f9fc;
+      color: #1363b8;
+    }
+  }
+
+  .accordion-body{
+    color: #555;
+    line-height: 1.7;
+    font-size: 15px;
+  }
+
+}

@@ -1,114 +1,87 @@
 import React from 'react'
-import logo from '../../../assets/images/logo2.png';
-import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+// import { useTranslation } from 'react-i18next';
+import { Link } from "react-router-dom";
+import logo from "../../../assets/images/Logo2.png";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faFacebook,
+  faInstagram,
+  faYoutube,
+} from "@fortawesome/free-brands-svg-icons";
+
 const FooterUi = () => {
-
-      const { t, i18n } = useTranslation();
   return (
-   <>
-   <div className='Footer_Section conatiner '>
-    <div className="row">
-        <div className="col-lg-3 col-sm-6 d-block">
-            <div className="d-flex">
-              <img src={logo} className="Brand_Logo" />
-              <div>
-                <h5 className="Brand_Name">
-                  <b>{t("Logo.title")}</b>
-                </h5>
-                <p className="Brand_Tagline">{t("Logo.tagline")}</p>
-              </div>
-            </div>
-              <p className='text-left pt-2'>Empower Your Learning with Expert Guidance from Top Faculties </p>
+<section className="astra-footer">
+  <div className="footer-wrapper container-fluid">
+
+    <div className="row footer-top">
+
+      {/* BRAND */}
+      <div className="col-lg-4 footer-brand">
+        <h2 className="logo">Jigyasa Classes</h2>
+
+        <p>
+          Learn anytime, anywhere with expert guidance.
+          Jigyasa Classes helps you prepare smarter for
+          competitive exams.
+        </p>
+
+        <div className="socials">
+          <i className="fab fa-facebook"></i>
+          <i className="fab fa-instagram"></i>
+          <i className="fab fa-youtube"></i>
+          <i className="fab fa-linkedin"></i>
         </div>
-        <div className="col-lg-3 col-sm-6 ">
-            <h3>Category</h3>
-            <ul>
-              <li>
-                <Link to="/" className="nav-link">
-                  {t("header.home")}
-                </Link>
-              </li>
+      </div>
 
-              <li>
-                <Link to="/about" className="nav-link">
-                  {t("header.about")}
-                </Link>
-              </li>
-                            <li>
-                <Link to="/" className="nav-link">
-                  {t("header.home")}
-                </Link>
-              </li>
+      {/* COURSES */}
+      <div className="col-lg-2 footer-links">
+        <h5>Courses</h5>
+        <ul>
+          <li>UPSC</li>
+          <li>SSC</li>
+          <li>JEE</li>
+          <li>Banking</li>
+        </ul>
+      </div>
 
-              <li>
-                <Link to="/about" className="nav-link">
-                  {t("header.about")}
-                </Link>
-              </li>
-                            <li>
-                <Link to="/" className="nav-link">
-                  {t("header.home")}
-                </Link>
-              </li>
+      {/* COMPANY */}
+      <div className="col-lg-3 footer-links">
+        <h5>Platform</h5>
+        <ul>
+          <li>About</li>
+          <li>All Courses</li>
+          <li>Blog</li>
+          <li>Testimonials</li>
+        </ul>
+      </div>
 
-              <li>
-                <Link to="/about" className="nav-link">
-                  {t("header.about")}
-                </Link>
-              </li>
-            </ul>
-        </div>
-        <div className="col-lg-3 col-sm-6">
-            <h3>Quick Links</h3>
-            <ul>
-              <li>
-                <Link to="/" className="nav-link">
-                  {t("header.home")}
-                </Link>
-              </li>
+      {/* SUPPORT */}
+      <div className="col-lg-3 footer-links">
+        <h5>Support</h5>
+        <ul>
+          <li>Contact</li>
+          <li>FAQ</li>
+          <li>Privacy Policy</li>
+          <li>Terms & Conditions</li>
+        </ul>
+      </div>
 
-              <li>
-                <Link to="/about" className="nav-link">
-                  {t("header.about")}
-                </Link>
-              </li>
-                            <li>
-                <Link to="/" className="nav-link">
-                  {t("header.home")}
-                </Link>
-              </li>
-
-              <li>
-                <Link to="/about" className="nav-link">
-                  {t("header.about")}
-                </Link>
-              </li>
-                            <li>
-                <Link to="/" className="nav-link">
-                  {t("header.home")}
-                </Link>
-              </li>
-
-              <li>
-                <Link to="/about" className="nav-link">
-                  {t("header.about")}
-                </Link>
-              </li>
-            </ul>
-        </div>
-        <div className="col-lg-3 col-sm-6">
-            <h3>Quick Connect</h3>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Et quisquam accusamus fuga exercitationem ex? Aspernatur blanditiis consequuntur ipsam voluptate a deserunt doloribus perferendis quos error!</p>
-
-        </div>
     </div>
-   </div>
-   <div className="Footer_Label">
-        HELLO TESTING for label
-   </div>
-   </>
-  )
-}
 
-export default FooterUi
+    {/* BOTTOM BAR */}
+    <div className="footer-bottom">
+      <p>© 2026 Jigyasa Classes. All rights reserved.</p>
+
+      <div className="policy-links">
+        <span>Privacy Policy</span>
+        <span>Terms</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+  );
+};
+
+export default FooterUi;

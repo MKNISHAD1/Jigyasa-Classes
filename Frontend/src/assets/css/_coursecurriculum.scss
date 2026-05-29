@@ -1,0 +1,57 @@
+.course-curriculum {
+
+  .curriculum-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+
+    span{
+      color:#777;
+      font-size:14px;
+    }
+  }
+
+  .accordion-item{
+    border-radius:12px;
+    overflow:hidden;
+    margin-bottom:15px;
+    border:1px solid #eee;
+  }
+
+  .accordion-button{
+    font-weight:600;
+    background:#fff;
+
+    &:focus{
+      box-shadow:none;
+    }
+  }
+
+  .section-header{
+    width:100%;
+    display:flex;
+    justify-content:space-between;
+    padding-right:10px;
+  }
+
+  .lesson-item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:12px 0;
+    border-bottom:1px solid #f1f1f1;
+
+    &:last-child{
+      border-bottom:none;
+    }
+  }
+
+  .lesson-left,
+  .lesson-right{
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+
+}

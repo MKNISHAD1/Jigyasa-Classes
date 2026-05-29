@@ -242,10 +242,14 @@ Route::delete('user-force-delete/{id}', [UserManagementController::class, 'force
 //                                           Course Routes
 // ===================================================================================================
 
-// Pubiic Routes
+// Public Routes
 Route::get('courses', [CourseController::class, 'courseList']);
-    // ->middleware('role:student|teacher|moderator|admin|super_admin');
 
+// Public Course View
+Route::get('Course-View/{id}', [CourseController::class, 'publicCourseView']);
+
+
+// Protected Routes (Teacher, Moderator, Admin, Super Admin) - For Course Management
 Route::middleware(['auth:sanctum'])->group(function () {
     
     // List courses
@@ -388,8 +392,11 @@ Route::middleware('auth:sanctum')->group(function () {
 // ===================================================================================================
 use App\Http\Controllers\FaqController;
 
+// Public Route
+Route::get('list-faqs', [FaqController::class, 'index']);   // list
+
+// Protected Route
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('list-faqs', [FaqController::class, 'index']);   // list
     Route::post('create-faqs', [FaqController::class, 'store']);  // create
     Route::put('update-faqs/{id}', [FaqController::class, 'update']); // update
     Route::delete('delete-faqs/{id}', [FaqController::class, 'destroy']); // delete

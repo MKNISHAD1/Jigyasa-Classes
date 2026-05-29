@@ -1,0 +1,225 @@
+
+// global variables 
+$primary-color:#1363b8;
+$secondary-color:#ebf1f5;
+$optional-color:#f7f9fc;
+$third-color:#162521;
+$forth-color:#047ba7;
+$fifth-color:#FFFFFF;
+
+
+.Latest_Course_Section{
+  padding: 0 4% 4% 4%;
+  
+  .course-card{
+    border-radius: 5%;
+    margin:0 4%;
+    transition: transform .25s ease, box-shadow .25s ease;
+  }
+  .course-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 30px rgba(255, 2, 2, 1);
+    border: 1px solid $primary-color;
+  }
+  .course-img{
+    // border-top-left-radius: 15px;
+    // border-top-right-radius: 15px;
+    padding: 10px;
+    border-radius: 25px;
+  }
+
+  .card-header{
+    background-color: $fifth-color;
+    border: none;
+    padding-bottom: 2px;
+  }
+  .teacher-img{
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+  }
+  .teacher-name{
+    align-content: center;
+    padding-left: 15px;
+    margin: 0;
+    font-size: medium;
+    font-weight: 380;
+  }
+  .category-button{
+    background-color: $secondary-color;
+    color: $primary-color;
+    border-radius: 5px;
+    font-size: small;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    padding: 8px;
+  }
+  .category-button:hover{
+    background-color: $primary-color;
+    color: $fifth-color;
+  }
+
+  .card-body{
+    padding: 10px 15px 20px 15px;
+  }
+  .course-title{
+    display: -webkit-box;
+    font-weight: 500;
+    font-size: 20px;
+    color: $third-color;
+    text-transform: capitalize;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .course-desc{
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    line-clamp: 3;
+    overflow: hidden;
+    font-weight: 400;
+  }
+  .lectures{
+    display: flex;
+    flex-flow: row;
+    justify-content: space-between;
+    padding: 9px 31px 9px 0px;
+  }
+  .rating{
+    padding-left: 2%;
+  }
+  .star{
+    color: $primary-color;
+  }
+  .book-icon{
+    color: $primary-color;
+    font-size: x-large;
+  }
+
+  .price-section{
+    background-color: $secondary-color;
+    padding: 10px 15px;
+    align-items: center;
+    border-radius: 15px;
+    margin-top: 3%;
+  }
+  .view-course-btn{
+    background-color: $primary-color;
+    color: $fifth-color;
+    padding: 7px 15px;
+    text-decoration: none;
+    font-size: medium;
+    font-weight: 500;
+    border-radius: 10px;
+    border : 1px solid $primary-color
+  }
+  .view-course-btn:hover{
+    background-color: $fifth-color;
+    color: $primary-color;
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1199.98px) {
+    .Latest_Course_Section{
+        padding: 0 2% 2% 2%;
+   // card headar
+    .teacher-img{
+      border-radius: 50%;
+      width: 35px;
+      height: 35px;
+    }
+    .teacher-name{
+      align-content: center;
+      padding-left: 12px;
+      margin: 0;
+      font-size: medium;
+      font-weight: 380;
+    }
+    .category-button{
+      background-color: $secondary-color;
+      color: $primary-color;
+      border-radius: 5px;
+      font-size: small;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      padding: 5px;
+    }
+    // Card Body
+    .course-title{
+      font-size: large;
+    }
+    .star{
+      font-size: small;
+      align-items: center;
+    }
+    .lectures{
+      padding: 9px 15px 9px 0px;
+    }
+    .view-course-btn{
+      font-size: small;
+    }
+  } 
+}
+@media (min-width: 576px) and (max-width: 767.98px) {
+    .Latest_Course_Section{
+     padding: 0;
+   // card headar
+    .teacher-img{
+      width: 30px;
+      height: 30px;
+    }
+    .teacher-name{
+      align-content: center;
+      padding-left: 12px;
+      margin: 0;
+      font-size: small;
+      font-weight: 380;
+    }
+    .category-button{
+      font-size: x-small;
+      padding: 5px;
+    }
+    // Card Body
+    .course-title{
+      font-size: medium;
+    }
+    .course-desc{
+      font-size: small;
+    }
+    .rating{
+      align-items: center;
+      display: flex;
+      
+    }
+    .star{
+      font-size: x-small;
+      align-items: center;
+    }
+    .lectures{
+      padding: 9px 0px 9px 0px;
+      span{
+        font-size: 0.9rem;
+      }
+    }
+    .view-course-btn{
+      font-size: small;
+      padding: 5px;
+      border-radius: 5px;
+    }
+    .book-icon{
+      font-size: large;
+    }
+    .price-section{
+      background-color: $secondary-color;
+      padding: 10px 10px;
+      .price{
+        font-size: small;
+      }
+    }
+      
+  }   
+}

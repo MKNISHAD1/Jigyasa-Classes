@@ -1,0 +1,244 @@
+// global variables 
+$primary-color:#1363b8;
+$secondary-color:#ebf1f5;
+$third-color:#162521;
+$forth-color:#047ba7;
+$fifth-color:#FFFFFF;
+
+//optinal color 
+  // background-color: #d5e7f3;
+
+// .about-hero{
+//   .about-heading{
+//     h4{
+//       color: $primary-color;
+//     }
+//     span{
+//       color: $primary-color;
+//     };
+//     .line{
+//       height: 4px;
+//       background-color: $primary-color;
+//       width: 100px;
+//       border-radius: 20px;
+//     }
+//   }
+// }
+
+// .about-mission-vision{
+//   background-color: $secondary-color;
+//   border-radius: 20px;
+
+//   h5{
+//     color: $primary-color;
+//     font-weight: bold;
+//   }
+
+//   .Mission-Icon{
+//     padding: 15px;
+//     align-items:center;
+//     font-size: xxx-large;
+//     color: $primary-color;
+//     background-color: #d5e7f3;
+//     border-radius: 50%;
+//   }
+//   .Mission-Body{
+//     padding-left: 25px;
+//   }
+
+//   // .lineh{
+//   //   width: 5px;
+//   //   border-radius: 20px;
+//   //   opacity: 0.3;
+//   //   background-color: $primary-color;
+//   // }
+
+//   .Vision-Icon{
+//     padding: 15px;
+//     align-items:center;
+//     font-size: xxx-large;
+//     color: $primary-color;
+//     background-color: #d5e7f3;
+//     border-radius: 50%;
+//   }
+
+//   .Vision-Body{
+//      padding-left: 25px;   
+//   }
+
+// }
+
+.about-mission-vision {
+  background: $secondary-color;
+  backdrop-filter: blur(12px);
+  border-radius: 24px;
+  gap: 2rem;
+
+  h5 {
+    color: $primary-color;
+    font-weight: 700;
+    font-size: 1.3rem;
+  }
+
+  small {
+    color: #555;
+    line-height:normal;
+    font-size: 0.8rem;
+  }
+
+  .about-mission,
+  .about-vision {
+    flex: 1;
+    align-items: flex-start;
+  }
+
+  .Mission-Icon,
+  .Vision-Icon {
+    min-width: 75px;
+    height: 75px;
+    padding-top: 20px;
+    border-radius: 50%;
+    background: #ccdaed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $primary-color;
+    font-size: 2.5rem;
+  }
+
+  .Mission-Body,
+  .Vision-Body {
+    padding-left: 1.2rem;
+  }
+
+  .lineh {
+    width: 1px;
+    background: rgba($primary-color, 0.15);
+    border-radius: 20px;
+  }
+}
+@media (max-width: 768px) {
+
+  .about-mission-vision {
+    flex-direction: column;
+    padding: 1.5rem;
+
+    .lineh {
+      width: 100%;
+      height: 1px;
+    }
+
+    .about-mission,
+    .about-vision {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .Mission-Body,
+    .Vision-Body {
+      padding-left: 0;
+      padding-top: 1rem;
+    }
+  }
+
+}
+.why-choose{
+  border-radius: 20px;
+}
+
+.Approach-Section{
+      h4{
+      color: $primary-color;
+    }
+    span{
+      color: $primary-color;
+    };
+
+    .approch-body{
+      .check-icon{
+        color: $primary-color;
+        padding: 10px;
+        font-size: x-large;
+      }
+      .icon-text{
+        display: flex;
+        align-items: center;
+        font-size: medium;
+      }
+    }
+}
+
+// .CTA-Section{
+//   border-radius: 20px;
+//   background-color: $secondary-color;;
+//   gap: 2rem;
+//   align-items: center;
+//   justify-items: center;
+
+//   .hat-icon{
+//     font-size: 3rem;
+//     border-radius: 50%;
+//     background-color: $primary-color;
+//     color: $fifth-color;
+//     display: flex;
+//     align-items: center;
+//     justify-items :center;
+//     padding: 20px;
+//     margin-left: 40px;
+//   }
+//   .cta-body{
+//     color: $third-color;
+//     padding-top: 15px;
+//   }
+//   .cta-button{
+//     margin-left: 6%;
+//     button{
+//       background-color: $primary-color;
+//       border-radius: 10px;
+//       border: $secondary-color solid 2px;
+//       color : $secondary-color;
+//       font-weight: 600;
+//     }
+//     button:hover{
+//       background-color: $secondary-color;
+//       color: $primary-color;
+//       border: $primary-color solid 2px;
+//     }
+//   }
+// }
+
+.CTA-Section{
+  border-radius: 20px;
+background: #090979;
+background: linear-gradient(90deg, rgba(9, 9, 121, 1) 27%, rgba(4, 123, 167, 1) 98%);
+  align-items: center;
+  justify-items: center;
+
+  .cta-body{
+    color: $fifth-color;
+    margin: auto;
+  }
+
+  .Button-opposite{
+    background-color: $fifth-color;
+    border-radius: 10px;
+    color : $primary-color;
+    font-weight: 600;
+    padding: 10px;
+  }
+
+  .Button-opposite:hover{
+    color : $fifth-color;
+    background-color: $primary-color;
+    border: $secondary-color solid 2px;
+  }
+
+  .hat-img{
+    margin: auto;
+    display: flex;
+    border-radius: 50%;
+    align-items: center;
+    justify-items :center;
+  }
+}

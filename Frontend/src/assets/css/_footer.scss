@@ -8,53 +8,209 @@ $forth-color:#047ba7;
 $fifth-color:#FFFFFF;
 
 
-.Footer_Section{
-    background-color: $secondary-color;
-    padding: 40px 15px;
+// .Footer_Section{
+//     background-color: $secondary-color;
+//     padding: 40px 15px;
 
-    .Brand_Logo {
-        border-radius: 50%;
-        width: 75px;
-        height: 75px;
-    }
-    .Brand_Name {
-        color: $primary-color;
-        padding: 15px 0 5px 10px;
-        width: max-content;
-        text-transform: uppercase;
-        font-weight: 500;
-        margin: 0;
-        font-size: 1.2rem;
-        text-align: center;
+//     .Brand_Logo {
+//         border-radius: 50%;
+//         width: 75px;
+//         height: 75px;
+//     }
+//     .Brand_Name {
+//         color: $primary-color;
+//         padding: 15px 0 5px 10px;
+//         width: max-content;
+//         text-transform: uppercase;
+//         font-weight: 500;
+//         margin: 0;
+//         font-size: 1.2rem;
+//         text-align: center;
+//     }
+
+//     .Brand_Tagline{
+//         color: $third-color;
+//         padding-left: 35px;
+//         text-transform: capitalize;
+//         font-weight: 400;
+//         font-size: 10px;
+//     }
+
+//     h3 {
+//         padding: 0 3rem;
+//     }
+//     ul li {
+//         text-decoration: none;
+//         color: $third-color;
+//         list-style: none;
+//         text-transform: capitalize;
+//         padding: 5px 20px;
+//     }
+//     .nav-link:hover{
+//         padding-left: 10px;
+//         color: $primary-color;
+//         font-weight: bold;
+//     }
+
+// }
+.astra-footer {
+  padding: 60px 20px 0;
+  background: radial-gradient(
+      circle at top left,
+      #0f2a5f,
+      #071a3a 60%
+  );
+  color: #e5e7eb;
+
+  /* subtle grid pattern */
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+  }
+
+  .footer-wrapper {
+    position: relative;
+    z-index: 2;
+    border-radius: 20px;
+    padding: 60px 40px 20px;
+  }
+
+  /* ---------- BRAND ---------- */
+
+  .footer-brand {
+    .logo {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 15px;
+      color: #fff;
     }
 
-    .Brand_Tagline{
-        color: $third-color;
-        padding-left: 35px;
-        text-transform: capitalize;
-        font-weight: 400;
-        font-size: 10px;
+    p {
+      font-size: 0.95rem;
+      color: #cbd5e1;
+      line-height: 1.6;
+      max-width: 320px;
+    }
+  }
+
+  /* ---------- SOCIAL ---------- */
+
+  .socials {
+    margin-top: 20px;
+    display: flex;
+    gap: 14px;
+
+    i {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: 0.3s ease;
     }
 
-    h3 {
-        padding: 0 3rem;
+    i:hover {
+      background: #2563eb;
+      transform: translateY(-3px);
     }
-    ul li {
-        text-decoration: none;
-        color: $third-color;
-        list-style: none;
-        text-transform: capitalize;
-        padding: 5px 20px;
-    }
-    .nav-link:hover{
-        padding-left: 10px;
-        color: $primary-color;
-        font-weight: bold;
+  }
+
+  /* ---------- LINKS ---------- */
+
+  .footer-links {
+
+    h5 {
+      color: #fff;
+      font-weight: 600;
+      margin-bottom: 18px;
     }
 
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      margin-bottom: 10px;
+      color: #cbd5e1;
+      cursor: pointer;
+      transition: 0.25s;
+    }
+
+    li:hover {
+      color: #60a5fa;
+      padding-left: 6px;
+    }
+  }
+
+  /* ---------- BOTTOM BAR ---------- */
+
+  .footer-bottom {
+    margin-top: 50px;
+    padding: 18px 0;
+    border-top: 1px solid rgba(255,255,255,0.12);
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+
+    p {
+      margin: 0;
+      font-size: 0.85rem;
+      color: #94a3b8;
+    }
+
+    .policy-links {
+      display: flex;
+      gap: 20px;
+
+      span {
+        cursor: pointer;
+        font-size: 0.85rem;
+        color: #cbd5e1;
+      }
+
+      span:hover {
+        color: #60a5fa;
+      }
+    }
+  }
 }
 
-.Footer_Label{
-    background-color: $forth-color;
-    padding: 8px;
+@media (max-width: 768px) {
+
+  .astra-footer {
+
+    .footer-top {
+      text-align: center;
+      gap: 40px;
+    }
+
+    .footer-brand p {
+      margin: auto;
+    }
+
+    .socials {
+      justify-content: center;
+    }
+
+    .footer-bottom {
+      flex-direction: column;
+      gap: 10px;
+      text-align: center;
+    }
+  }
 }

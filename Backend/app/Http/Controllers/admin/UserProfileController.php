@@ -46,6 +46,9 @@ class UserProfileController extends Controller
                 'role' => $user->getRoleNames(), //fetch roleform spatie
                 'created_at' => $user->created_at,
                 'updated_at' => $user->updated_at,
+                'professional_title' => $user->professional_title,
+                'bio' => $user->bio,
+                'social_links' => $user->social_links,
             ]
         ]);
     }
@@ -64,6 +67,9 @@ class UserProfileController extends Controller
         'mobile_no'  => 'sometimes|string|max:15',
         'address'    => 'sometimes|string|nullable',
         'profile_pic' => 'sometimes|image|mimes:jpg,jpeg,png,webp|max:2048',
+        'professional_title' => 'sometimes|string|max:255|nullable',
+        'bio' => 'sometimes|string|nullable',
+        'social_links' => 'sometimes|array|nullable',
     ]);
 
     if ($validator->fails()) {

@@ -36,6 +36,9 @@ class User extends Authenticatable implements MustVerifyEmail
     'is_suspended',
     'suspension_reason',
     'two_factor_verified_at',
+    'professional_title',
+    'bio',
+    'social_links',
     ];
     /**
      * The attributes that should be hidden for serialization.
@@ -61,6 +64,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'suspended_until' => 'datetime',
         'is_suspended'    => 'boolean',
         'password' => 'hashed',
+        'social_links' => 'array',
     ];
 
 
@@ -74,6 +78,21 @@ class User extends Authenticatable implements MustVerifyEmail
             if (!$user->hasAnyRole()) {
                 $user->assignRole('student');
             }
+
+            $role = $user->getRoleNames()->first();
+
+            $defaultTitles = [
+                'student' => 'Student',
+                'teacher' => 'Instructor',
+                'moderator' => 'Moderator',
+                'admin' => 'Administrator',
+                'super_admin' => 'Super Administrator',
+            ];
+
+            $user->update([
+                'professional_title' =>
+                    $defaultTitles[$role] ?? 'Member'
+            ]);
         });
 
         // Automatically restore file from storage when User is restored
