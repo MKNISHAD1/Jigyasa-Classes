@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Media;
 use App\Models\Course;
+use App\Models\CourseModule;
+
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -106,11 +108,13 @@ class CourseController extends Controller
     public function publicCourseView($id)
     {
         $course = Course::with([
-            'lessons', 
+            'lessons.module', 
             'thumbnail', 
             'teacher',
             'category',
-            'subcategory'])->findOrFail($id);
+            'subcategory',
+            'modules'
+        ])->findOrFail($id);
 
         if (!$course) {
             return response()->json([
@@ -184,6 +188,15 @@ class CourseController extends Controller
             'rating' => 0,
         ]);
 
+        $generalModule = CourseModule::create([
+            'course_id' => $course->id,
+            'title'     => 'General',
+            'order'     => 0,
+        ]);
+
+        $generalModule>saveTranslation('title', 'hi', 'सामान्य');
+
+
         // Save translations
         $course->saveTranslation('title', 'hi', $request->title_hi);
         $course->saveTranslation('description', 'hi', $request->description_hi);
@@ -232,7 +245,7 @@ class CourseController extends Controller
      */
     public function viewCourse($id)
     {
-        $course = Course::with(['lessons', 'thumbnail', 'teacher', 'creator', 'category', 'subcategory'])->findOrFail($id);
+        $course = Course::with(['lessons.module','modules', 'thumbnail', 'teacher', 'creator', 'category', 'subcategory'])->findOrFail($id);
 
         return response()->json([
             'status' => true,
@@ -483,10 +496,10 @@ class CourseController extends Controller
 
         if ($user->hasAnyRole(['admin', 'super_admin', 'moderator'])) {
             // Admins/mods get all courses
-            $courses = Course::with(['teacher', 'creator', 'category', 'subcategory', 'thumbnail'])->get();
+            $courses = Course::with(['teacher', 'creator', 'category', 'subcategory', 'thumbnail','modules','lessons.module'])->get();
         } elseif ($user->hasRole('teacher')) {
             // Teacher gets: courses they created OR assigned as teacher
-            $courses = Course::with(['teacher', 'creator', 'category', 'subcategory', 'thumbnail'])
+            $courses = Course::with(['teacher', 'creator', 'category', 'subcategory', 'thumbnail','modules','lessons.module'])
                 ->where('created_by', $user->id)
                 ->orWhere('teacher_id', $user->id)
                 ->get();
@@ -543,7 +556,7 @@ class CourseController extends Controller
      */
     public function deletedCourses()
     {
-        $courses = Course::onlyTrashed()->with(['thumbnail', 'teacher', 'creator', 'category', 'subcategory'])->get();
+        $courses = Course::onlyTrashed()->with(['thumbnail', 'teacher', 'creator', 'category', 'subcategory','modules','lessons.module'])->get();
 
         return response()->json([
             'status' => true,
@@ -568,7 +581,7 @@ class CourseController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'Course restored successfully',
-            'course' => $this->formatCourseResponse($course->load(['thumbnail', 'teacher', 'creator', 'category', 'subcategory', 'lessons']))
+            'course' => $this->formatCourseResponse($course->load(['thumbnail', 'teacher', 'creator', 'category', 'subcategory', 'modules','lessons.module']))
         ], 200);
     }
 
@@ -578,6 +591,12 @@ class CourseController extends Controller
 
         $user = Auth::user();
 
+        if (!$course) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Course not found or already permanently deleted'
+            ], 404);
+        }
         
         // Allow either creator OR assigned teacher
         $isOwnerOrAssignedTeacher = (
@@ -593,12 +612,6 @@ class CourseController extends Controller
             ], 403);
         }
 
-        if (!$course) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Course not found or already permanently deleted'
-            ], 404);
-        }
 
         // if course has a thumbnail in media, delete it as well
 
@@ -626,6 +639,8 @@ class CourseController extends Controller
     private function formatCourseResponse(Course $course)
     {
         return [
+
+
             'id' => $course->id,
 
             'title' => [
@@ -673,10 +688,48 @@ class CourseController extends Controller
             'teacher' => $course->teacher,
             'creator' => $course->creator,
                
-            'lessons_count' =>$course->lessons_count,
+            'lessons_count' =>$course->lessons->count(),
+
+            // Modules 
+            'modules' => $course->modules->map(function ($module) {
+
+                $moduleLessons = $module->lessons;
+
+                return [
+                    'id' => $module->id,
+
+                    'title' => [
+                        'en' => $module->title,
+                        'hi' => $module->translateField('title', 'hi')
+                            ?? $module->title,
+                    ],
+
+                    'order' => $module->order,
+
+                    'lessons_count' => $moduleLessons->count(),
+
+                    'lessons' => $moduleLessons->map(function ($lesson) {
+                        return [
+                            'id' => $lesson->id,
+
+                            'title' => [
+                                'en' => $lesson->title,
+                                'hi' => $lesson->translateField('title', 'hi')
+                                    ?? $lesson->title,
+                            ],
+
+                            'order' => $lesson->order,
+
+                            'status' => $lesson->status,
+                        ];
+                    })->values(),
+                ];
+        }),
             // Lessons
 
             'lessons' => $course->lessons->map(function ($lesson) {
+
+            $module = $lesson->module;
                 return [
                     'id'       => $lesson->id,
 
@@ -698,6 +751,16 @@ class CourseController extends Controller
                     'status'          => $lesson->status,
                     'is_locked'       => $lesson->is_locked,
                     'published_at'    => $lesson->published_at,
+
+                    'module' => [
+                        'id' => $module?->id,
+                        'title' => [
+                            'en' => $module?->title ?? 'General',
+                            'hi' => $module?->translateField('title', 'hi')
+                                ?? $module?->title
+                                ?? 'General',
+                        ],
+                    ],
 
                     // Map lesson media files as materials
                     'materials'       => $lesson->media->map(fn ($file) => [

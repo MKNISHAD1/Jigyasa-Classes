@@ -290,6 +290,28 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 
 
+// ===================================================================================================
+//                                      Module Routes
+// ===================================================================================================
+
+use App\Http\Controllers\CourseModuleController;
+
+Route::post('module', [CourseModuleController::class, 'createModule']);
+Route::put('update-module/{id}', [CourseModuleController::class, 'updateModule']);
+
+Route::delete('modules/bulk-delete',[CourseModuleController::class, 'bulkDeleteModules']);
+Route::post('modules/bulk-restore',[CourseModuleController::class, 'bulkRestoreModules']);
+Route::delete('modules/bulk-force-delete',[CourseModuleController::class, 'bulkForceDeleteModules']);
+
+Route::delete('modules/{id}', [CourseModuleController::class, 'deleteModule']);
+Route::get('course/{courseId}/modules', [CourseModuleController::class, 'listModules']);
+Route::get('deleted-modules',[CourseModuleController::class, 'trashedModules']);
+Route::post('restore-module/{id}',[CourseModuleController::class, 'restoreModule']);
+Route::delete('force-delete-module/{id}',[CourseModuleController::class, 'forceDeleteModule']);
+Route::post('modules/{id}/assign-lessons',[CourseModuleController::class, 'assignLessons']);
+Route::post('modules/{id}/remove-lessons',[CourseModuleController::class, 'removeLessons']);
+
+
 
 
 // ===================================================================================================

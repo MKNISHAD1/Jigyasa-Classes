@@ -23,7 +23,7 @@ class LessonController extends Controller
      */
     public function lessonList($courseId)
     {
-        $course = Course::with('lessons.media')->findOrFail($courseId);
+        $course = Course::with('lessons.media','lessons.module')->findOrFail($courseId);
 
         return response()->json([
             'status' => true,
@@ -36,7 +36,7 @@ class LessonController extends Controller
      */
     public function viewLesson($courseId, $id)
     {
-        $lesson = Lesson::with('media')->where('course_id', $courseId)->findOrFail($id);
+        $lesson = Lesson::with('media,module')->where('course_id', $courseId)->findOrFail($id);
 
         return response()->json([
             'status' => true,
@@ -187,6 +187,7 @@ class LessonController extends Controller
         }
 
         $validated = $request->validate([
+            'module_id' => 'nullable|exists:course_modules,id',
             'title_en'       => 'required|string|max:255',
             'title_hi'       => 'nullable|string|max:255',
             'is_free_preview' => 'boolean',
@@ -204,6 +205,7 @@ class LessonController extends Controller
 
         // Create lesson (store base English version)
         $lesson = Lesson::create([
+            'module_id' => $request->module_id,
             'course_id'      => $courseId,
             'title'          => $request->title_en,
             'order'          => $order,
@@ -230,7 +232,7 @@ class LessonController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'Lesson created successfully',
-            'lesson' => $this->formatLesson($lesson->load(['media','translations'])),
+            'lesson' => $this->formatLesson($lesson->load(['media','translations','module'])),
         ], 201);
     }
 
@@ -320,7 +322,7 @@ class LessonController extends Controller
     public function updateLesson(Request $request, $courseId, $id)
     {
             $course = Course::findOrFail($courseId);
-            $lesson = Lesson::with('translations')->where('course_id', $courseId)->findOrFail($id);
+            $lesson = Lesson::with('translations','module')->where('course_id', $courseId)->findOrFail($id);
 
             $user = Auth::user();
 
@@ -340,6 +342,7 @@ class LessonController extends Controller
 
 
             $validated = $request->validate([
+                'module_id' => 'nullable|exists:course_modules,id',
                 'title_en'         => 'sometimes|string|max:255',
                 'title_hi'         => 'nullable|string|max:255',
                 'description_en'   => 'sometimes|string',
@@ -398,6 +401,7 @@ class LessonController extends Controller
 
             // ------------------- UPDATE ENGLISH -------------------
             $lesson->update([
+                'module_id' => $request->module_id ?? $lesson->module_id,
                 'title'          => $newTitleEn ?? $lesson->title,
                 'description'    => $newDescEn ?? $lesson->description,
                 'is_free_preview' => $request->is_free_preview ?? $lesson->is_free_preview,
@@ -474,7 +478,7 @@ class LessonController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => 'Lesson updated successfully',
-                'lesson' => $this->formatLesson($lesson->load(['media','translations'])),
+                'lesson' => $this->formatLesson($lesson->load(['media','translations','module'])),
             ]);
     }
 
@@ -507,14 +511,30 @@ class LessonController extends Controller
         $actor = Auth::user();
 
         // ✅ Only owner (uploader), course creator, admin, or super_admin
-        if ($lesson->uploaded_by !== $actor->id 
-            && $lesson->course->created_by !== $actor->id 
-            && !$actor->hasAnyRole(['admin', 'super_admin','teacher'])) {
+        $course = $lesson->course;
+
+        $isOwnerOrAssignedTeacher = (
+            $actor->id === $course->created_by ||
+            $actor->id === $course->teacher_id
+        );
+
+        if (
+            !$isOwnerOrAssignedTeacher &&
+            !$actor->hasAnyRole(['admin', 'super_admin'])
+        ) {
             return response()->json([
                 'status' => false,
                 'message' => 'You are not allowed to delete this lesson.'
             ], 403);
         }
+        // if ($lesson->uploaded_by !== $actor->id 
+        //     && $lesson->course->created_by !== $actor->id 
+        //     && !$actor->hasAnyRole(['admin', 'super_admin','teacher'])) {
+        //     return response()->json([
+        //         'status' => false,
+        //         'message' => 'You are not allowed to delete this lesson.'
+        //     ], 403);
+        // }
         
         $lesson->delete(); // sof delete
 
@@ -559,16 +579,34 @@ class LessonController extends Controller
 
         foreach ($lessons as $lesson) {
             // ✅ Only owner (uploader), course creator, admin, or super_admin
+
+            $course = $lesson->course;
+
+            $isOwnerOrAssignedTeacher = (
+                $actor->id === $course->created_by ||
+                $actor->id === $course->teacher_id
+            );
+
             if (
-                $lesson->uploaded_by !== $actor->id &&
-                $lesson->course->created_by !== $actor->id &&
+                !$isOwnerOrAssignedTeacher &&
                 !$actor->hasAnyRole(['admin', 'super_admin'])
             ) {
                 return response()->json([
                     'status' => false,
                     'message' => "You are not allowed to delete lesson: {$lesson->title}"
                 ], 403);
-            }
+              }
+            
+            // if (
+            //     $lesson->uploaded_by !== $actor->id &&
+            //     $lesson->course->created_by !== $actor->id &&
+            //     !$actor->hasAnyRole(['admin', 'super_admin'])
+            // ) {
+            //     return response()->json([
+            //         'status' => false,
+            //         'message' => "You are not allowed to delete lesson: {$lesson->title}"
+            //     ], 403);
+            // }
 
 
             $lesson->delete();
@@ -611,16 +649,33 @@ class LessonController extends Controller
 
         foreach ($lessons as $lesson) {
             // ✅ Same permission rules as delete
+            $course = $lesson->course;
+
+            $isOwnerOrAssignedTeacher = (
+                $actor->id === $course->created_by ||
+                $actor->id === $course->teacher_id
+            );
+
             if (
-                $lesson->uploaded_by !== $actor->id &&
-                $lesson->course->created_by !== $actor->id &&
+                !$isOwnerOrAssignedTeacher &&
                 !$actor->hasAnyRole(['admin', 'super_admin'])
-            ) {
+            ){
                 return response()->json([
                     'status' => false,
                     'message' => "You are not allowed to restore lesson: {$lesson->title}"
                 ], 403);
             }
+
+            // if (
+            //     $lesson->uploaded_by !== $actor->id &&
+            //     $lesson->course->created_by !== $actor->id &&
+            //     !$actor->hasAnyRole(['admin', 'super_admin'])
+            // ) {
+            //     return response()->json([
+            //         'status' => false,
+            //         'message' => "You are not allowed to restore lesson: {$lesson->title}"
+            //     ], 403);
+            // }
 
             // Ensure restored lesson order doesn't collide
             $maxOrder = Lesson::where('course_id', $courseId)
@@ -674,9 +729,16 @@ class LessonController extends Controller
 
         foreach ($lessons as $lesson) {
             // Permission check
+
+            $course = $lesson->course;
+
+            $isOwnerOrAssignedTeacher = (
+                $actor->id === $course->created_by ||
+                $actor->id === $course->teacher_id
+            );
+
             if (
-                $lesson->uploaded_by !== $actor->id &&
-                $lesson->course->created_by !== $actor->id &&
+                !$isOwnerOrAssignedTeacher &&
                 !$actor->hasAnyRole(['admin', 'super_admin'])
             ) {
                 return response()->json([
@@ -684,6 +746,17 @@ class LessonController extends Controller
                     'message' => "You are not allowed to permanently delete lesson: {$lesson->title}"
                 ], 403);
             }
+
+            // if (
+            //     $lesson->uploaded_by !== $actor->id &&
+            //     $lesson->course->created_by !== $actor->id &&
+            //     !$actor->hasAnyRole(['admin', 'super_admin'])
+            // ) {
+            //     return response()->json([
+            //         'status' => false,
+            //         'message' => "You are not allowed to permanently delete lesson: {$lesson->title}"
+            //     ], 403);
+            // }
 
             $lesson->forceDelete();
         }
@@ -707,7 +780,20 @@ class LessonController extends Controller
         $course = Course::findOrFail($courseId);
 
         // ✅ Only course creator, admin, or super_admin can see trashed
-        if ($course->created_by !== $actor->id && !$actor->hasAnyRole(['admin', 'super_admin'])) {
+
+        $isOwnerOrAssignedTeacher = (
+            $actor->id === $course->created_by ||
+            $actor->id === $course->teacher_id
+        );
+
+        if (
+            !$isOwnerOrAssignedTeacher &&
+            !$actor->hasAnyRole(['admin', 'super_admin'])
+        )
+
+        // if ($course->created_by !== $actor->id && !$actor->hasAnyRole(['admin', 'super_admin']))
+         
+        {
             return response()->json([
                 'status' => false,
                 'message' => 'You are not allowed to view trashed lessons for this course.'
@@ -716,7 +802,7 @@ class LessonController extends Controller
 
         $trashed = Lesson::onlyTrashed()
             ->where('course_id', $courseId)
-            ->with('media')
+            ->with('media','module')
             ->get();
 
         return response()->json([
@@ -730,9 +816,9 @@ class LessonController extends Controller
      */
     public function trashedLessonsByUser(Request $request, $courseId)
     {
-        $user = $request->user();
+        // $user = $request->user();
 
-        $course = Course::findOrFail($courseId);
+        // $course = Course::findOrFail($courseId);
 
         $lessons = Lesson::onlyTrashed()
             ->where('course_id', $courseId)
@@ -786,9 +872,9 @@ class LessonController extends Controller
         $course = Course::findOrFail($courseId);
 
         $lesson = Lesson::onlyTrashed()
+            ->where('id', $id)
             ->where('course_id', $courseId)
-            ->where('uploaded_by', auth()->id()) // Only lessons created by that teacher
-            ->orderBy('deleted_at', 'desc')
+            ->where('uploaded_by', auth()->id())
             ->firstOrFail();
 
         if (!$lesson) {
@@ -853,6 +939,7 @@ class LessonController extends Controller
         $course = Course::findOrFail($courseId);
 
         $lesson = Lesson::onlyTrashed()
+            ->where('id', $id)
             ->where('course_id', $courseId)
             ->where('uploaded_by', auth()->id()) // Only lessons created by that teacher
             ->orderBy('deleted_at', 'desc')
@@ -956,6 +1043,16 @@ class LessonController extends Controller
                     'status'          => $lesson->status,
                     'is_locked'       => $lesson->is_locked,
                     'published_at'    => $lesson->published_at,
+                    'module' => [
+                        'id' => $lesson->module?->id,
+                        'title' => [
+                            'en' => $lesson->module?->title ?? 'General',
+                            'hi' => $lesson->module?->translateField('title', 'hi')
+                                ?? $lesson->module?->title
+                                ?? 'General',
+                        ],
+                    ],
+
 
                     // Map lesson media files as materials
                     'materials'       => $lesson->media->map(fn ($file) => [
