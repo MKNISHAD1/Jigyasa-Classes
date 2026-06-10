@@ -31,14 +31,31 @@ class CourseModuleController extends Controller
 
     public function listModules($courseId)
     {
+        
         $modules = CourseModule::with('lessons')
             ->where('course_id', $courseId)
             ->orderBy('order')
             ->get();
 
+
+
         return response()->json([
             'status' => true,
-            'modules' => $modules
+            'modules' => $modules->map(function ($module) {
+                return [
+                    'id' => $module->id,
+
+                    'title' => [
+                        'en' => $module->title,
+                        'hi' => $module->translateField('title', 'hi')
+                            ?? $module->title,
+                    ],
+
+                    'order' => $module->order,
+
+                    'lessons_count' => $module->lessons->count(),
+                ];
+            }),
         ]);
     }
 
@@ -57,6 +74,38 @@ class CourseModuleController extends Controller
 
         $course = Course::findOrFail($request->course_id);
 
+        // Normalize title
+        $normalizedTitle = preg_replace(
+            '/\s+/',
+            ' ',
+            strtolower(trim($request->title_en))
+        );
+
+        // Prevent duplicate module names in same course
+        $exists = CourseModule::where(
+            'course_id',
+            $course->id
+        )
+        ->get()
+        ->contains(function ($module) use ($normalizedTitle) {
+
+            $existingTitle = preg_replace(
+                '/\s+/',
+                ' ',
+                strtolower(trim($module->title))
+            );
+
+            return $existingTitle === $normalizedTitle;
+        });
+
+        if ($exists) {
+            return response()->json([
+                'status' => false,
+                'message' => 'A module with this name already exists in this course.'
+            ], 422);
+        }
+
+
         // Prevent creating of General module
         if ($this->isGeneralModule($request->title_en)){
             return response()->json([
@@ -65,10 +114,20 @@ class CourseModuleController extends Controller
             ], 422);
         }
 
+        // Auto Assign Order
+        $lastOrder = CourseModule::where(
+            'course_id',
+            $course->id
+        )->max('order') ?? 0;
+
+        $order = $lastOrder + 1;
+
+        // Module create
+
         $module = CourseModule::create([
             'course_id' => $course->id,
             'title'     => $request->title_en,
-            'order'     => $request->order ?? 0,
+            'order'     => $order,
         ]);
 
         // Manual Hindi
@@ -106,6 +165,46 @@ class CourseModuleController extends Controller
             'title_hi' => 'nullable|string|max:255',
             'order'    => 'nullable|integer|min:0',
         ]);
+
+        // Normalise title and prevent duplicate 
+        
+        if ($request->filled('title_en')) {
+
+            $normalizedTitle = preg_replace(
+                '/\s+/',
+                ' ',
+                strtolower(trim($request->title_en))
+            );
+
+            $exists = CourseModule::where(
+                'course_id',
+                $module->course_id
+            )
+            ->where(
+                'id',
+                '!=',
+                $module->id
+            )
+            ->get()
+            ->contains(function ($module) use ($normalizedTitle) {
+
+                $existingTitle = preg_replace(
+                    '/\s+/',
+                    ' ',
+                    strtolower(trim($module->title))
+                );
+
+                return $existingTitle === $normalizedTitle;
+            });
+
+            if ($exists) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'A module with this name already exists in this course.'
+                ], 422);
+            }
+        }
+
 
         //General module cannot be renamed
         if (
@@ -466,5 +565,102 @@ class CourseModuleController extends Controller
             'message' => 'Modules permanently deleted'
         ]);
     }
+
+    // reorder for modules
+
+    public function reorderModules(Request $request,$courseId)
+    {
+
+    
+        $validated = $request->validate([
+            'orders' => 'required|array',
+            'orders.*.id' => 'required|exists:course_modules,id',
+            'orders.*.order' => 'required|integer|min:1',
+        ]);
+
+        foreach ($validated['orders'] as $item) {
+
+            CourseModule::where(
+                'id',
+                $item['id']
+            )
+            ->where(
+                'course_id',
+                $courseId
+            )
+            ->update([
+                'order' => $item['order']
+            ]);
+        }
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Modules reordered successfully'
+        ]);
+    }
+
+    // get lessons insiide module list 
+
+    public function getModuleLessons($courseId, $moduleId)
+    {
+        $lessons = Lesson::where('course_id', $courseId)
+            ->where('module_id', $moduleId)
+            ->orderBy('order')
+            ->get();
+
+        return response()->json([
+            'status' => true,
+            'lessons' => $lessons->map(function ($lesson) {
+                return [
+                    'id' => $lesson->id,
+
+                    'title' => [
+                        'en' => $lesson->title,
+                        'hi' => $lesson->translateField('title', 'hi')
+                            ?? $lesson->title,
+                    ],
+
+                    'order' => $lesson->order,
+                ];
+            }),
+        ]);
+    }
+    
+    // Reorder lessons inside module
+
+    public function reorderModuleLessons(Request $request,$courseId,$moduleId)
+    {
+        $validated = $request->validate([
+            'orders' => 'required|array',
+            'orders.*.id' => 'required|exists:lessons,id',
+            'orders.*.order' => 'required|integer|min:1',
+        ]);
+
+        foreach ($validated['orders'] as $item) {
+
+            Lesson::where(
+                'id',
+                $item['id']
+            )
+            ->where(
+                'course_id',
+                $courseId
+            )
+            ->where(
+                'module_id',
+                $moduleId
+            )
+            ->update([
+                'order' => $item['order']
+            ]);
+        }
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Lessons reordered successfully'
+        ]);
+    }
+
+
 
 }

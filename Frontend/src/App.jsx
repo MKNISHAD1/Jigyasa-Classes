@@ -43,6 +43,9 @@ import ContactUi from "./Component/Frontend/Ui for Frontend/ContactUi";
 import AllCoursesUi from "./Component/Frontend/Ui for Frontend/AllCoursesUi";
 import CourseCardUi from "./Component/Common/CommonUI/CourseCardUi";
 import ViewCourseUi from "./Component/Frontend/Ui for Frontend/ViewCourseUi";
+import CourseModule from "./Component/backend/courses/CourseModule";
+import CourseModuleReorder from "./Component/backend/courses/CourseModuleReorder";
+import ModuleLessonReorder from "./Component/backend/courses/ModuleLessonReorder";
 
 
 function App() {
@@ -86,6 +89,14 @@ function App() {
               <Route path="/Courses" element={<AllCoursesUi />}/>
               <Route path="/CourseCard" element={<CourseCardUi />}/>
               <Route path="/CourseView/:id/:title" element={<ViewCourseUi />}/>
+
+              <Route path="/admin/course/:id/course-modules" element={<CourseModule />} />
+              <Route path="admin/course/:id/module-order" element={<CourseModuleReorder />} />
+
+              <Route path="/admin/course/:id/module/:moduleId/reorder-lessons"
+                element={<ModuleLessonReorder />}
+              />
+
               <Route
                 path="/register"
                 element={<Registration handleLogin={login} />}
@@ -227,6 +238,8 @@ function App() {
                   </RequireAuth>
                 }
                 />
+
+
 
                {/* Create FAQ */}
                 <Route

@@ -119,6 +119,13 @@ const CourseView = () => {
                 {/* Buttons */}
                 <div className="d-flex gap-3 mt-4">
                   <Link
+                    to={`/admin/course/${course.id}/course-modules`}
+                    className="btn btn-success"
+                  >
+                    Manage Structure
+                  </Link>
+
+                  <Link
                     to={`/admin/course/update-Course/${course.id}`}
                     className="btn btn-primary"
                   >

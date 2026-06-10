@@ -296,20 +296,46 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 use App\Http\Controllers\CourseModuleController;
 
-Route::post('module', [CourseModuleController::class, 'createModule']);
-Route::put('update-module/{id}', [CourseModuleController::class, 'updateModule']);
+// Protected Routes
 
-Route::delete('modules/bulk-delete',[CourseModuleController::class, 'bulkDeleteModules']);
-Route::post('modules/bulk-restore',[CourseModuleController::class, 'bulkRestoreModules']);
-Route::delete('modules/bulk-force-delete',[CourseModuleController::class, 'bulkForceDeleteModules']);
+Route::middleware(['auth:sanctum'])->group(function () {
 
-Route::delete('modules/{id}', [CourseModuleController::class, 'deleteModule']);
-Route::get('course/{courseId}/modules', [CourseModuleController::class, 'listModules']);
-Route::get('deleted-modules',[CourseModuleController::class, 'trashedModules']);
-Route::post('restore-module/{id}',[CourseModuleController::class, 'restoreModule']);
-Route::delete('force-delete-module/{id}',[CourseModuleController::class, 'forceDeleteModule']);
-Route::post('modules/{id}/assign-lessons',[CourseModuleController::class, 'assignLessons']);
-Route::post('modules/{id}/remove-lessons',[CourseModuleController::class, 'removeLessons']);
+Route::post('module', [CourseModuleController::class, 'createModule'])
+    ->middleware('role:teacher|moderator|admin|super_admin');
+Route::put('update-module/{id}', [CourseModuleController::class, 'updateModule'])
+    ->middleware('role:teacher|moderator|admin|super_admin');
+Route::delete('modules/bulk-delete',[CourseModuleController::class, 'bulkDeleteModules'])
+    ->middleware('role:teacher|moderator|admin|super_admin');
+Route::post('modules/bulk-restore',[CourseModuleController::class, 'bulkRestoreModules'])
+    ->middleware('role:teacher|moderator|admin|super_admin');
+Route::delete('modules/bulk-force-delete',[CourseModuleController::class, 'bulkForceDeleteModules'])
+    ->middleware('role:teacher|moderator|admin|super_admin');
+
+Route::delete('modules/{id}', [CourseModuleController::class, 'deleteModule'])
+    ->middleware('role:teacher|moderator|admin|super_admin');
+Route::get('course/{courseId}/modules', [CourseModuleController::class, 'listModules'])
+    ->middleware('role:teacher|moderator|admin|super_admin');
+Route::get('deleted-modules',[CourseModuleController::class, 'trashedModules'])
+    ->middleware('role:teacher|moderator|admin|super_admin');
+Route::post('restore-module/{id}',[CourseModuleController::class, 'restoreModule'])
+    ->middleware('role:teacher|moderator|admin|super_admin');
+Route::delete('force-delete-module/{id}',[CourseModuleController::class, 'forceDeleteModule'])
+    ->middleware('role:teacher|moderator|admin|super_admin');
+Route::post('modules/{id}/assign-lessons',[CourseModuleController::class, 'assignLessons'])
+    ->middleware('role:teacher|moderator|admin|super_admin');
+Route::post('modules/{id}/remove-lessons',[CourseModuleController::class, 'removeLessons'])
+    ->middleware('role:teacher|moderator|admin|super_admin');
+
+    // Module reorder
+Route::post('course/{courseId}/modules/reorder',[CourseModuleController::class, 'reorderModules'])
+    ->middleware('role:teacher|moderator|admin|super_admin');
+
+    // Lesson reorder
+Route::get('course/{courseId}/module/{moduleId}/lessons',[CourseModuleController::class,    'getModuleLessons'])
+    ->middleware('role:teacher|moderator|admin|super_admin');
+Route::post('course/{courseId}/module/{moduleId}/reorder-lessons',[CourseModuleController::class, 'reorderModuleLessons'])
+    ->middleware('role:teacher|moderator|admin|super_admin');
+});
 
 
 
