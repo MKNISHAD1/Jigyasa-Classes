@@ -4,6 +4,8 @@ import {useParams,useNavigate} from "react-router-dom";
 import {apiUrl,token} from "../../Common/http";
 import { toast } from "react-toastify";
 import i18n from "../../../i18n/i18n";
+import HeaderUi from "../../Common/CommonUI/HeaderUi";
+import FooterUi from "../../Common/CommonUI/FooterUi";
 
 const ModuleLessonReorder = () => {
 
@@ -150,79 +152,91 @@ if (loading)
   return <p>Loading lessons...</p>;
 
 return (
-  <div className="container my-5">
 
-    <h4 className="mb-3">
-      Reorder Lessons
-    </h4>
+  <>
 
-    <DragDropContext
-      onDragEnd={handleDragEnd}
-    >
+    {/* Header  */}
+    <HeaderUi />
 
-      <Droppable
-        droppableId="lesson-order"
+    <div className="container my-5">
+
+      <h4 className="mb-3">
+        Reorder Lessons
+      </h4>
+
+      <DragDropContext
+        onDragEnd={handleDragEnd}
       >
 
-        {(provided) => (
+        <Droppable
+          droppableId="lesson-order"
+        >
 
-          <div
-            ref={provided.innerRef}
-            {...provided.droppableProps}
-            className="list-group"
-          >
+          {(provided) => (
 
-            {lessons.map(
-              (lesson, index) => (
+            <div
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+              className="list-group"
+            >
 
-              <Draggable
-                key={lesson.id}
-                draggableId={lesson.id.toString()}
-                index={index}
-              >
+              {lessons.map(
+                (lesson, index) => (
 
-                {(provided) => (
+                <Draggable
+                  key={lesson.id}
+                  draggableId={lesson.id.toString()}
+                  index={index}
+                >
 
-                  <div
-                    ref={provided.innerRef}
-                    {...provided.draggableProps}
-                    {...provided.dragHandleProps}
-                    className="list-group-item"
-                  >
+                  {(provided) => (
 
-                    {lesson.order}.
-                    {" "}
-                    {lesson.title?.[i18n.language] || lesson.title?.en}
+                    <div
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                      className="list-group-item"
+                    >
 
-                  </div>
+                      {lesson.order}.
+                      {" "}
+                      {lesson.title?.[i18n.language] || lesson.title?.en}
 
-                )}
+                    </div>
 
-              </Draggable>
+                  )}
 
-            ))}
+                </Draggable>
 
-            {provided.placeholder}
+              ))}
 
-          </div>
+              {provided.placeholder}
 
-        )}
+            </div>
 
-      </Droppable>
+          )}
 
-    </DragDropContext>
+        </Droppable>
 
-    <button
-      className="btn btn-success mt-3"
-      onClick={saveOrder}
-      disabled={saving}
-    >
-      {saving
-        ? "Saving..."
-        : "Save Order"}
-    </button>
+      </DragDropContext>
 
-  </div>
+      <button
+        className="btn btn-success mt-3"
+        onClick={saveOrder}
+        disabled={saving}
+      >
+        {saving
+          ? "Saving..."
+          : "Save Order"}
+      </button>
+
+    </div>
+
+    {/* Footer  */}
+    <FooterUi/>
+    
+  </>
+
 );
 };
 export default ModuleLessonReorder;

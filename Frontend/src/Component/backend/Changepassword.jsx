@@ -5,6 +5,8 @@ import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { apiUrl, token } from '../Common/http'
 import { toast } from 'react-toastify'
+import HeaderUi from '../Common/CommonUI/HeaderUi'
+import FooterUi from '../Common/CommonUI/FooterUi'
 
 const Changepassword = () => {
   const [isDisable, setIsDisable] = useState(false);
@@ -53,8 +55,10 @@ const Changepassword = () => {
   }
 
   return (
-    <>
-      <Header />
+    <>  
+      {/* Header  */}
+      <HeaderUi />
+
       <main>
         <div className="container my-5">
           <div className="row">
@@ -119,6 +123,10 @@ const Changepassword = () => {
           </div>
         </div>
       </main>
+
+      {/* Footer */}
+      <FooterUi/>
+      
     </>
   )
 }

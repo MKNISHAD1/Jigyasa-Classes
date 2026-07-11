@@ -36,7 +36,7 @@ class LessonController extends Controller
      */
     public function viewLesson($courseId, $id)
     {
-        $lesson = Lesson::with('media,module')->where('course_id', $courseId)->findOrFail($id);
+        $lesson = Lesson::with('media','module')->where('course_id', $courseId)->findOrFail($id);
 
         return response()->json([
             'status' => true,
@@ -995,7 +995,7 @@ class LessonController extends Controller
     }
 
     /**
-     * erify and regenarate signed url for 10 min only
+     * Verify and regenarate signed url for 10 min only
      */
 
     public function refreshSignedUrl($id)

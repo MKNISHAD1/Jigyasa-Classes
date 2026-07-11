@@ -6,6 +6,8 @@ import { useForm } from "react-hook-form";
 import { apiUrl, token } from "../Common/http";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import FooterUi from "../Common/CommonUI/FooterUi";
+import HeaderUi from "../Common/CommonUI/HeaderUi";
 
 const Profile = () => {
   const [user, setUser] = useState("");
@@ -96,7 +98,9 @@ const isChanged =
 
   return (
     <>
-      <Header />
+      {/* Header  */}
+      <HeaderUi />
+
       <main>
         <div className="container my-5">
           <div className="row">
@@ -212,6 +216,9 @@ const isChanged =
           </div>
         </div>
       </main>
+
+      {/* Footer */}
+      <FooterUi/>
     </>
   );
 };

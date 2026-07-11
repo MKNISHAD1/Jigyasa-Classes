@@ -39,7 +39,18 @@ export const AuthProvider = ({ children }) => {
         .then((res) => res.json())
         .then((fresh) => {
           if (fresh?.id) {
-            const updatedUserInfo = { token: saved.token, ...fresh };
+            // const updatedUserInfo = { token: saved.token, ...fresh };
+            const updatedUserInfo = {
+              token: saved.token,
+              ...fresh,
+              roles: Array.isArray(fresh.roles)
+                ? fresh.roles.map(role =>
+                    typeof role === "object"
+                      ? role.name
+                      : role
+                  )
+                : []
+            };
             setUser(updatedUserInfo);
 
             // update state + storage

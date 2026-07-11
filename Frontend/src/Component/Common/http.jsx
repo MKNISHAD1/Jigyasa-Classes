@@ -1,4 +1,7 @@
-export const apiUrl = 'http://127.0.0.1:8000/api/';
+// export const apiUrl = 'http://127.0.0.1:8000/api/';
+
+export const apiUrl = `http://${window.location.hostname}:8000/api/`;
+
 
 export const token = () => {
     const userInfo = localStorage.getItem('userInfo') || sessionStorage.getItem('userInfo');

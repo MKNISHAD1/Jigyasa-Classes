@@ -1,7 +1,5 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
-import Home from "./Component/Frontend/Home";
-import About from "./Component/Frontend/About";
 import Registration from "./Component/backend/Registration";
 import Login from "./Component/backend/Login";
 import { ToastContainer } from "react-toastify";
@@ -46,6 +44,8 @@ import ViewCourseUi from "./Component/Frontend/Ui for Frontend/ViewCourseUi";
 import CourseModule from "./Component/backend/courses/CourseModule";
 import CourseModuleReorder from "./Component/backend/courses/CourseModuleReorder";
 import ModuleLessonReorder from "./Component/backend/courses/ModuleLessonReorder";
+import ContactMessages from "./Component/backend/users/ContactMessages";
+import ContactMessageView from "./Component/backend/users/ContactMessageView";
 
 
 function App() {
@@ -92,7 +92,11 @@ function App() {
 
               <Route path="/admin/course/:id/course-modules" element={<CourseModule />} />
               <Route path="admin/course/:id/module-order" element={<CourseModuleReorder />} />
-
+              <Route path="admin/contact-messages" element={<ContactMessages />} />
+              <Route
+    path="/admin/contact-message/:id"
+    element={<ContactMessageView />}
+/>
               <Route path="/admin/course/:id/module/:moduleId/reorder-lessons"
                 element={<ModuleLessonReorder />}
               />
@@ -107,7 +111,7 @@ function App() {
               {/* Email Verification Link  */}
               <Route path="/email-verified" element={<EmailVerified />} />
 
-              <Route path="/unauthorized" element={<Home />} />
+              <Route path="/unauthorized" element={<HomeUi />} />
 
               <Route path="/two-factor" element={<TwofactOTP />} />
 
@@ -233,7 +237,7 @@ function App() {
                 <Route
                 path="/admin/course/create"
                 element={
-                  <RequireAuth allowedRoles={["moderator","super_admin","teacher"]}>
+                  <RequireAuth allowedRoles={["moderator","admin","super_admin","teacher"]}>
                     <CreateCourse />
                   </RequireAuth>
                 }

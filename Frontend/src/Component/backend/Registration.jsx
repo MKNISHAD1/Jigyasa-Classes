@@ -6,6 +6,7 @@ import { apiUrl } from '../Common/http'
 import { useNavigate } from 'react-router-dom'
 import { AuthContext } from './context/Auth'
 import { toast } from 'react-toastify'
+import HeaderUi from '../Common/CommonUI/HeaderUi'
 
 const Registration = () => {
 
@@ -78,7 +79,9 @@ const Registration = () => {
 
   return (
     <>
-      <Header />
+      {/* Header */}
+      <HeaderUi />
+
       <div className="container my-5">
         <div className="login-form">
           <div className="card border-0 shadow">
@@ -175,6 +178,8 @@ const Registration = () => {
           </div>
         </div>
       </div>
+      
+      {/* Footer */}
       <Footercomp />
     </>
   )

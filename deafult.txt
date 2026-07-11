@@ -490,3 +490,547 @@ benefits-layout {
   }
 }
 
+
+// Extra Small Phones
+@media (max-width: 479px) {
+
+}
+
+// Large Phones
+@media (min-width: 480px) and (max-width: 575px) {
+
+}
+
+// Small Tablets / Foldables
+@media (min-width: 576px) and (max-width: 767px) {
+
+}
+
+// Tablets
+@media (min-width: 768px) and (max-width: 991px) {
+
+}
+
+// Laptops
+@media (min-width: 992px) and (max-width: 1199px) {
+
+}
+
+// Desktop
+@media (min-width: 1200px) {
+
+}
+
+
+///////////////////        View COusre   PAge //////////////////
+
+    {/* New Hero  */}
+    <section className="hero-section" 
+      style={{backgroundImage: `url(${bgImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'}}>
+
+      <div className="container-fluid hero-body pb-3">
+
+        <div className="row">
+
+          {/* LEFT CONTENT */}
+          <div className="col-lg-6 hero-content-view-course pb-2">
+
+            <small className="hero-tag">
+              {/* Breadcrubms */}
+              <section className="breadcrumb-section">
+                <Link className='bread-link' to="/">Home</Link>
+                <span><FontAwesomeIcon icon={faAngleRight}/></span>
+
+                <Link className='bread-link' to="/courses">Courses</Link>
+                <span><FontAwesomeIcon icon={faAngleRight}/></span>
+
+                <span>{course.title?.[i18n.language] || course.title?.en}</span>
+              </section>
+            </small>
+
+            <span className="category-pill">
+                {course.category?.name?.[i18n.language] ??
+                  course.category?.name?.en}
+              </span>
+
+            {/* Course title */}
+            <h2  className='course-title'>  {course.title?.[i18n.language] || course.title?.en} </h2>
+
+            {/* Description  */}
+            <p className='course-description'> {course.description?.[i18n.language] || course.description?.en}</p>
+
+            {/* rating and enrollment count */}
+            <div className="rating-enrollcount d-flex">
+              <div className="icon">
+              <FontAwesomeIcon icon={faStar} /> <span>5 (100 reviews)</span> 
+              </div>
+              <div className="icon">
+              <FontAwesomeIcon icon={faUsers}/><span> 1200 students enrolled </span>
+              </div>
+              <div className="icon">
+              <FontAwesomeIcon icon={faArrowTrendUp}/>  <span>
+                {course.difficulty_level || "All Levels"}
+                </span> 
+              
+              </div>
+            </div>
+
+            <div className="hero-features">
+
+              <div className="feature-item">
+                <div className="icon">
+                <FontAwesomeIcon icon={faPlayCircle} />
+                </div>
+                <div className="body">
+                <small>Lectures</small> <p>{course.lessons_count || 0} Lessons</p>
+                </div>
+              </div>
+
+              <div className="feature-item">
+                <div className="icon">
+                <FontAwesomeIcon icon={faAward}/>
+                </div>
+                <div className="body">
+                 <small>Certification</small> <p>Coming Soon</p>
+                </div>
+              </div>
+
+              <div className="feature-item">
+                <div className="icon">
+                <FontAwesomeIcon icon={faLanguage} /> 
+                </div>
+                <div className="body">
+                <small>Language</small> <p>{course?.language}</p>
+                </div>
+              </div>
+
+            </div>
+
+
+          </div>
+
+          {/* RIGHT IMAGE */}
+            <div className=" col-lg-6 text-center thumbnail-banner">
+              {/* Couse Thumbnail  */}
+                <img
+                    src={course.thumbnail || "/images/default-thumbnail.jpg"}
+                    alt="Course Thumbnail"
+                    //  style={{ width:"100%", aspectRatio: "16/9", objectFit:"cover",borderRadius:"20px" }}
+                  />
+            </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    {/* Tabs and content  */}
+    <section className="CourseDetailsPage">
+
+      <div className="container-fluid">
+
+        <div className="course-layout">
+
+          {/* LEFT */}
+          <div className="course-main">
+            
+            <div className="course-tabs-card card shadow border-1 mt-4">
+
+              <Tabs
+                defaultActiveKey="Overview"
+                id="fill-tab-example"
+                className="tabs mb-3 "
+                fill
+              >
+                {/* Overview Tab  */}
+                <Tab
+                  eventKey="Overview"
+                  title={
+                    <>
+                      <FontAwesomeIcon icon={faFileLines} className="me-2" />
+                      Overview
+                    </>
+                  }
+                >
+                  <div className="tab-body-about">
+                    <h5>About This <span>Course</span> </h5>
+                      <p className={showMore ? "expanded" : ""}>
+                        {course.description?.[i18n.language] || course.description?.en}
+                      </p>
+                      {
+                      (course.description?.en?.length > 150 ||
+                      course.description?.hi?.length > 150)
+                      && (
+                        <button
+                          className="read-more-btn"
+                          onClick={() =>
+                            setShowMore(!showMore)
+                          }
+                        >
+                          {showMore
+                            ? (<>Read Less <FontAwesomeIcon icon={faAngleUp} /></> )
+                            : (<>Read More <FontAwesomeIcon icon={faAngleDown} /></> )
+                            }
+                        </button>
+                      )
+                      }
+
+                      <hr className="overview-divider"/>
+
+                      {/* Highlights */}
+
+                    <div className="tab-body-learn">
+
+                        <h5>What <span>You'll Learn</span></h5>
+
+                        {
+                            highlights.length > 0 ? (
+
+                                <div className="highlights-grid">
+
+                                    <div className="highlight-column">
+
+                                        {leftHighlights.map((item,index)=>(
+                                            <div
+                                                className="highlight-item"
+                                                key={index}
+                                            >
+                                                <FontAwesomeIcon
+                                                    icon={faCircleCheck}
+                                                    className="check-icon"
+                                                />
+
+                                                <span>{item}</span>
+
+                                            </div>
+                                        ))}
+
+                                    </div>
+
+                                    <div className="highlight-column">
+
+                                        {rightHighlights.map((item,index)=>(
+                                            <div
+                                                className="highlight-item"
+                                                key={index}
+                                            >
+                                                <FontAwesomeIcon
+                                                    icon={faCircleCheck}
+                                                    className="check-icon"
+                                                />
+
+                                                <span>{item}</span>
+
+                                            </div>
+                                        ))}
+
+                                    </div>
+
+                                </div>
+
+                            ) : (
+
+                                <small className='text-success fw-bold'>
+                                    Course highlights will be coming soon.
+                                </small>
+
+                            )
+                        }
+
+                    </div>
+                  </div>
+                </Tab>
+
+                {/* Curriculum Tab  */}
+                <Tab eventKey="Tab-Curriculum" 
+                  title={
+                    <>
+                      <FontAwesomeIcon icon={faListCheck} className="me-2" />
+                      Curriculum
+                    </>
+                  } 
+                  >
+                  {
+                    course.lessons?.length > 0 ? (
+                      <CourseCurriculum
+                        modules={course.modules}
+                        lessonsCount={course.lessons_count}
+                      />
+                    ) : (
+                      <div className="empty-curriculum text-center">
+                        <img src={no_lesson} alt="No Lesson Found" style={{width:"40%", height:"100%" }}/>
+
+
+                        <h5>
+                            Curriculum Coming Soon
+                        </h5>
+
+                        <p>
+
+                        Lessons are being prepared.
+
+                        Please check back later.
+
+                        </p>
+                    </div>
+                    )
+                  }
+                </Tab>
+
+                {/* Instructer Tab  */}
+                <Tab
+                  eventKey="Instructor"
+                  title={
+                    <>
+                      <FontAwesomeIcon
+                        icon={faChalkboardTeacher}
+                        className="me-2"
+                      />
+                      Instructor
+                    </>
+                  }
+                >
+                  <div className="instructor-tab-body">
+
+                    <div className="teacher-profile">
+
+                      <img
+                        src={course.teacher?.profile_pic || "/default-course.png"}
+                        className="teacher-img"
+                        alt={course.teacher?.name}
+                      />
+
+                      <h3 className="teacher-name">
+                        {course.teacher?.name}
+                      </h3>
+
+                      <p className="teacher-title">
+                        {course.teacher?.professional_title || "Instructor"}
+                      </p>
+
+                      {(course.teacher?.overall_rating || course.teacher?.total_students) && (
+                        <div className="teacher-stats">
+
+                          {course.teacher?.overall_rating && (
+                            <div className="stat-box">
+                              ⭐ {course.teacher.overall_rating}
+                            </div>
+                          )}
+
+                          {course.teacher?.total_students > 0 && (
+                            <div className="stat-box">
+                              👨‍🎓 {course.teacher.total_students} Students
+                            </div>
+                          )}
+
+                        </div>
+                      )}
+
+
+                    </div>
+
+                    <div className="teacher-about">
+
+                      <h5>About Instructor</h5>
+
+                      <p>
+                        {
+                          course.teacher?.bio ||
+                          "Instructor information will be available soon."
+                        }
+                      </p>
+
+                    </div>
+
+                  </div>
+                </Tab>
+
+                <Tab eventKey="Reviews" title={
+                    <>
+                      <FontAwesomeIcon icon={faStar} className="me-2" />
+                      Reviews
+                    </>
+                  } disabled>
+                  Tab content for Contact
+                </Tab>
+              </Tabs>
+
+            </div>
+
+
+
+            <div className="related-course-card">
+            <CourseFaqs
+              faqs={courseFaqs}
+            />
+            </div>
+
+          </div>
+
+          {/* RIGHT */}
+          <aside className="course-sidebar">
+
+            {/* COURSE OVERVIEW */}
+          <div className="overview-card card border-1 shadow mt-4">
+
+              <h5 className="sidebar-title">
+                Course <span>Overview</span>
+              </h5>
+<hr />
+              {/* PRICE */}
+              <div className="price-section">
+
+                <h3 className="final-price">
+                  {price ? `₹${price}.00` : "Free"}
+                </h3>
+
+                {price > 0 ? (
+                  <div className="price-row">
+
+                    <span className="old-price">
+                      ₹{originalPrice}.00
+                    </span>
+
+                    <span className="discount-badge">
+                      {discount}% OFF
+                    </span>
+
+                  </div>
+                ):(
+                  <span className="free-badge">
+                      100% FREE
+                  </span>
+                  )
+                }
+
+              </div>
+
+              {/* DETAILS */}
+              <div className="overview-list">
+
+                <div className="overview-item">
+                  <div className="left">
+                    <FontAwesomeIcon icon={faClock} className="icon" />
+                    <span>Course Duration</span>
+                  </div>
+
+                  <strong>1 Year</strong>
+                </div>
+
+                <div className="overview-item">
+                  <div className="left">
+                    <FontAwesomeIcon icon={faBookOpen} className="icon" />
+                    <span>Total Lectures</span>
+                  </div>
+
+                  <strong>{course.lessons_count || 0}+</strong>
+                </div>
+
+                <div className="overview-item">
+                  <div className="left">
+                    <FontAwesomeIcon icon={faFileLines} className="icon" />
+                    <span>Study Material</span>
+                  </div>
+
+                  <strong>Yes</strong>
+                </div>
+
+                <div className="overview-item">
+                  <div className="left">
+                    <FontAwesomeIcon icon={faLanguage} className="icon" />
+                    <span>Language</span>
+                  </div>
+                <strong>{languageLabel}</strong>
+                </div>
+
+                <div className="overview-item">
+                  <div className="left">
+                    <FontAwesomeIcon icon={faLayerGroup} className="icon" />
+                    <span>Level</span>
+                  </div>
+
+                  <strong>{difficultyLabel}</strong>
+                </div>
+
+                <div className="overview-item">
+                  <div className="left">
+                    <FontAwesomeIcon icon={faCertificate} className="icon" />
+                    <span>Certificate</span>
+                  </div>
+
+                  <strong>Yes</strong>
+                </div>
+
+              </div>
+
+              {/* BUTTONS */}
+              <button className="enroll-btn">
+                Enroll Now
+              </button>
+
+              <button className="wishlist-btn" disabled>
+                ♡ Wishlist (coming Soon)
+              </button>
+
+        </div>
+
+            {/* SHARE CARD */}
+            <div className="share-course-card text-center card border-1 shadow mb-4">
+
+              <h5 className=''> <span>Share</span> This Course</h5>
+
+              <p>Share with Friends and Classmates</p>
+
+              <div className="social-icons m-auto">
+
+                <a
+                  href={`https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`}
+                  target="_blank"
+                  >
+                  <FontAwesomeIcon icon={faFacebookF} />
+                </a>
+
+                
+                <a
+                  href={`https://wa.me/?text=${shareUrl}`}
+                  target="_blank"
+                >
+                  <FontAwesomeIcon icon={faWhatsapp} />
+                </a>
+
+                <a
+                  href={`https://t.me/share/url?url=${shareUrl}`}
+                  target="_blank"
+                  >
+                  <FontAwesomeIcon icon={faTelegramPlane} />
+                </a>
+
+                <a
+                  href="#"
+                  onClick={(e)=>{
+                    e.preventDefault();
+                    navigator.clipboard.writeText(
+                      shareUrl
+                    );
+                    toast.success(
+                      "Link copied!"
+                    );
+                  }}
+                  >
+                  <FontAwesomeIcon icon={faLink} />
+                </a>
+
+              </div>
+
+            </div>
+
+
+          </aside>
+        </div>
+
+      </div>
+
+    </section>

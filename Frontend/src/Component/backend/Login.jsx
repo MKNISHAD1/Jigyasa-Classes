@@ -6,6 +6,8 @@ import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "./context/Auth";
 import { apiUrl } from "../Common/http";
+import HeaderUi from "../Common/CommonUI/HeaderUi";
+import FooterUi from "../Common/CommonUI/FooterUi";
 
 const Login = () => {
   const { login, setTwoFactorRequired, setTwoFactorEmail,hasAnyRole } = useContext(AuthContext);
@@ -90,25 +92,45 @@ const Login = () => {
       login(userInfo);
 
       // Will redirect to Dashbord page
+      // const roleNames = Array.isArray(result.user.roles)
+      //   ? result.user.roles.map((r) => (r.name ? r.name : r))
+      //   : [];
+
+      // if (hasAnyRole(["admin","moderator"])) {
+      //   navigate("/admin");
+      // } else if (hasAnyRole(["super_admin"])) {
+      //   navigate("/superadmin");
+      // } else {
+      //   navigate("/dash");
+      // }
+
       const roleNames = Array.isArray(result.user.roles)
         ? result.user.roles.map((r) => (r.name ? r.name : r))
         : [];
 
-      if (hasAnyRole(["admin","moderator"])) {
+      if (
+        roleNames.includes("admin") ||
+        roleNames.includes("moderator")
+      ) {
         navigate("/admin");
-      } else if (hasAnyRole(["super_admin"])) {
+      } else if (
+        roleNames.includes("super_admin")
+      ) {
         navigate("/superadmin");
       } else {
         navigate("/dash");
       }
-    } catch (error) {
+    }
+     catch (error) {
       toast.error("Network error, please try again.");
     }
   };
 
   return (
     <>
-      <Header />
+      {/* Header */}
+      <HeaderUi />
+
       <div className="container my-5">
         <div className="login-form">
           <div className="card border-0 shadow">
@@ -190,7 +212,9 @@ const Login = () => {
           </div>
         </div>
       </div>
-      <Footercomp />
+      
+      {/* Footer */}
+      <FooterUi />
     </>
   );
 };

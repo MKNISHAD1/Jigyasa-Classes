@@ -5,6 +5,8 @@ import { useForm } from "react-hook-form";
 import { apiUrl } from "../Common/http";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import HeaderUi from "../Common/CommonUI/HeaderUi";
+import FooterUi from "../Common/CommonUI/FooterUi";
 
 const Forgotpassword = () => {
   const navigate = useNavigate();
@@ -85,7 +87,9 @@ const Forgotpassword = () => {
 
   return (
     <>
-      <Header />
+      {/* Header */}
+      <HeaderUi />
+
       <div className="container my-5">
         <div className="login-form">
           <div className="card border-0 shadow">
@@ -197,8 +201,9 @@ const Forgotpassword = () => {
           </div>
         </div>
       </div>
-
-      <Footercomp />
+      
+      {/* Footer */}
+      <FooterUi />
     </>
   );
 };

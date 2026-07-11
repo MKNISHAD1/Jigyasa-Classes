@@ -6,6 +6,8 @@ import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import DataTable from "react-data-table-component";
 import { Modal, Button, OverlayTrigger, Popover } from "react-bootstrap";
+import HeaderUi from "../../Common/CommonUI/HeaderUi";
+import FooterUi from "../../Common/CommonUI/FooterUi";
 
 const Faqs = () => {
   const [faqs, setFaqs] = useState([]);
@@ -232,7 +234,10 @@ const Faqs = () => {
 
   return (
     <>
-      <Header />
+
+      {/* Header  */}
+      <HeaderUi />
+
       <main>
         <div className="container my-5">
           <div className="row">
@@ -383,6 +388,10 @@ const Faqs = () => {
           </div>
         </div>
       </main>
+
+      {/* Footer  */}
+      <FooterUi/>
+
     </>
   );
 };

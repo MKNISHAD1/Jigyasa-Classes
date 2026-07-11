@@ -60,71 +60,71 @@ class UserProfileController extends Controller
     public function updateProfile(Request $request)
     {
         
-    $user = Auth::user();
+        $user = Auth::user();
 
-    $validator = Validator::make($request->all(), [
-        'name'       => 'sometimes|string|max:255',
-        'mobile_no'  => 'sometimes|string|max:15',
-        'address'    => 'sometimes|string|nullable',
-        'profile_pic' => 'sometimes|image|mimes:jpg,jpeg,png,webp|max:2048',
-        'professional_title' => 'sometimes|string|max:255|nullable',
-        'bio' => 'sometimes|string|nullable',
-        'social_links' => 'sometimes|array|nullable',
-    ]);
+        $validator = Validator::make($request->all(), [
+            'name'       => 'sometimes|string|max:255',
+            'mobile_no'  => 'sometimes|string|max:15',
+            'address'    => 'sometimes|string|nullable',
+            'profile_pic' => 'sometimes|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'professional_title' => 'sometimes|string|max:255|nullable',
+            'bio' => 'sometimes|string|nullable',
+            'social_links' => 'sometimes|array|nullable',
+        ]);
 
-    if ($validator->fails()) {
-        return response()->json([
-            'status' => false, 
-            'errors' => $validator->errors(
-            )], 422);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false, 
+                'errors' => $validator->errors(
+                )], 422);
+        }
+
+        // Update basic fields
+        $user->fill($validator->validated());
+        $user->save();
+
+        // If profile_pic is uploaded
+        if ($request->hasFile('profile_pic')) {
+        // Step 1: Delete old profile picture from storage and database (if it exists)
+        $oldMedia = $user->media()->where('type', 'profile_pic')->first();
+
+        if ($oldMedia) {
+            // Extract actual file path from stored URL
+            $oldPath = str_replace('storage/', '', $oldMedia->url);
+
+            // Delete the file from storage if it exists
+            if (Storage::disk('public')->exists($oldPath)) {
+                Storage::disk('public')->delete($oldPath);
+            }
+
+            // Remove the DB record
+            $oldMedia->delete();
+            }
+
+            // Step 2: Store new profile picture
+            $image = $request->file('profile_pic');
+            $filename = Str::slug($user->name) . '_' . time() . '.' . $image->getClientOriginalExtension();
+            $path = $image->storeAs('uploads/profiles', $filename, 'public');
+
+            // Step 3: Create new media record
+            $user->media()->create([
+            'url' => 'storage/' . $path,
+            'type' => 'profile_pic',
+        ]);
+        }
+
+            // Get updated profile pic
+            // $profilePic = $user->media()->where('type', 'profile_pic')->first();
+            // $profilePicUrl = $profilePic
+            //     ? asset($profilePic->url)
+            //     : asset('uploads/profiles/default/' . $user->role . '.png');
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Profile updated successfully',
+                'user' => $user->fresh()->load('roles')
+            ]);
     }
-
-    // Update basic fields
-    $user->fill($validator->validated());
-    $user->save();
-
-    // If profile_pic is uploaded
-    if ($request->hasFile('profile_pic')) {
-    // Step 1: Delete old profile picture from storage and database (if it exists)
-    $oldMedia = $user->media()->where('type', 'profile_pic')->first();
-
-    if ($oldMedia) {
-        // Extract actual file path from stored URL
-        $oldPath = str_replace('storage/', '', $oldMedia->url);
-
-        // Delete the file from storage if it exists
-        if (Storage::disk('public')->exists($oldPath)) {
-            Storage::disk('public')->delete($oldPath);
-        }
-
-        // Remove the DB record
-        $oldMedia->delete();
-        }
-
-        // Step 2: Store new profile picture
-        $image = $request->file('profile_pic');
-        $filename = Str::slug($user->name) . '_' . time() . '.' . $image->getClientOriginalExtension();
-        $path = $image->storeAs('uploads/profiles', $filename, 'public');
-
-        // Step 3: Create new media record
-        $user->media()->create([
-        'url' => 'storage/' . $path,
-        'type' => 'profile_pic',
-    ]);
- }
-
-    // Get updated profile pic
-    // $profilePic = $user->media()->where('type', 'profile_pic')->first();
-    // $profilePicUrl = $profilePic
-    //     ? asset($profilePic->url)
-    //     : asset('uploads/profiles/default/' . $user->role . '.png');
-
-    return response()->json([
-        'status' => true,
-        'message' => 'Profile updated successfully',
-        'user' => $user->fresh()->load('roles')
-    ]);
-  }
 
     public function changePassword(Request $request)
     {

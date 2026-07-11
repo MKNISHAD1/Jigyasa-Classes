@@ -2,6 +2,8 @@ import React, { useContext, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "./context/Auth";
 import { apiUrl } from "../Common/http";
+import HeaderUi from "../Common/CommonUI/HeaderUi";
+import FooterUi from "../Common/CommonUI/FooterUi";
 
 const TwofactOTP = () => {
   const { twoFactorEmail, setTwoFactorRequired, login,hasAnyRole } = useContext(AuthContext);
@@ -50,6 +52,10 @@ const TwofactOTP = () => {
   };
 
   return (
+    <>
+    {/* Header */}
+    <HeaderUi/>
+
     <div className="container my-5">
       <h3>Enter OTP</h3>
       <input
@@ -59,6 +65,11 @@ const TwofactOTP = () => {
       />
       <button onClick={verifyOtp}>Verify</button>
     </div>
+
+    {/* Footer  */}
+    <FooterUi/>
+    
+    </>
   );
 };
 

@@ -6,6 +6,8 @@ import Sidebar from "../../Common/Sidebar";
 import { apiUrl, token } from "../../Common/http";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
+import HeaderUi from "../../Common/CommonUI/HeaderUi";
+import FooterUi from "../../Common/CommonUI/FooterUi";
 
 const CourseModule = () => {
   const { id } = useParams();
@@ -552,9 +554,12 @@ const CourseModule = () => {
 
   return (
     <>
-      <Header />
+      
+      {/* Header  */}
+      <HeaderUi/>
 
       <main>
+        
         <div className="container my-5">
           <div className="row">
 
@@ -1212,39 +1217,39 @@ const CourseModule = () => {
                                     <table className="table">
 
                                       <thead>
-    <tr>
+                                        <tr>
 
-        <th>
-            <input
-                type="checkbox"
-                checked={
-                    deletedModules.length > 0 &&
-                    selectedDeletedModules.length === deletedModules.length
-                }
-                onChange={(e) => {
+                                            <th>
+                                                <input
+                                                    type="checkbox"
+                                                    checked={
+                                                        deletedModules.length > 0 &&
+                                                        selectedDeletedModules.length === deletedModules.length
+                                                    }
+                                                    onChange={(e) => {
 
-                    if (e.target.checked) {
+                                                        if (e.target.checked) {
 
-                        setSelectedDeletedModules(
-                            deletedModules.map(
-                                module => module.id
-                            )
-                        );
+                                                            setSelectedDeletedModules(
+                                                                deletedModules.map(
+                                                                    module => module.id
+                                                                )
+                                                            );
 
-                    } else {
+                                                        } else {
 
-                        setSelectedDeletedModules([]);
+                                                            setSelectedDeletedModules([]);
 
-                    }
+                                                        }
 
-                }}
-            />
-        </th>
+                                                    }}
+                                                />
+                                            </th>
 
-        <th>Module</th>
+                                            <th>Module</th>
 
-    </tr>
-</thead>
+                                        </tr>
+                                    </thead>
 
 
                                       <tbody>
@@ -1334,6 +1339,10 @@ const CourseModule = () => {
           </div>
         </div>
       </main>
+
+      {/* Footer */}
+      <FooterUi />
+      
     </>
   );
 };

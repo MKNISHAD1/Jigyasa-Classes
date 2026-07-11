@@ -6,6 +6,8 @@ import { apiUrl, token } from "../../Common/http";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import LessonTable from "../Lessons/LessonTable";
+import HeaderUi from "../../Common/CommonUI/HeaderUi";
+import FooterUi from "../../Common/CommonUI/FooterUi";
 
 const CourseView = () => {
   const { id } = useParams();
@@ -55,7 +57,9 @@ const CourseView = () => {
 
   return (
     <>
-      <Header />
+      {/* Header  */}
+      <HeaderUi />
+
       <main>
         <div className="container my-5">
           <div className="row">
@@ -76,6 +80,35 @@ const CourseView = () => {
                   <strong>Description:</strong> {course.description?.[i18n.language] || course.description?.en}
                 </div>
 
+              {/*  Highlights */}
+                <div className="mb-3">
+                  <strong>Highlights:</strong>
+
+                  {course.highlights?.[i18n.language]?.length > 0 ? (
+                    <ul className="mt-2">
+                      {course.highlights[i18n.language].map(
+                        (highlight, index) => (
+                          <li key={index}>
+                            {highlight}
+                          </li>
+                        )
+                      )}
+                    </ul>
+                  ) : course.highlights?.en?.length > 0 ? (
+                    <ul className="mt-2">
+                      {course.highlights.en.map(
+                        (highlight, index) => (
+                          <li key={index}>
+                            {highlight}
+                          </li>
+                        )
+                      )}
+                    </ul>
+                  ) : (
+                    <p>No highlights available</p>
+                  )}
+                </div>
+
                 <div className="mb-3">
                   <strong>Category:</strong> {course.category?.name?.[i18n.language] || course.category?.name?.en}
                 </div>
@@ -83,6 +116,16 @@ const CourseView = () => {
                 <div className="mb-3">
                   <strong>Subcategory:</strong> {course.subcategory?.name?.[i18n.language] || course.subcategory?.name?.en}
                 </div>
+
+                <div className="mb-3">
+                  <strong>Language:</strong> {course.language || "N/A"}
+                </div>
+
+                <div className="mb-3">
+                  <strong>Difficulty Level:</strong>{" "}
+                  {course.difficulty_level || "N/A"}
+                </div>
+
 
                 <div className="mb-3">
                   <strong>Teacher:</strong> {course.teacher?.name || "N/A"}
@@ -143,6 +186,10 @@ const CourseView = () => {
           </div>
         </div>
       </main>
+
+      {/* Footer  */}
+      <FooterUi/>
+      
     </>
   );
 };

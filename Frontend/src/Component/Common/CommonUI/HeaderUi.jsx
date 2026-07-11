@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHouse } from "@fortawesome/free-solid-svg-icons";
 import { faCircleUser } from "@fortawesome/free-regular-svg-icons";
-import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
+import { faCartShopping,faHouse,faBookOpen,faEnvelope,faClipboardList,faUser,faTrophy,faArrowRightFromBracket,faUserGear } from "@fortawesome/free-solid-svg-icons";
 import { Nav, Navbar, Accordion, Offcanvas} from "react-bootstrap";
 import { Link } from "react-router-dom";
 import "../../../assets/css/style.scss";
@@ -11,6 +10,7 @@ import { useTranslation } from "react-i18next";
 import logo2 from "../../../assets/images/Logo2.png";
 import LanguageSwitch from "./LanguageSwitch";
 import { useCategories } from "../../../hooks/useCategories";
+import { AuthContext } from "../../backend/context/Auth";
 
 const HeaderUi = () => {
 
@@ -21,6 +21,8 @@ const HeaderUi = () => {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const { user, logout } = useContext(AuthContext);
 
   return (
     <>
@@ -61,7 +63,7 @@ const HeaderUi = () => {
         <Navbar expand="lg" className="shadow">
           {/* Left side LOGO*/}
 
-          <Navbar.Brand href="#">
+          <Navbar.Brand href="/">
             <div className="d-flex Brand_Section">
               <img src={logo2} className="Brand_Logo" />
               <div className="d-none d-md-block">
@@ -204,180 +206,227 @@ const HeaderUi = () => {
 
             {/* Mobile Offcanvas */}
 
-            <Offcanvas show={show} onHide={handleClose} placement="start">
+            <Offcanvas show={show} onHide={handleClose} placement="start" scroll={true}>
               <Offcanvas.Header closeButton className="Offcanvas_header">
                 <Offcanvas.Title >
-                  <b style={{ paddingLeft: 145 }}>Menu</b><br />
-
-                  <div className="pt-3" style={{ paddingLeft: 105 }}>
-                    <a href="/signup" className="Button_Style " >Sign Up</a> <a href="/login" className="Button_Style ">Login</a>
+                  <div className="d-flex Brand_Section">
+                    <img src={logo2} className="Brand_Logo" />
+                    <div className="">
+                      <h5 className="Brand_Name">
+                        <b>{t("Logo.title")}</b>
+                      </h5>
+                      <p className="Brand_Tagline">{t("Logo.tagline")}</p>
+                    </div>
                   </div>
                 </Offcanvas.Title>
               </Offcanvas.Header>
 
-              <Offcanvas.Body className="Offcanvas_MenuItem">
-                <Accordion alwaysOpen>
-                  {/* Home */}
-                  <div className="test">
-                    <Link
-                      to="/"
-                      className="nav-link fw-bold"
-                      onClick={handleClose}
-                    >
-                      {t("header.home")}
-                    </Link>
-                  </div>
+              <Offcanvas.Body className="New_Offcanvas">
 
-                  <div className="test">
-                    <Link
-                      to="/about" className="nav-link fw-bold"  onClick={handleClose}
-                    >
-                      {t("header.about")}
-                    </Link>
-                  </div>
+                    {/* Guest User */}
 
-                  <div className="test">
-                    <Link
-                      to="/courses" className="nav-link fw-bold"  onClick={handleClose}
-                    >
-                      Courses
-                    </Link>
-                  </div>
+                    {
+                      user ? (
 
-                  {/* Exams  */}
+                        <div className="Welcome_Card">
 
-                  <Accordion.Item eventKey="exams">
-                      <Accordion.Header>Exams</Accordion.Header>
-                      <Accordion.Body>
-                        {categories.map((cat) => {
-                          const subs = subcategories[cat.id] || [];
+                          <img
+                            src={
+                              user.profile_pic ||
+                              "/images/default-user.png"
+                            }
+                            alt=""
+                            className="Welcome_Avatar"
+                          />
 
-                          return (
-                            <div key={cat.id}>
-                              {subs.length ? (
-                                <Accordion flush>
-                                  <Accordion.Item eventKey={`exam-${cat.id}`}>
-                                    <Accordion.Header>
-                                      {cat.name[i18n.language] ?? cat.name.en}
-                                    </Accordion.Header>
-                                    <Accordion.Body>
-                                      {subs.map((sub) => (
-                                        <Link
-                                          key={sub.id}
-                                          to={`/exams/${cat.id}/${sub.id}`}
-                                          className="nav-link"
-                                          onClick={handleClose}
-                                        >
-                                          {sub.name[i18n.language] ?? sub.name.en}
-                                        </Link>
-                                      ))}
-                                    </Accordion.Body>
-                                  </Accordion.Item>
-                                </Accordion>
-                            ) : (
-                              <Link
-                                to={`/exams/${cat.id}`}
-                                className="nav-link"
-                                onClick={handleClose}
-                              >
-                                {cat.name[i18n.language] ?? cat.name.en}
-                              </Link>
-                            )}
+                          <h5>
+                            Welcome Back!
+                          </h5>
+
+                          <p>
+                            {user.name}
+                          </p>
+
+                          <small>
+                            {
+                              Array.isArray(user?.roles)
+                                ? (
+                                    user.roles[0]?.name ||
+                                    user.roles[0] ||
+                                    "Student"
+                                  )
+                                : "Student"
+                            }
+                          </small>
+
+                          <Link
+                            to="/dash"
+                            className="Dashboard_Button"
+                          >
+                            View Dashboard
+                          </Link>
+
+                        </div>
+
+                      ) : (
+
+                        <div className="Guest_Actions">
+
+                          <Link
+                            to="/register"
+                            className="Signup_Btn"
+                          >
+                            Sign Up
+                          </Link>
+
+                          <Link
+                            to="/login"
+                            className="Login_Btn"
+                          >
+                            Login
+                          </Link>
+
+                        </div>
+
+                      )
+                    }
+
+                    {/* Menu */}
+
+                    <div className="Sidebar_Menu">
+
+                      <Link to="/" className="Sidebar_Link">
+                        <FontAwesomeIcon icon={faHouse}/>
+                        <span>Home</span>
+                      </Link>
+
+                      <Link to="/about" className="Sidebar_Link">
+                        <FontAwesomeIcon icon={faUser}/>
+                        <span>About Us</span>
+                      </Link>
+
+                      <Link to="/courses" className="Sidebar_Link">
+                        <FontAwesomeIcon icon={faBookOpen}/>
+                        <span>Courses</span>
+                      </Link>
+
+                    </div>
+
+                    {/* Exams */}
+
+                    <Accordion flush className="Sidebar_Accordion">
+
+                      <Accordion.Item eventKey="1">
+
+                        <Accordion.Header>
+
+                          <div className="Menu_Header">
+                            <FontAwesomeIcon icon={faClipboardList} style={{color:"#1363b8"}}/>
+                            <span>Exams</span>
                           </div>
-                        );
-                      })}
-                    </Accordion.Body>
-              </Accordion.Item>
 
-                  {/* Pages  */}
-                  <Accordion.Item eventKey="pages">
-                    <Accordion.Header className="test1">Pages</Accordion.Header>
-                    <Accordion.Body>
-                      <Link
-                        to="/about"
-                        className="nav-link"
-                        onClick={handleClose}
-                      >
-                        About Us
-                      </Link>
-                      {/* Nested Accordion */}
+                        </Accordion.Header>
 
-                      <Link
-                        to="/faq"
-                        className="nav-link"
-                        onClick={handleClose}
-                      >
-                        FAQ
-                      </Link>
+                        <Accordion.Body>
 
-                      <Link
-                        to="/privacy-policy"
-                        className="nav-link"
-                        onClick={handleClose}
-                      >
-                        Privacy Policy
-                      </Link>
-                      <Accordion flush>
-                        <Accordion.Item eventKey="instructors">
-                          <Accordion.Header>Instructors</Accordion.Header>
-                          <Accordion.Body>
+                          {categories.map((cat) => (
+
                             <Link
-                              to="/instructors"
-                              className="nav-link"
-                              onClick={handleClose}
+                              key={cat.id}
+                              to={`/exams/${cat.id}`}
+                              className="Sidebar_SubLink"
                             >
-                              Instructors
+                              {cat.name[i18n.language] ?? cat.name.en}
                             </Link>
-                            <Link
-                              to="/become-instructor"
-                              className="nav-link"
-                              onClick={handleClose}
-                            >
-                              Become Instructor
-                            </Link>
-                            <Link
-                              to="/instructor-details"
-                              className="nav-link"
-                              onClick={handleClose}
-                            >
-                              Instructor Details
-                            </Link>
-                          </Accordion.Body>
-                        </Accordion.Item>
-                      </Accordion>
-                    </Accordion.Body>
-                  </Accordion.Item>
 
+                          ))}
 
+                        </Accordion.Body>
 
+                      </Accordion.Item>
 
-                  {/* Blog */}
-                  <div className="test">
-                    <Link to="/blog" className="nav-link" onClick={handleClose}>
-                      <b>Contact Us</b>
+                    </Accordion>
+
+                    {/* Pages */}
+
+                    <Accordion flush className="Sidebar_Accordion">
+
+                      <Accordion.Item eventKey="2">
+
+                        <Accordion.Header>
+
+                          <div className="Menu_Header">
+                            <FontAwesomeIcon icon={faBookOpen} style={{color:"#1363b8"}}/>
+                            <span>Pages</span>
+                          </div>
+
+                        </Accordion.Header>
+
+                        <Accordion.Body>
+
+                          <Link to="/faq" className="Sidebar_SubLink">
+                            FAQ
+                          </Link>
+
+                          <Link to="/privacy-policy" className="Sidebar_SubLink">
+                            Privacy Policy
+                          </Link>
+
+                        </Accordion.Body>
+
+                      </Accordion.Item>
+
+                    </Accordion>
+
+                    {/* Contact */}
+
+                    <Link to="/Contact-Us" className="Sidebar_Link">
+                      <FontAwesomeIcon icon={faEnvelope}/>
+                      <span>Contact Us</span>
                     </Link>
-                  </div>
 
-                  {/* Auth */}
-                  <div className="test">
-                    <Link
-                      to="/login"
-                      className="nav-link"
-                      onClick={handleClose}
-                    >
-                      Login
-                    </Link>
-                    <Link
-                      to="/register"
-                      className="nav-link"
-                      onClick={handleClose}
-                    >
-                      Register
-                    </Link>
-                  </div>
+                    {/* Motivation Card */}
 
-                </Accordion>
+                    <div className="Learning_Card">
+
+                      <FontAwesomeIcon
+                        icon={faTrophy}
+                        className="Trophy_Icon"
+                      />
+
+                      <div>
+
+                        <h6>Keep Learning, Keep Growing!</h6>
+
+                        <p>
+                          Explore new courses and achieve your goals.
+                        </p>
+
+                      </div>
+
+                    </div>
+
+                    {/* Logout Button */}
+                    {
+                      user && (
+                        <div className="Logout_Section text-center">
+                          <button
+                            className="Logout_Btn"
+                            onClick={() => {
+                              logout();
+                              handleClose();
+                            }}
+                          >
+                            <FontAwesomeIcon icon={faArrowRightFromBracket} />
+                            <span className="logout">Log out</span>
+                          </button>
+                        </div>
+                      )
+                    }
+
+
               </Offcanvas.Body>
+
             </Offcanvas>
           </Navbar.Collapse>
 
@@ -390,14 +439,63 @@ const HeaderUi = () => {
             <FontAwesomeIcon icon={faCartShopping} className="Cart_Icon"/>
 
             {/* Login-Button */}
-            <Link to="/login" className="Button_Style1 d-none d-xl-block">
-              Login/SignUp
-            </Link>
+            {
+              user ? (
+                <Link
+                  to="/dash"
+                  className="User_Profile_Link  d-none d-xl-block"
+                >
+                  <img
+                    src={
+                      user.profile_pic ||
+                      "/images/default-user.png"
+                    }
+                    alt="profile"
+                    className="Navbar_Profile"
+                  />
+
+                  <span className="p-1">
+                    {user.name?.split(" ")[0]}
+                  </span>
+                </Link>
+              ) : (
+                <Link
+                  to="/login"
+                  className="Button_Style1  d-none d-xl-block"
+                >
+                  Login/SignUp
+                </Link>
+              )
+            }
             
             {/* Login icon  */}
-            <Link to="/login" className="d-none d-sm-block d-xl-none ">
+            {
+              user ? (
+                <Link
+                  to="/dash"
+                  className="User_Profile_Link  d-sm-block d-xl-none"
+                >
+                  <img
+                    src={
+                      user.profile_pic ||
+                      "/images/default-user.png"
+                    }
+                    alt="profile"
+                    className="Navbar_Profile"
+                  />
+                </Link>
+              ) : (
+                <Link
+                  to="/login"
+                  className="d-none d-sm-block d-xl-none"
+                >
+                  <FontAwesomeIcon icon={faCircleUser} className="User_Icon" />
+                </Link>
+              )
+            }
+            {/* <Link to="/login" className="d-none d-sm-block d-xl-none ">
                 <FontAwesomeIcon icon={faCircleUser} className="User_Icon" />
-            </Link>
+            </Link> */}
 
             {/* Toggle icon  */}
             <Navbar.Toggle

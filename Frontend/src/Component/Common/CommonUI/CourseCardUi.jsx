@@ -5,6 +5,7 @@ import { useCourses } from '../../../hooks/useCourses';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBook, faStar } from '@fortawesome/free-solid-svg-icons';
+import { faClock } from '@fortawesome/free-regular-svg-icons';
 
 const CourseCardUi = () => {
 
@@ -44,8 +45,8 @@ return (
 
         {!loading &&
           courses.map((course) => (
-            <div className="col-12 col-sm-6 col-lg-4" key={course.id}>
-              <div className="card shadow h-100 course-card">
+            <div className="col-12 col-sm-6 col-lg-3" key={course.id}>
+              <div className="card h-100 course-card">
                 
                 <img
                   src={course.thumbnail ?? "/default-course.png"}
@@ -53,7 +54,12 @@ return (
                   alt={course.title?.en}
                 />
 
-                  <div className="card-header d-flex flex-row mt-auto">
+                  <div className="card-header">
+                    <h6 className="course-title">
+                    {course.title?.[i18n.language] ?? course.title?.en}
+                  </h6>
+                  </div>
+                  <div className="container d-flex flex-row">
                     <img
                       src={course.teacher.profile_pic ?? "/default-course.png"}
                       className="teacher-img"
@@ -62,7 +68,7 @@ return (
                     <h6 className="teacher-name">
                       {course.teacher.name}
                     </h6>                                    
-                    <div className="ms-auto">
+                    <div className="ms-auto"> 
                       <Link className='category-button' to="#" >
                         {course.category?.name?.[i18n.language] ??
                           course.category?.name?.en}
@@ -70,35 +76,35 @@ return (
                     </div>
                   </div>
 
-                <div className="card-body d-flex flex-column">
-                  <h6 className="course-title">
-                    {course.title?.[i18n.language] ?? course.title?.en}
-                  </h6>
+                <div className="card-body d-flex flex-column h-100">
+                  
 
-                  <p className="course-desc small flex-grow-1 mb-2">
+                  {/* <p className="course-desc small flex-grow-1 mb-2">
                     {course.description?.[i18n.language] ??
                       course.description?.en}
-                  </p>
-                  <div className="lectures ">
-                    <div className="rating">
-                       <span>5</span> &nbsp;<FontAwesomeIcon icon={faStar} className='star'/>
-                    </div>
-                    <div className="book">
-                    <FontAwesomeIcon icon={faBook} className='book-icon'/>  &nbsp;
-                    {course.lessons_count} <span>Lessons</span><br />
-                    </div>
+                  </p> */}
+
+                  <div className="course-meta">
+                    <span>
+                      <FontAwesomeIcon icon={faBook} className='icon'/> {course.lessons_count || 0} Lessons
+                    </span>
+
+                    {/* Future Data */}
+                    <span><FontAwesomeIcon icon={faClock} className='icon'/> 18 Hours</span> <br />
+                    {/* <span><FontAwesomeIcon icon={faStar}/> 4.8</span>
+                    <span><FontAwesomeIcon icon={faUserGroup}/> 245</span> */}
+
                   </div>
-                  <hr />
-                  <div className="d-flex justify-content-between align-items-centers price-section">
+                  <div className="d-flex card-footer justify-content-between align-items-center price-section">
                     <span className="fw-bold text-success price">
-                      {course.price ? `₹${course.price}` : "Free"}
+                      {course.price ? `₹${course.price}` : "Free"} 
                     </span>
 
                     <Link
-                      to={`/course/${course.id}`}
+                      to={`/CourseView/${course.id}/${course.title?.en}`}
                       className="view-course-btn"
                     >
-                      View Course
+                      View Course 
                     </Link>
                   </div>
                 </div>
@@ -106,13 +112,6 @@ return (
             </div>
           ))}
       </div>
-
-        {/* All Courses Button */}
-        <div className="text-center mt-5">
-          <Link to="/courses" className="view-course-btn py-2 px-4">
-            All Courses
-          </Link>
-        </div>
     </section>
 
     </>

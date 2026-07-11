@@ -3,6 +3,8 @@ import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { useParams, useNavigate } from "react-router-dom";
 import { apiUrl, token } from "../../Common/http";
 import { toast } from "react-toastify";
+import HeaderUi from "../../Common/CommonUI/HeaderUi";
+import FooterUi from "../../Common/CommonUI/FooterUi";
 
 const ChangeLessonOrder = () => {
   const { courseId } = useParams();
@@ -88,6 +90,11 @@ const ChangeLessonOrder = () => {
   if (loading) return <p>Loading lessons...</p>;
 
   return (
+    <>
+
+    {/* Header  */}
+    <HeaderUi/>
+
     <div className="container my-5">
       <h4 className="mb-3">Reorder Lessons</h4>
 
@@ -135,6 +142,12 @@ const ChangeLessonOrder = () => {
         {saving ? "Saving..." : "Save Order"}
       </button>
     </div>
+
+    {/* Footer  */}
+    <FooterUi/>
+    
+    </>
+
   );
 };
 

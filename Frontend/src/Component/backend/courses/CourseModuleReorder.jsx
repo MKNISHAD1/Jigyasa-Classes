@@ -4,6 +4,8 @@ import { toast } from 'react-toastify';
 import { apiUrl, token } from '../../Common/http';
 import { useNavigate, useParams } from 'react-router-dom';
 import i18n from '../../../i18n/i18n';
+import HeaderUi from '../../Common/CommonUI/HeaderUi';
+import FooterUi from '../../Common/CommonUI/FooterUi';
 
 const CourseModuleReorder = () => {
   const { id } = useParams();
@@ -99,57 +101,72 @@ const CourseModuleReorder = () => {
   if (loading) return <p>Loading lessons...</p>;
 
   return (
-    <div className="container my-5">
-      <h4 className="mb-3">Reorder Modules </h4>
+    <>
 
-      <DragDropContext onDragEnd={handleDragEnd}>
-        <Droppable droppableId="lessons-droppable">
-          {(provided) => (
-            <div
-              {...provided.droppableProps}
-              ref={provided.innerRef}
-              className="list-group"
-            >
-              {modules.map((module, index) => (
-                <Draggable
-                  key={module.id}
-                  draggableId={module.id.toString()}
-                  index={index}
-                >
-                  {(provided, snapshot) => (
-                    <div
-                      className={`list-group-item d-flex justify-content-between align-items-center ${
-                        snapshot.isDragging ? "bg-light border-primary" : ""
-                      }`}
-                      ref={provided.innerRef}
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                    >
-                      <span>
-                        {module.order}. {module.title?.[i18n.language] || module.title?.en}
+    {/* Header */}
+    <HeaderUi/>
+
+    <main>
+      <div className="container my-5">
+        <h4 className="mb-3">Reorder Modules </h4>
+
+        <DragDropContext onDragEnd={handleDragEnd}>
+          <Droppable droppableId="lessons-droppable">
+            {(provided) => (
+              <div
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+                className="list-group"
+              >
+                {modules.map((module, index) => (
+                  <Draggable
+                    key={module.id}
+                    draggableId={module.id.toString()}
+                    index={index}
+                  >
+                    {(provided, snapshot) => (
+                      <div
+                        className={`list-group-item d-flex justify-content-between align-items-center ${
+                          snapshot.isDragging ? "bg-light border-primary" : ""
+                        }`}
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                      >
+                        <span>
+                          {module.order}. {module.title?.[i18n.language] || module.title?.en}
+                        </span>
+
+                        <span className="badge bg-primary ">
+                          {module.lessons_count} Lessons
                       </span>
+                      </div>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+        </DragDropContext>
 
-                      <span className="badge bg-primary ">
-                        {module.lessons_count} Lessons
-                    </span>
-                    </div>
-                  )}
-                </Draggable>
-              ))}
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext>
+        <button
+          className="btn btn-success mt-3"
+          onClick={saveOrder}
+          disabled={saving}
+        >
+          {saving ? "Saving..." : "Save Order"}
+        </button>
+      </div>
+    </main>
 
-      <button
-        className="btn btn-success mt-3"
-        onClick={saveOrder}
-        disabled={saving}
-      >
-        {saving ? "Saving..." : "Save Order"}
-      </button>
-    </div>
+    {/* Footer  */}
+    <FooterUi/>
+
+    </>
+
+
+
   );
 };
 

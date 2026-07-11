@@ -5,6 +5,8 @@ import { toast } from "react-toastify";
 import Header from "../../Common/Header";
 import Sidebar from "../../Common/Sidebar";
 import { useTranslation } from "react-i18next";
+import FooterUi from "../../Common/CommonUI/FooterUi";
+import HeaderUi from "../../Common/CommonUI/HeaderUi";
 
 const CreateLesson = () => {
   const { user } = useContext(AuthContext);
@@ -233,7 +235,9 @@ const CreateLesson = () => {
 
   return (
     <>
-      <Header />
+      {/* Header  */}
+      <HeaderUi />
+
       <main>
         <div className="container my-5">
           <div className="row">
@@ -421,6 +425,10 @@ const CreateLesson = () => {
           </div>
         </div>
       </main>
+
+      {/* Footer  */}
+      <FooterUi/>
+
     </>
   );
 };

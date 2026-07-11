@@ -5,6 +5,8 @@ import { apiUrl } from "../Common/http";
 import { toast } from "react-toastify";
 import Header from "../Common/Header";
 import Footercomp from '../Common/footer';
+import FooterUi from "../Common/CommonUI/FooterUi";
+import HeaderUi from "../Common/CommonUI/HeaderUi";
 
 const Resetpassword = () => {
   const [searchParams] = useSearchParams();
@@ -42,7 +44,9 @@ const Resetpassword = () => {
 
   return (
     <>
-    <Header/>
+    {/* Header  */}
+    <HeaderUi/>
+
     <div className="container my-5">
       <div className="card border-0 shadow">
         <div className="card-body">
@@ -82,7 +86,9 @@ const Resetpassword = () => {
         </div>
       </div>
     </div>
-    <Footercomp/>
+    
+    {/* Footer */}
+    <FooterUi />
     </>
   );
 };

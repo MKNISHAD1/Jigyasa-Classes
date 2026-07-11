@@ -6,6 +6,8 @@ import DataTable from "react-data-table-component";
 import { Link, useParams } from "react-router-dom";
 import Header from "../../Common/Header";
 import Sidebar from "../../Common/Sidebar";
+import HeaderUi from "../../Common/CommonUI/HeaderUi";
+import FooterUi from "../../Common/CommonUI/FooterUi";
 
 const DeletedLessons = () => {
   const { courseId } = useParams();
@@ -132,7 +134,10 @@ const DeletedLessons = () => {
 
   return (
     <>
-      <Header />
+
+      {/* Header */}
+      <HeaderUi />
+
       <main>
         <div className="container my-5">
           <div className="row">
@@ -182,6 +187,10 @@ const DeletedLessons = () => {
           </div>
         </div>
       </main>
+
+      {/* Footer  */}
+      <FooterUi/>
+      
     </>
   );
 };

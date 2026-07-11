@@ -21,7 +21,8 @@ use Illuminate\Validation\ValidationException;
 class AuthenticationController extends Controller
 {
     //For Login with 2FA + suspension Check
-    public function authenticate(Request $request){
+    public function authenticate(Request $request)
+    {
         //check validation
         $validator = Validator::make($request->all(),[
             'email' => 'required|email', // it will validate the email is valid or not
@@ -51,31 +52,32 @@ class AuthenticationController extends Controller
         }
 
         // Check if user is suspended
-        if ($user && $user->is_suspended) {
-            if ($user->suspended_until && now()->lessThan($user->suspended_until)) {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Your account is suspended until ' . $user->suspended_until->toDateTimeString(),
-                    'suspension_reason' => $user->suspension_reason ?? 'No reason provided',
-                ], 403);
+        if ($user && $user->is_suspended) 
+            {
+                if ($user->suspended_until && now()->lessThan($user->suspended_until)) {
+                    return response()->json([
+                        'status' => false,
+                        'message' => 'Your account is suspended until ' . $user->suspended_until->toDateTimeString(),
+                        'suspension_reason' => $user->suspension_reason ?? 'No reason provided',
+                    ], 403);
+                }
+
+            // Auto unsuspend if time passed
+            if ($user->suspended_until && now()->greaterThanOrEqualTo($user->suspended_until)) {
+                $user->update([
+                    'is_suspended' => false,
+                    'suspended_until' => null,
+                    'suspension_reason' => null,
+                ]);
+                
+                Mail::to($user->email)->send(new AccountUnsuspendedMail($user,'auto'));
+
+                ActivityLogger::log('Account_Auto_Unsuspended',null, [
+                    'user_id' => $user->id,
+                    'email' => $user->email,
+                ]);
             }
-
-        // Auto unsuspend if time passed
-        if ($user->suspended_until && now()->greaterThanOrEqualTo($user->suspended_until)) {
-            $user->update([
-                'is_suspended' => false,
-                'suspended_until' => null,
-                'suspension_reason' => null,
-            ]);
-            
-            Mail::to($user->email)->send(new AccountUnsuspendedMail($user,'auto'));
-
-            ActivityLogger::log('Account_Auto_Unsuspended',null, [
-                'user_id' => $user->id,
-                'email' => $user->email,
-            ]);
         }
-    }
         // Check Short Cooldown First
         if ($response = $this->checkTooManyFailedAttempts($request)) {
             // log lockout

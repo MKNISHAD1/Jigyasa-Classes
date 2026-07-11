@@ -5,6 +5,8 @@ import { apiUrl, token } from "../../Common/http";
 import Header from "../../Common/Header";
 import Sidebar from "../../Common/Sidebar";
 import { toast } from "react-toastify";
+import HeaderUi from "../../Common/CommonUI/HeaderUi";
+import FooterUi from "../../Common/CommonUI/FooterUi";
 
 const UpdateCourse = () => {
   const { id } = useParams();
@@ -17,6 +19,8 @@ const UpdateCourse = () => {
   const [subcategories, setSubcategories] = useState([]);
   const [teachers, setTeachers] = useState([]);
   const [isChanged, setIsChanged] = useState(false);
+
+  const [highlights, setHighlights] = useState([ { en: "", hi: ""} ]);
 
 
   const {
@@ -64,11 +68,32 @@ const UpdateCourse = () => {
             description_en: result.course.description?.en || "",
             description_hi: result.course.description?.hi || "",
             price: result.course.price,
+            language: result.course.language || "",
+            difficulty_level: result.course.difficulty_level || "",
             category_id: result.course.category?.id || "",
             subcategory_id: result.course.subcategory?.id || "",
             teacher_id: result.course.teacher?.id || "",
             status: result.course.status,
           });
+
+          // Set Highlight function
+          setHighlights(
+            result.course.highlights?.en?.length
+              ? result.course.highlights.en.map(
+                  (enText, index) => ({
+                    en: enText,
+                    hi:
+                      result.course.highlights?.hi?.[index]
+                      || ""
+                  })
+                )
+              : [
+                  {
+                    en: "",
+                    hi: ""
+                  }
+                ]
+          );
 
           // Fetch subcategories for this course
           if (result.course.category?.id) {
@@ -201,6 +226,49 @@ const UpdateCourse = () => {
     }
   };
 
+  // Highlights Functions 
+
+  const addHighlight = () => {
+
+    setHighlights([
+      ...highlights,
+      {
+        en: "",
+        hi: ""
+      }
+    ]);
+
+  };
+
+  const removeHighlight = (index) => {
+
+    setHighlights(
+      highlights.filter(
+        (_, i) => i !== index
+      )
+    );
+
+    setIsChanged(true);
+
+  };
+
+  const updateHighlight = (
+    index,
+    field,
+    value
+  ) => {
+
+    const updated = [...highlights];
+
+    updated[index][field] = value;
+
+    setHighlights(updated);
+
+    setIsChanged(true);
+
+  };
+
+
 
   // Update course
   const onSubmit = async (data) => {
@@ -218,7 +286,33 @@ const UpdateCourse = () => {
     formData.append("teacher_id", data.teacher_id || "");
     formData.append("status", data.status || "");
 
+    // Highlights 
+    formData.append("language", data.language || "");
+    formData.append("difficulty_level", data.difficulty_level || "");
 
+    highlights.forEach(
+      (highlight, index) => {
+
+        if (highlight.en.trim()) {
+
+          formData.append(
+            `highlights[${index}]`,
+            highlight.en.trim()
+          );
+
+        }
+
+        if (highlight.hi.trim()) {
+
+          formData.append(
+            `highlights_hi[${index}]`,
+            highlight.hi.trim()
+          );
+
+        }
+
+      }
+    );
 
     // Append thumbnail if selected
     if (data.thumbnail && data.thumbnail[0]) {
@@ -263,7 +357,9 @@ const UpdateCourse = () => {
 
   return (
     <>
-      <Header />
+      {/* Header  */}
+      <HeaderUi />
+      
       <main>
         <div className="container my-5">
           <div className="row">
@@ -316,6 +412,87 @@ const UpdateCourse = () => {
                       rows="4"
                     />
                   </div>
+
+                  {/* Highlights */}
+
+                  <div className="mb-3">
+                    <label className="form-label">
+                      Course Highlights
+                    </label>
+
+                    {highlights.map(
+                      (highlight, index) => (
+
+                        <div
+                          className="row mb-2"
+                          key={index}
+                        >
+
+                          <div className="col-md-5">
+
+                            <input
+                              type="text"
+                              className="form-control"
+                              placeholder="Highlight (English)"
+                              value={highlight.en}
+                              onChange={(e) =>
+                                updateHighlight(
+                                  index,
+                                  "en",
+                                  e.target.value
+                                )
+                              }
+                            />
+
+                          </div>
+
+                          <div className="col-md-5">
+
+                            <input
+                              type="text"
+                              className="form-control"
+                              placeholder="Highlight (Hindi)"
+                              value={highlight.hi}
+                              onChange={(e) =>
+                                updateHighlight(
+                                  index,
+                                  "hi",
+                                  e.target.value
+                                )
+                              }
+                            />
+
+                          </div>
+
+                          <div className="col-md-2">
+
+                            <button
+                              type="button"
+                              className="btn btn-danger w-100"
+                              onClick={() =>
+                                removeHighlight(index)
+                              }
+                            >
+                              ✕
+                            </button>
+
+                          </div>
+
+                        </div>
+
+                      )
+                    )}
+
+                    <button
+                      type="button"
+                      className="btn btn-secondary"
+                      onClick={addHighlight}
+                    >
+                      Add Highlight
+                    </button>
+
+                  </div>
+
                   {/* Price */}
                   <div className="mb-3">
                     <label className="form-label">Price</label>
@@ -349,6 +526,66 @@ const UpdateCourse = () => {
                           {sub.name?.en}
                         </option>
                       ))}
+                    </select>
+                  </div>
+
+                  {/* Languages */}
+                  <div className="mb-3">
+                    <label className="form-label">
+                      Language
+                    </label>
+
+                    <select
+                      {...register("language")}
+                      className="form-control"
+                    >
+                      <option value="">
+                        Select Language
+                      </option>
+
+                      <option value="English">
+                        English
+                      </option>
+
+                      <option value="Hindi">
+                        Hindi
+                      </option>
+
+                      <option value="Both">
+                        Both
+                      </option>
+                    </select>
+                  </div>
+                    
+                  {/* Difficulty Level */}
+                  <div className="mb-3">
+                    <label className="form-label">
+                      Difficulty Level
+                    </label>
+
+                    <select
+                      {...register("difficulty_level")}
+                      className="form-control"
+                    >
+                      <option value="">
+                        Select Difficulty
+                      </option>
+
+                      <option value="Beginner">
+                        Beginner
+                      </option>
+
+                      <option value="Intermediate">
+                        Intermediate
+                      </option>
+
+                      <option value="Advanced">
+                        Advanced
+                      </option>
+
+                      <option value="All Levels">
+                        All Levels
+                      </option>
                     </select>
                   </div>
 
@@ -462,6 +699,10 @@ const UpdateCourse = () => {
           </div>
         </div>
       </main>
+
+      {/* Footer  */}
+      <FooterUi/>
+      
     </>
   );
 };

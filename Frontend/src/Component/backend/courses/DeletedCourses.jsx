@@ -3,6 +3,8 @@ import { apiUrl, token } from "../../Common/http";
 import Header from "../../Common/Header";
 import Sidebar from "../../Common/Sidebar";
 import { toast } from "react-toastify";
+import HeaderUi from "../../Common/CommonUI/HeaderUi";
+import FooterUi from "../../Common/CommonUI/FooterUi";
 
 const DeletedCourses = () => {
   const [courses, setCourses] = useState([]);
@@ -82,7 +84,9 @@ const DeletedCourses = () => {
 
   return (
     <>
-      <Header />
+      {/* Header  */}
+      <HeaderUi/>
+
       <main>
         <div className="container my-5">
           <div className="row">
@@ -135,6 +139,11 @@ const DeletedCourses = () => {
           </div>
         </div>
       </main>
+
+      {/* Footer  */}
+      <FooterUi/>
+
+
     </>
   );
 };

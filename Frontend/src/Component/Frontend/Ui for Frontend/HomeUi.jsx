@@ -11,6 +11,12 @@ import why1 from '../../../assets/images/why-1.jpeg';
 import why2 from '../../../assets/images/why-2.jpeg';
 import why3 from '../../../assets/images/why-3.jpeg';
 import why4 from '../../../assets/images/why-4.jpeg';
+
+import ProfessorIcon from "../../../assets/images/professor2.svg?react";
+import VideoIcon from "../../../assets/images/video2.svg?react";
+import MoneyIcon from "../../../assets/images/money.svg?react";
+import CertificateIcon from "../../../assets/images/certificate3.svg?react";
+
 import blackboard from '../../../assets/images/blackboard4.png';
 import student1 from '../../../assets/images/Student1.png'
 import student2 from '../../../assets/images/Student2.png'
@@ -23,12 +29,12 @@ import exam2 from '../../../assets/images/exam2.png'
 import exam3 from '../../../assets/images/exam3.png'
 import exam4 from '../../../assets/images/exam4.png'
 import exam5 from '../../../assets/images/exam5.png'
+import bgImage from '../../../assets/images/herobg1.png'
 import bfs1 from '../../../assets/images/bf1.png'
-import bfs2 from '../../../assets/images/bf2.png'
+import bfs2 from '../../../assets/images/success.jpg'
 import bfs3 from '../../../assets/images/bf3.png'
-import test from '../../../assets/images/bg1.jpg'
 import { Carousel } from 'react-bootstrap';
-import { faBookOpen, faClock, faDollar, faDollarSign, faJournalWhills, faLaptop, faLayerGroup, faMessage, faMoneyBill, faMoneyBillTransfer, faMoneyCheckDollar, faQuoteLeft, faSearch, faSearchPlus, faStar, faUserEdit } from '@fortawesome/free-solid-svg-icons';
+import { faArrowRight, faBook, faBookOpen, faClock, faDesktop, faDollar, faDollarSign, faFile, faJournalWhills, faLaptop, faLayerGroup, faMessage, faMoneyBill, faMoneyBillTransfer, faMoneyCheckDollar, faQuoteLeft, faSearch, faSearchPlus, faStar, faUserEdit, faUserGroup } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const HomeUi = () => {
@@ -36,7 +42,7 @@ const HomeUi = () => {
   const {categories, loading} = useCategories();
   const { courses } = useCourses({
     status:"published",
-    limit:3,
+    limit:4,
   });
   const {i18n} = useTranslation();
 
@@ -44,33 +50,88 @@ const HomeUi = () => {
     backgroundImage: `url(${blackboard})`,
   };
 
-      const myStyle1 = {
-    backgroundImage: `url(${test})`,
-  };
   
   return (
     <>
 
     <HeaderUi />
+    
     {/* Hero Section  */}
-    <div className='text-center hero'>
-    <img src={hero} />
-    </div>
+    <section className="hero-section" 
+      style={{backgroundImage: `url(${bgImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'}}>
 
+      <div className="container-fluid hero-body">
+
+        <div className="row">
+
+          {/* LEFT CONTENT */}
+          <div className="col-lg-6 hero-content pb-2">
+
+            <small className="hero-tag">
+              Start Your Success Journey Today
+            </small>
+
+            <h1>
+              Build Your Future With <br />
+              <span> Quality Education </span>
+              & <br /> Expert
+              <span> Mentorship</span>
+            </h1>
+
+            <p>
+              Learn from experienced educators, access structured study materials, and prepare confidently for competitive examinations with guided learning paths.
+            </p>
+
+            <div className="hero-btns">
+              <Link to="/" className="primary-btn">
+                Start Learning  <FontAwesomeIcon icon={faArrowRight} className='icon'/>
+              </Link>
+            </div>
+
+            <div className="hero-features">
+
+              <div className="feature-item">
+                <FontAwesomeIcon icon={faDesktop} /> Interactive Sessions
+              </div>
+
+              <div className="feature-item">
+                <FontAwesomeIcon icon={faUserGroup}/> Expert Faculty
+              </div>
+
+
+              <div className="feature-item">
+                <FontAwesomeIcon icon={faFile} /> Study Material
+              </div>
+
+            </div>
+
+          </div>
+
+          {/* RIGHT IMAGE */}
+          <div className="col-lg-6 hero-img text-center">
+            <img
+              src={student5}
+              alt="Student"
+              className="student-img"
+            />
+
+          </div>
+
+        </div>
+
+      </div>
+    </section>
 
 
     {/* Exams banner */}
-    <div className="text-center mb-4">
+    {/* <div className="text-center mb-4">
       
         <div className="gradi">
           <div className='container'>
-              <div className='p-4 text-center'>
-                <br /><br />
-                    <h3 className="fw-bold">
-                      We Prepare You For Multiple <span className='span2'>Competetitive  Exams</span>
-                    </h3>
-                    <p>Structured courses designed for India’s top competitive exams</p>
-              </div>
+
               <div className=" Exam-Section">
 
                 <img src={exam} className='exampic'/>
@@ -104,77 +165,91 @@ const HomeUi = () => {
           </div>
         </div>
 
-    </div>
+    </div> */}
 
-
-
-    {/* Category section */}
     <div className="text-center mb-4">
       
         <div className="gradi2">
           <div className='container'>
-              <div className='p-4 text-center'>
+              <div className='pb-2 text-center'>
                 <br /><br />
 
                     <h3 className="fw-bold">
-                      Explore <span className='span2'> Categories</span>
+                      We Prepare You For Multiple <span className='span2'> Competetitive  Exams</span>
                     </h3>
-                    <p>Learn from newly added courses by expert instructors</p>
+                    <p>Structured courses designed for India's top competitive exams</p>
                 
 
               </div>
           </div>
         </div>
-
     </div>
-    <section className="category-section container">
-      <div className="category-scroll-container">
 
-        {/* Left Arrow */}
-        <button
-          className="scroll-btn left"
-          onClick={() =>
-            document.querySelector(".category-chips-wrapper")
-              .scrollBy({ left: -200, behavior: "smooth" })
-          }
-        >
-          &lt; 
-        </button>
+    <section className="exam-marquee-section">
+      <div className="exam-marquee">
 
-        {/* Chips */}
-        <div className="category-chips-wrapper">
-          {categories.map((cat) => (
-            <button key={cat.id} className="category-chip" type="button">
-              <span className="chip-text">
-                <img
-                  src={logo}
-                  alt=""
-                  style={{
-                    width: 22,
-                    height: 22,
-                    borderRadius: 50,
-                    marginRight: 8,
-                  }}
-                />
-                {cat.name?.[i18n.language] ?? cat.name?.en}
-              </span>
-            </button>
-          ))}
+        <div className="marquee-track">
+
+          {/* First Set */}
+          <div className="exam-item">
+            <img src={exam1} alt="UPPSC" />
+            <span>UPPSC</span>
+          </div>
+
+          <div className="exam-item">
+            <img src={exam2} alt="RRB" />
+            <span>RRB</span>
+          </div>
+
+          <div className="exam-item">
+            <img src={exam3} alt="PSC" />
+            <span>PSC</span>
+          </div>
+
+          <div className="exam-item">
+            <img src={exam4} alt="SSC" />
+            <span>SSC</span>
+          </div>
+
+          <div className="exam-item">
+            <img src={exam5} alt="JEE" />
+            <span>JEE</span>
+          </div>
+
+          {/* Duplicate for infinite scroll */}
+
+          <div className="exam-item">
+            <img src={exam1} alt="UPPSC" />
+            <span>UPPSC</span>
+          </div>
+
+          <div className="exam-item">
+            <img src={exam2} alt="RRB" />
+            <span>RRB</span>
+          </div>
+
+          <div className="exam-item">
+            <img src={exam3} alt="PSC" />
+            <span>PSC</span>
+          </div>
+
+          <div className="exam-item">
+            <img src={exam4} alt="SSC" />
+            <span>SSC</span>
+          </div>
+
+          <div className="exam-item">
+            <img src={exam5} alt="JEE" />
+            <span>JEE</span>
+          </div>
+
         </div>
 
-        {/* Right Arrow */}
-        <button
-          className="scroll-btn right"
-          onClick={() =>
-            document.querySelector(".category-chips-wrapper")
-              .scrollBy({ left: 200, behavior: "smooth" })
-          }
-        >
-          &gt;
-        </button>
-
       </div>
+
     </section>
+
+
     
 
     {/* Latest Courses Section */}
@@ -182,7 +257,7 @@ const HomeUi = () => {
       
         <div className="gradi2">
           <div className='container'>
-              <div className='p-4 text-center'>
+              <div className='pb-2 text-center'>
                 <br /><br />
 
                     <h3 className="fw-bold">
@@ -207,8 +282,8 @@ const HomeUi = () => {
 
         {!loading &&
           courses.map((course) => (
-            <div className="col-12 col-sm-6 col-lg-4" key={course.id}>
-              <div className="card shadow h-100 course-card">
+            <div className="col-12 col-sm-6 col-lg-3" key={course.id}>
+              <div className="card h-100 course-card">
                 
                 <img
                   src={course.thumbnail ?? "/default-course.png"}
@@ -216,7 +291,12 @@ const HomeUi = () => {
                   alt={course.title?.en}
                 />
 
-                  <div className="card-header d-flex flex-row mt-auto">
+                  <div className="card-header">
+                    <h6 className="course-title">
+                    {course.title?.[i18n.language] ?? course.title?.en}
+                  </h6>
+                  </div>
+                  <div className="container d-flex flex-row">
                     <img
                       src={course.teacher.profile_pic ?? "/default-course.png"}
                       className="teacher-img"
@@ -225,7 +305,7 @@ const HomeUi = () => {
                     <h6 className="teacher-name">
                       {course.teacher.name}
                     </h6>                                    
-                    <div className="ms-auto">
+                    <div className="ms-auto"> 
                       <Link className='category-button' to="#" >
                         {course.category?.name?.[i18n.language] ??
                           course.category?.name?.en}
@@ -233,38 +313,35 @@ const HomeUi = () => {
                     </div>
                   </div>
 
-                <div className="card-body d-flex flex-column">
-                  <h6 className="course-title">
-                    {course.title?.[i18n.language] ?? course.title?.en}
-                  </h6>
+                <div className="card-body d-flex flex-column h-100">
+                  
 
-                  <p className="course-desc small flex-grow-1 mb-2">
+                  {/* <p className="course-desc small flex-grow-1 mb-2">
                     {course.description?.[i18n.language] ??
                       course.description?.en}
-                  </p>
-                  <div className="lectures ">
-                    <div className="rating">
-                       <span>5</span> &nbsp;<FontAwesomeIcon icon={faStar} className='star'/>
-                       <FontAwesomeIcon icon={faStar} className='star'/>
-                       <FontAwesomeIcon icon={faStar} className='star'/>
-                       <FontAwesomeIcon icon={faStar} className='star'/>
-                       <FontAwesomeIcon icon={faStar} className='star'/>
-                    </div>
-                    <div className="book">
-                    <FontAwesomeIcon icon={faBookOpen} className='book-icon'/>  &nbsp;
-                    {course.lessons_count} <span>Lessons</span><br />
-                    </div>
+                  </p> */}
+
+                  <div className="course-meta">
+                    <span>
+                      <FontAwesomeIcon icon={faBook} className='icon'/> {course.lessons_count || 0} Lessons
+                    </span>
+
+                    {/* Future Data */}
+                    <span><FontAwesomeIcon icon={faClock} className='icon'/> 18 Hours</span> <br />
+                    {/* <span><FontAwesomeIcon icon={faStar}/> 4.8</span>
+                    <span><FontAwesomeIcon icon={faUserGroup}/> 245</span> */}
+
                   </div>
-                  <div className="d-flex justify-content-between align-items-centers price-section">
+                  <div className="d-flex card-footer justify-content-between align-items-center price-section">
                     <span className="fw-bold text-success price">
-                      {course.price ? `₹${course.price}` : "Free"}
+                      {course.price ? `₹${course.price}` : "Free"} 
                     </span>
 
                     <Link
-                      to={`/course/${course.id}`}
+                      to={`/CourseView/${course.id}/${course.title?.en}`}
                       className="view-course-btn"
                     >
-                      View Course
+                      View Course 
                     </Link>
                   </div>
                 </div>
@@ -276,50 +353,86 @@ const HomeUi = () => {
         {/* All Courses Button */}
         <div className="text-center mt-5">
           <Link to="/courses" className="view-course-btn py-2 px-4">
-            All Courses
+            More Courses <FontAwesomeIcon icon={faArrowRight}/>
           </Link>
         </div>
     </section>
 
 
     {/* Why Choose Us Section */}
-    <section className="why-choose ">
 
-      <div className="row">
-      <h2 >Why Choose Us</h2>
-        <div className="col-12 col-sm-6  col-lg-3">
-          <img src={why1}/>
-          <div className="why-content ">
-            <h3>Expert <span>Faculty</span></h3>
-            <p>Learn from highly experienced educators and industry professionals dedicated to your success.</p>
-          </div>
-        </div>
+    <section className="why-choose">
 
-        <div className="col-12 col-sm-6  col-lg-3">
-          <img src={why2}  />
-          <div className="why-content ">
-            <h3>Structured <span>Curriculum</span></h3>
-            <p>Well-organized courses designed to build concepts step-by-step for better understanding.</p>
+      <div className="row ">
+        <h2 className="title">
+          Why Aspirants Choose <span>Jigyasa Classes</span>
+        </h2>
+
+        <div className="col-12 col-sm-6 col-lg-3">
+          <div className="why-item">
+            <div className="icon-wrapper">
+              <ProfessorIcon className="why-icon" />
+            </div>
+
+            <div className="why-content">
+              <h3>Expert <span>Faculty</span></h3>
+              <p>
+                Learn from experienced teachers with proven success in competitive
+                exam preparation.
+              </p>
+            </div>
           </div>
         </div>
 
         <div className="col-12 col-sm-6 col-lg-3">
-          <img src={why3} alt="" />
-          <div className="why-content ">
-            <h3>Affordable <span>Pricing</span></h3>
-            <p>Quality education at budget-friendly prices, with free and premium course options.</p>
+          <div className="why-item">
+            <div className="icon-wrapper">
+              <VideoIcon className="why-icon" />
+            </div>
+
+            <div className="why-content">
+              <h3>Structured <span>Curriculum</span></h3>
+              <p>
+                Step-by-step learning paths designed according to the latest exam
+                patterns.
+              </p>
+            </div>
           </div>
         </div>
 
-        <div className="col-12 col-sm-6  col-lg-3">
-          <img src={why4} alt="" />
-          <div className="why-content ">
-            <h3>Verified <span>Certification</span></h3>
-            <p>Receive trusted certificates that add real value to your academic and career profile.</p>
+        <div className="col-12 col-sm-6 col-lg-3">
+          <div className="why-item">
+            <div className="icon-wrapper">
+              <MoneyIcon className="why-icon" />
+            </div>
+
+            <div className="why-content">
+              <h3>Affordable <span>Pricing</span></h3>
+              <p>
+                Quality education at student-friendly prices with both free and
+                premium options.
+              </p>
+            </div>
           </div>
         </div>
+
+        <div className="col-12 col-sm-6 col-lg-3">
+          <div className="why-item">
+            <div className="icon-wrapper">
+              <CertificateIcon className="why-icon" />
+            </div>
+
+            <div className="why-content">
+              <h3>Verified <span>Certification</span></h3>
+              <p>
+                Earn certificates that showcase your learning achievements and
+                skills.
+              </p>
+            </div>
+          </div>
+        </div>
+
       </div>
-
 
     </section>
 
@@ -329,7 +442,7 @@ const HomeUi = () => {
       
         <div className="gradi3">
           <div className='container'>
-              <div className='p-4 text-center'>
+              <div className='pb-2 text-center'>
                 <br /><br />
 
       <h3 className="fw-bold">
@@ -343,6 +456,7 @@ const HomeUi = () => {
         </div>
 
     </div>
+
     <section className="testimonial-section" style={myStyle}>
       <div className="testimonial-overlay">
         <Carousel
@@ -560,7 +674,7 @@ It helped me manage my studies along with my college schedule effortlessly.”
                 </p>
               </div>
             </div>
-            <img src={bfs1} />
+            <img src={bfs2}/>
           </div>
 
           {/* RIGHT COLUMN */}
@@ -600,7 +714,7 @@ It helped me manage my studies along with my college schedule effortlessly.”
       
         <div className="gradi2">
           <div className='container'>
-              <div className='p-4 text-center'>
+              <div className='pb-2 text-center'>
                 <br /><br />
 
       <h3 className="fw-bold">
@@ -662,6 +776,11 @@ It helped me manage my studies along with my college schedule effortlessly.”
             </div>
           </div>
           
+        </div>
+        <div className="text-center mb-4">
+          <Link to="/Register" className="Register py-2 px-4">
+            Register Now <FontAwesomeIcon icon={faArrowRight}/>
+          </Link>
         </div>
       </div>
     </section>

@@ -6,6 +6,8 @@ import { toast } from "react-toastify";
 import Header from "../../Common/Header";
 import Sidebar from "../../Common/Sidebar";
 import ClipLoader from "react-spinners/ClipLoader";
+import HeaderUi from "../../Common/CommonUI/HeaderUi";
+import FooterUi from "../../Common/CommonUI/FooterUi";
 
 const UpdateLesson = () => {
   const { courseId, lessonId } = useParams();
@@ -174,7 +176,9 @@ useEffect(() => {
 
   return (
     <>
-      <Header />
+      {/* Header */}
+      <HeaderUi />
+
       <main>
         <div className="container my-5">
           <div className="row">
@@ -411,6 +415,10 @@ useEffect(() => {
           </div>
         )}
       </main>
+
+      {/* Footer  */}
+      <FooterUi/>
+      
     </>
   );
 };

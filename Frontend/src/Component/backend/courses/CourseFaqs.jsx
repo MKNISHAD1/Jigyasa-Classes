@@ -7,14 +7,19 @@ const CourseFaqs = ({ faqs = [] }) => {
   const { i18n } = useTranslation();
 
 
-  
-
   return (
     <div className="course-faqs">
 
       <div className="section-title">
-        <h4>Frequently Asked Questions</h4>
+          <div>
+              <h4>Frequently Asked <span>Questions</span></h4>
+              <p>
+                  Find answers to the most common questions about this course.
+              </p>
+          </div>
       </div>
+
+    {faqs.length > 0 ? (
 
       <Accordion defaultActiveKey="0">
 
@@ -40,10 +45,16 @@ const CourseFaqs = ({ faqs = [] }) => {
             </Accordion.Body>
 
           </Accordion.Item>
-
         ))}
-
-      </Accordion>
+          </Accordion>
+        ):(
+              <div className="empty-faq">
+                <h5>No FAQs Available</h5>
+                <p>
+                    Frequently asked questions will be added soon.
+                </p>
+              </div>
+        )}
 
     </div>
   );

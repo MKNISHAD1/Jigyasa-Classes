@@ -5,6 +5,8 @@ import { toast } from "react-toastify";
 import { apiUrl, token } from "../../Common/http";
 import { useTranslation } from "react-i18next";
 import ProtectedVideoPlayer from "./LessonViewer";
+import HeaderUi from "../../Common/CommonUI/HeaderUi";
+import FooterUi from "../../Common/CommonUI/FooterUi";
 
 const LessonTable = ({ lessons = [], courseId, onLessonDeleted, reloadLessons}) => {
   const { i18n } = useTranslation();
@@ -181,45 +183,52 @@ const LessonTable = ({ lessons = [], courseId, onLessonDeleted, reloadLessons}) 
   ];
 
   return (
-    <div className="mt-4">
-      <div className="d-flex justify-content-between align-items-center mb-3">
-        <h4 className="h5">Lessons {selectedLessons.length > 0 && `(Selected: ${selectedLessons.length})`}</h4>
+    <>
 
-        <div className="d-flex gap-2">
-          <Link to={`/admin/course/${courseId}/lesson/ChangeLessonOrder`} className="btn btn-warning">
-            Change Order
-          </Link>
-          <Link to={`/admin/lesson/create`} className="btn btn-success">
-            Create Lesson
-          </Link>
-          <Link to={`/admin/course/${courseId}/lessons/trashed`} className="btn btn-outline-danger">
-            View Deleted Lessons
-          </Link>
-          <button onClick={bulkDeleteLessons} className="btn btn-danger" disabled={selectedLessons.length === 0}>
-            Delete Selected
-          </button>
+
+
+      <div className="mt-4">
+        <div className="d-flex justify-content-between align-items-center mb-3">
+          <h4 className="h5">Lessons {selectedLessons.length > 0 && `(Selected: ${selectedLessons.length})`}</h4>
+
+          <div className="d-flex gap-2">
+            <Link to={`/admin/course/${courseId}/lesson/ChangeLessonOrder`} className="btn btn-warning">
+              Change Order
+            </Link>
+            <Link to={`/admin/lesson/create`} className="btn btn-success">
+              Create Lesson
+            </Link>
+            <Link to={`/admin/course/${courseId}/lessons/trashed`} className="btn btn-outline-danger">
+              View Deleted Lessons
+            </Link>
+            <button onClick={bulkDeleteLessons} className="btn btn-danger" disabled={selectedLessons.length === 0}>
+              Delete Selected
+            </button>
+          </div>
         </div>
-      </div>
-      <DataTable 
-      columns={columns} 
-      data={lessons}         
-      selectableRows
-      selectableRowsHighlight
-      onSelectedRowsChange={(state) => setSelectedLessons(state.selectedRows.map(r => r.id))}
-      pagination 
-      highlightOnHover 
-      striped 
-      progressPending={loading}
-    />
-      {/* ✅ Modal player (only shown when lesson selected) */}
-      {selectedLesson && (
-        <ProtectedVideoPlayer
-          lesson={selectedLesson}
-          onClose={handleClosePlayer}
-        />
-      )}
+        <DataTable 
+        columns={columns} 
+        data={lessons}         
+        selectableRows
+        selectableRowsHighlight
+        onSelectedRowsChange={(state) => setSelectedLessons(state.selectedRows.map(r => r.id))}
+        pagination 
+        highlightOnHover 
+        striped 
+        progressPending={loading}
+      />
+        {/* ✅ Modal player (only shown when lesson selected) */}
+        {selectedLesson && (
+          <ProtectedVideoPlayer
+            lesson={selectedLesson}
+            onClose={handleClosePlayer}
+          />
+        )}
 
-    </div>
+      </div>
+
+
+    </>
   );
 };
 

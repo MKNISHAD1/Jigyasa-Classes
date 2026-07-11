@@ -1,11 +1,15 @@
 import React from 'react'
 import Header from '../Common/Header'
 import Sidebar from '../Common/Sidebar'
+import HeaderUi from '../Common/CommonUI/HeaderUi'
+import FooterUi from '../Common/CommonUI/FooterUi'
 
 const Dashboard = () => {
   return (
  <>
-    <Header/>
+    {/* Header */}
+    <HeaderUi/>
+    
     <main>
         <div className="container my-5">
         <div className="row">
@@ -26,6 +30,10 @@ const Dashboard = () => {
         </div>
         
     </main>
+
+    {/* Footer  */}
+    <FooterUi/>
+
     </>
   )
 }

@@ -116,6 +116,28 @@ class CourseController extends Controller
             'modules'
         ])->findOrFail($id);
 
+        // SIMILAR COURSES
+
+        $similarCourses = Course::with([
+            'thumbnail',
+            'teacher',
+            'category',
+            'subcategory',
+        ])
+        ->withCount('lessons')
+        ->where('status', 'published')
+        ->where('id', '!=', $course->id)
+        ->where(function ($q) use ($course) {
+            if ($course->subcategory_id) {
+                $q->where('subcategory_id', $course->subcategory_id);
+            } else {
+                $q->where('category_id', $course->category_id);
+            }
+        })
+        ->inRandomOrder()
+        ->take(4)
+        ->get();
+
         if (!$course) {
             return response()->json([
                 'status' => false,
@@ -125,7 +147,12 @@ class CourseController extends Controller
 
         return response()->json([
             'status' => true,
-            'course' => $this->formatCourseResponse($course)
+            'course' => $this->formatCourseResponse($course),
+
+            // similar  courses
+            'similar_courses' => $similarCourses->map(
+                fn($item) => $this->formatCourseResponse($item)
+            ),
         ]);
     }
 
@@ -194,7 +221,7 @@ class CourseController extends Controller
             'order'     => 0,
         ]);
 
-        $generalModule>saveTranslation('title', 'hi', 'सामान्य');
+        $generalModule->saveTranslation('title', 'hi', 'सामान्य');
 
 
         // Save translations
@@ -660,6 +687,9 @@ class CourseController extends Controller
                         ?? [],
             ],
 
+            'language' => $course->language,
+            'difficulty_level' => $course->difficulty_level,
+
             'price' => $course->price,
             'status' => $course->status,
             'published_at' => $course->published_at,
@@ -688,7 +718,7 @@ class CourseController extends Controller
             'teacher' => $course->teacher,
             'creator' => $course->creator,
                
-            'lessons_count' =>$course->lessons->count(),
+            'lessons_count' =>$course->lessons_count ?? $course->lessons->count(),
 
             // Modules 
             'modules' => $course->modules->map(function ($module) {
@@ -770,6 +800,38 @@ class CourseController extends Controller
                     ]),
                 ];
             }),     
+        ];
+    }
+
+    /**
+     * Helper card for Similar Courses
+     */
+    private function formatCourseCard(Course $course)
+    {
+        return [
+            'id' => $course->id,
+
+            'title' => [
+                'en' => $course->title,
+                'hi' => $course->translateField('title','hi') ?? $course->title,
+            ],
+
+            'price' => $course->price,
+
+            'thumbnail' => $course->thumbnail_url,
+
+            'lessons_count' => $course->lessons_count,
+
+            'teacher' => $course->teacher,
+
+            'category' => [
+                'id' => $course->category?->id,
+                'name' => [
+                    'en' => $course->category?->name,
+                    'hi' => $course->category?->translateField('name','hi')
+                            ?? $course->category?->name,
+                ]
+            ]
         ];
     }
 }

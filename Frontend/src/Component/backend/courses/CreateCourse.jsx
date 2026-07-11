@@ -7,6 +7,8 @@ import { toast } from "react-toastify";
 import { AuthContext } from "../context/Auth";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import HeaderUi from "../../Common/CommonUI/HeaderUi";
+import FooterUi from "../../Common/CommonUI/FooterUi";
 
 const CreateCourse = () => {
   const { hasAnyRole } = useContext(AuthContext);
@@ -17,6 +19,9 @@ const CreateCourse = () => {
   const [subcategories, setSubcategories] = useState([]);
   const [thumbnailPreview, setThumbnailPreview] = useState(null);
   const {i18n} = useTranslation();
+
+  const [highlights, setHighlights] = useState([ { en: "", hi: ""} ]);
+
 
   const {
     register,
@@ -54,6 +59,47 @@ const CreateCourse = () => {
     // Also clear the file input element directly
     document.getElementById("thumbnail-input").value = "";
   };
+
+  // Add Highlight
+  const addHighlight = () => {
+
+    setHighlights([
+      ...highlights,
+      {
+        en: "",
+        hi: ""
+      }
+    ]);
+
+  };
+
+  // Remove Highlights
+  const removeHighlight = (index) => {
+
+    setHighlights(
+      highlights.filter(
+        (_, i) => i !== index
+      )
+    );
+
+  };
+
+  // Update Hughlights
+
+  const updateHighlight = (
+    index,
+    field,
+    value
+  ) => {
+
+    const updated = [...highlights];
+
+    updated[index][field] = value;
+
+    setHighlights(updated);
+
+  };
+
 
 
   // ✅ Fetch teachers
@@ -113,6 +159,31 @@ const CreateCourse = () => {
       }
     }
 
+    highlights.forEach(
+      (highlight, index) => {
+
+        if (
+          highlight.en.trim()
+        ) {
+          payload.append(
+            `highlights[${index}]`,
+            highlight.en.trim()
+          );
+        }
+
+        if (
+          highlight.hi.trim()
+        ) {
+          payload.append(
+            `highlights_hi[${index}]`,
+            highlight.hi.trim()
+          );
+        }
+
+      }
+    );
+
+
     try {
       const res = await fetch(apiUrl + "create-course", {
         method: "POST",
@@ -146,7 +217,11 @@ const CreateCourse = () => {
 
   return (
     <>
-      <Header />
+
+      
+      {/* Header  */}
+      <HeaderUi/>
+
       <main>
         <div className="container my-5">
           <div className="row">
@@ -278,6 +353,179 @@ const CreateCourse = () => {
                     />
                   </div>
 
+                  {/* Language */}
+
+                  <div className="mb-3">
+
+                    <label className="form-label">
+                      Language
+                    </label>
+
+                    <select
+                      {...register("language", {
+                        required: "Language is required"
+                      })}
+                      className={`form-control ${
+                        errors.language && "is-invalid"
+                      }`}
+                    >
+
+                      <option value="">
+                        Select Language
+                      </option>
+
+                      <option value="English">
+                        English
+                      </option>
+
+                      <option value="Hindi">
+                        Hindi
+                      </option>
+
+                      <option value="Both">
+                        Both
+                      </option>
+
+                    </select>
+
+                    {errors.language && (
+                      <p className="invalid-feedback">
+                        {errors.language.message}
+                      </p>
+                    )}
+
+                  </div>
+
+                  {/* Difficulty Level */}
+
+                  <div className="mb-3">
+
+                    <label className="form-label">
+                      Difficulty Level
+                    </label>
+
+                    <select
+                      {...register("difficulty_level", {
+                        required:
+                          "Difficulty level is required"
+                      })}
+                      className={`form-control ${
+                        errors.difficulty_level &&
+                        "is-invalid"
+                      }`}
+                    >
+
+                      <option value="">
+                        Select Difficulty
+                      </option>
+
+                      <option value="Beginner">
+                        Beginner
+                      </option>
+
+                      <option value="Intermediate">
+                        Intermediate
+                      </option>
+
+                      <option value="Advanced">
+                        Advanced
+                      </option>
+
+                      <option value="All Levels">
+                        All Levels
+                      </option>
+
+                    </select>
+
+                    {errors.difficulty_level && (
+                      <p className="invalid-feedback">
+                        {errors.difficulty_level.message}
+                      </p>
+                    )}
+
+                  </div>
+
+                  {/* Highlights */}
+
+                  <div className="mb-3">
+
+                    <label className="form-label">
+                      Course Highlights
+                    </label>
+
+                    {highlights.map(
+                      (highlight, index) => (
+
+                      <div
+                        className="row mb-2"
+                        key={index}
+                      >
+
+                        <div className="col-md-5">
+
+                          <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Highlight (English)"
+                            value={highlight.en}
+                            onChange={(e) =>
+                              updateHighlight(
+                                index,
+                                "en",
+                                e.target.value
+                              )
+                            }
+                          />
+
+                        </div>
+
+                        <div className="col-md-5">
+
+                          <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Highlight (Hindi)"
+                            value={highlight.hi}
+                            onChange={(e) =>
+                              updateHighlight(
+                                index,
+                                "hi",
+                                e.target.value
+                              )
+                            }
+                          />
+
+                        </div>
+
+                        <div className="col-md-2">
+
+                          <button
+                            type="button"
+                            className="btn btn-danger w-100"
+                            onClick={() =>
+                              removeHighlight(index)
+                            }
+                          >
+                            ✕
+                          </button>
+
+                        </div>
+
+                      </div>
+
+                    ))}
+
+                    <button
+                      type="button"
+                      className="btn btn-secondary"
+                      onClick={addHighlight}
+                    >
+                      Add Highlight
+                    </button>
+
+                  </div>
+
+
                   {/* Teacher */}
                   <div className="mb-3">
                     <label className="form-label">Assign Teacher</label>
@@ -362,6 +610,10 @@ const CreateCourse = () => {
           </div>
         </div>
       </main>
+
+      {/* Footer  */}
+      <FooterUi/>
+      
     </>
   );
 };

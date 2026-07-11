@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import DataTable from "react-data-table-component";
 import { useTranslation } from "react-i18next";
 import HeaderUi from "../../Common/CommonUI/HeaderUi";
+import FooterUi from "../../Common/CommonUI/FooterUi";
 
 const CourseList = () => {
   const [courses, setCourses] = useState([]);
@@ -189,7 +190,9 @@ const CourseList = () => {
 
   return (
     <>
+    {/* Header  */}
       <HeaderUi />
+
       <main>
         <div className="container my-5">
           <div className="row">
@@ -236,6 +239,9 @@ const CourseList = () => {
           </div>
         </div>
       </main>
+
+      {/* Footer */}
+      <FooterUi />
     </>
   );
 };

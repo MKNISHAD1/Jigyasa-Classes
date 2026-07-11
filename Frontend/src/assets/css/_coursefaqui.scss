@@ -1,42 +1,108 @@
+
+// global variables 
+$primary-color:#1363b8;
+$secondary-color:#ebf1f5;
+$optional-color:#f7f9fc;
+$third-color:#162521;
+$forth-color:#047ba7;
+$fifth-color:#FFFFFF;
+
 .course-faqs{
 
-  margin-top: 30px;
+  margin-top: 40px;
+
 
   .section-title{
-    margin-bottom: 20px;
+      margin-bottom:24px;
 
-    h4{
-      font-weight: 700;
-      color: #162521;
+        h4{
+          font-weight:650;
+          color:$third-color;
+          margin-bottom:6px;
+        }
+
+        p{
+          margin:0;
+          font-weight: 600;
+          color:#383636;
+          font-size:14px;
+          margin-bottom: 6px;
+        }
+  }
+
+    .accordion-item{
+      border: none;
+      border-bottom: 1px solid rgba(10, 28, 189, 0.3);
+      border-radius:0;
+      overflow:hidden;
+      margin-bottom:14px;
+      transition:.25s;
+
+      &:hover{
+          border-color:#d6e4f5;
+
+          transform: translateX(3px);
+          box-shadow:0 8px 20px rgba(19,99,184,.06);
+          
+      }
     }
-  }
 
-  .accordion-item{
-    border: 1px solid #edf0f7;
-    border-radius: 12px;
-    overflow: hidden;
-    margin-bottom: 15px;
-  }
+    .accordion-button{
+      background:#fff;
+      padding:20px;
+      font-weight:500;
+      color:$third-color;
 
-  .accordion-button{
-    font-weight: 600;
-    padding: 18px;
-    background: #fff;
+      &:focus{
+        box-shadow:none;
+      }
+      &:not(.collapsed){
+        background:$secondary-color;
+        color:$primary-color;
+      }
 
-    &:focus{
-      box-shadow: none;
+      &::after{
+        transition:.25s;
+      }
+      &:hover{
+        color: $primary-color;
+      }
     }
 
-    &:not(.collapsed){
-      background: #f7f9fc;
-      color: #1363b8;
+    .accordion-body{
+      padding:18px 20px 22px;
+      color:$third-color;
+      line-height:1.8;
+      font-size:15px;
     }
-  }
 
-  .accordion-body{
-    color: #555;
-    line-height: 1.7;
-    font-size: 15px;
-  }
 
+  .empty-faq{
+
+      padding:50px 20px;
+
+      text-align:center;
+
+      border:1px dashed #dce6f5;
+
+      border-radius:12px;
+
+      color:#666;
+
+      h5{
+
+          margin-bottom:10px;
+
+          font-weight:600;
+
+      }
+
+      p{
+
+          margin:0;
+
+      }
+
+  }
 }
+

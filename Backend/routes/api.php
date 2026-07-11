@@ -511,3 +511,28 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('translations/{type}/{id}/mark-done', [TranslationController::class, 'markDone'])// mark reviewed
         ->middleware('role:teacher|admin|super_admin'); 
 });
+
+
+// ===================================================================================================
+//                                      Contact Us (Messages) Page Routes
+// ===================================================================================================
+
+
+use App\Http\Controllers\ContactMessageController;
+
+// public routes
+Route::post('/contact-us',[ContactMessageController::class, 'storeMessages']);
+
+
+Route::middleware('auth:sanctum')->group(function () {
+
+    Route::get('/contact-messages',[ContactMessageController::class, 'messageList'])
+        ->middleware('role:moderator|admin|super_admin'); 
+
+    Route::get('/contact-message/{id}',[ContactMessageController::class, 'showMessage'])
+        ->middleware('role:moderator|admin|super_admin'); 
+
+    Route::put('/contact-message/{id}/close',[ContactMessageController::class, 'closeMessage'])
+        ->middleware('role:moderator|admin|super_admin'); 
+    
+});

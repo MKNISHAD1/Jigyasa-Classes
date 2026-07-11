@@ -23,6 +23,8 @@ const roleNames = Array.isArray(user?.roles)
                             <li><RefreshLink to="/viewprofile">View Profile</RefreshLink></li>
                             <li><RefreshLink to="/changepassword">Change Password</RefreshLink></li>
 
+                            <li><RefreshLink to="/admin/contact-messages">Contact Messages</RefreshLink></li>
+
                             {/* Course RefreshLinks  */}
 
                             {hasAnyRole(["teacher","admin","moderator","super_admin"]) && (

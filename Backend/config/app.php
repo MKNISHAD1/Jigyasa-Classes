@@ -126,6 +126,6 @@ return [
 
     //  frontend link 
 
-    'frontend_url' => env('FRONTEND_URL', 'http://localhost:5173'),
+    'frontend_url' => env('FRONTEND_URL', 'http://localhost:5173','http://192.168.0.104:5173/'),
 
 ];

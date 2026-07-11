@@ -8,66 +8,93 @@ import {
   faInstagram,
   faYoutube,
 } from "@fortawesome/free-brands-svg-icons";
+import { faMessage } from '@fortawesome/free-regular-svg-icons';
+import { faClockFour, faEnvelope, faLocationDot, faPhone } from '@fortawesome/free-solid-svg-icons';
 
 const FooterUi = () => {
   return (
 <section className="astra-footer">
   <div className="footer-wrapper container-fluid">
 
-    <div className="row footer-top">
+<div className="row footer-top">
 
-      {/* BRAND */}
-      <div className="col-lg-4 footer-brand">
-        <h2 className="logo">Jigyasa Classes</h2>
+  {/* BRAND */}
+  <div className="col-lg-3 col-md-6 col-6 footer-brand">
+    <h2 className="logo">Jigyasa Classes</h2>
 
-        <p>
-          Learn anytime, anywhere with expert guidance.
-          Jigyasa Classes helps you prepare smarter for
-          competitive exams.
-        </p>
+    <p>
+      Learn anytime, anywhere with expert guidance.
+      Jigyasa Classes helps you prepare smarter for
+      competitive exams.
+    </p>
 
-        <div className="socials">
-          <i className="fab fa-facebook"></i>
-          <i className="fab fa-instagram"></i>
-          <i className="fab fa-youtube"></i>
-          <i className="fab fa-linkedin"></i>
-        </div>
-      </div>
-
-      {/* COURSES */}
-      <div className="col-lg-2 footer-links">
-        <h5>Courses</h5>
-        <ul>
-          <li>UPSC</li>
-          <li>SSC</li>
-          <li>JEE</li>
-          <li>Banking</li>
-        </ul>
-      </div>
-
-      {/* COMPANY */}
-      <div className="col-lg-3 footer-links">
-        <h5>Platform</h5>
-        <ul>
-          <li>About</li>
-          <li>All Courses</li>
-          <li>Blog</li>
-          <li>Testimonials</li>
-        </ul>
-      </div>
-
-      {/* SUPPORT */}
-      <div className="col-lg-3 footer-links">
-        <h5>Support</h5>
-        <ul>
-          <li>Contact</li>
-          <li>FAQ</li>
-          <li>Privacy Policy</li>
-          <li>Terms & Conditions</li>
-        </ul>
-      </div>
-
+    <div className="socials">
+      <i className="fab fa-facebook"></i>
+      <i className="fab fa-instagram"></i>
+      <i className="fab fa-youtube"></i>
+      <i className="fab fa-linkedin"></i>
     </div>
+  </div>
+
+  {/* QUICK LINKS */}
+  <div className="col-lg-2 col-md-6 col-6 footer-links">
+    <h5>Quick Links</h5>
+    <ul>
+      <li>Home</li>
+      <li>About Us</li>
+      <li>Courses</li>
+      <li>Blog</li>
+      <li>Contact Us</li>
+    </ul>
+  </div>
+
+  {/* COURSES */}
+  <div className="col-lg-2 col-md-6 col-6 footer-links">
+    <h5>Courses</h5>
+    <ul>
+      <li>UPSC</li>
+      <li>SSC</li>
+      <li>JEE</li>
+      <li>Banking</li>
+      <li>Railway</li>
+    </ul>
+  </div>
+
+  {/* EXAMS */}
+  <div className="col-lg-2 col-md-6 col-6 footer-links">
+    <h5>Popular Exams</h5>
+    <ul>
+      <li>UPSC</li>
+      <li>SSC CGL</li>
+      <li>PSC</li>
+      <li>Teaching</li>
+      <li>Railway</li>
+    </ul>
+  </div>
+
+  {/* CONTACT */}
+  <div className="col-lg-3 col-md-12 col-12 footer-contact">
+    <h5>Contact Us</h5>
+
+    <div className="contact-item">
+      <FontAwesomeIcon icon={faEnvelope} /> support@jigyasaclasses.com
+    </div>
+
+    <div className="contact-item">
+      <FontAwesomeIcon icon={faPhone} />+91 98765 43210
+    </div>
+
+    <div className="contact-item">
+      <FontAwesomeIcon icon={faLocationDot} /> Maharashtra, India
+    </div>
+
+    <div className="contact-item">
+      <FontAwesomeIcon icon={faClockFour} /> Mon - Sat | 9 AM - 7 PM
+    </div>
+  </div>
+
+</div>
+
 
     {/* BOTTOM BAR */}
     <div className="footer-bottom">

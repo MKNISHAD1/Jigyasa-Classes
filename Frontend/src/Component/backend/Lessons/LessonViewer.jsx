@@ -6,6 +6,8 @@ import Header from "../../Common/Header";
 import Sidebar from "../../Common/Sidebar";
 import ClipLoader from "react-spinners/ClipLoader";
 import { useTranslation } from "react-i18next";
+import HeaderUi from "../../Common/CommonUI/HeaderUi";
+import FooterUi from "../../Common/CommonUI/FooterUi";
 
 const LessonViewer = () => {
   const { courseId, lessonId } = useParams();
@@ -93,7 +95,9 @@ const LessonViewer = () => {
 
   return (
     <>
-      <Header />
+      {/* Header */}
+      <HeaderUi />
+
       <main>
         <div className="container my-4">
           <div className="row">
@@ -184,6 +188,9 @@ const LessonViewer = () => {
           </div>
         </div>
       </main>
+
+      {/* Footer  */}
+      <FooterUi />
     </>
   );
 };
