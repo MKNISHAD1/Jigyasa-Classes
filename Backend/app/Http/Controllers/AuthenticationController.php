@@ -241,18 +241,18 @@ class AuthenticationController extends Controller
             'status'  => false,
             'message' => 'OTP has expired',
         ], 401);
-    }
+      }
 
         // Case 2: OTP Invalid
         if (!\Hash::check($request->otp, $user->two_factor_code)) {
             $this->incrementFailedAttempts($request);// increase Failed Counter
             ActivityLogger::log('2FA_Failed_Invalid_OTP',null, ['email' => $user->email]);
 
-        return response()->json([
-            'status'  => false,
-            'message' => 'Invalid OTP',
-        ], 401);
-    }
+            return response()->json([
+                'status'  => false,
+                'message' => 'Invalid OTP',
+            ], 401);
+        }
 
 
         // Clear OTP after successful verification
@@ -278,7 +278,7 @@ class AuthenticationController extends Controller
                 'profile_pic'])->toArray() + [
                 'roles' => $user->getRoleNames()->toArray()],
             ]);
-        }
+    }
 
 
     protected function incrementFailedAttempts(Request $request)

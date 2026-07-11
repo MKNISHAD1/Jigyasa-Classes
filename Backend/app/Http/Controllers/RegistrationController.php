@@ -18,7 +18,7 @@ class RegistrationController extends Controller
         'username' => 'required|string|max:255|unique:users',
         'email' => 'required|string|email|max:255|unique:users,email,NULL,id,deleted_at,NULL',
         'password' => 'required|string|min:8',
-        'mobile_no' => 'required|string'
+        'mobile_no' => 'required|string|unique:users,mobile_no,NULL,id,deleted_at,NULL'
         ]);
 
         // it will return error message
@@ -29,14 +29,36 @@ class RegistrationController extends Controller
             ]);
         } 
 
-            // Check if email exists in soft-deleted user
-            $softDeletedUser = User::withTrashed()->where('email', $request->email)->first();
+        // Check if email & mobile no. exists in soft-deleted user
+            $softDeletedUser = User::withTrashed()
+                ->where('email', $request->email)
+                ->first();
+            $softDeletedMobile = User::withTrashed()
+                ->where('mobile_no', $request->mobile_no)
+                ->first();
+
+            $errors = [];
+
+            // mail check
             if ($softDeletedUser && $softDeletedUser->trashed()) {
+                $errors['email'][] =
+                    'This email belongs to a previously deleted account. Please contact support to restore it.';
+            }
+
+            // mobile number check
+            if ($softDeletedMobile && $softDeletedMobile->trashed()) {
+                $errors['mobile_no'][] =
+                    'This mobile number belongs to a previously deleted account. Please contact support to restore it.';
+            }
+
+            // throw error
+            if (!empty($errors)) {
                 return response()->json([
                     'status' => false,
-                    'message' => 'This email belongs to a deleted account. Please contact support to recover it.'
-                ], 409);
+                    'error' => $errors
+                ],409);
             }
+
 
 
         // Creating User in Database
@@ -61,7 +83,7 @@ class RegistrationController extends Controller
         // It will give show data of register user 
         return response()->json([
             'status'=> true,
-            'message' => 'Dear User, Your account created successfully, Kindly check you Mail to verify Email Then Proceed to Login ',
+            'message' => 'Account created successfully. Welcome to Jigyasa Classes! Please check your email to verify your account.',
             'token' => $token,
             'token_type' => 'Bearer',
             'user' => $user,

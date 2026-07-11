@@ -1059,70 +1059,6 @@ $fifth-color:#FFFFFF;
   }
 }
 
-// .course-sidebar {
-//   display: flex;
-//   flex-direction: column;
-//   gap: 20px;
-//   width:100%;
-//   max-width:360px;
-//   justify-self:end;
-// }
-
-// .share-course-card h5 {
-//   font-weight: 700;
-//   margin-bottom: 8px;
-// }
-
-// .share-course-card p {
-//   color: #666;
-//   font-size: 14px;
-// }
-
-// .social-icons {
-//   display: flex;
-//   gap: 14px;
-//   margin-top: 18px;
-// }
-
-// .social-icons a {
-//   width: 42px;
-//   height: 42px;
-//   border-radius: 50%;
-//   background: $secondary-color;
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   color: $primary-color;
-//   transition: 0.3s;
-// }
-
-// .social-icons a:hover {
-//         background-color: $primary-color;
-//         color: $fifth-color;
-//         transform:translateY(-2px);
-//         box-shadow:0 10px 20px rgba(13,110,253,.25);
-// }
-
-// @media (max-width:768px){
-
-//     .tab-body-learn{
-//         .highlights-grid{
-//             grid-template-columns:1fr;
-//         }
-
-//         .highlight-column:first-child{
-//             border:none;
-//             padding-right:0;
-//         }
-
-//         .highlight-column:last-child{
-//             padding-left:0;
-//         }
-//     }
-// }
-
-
-
 
 // Sticky Sidebar
 
@@ -1551,6 +1487,72 @@ $fifth-color:#FFFFFF;
     display: block !important;
   }
 }
+
+
+
+
+// .course-sidebar {
+//   display: flex;
+//   flex-direction: column;
+//   gap: 20px;
+//   width:100%;
+//   max-width:360px;
+//   justify-self:end;
+// }
+
+// .share-course-card h5 {
+//   font-weight: 700;
+//   margin-bottom: 8px;
+// }
+
+// .share-course-card p {
+//   color: #666;
+//   font-size: 14px;
+// }
+
+// .social-icons {
+//   display: flex;
+//   gap: 14px;
+//   margin-top: 18px;
+// }
+
+// .social-icons a {
+//   width: 42px;
+//   height: 42px;
+//   border-radius: 50%;
+//   background: $secondary-color;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   color: $primary-color;
+//   transition: 0.3s;
+// }
+
+// .social-icons a:hover {
+//         background-color: $primary-color;
+//         color: $fifth-color;
+//         transform:translateY(-2px);
+//         box-shadow:0 10px 20px rgba(13,110,253,.25);
+// }
+
+// @media (max-width:768px){
+
+//     .tab-body-learn{
+//         .highlights-grid{
+//             grid-template-columns:1fr;
+//         }
+
+//         .highlight-column:first-child{
+//             border:none;
+//             padding-right:0;
+//         }
+
+//         .highlight-column:last-child{
+//             padding-left:0;
+//         }
+//     }
+// }
+
 
 
 // .course-tabs-card{
