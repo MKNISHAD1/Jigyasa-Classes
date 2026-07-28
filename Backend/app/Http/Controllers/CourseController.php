@@ -48,9 +48,18 @@ class CourseController extends Controller
     //     ]);
     // }
 
+    // Course-list for addmin access role logged-in  useer
     public function courseList()
     {
         $user = Auth::user(); // may be null for public users
+
+        if (!$user->hasAnyRole(['teacher','moderator','admin','super_admin'])) {
+            return response() -> json([
+                'status' => false,
+                'message' => 'Unauthorized'
+            ],403);
+
+        }
 
         $query = Course::with([
                 'thumbnail',
@@ -62,29 +71,12 @@ class CourseController extends Controller
             ->withCount('lessons')
             ->orderByDesc('created_at');
 
-        // 🔓 PUBLIC / NON-LOGGED USER
-        if (!$user) {
-            $courses = $query
-                ->where('status', 'published')
-                ->get();
-        }
-
         // 🔐 ADMIN / SUPER ADMIN
-        elseif ($user->hasRole(['admin', 'super_admin'])) {
+        if ($user->hasAnyRole(['admin','moderator', 'super_admin'])) {
+
             $courses = $query->get();
-        }
 
-        // 🎓 TEACHER / MODERATOR
-        elseif ($user->hasRole(['teacher', 'moderator'])) {
-            $courses = $query
-                ->where(function ($q) use ($user) {
-                    $q->where('created_by', $user->id)
-                    ->orWhere('teacher_id', $user->id);
-                })
-                ->get();
         }
-
-        // 👨‍🎓 STUDENT (logged but no special role)
         else {
             $courses = $query
                 ->where('status', 'published')
@@ -101,6 +93,32 @@ class CourseController extends Controller
             'courses' => $courses
         ]);
     }
+
+    // Course list for public users
+
+    public function publicCourseList()
+    {
+        $courses = Course::with([
+                'thumbnail',
+                'teacher',
+                'creator',
+                'category',
+                'subcategory'
+            ])
+            ->withCount('lessons')
+            ->where('status', 'published')
+            ->latest()
+            ->get();
+
+        return response()->json([
+            'status' => true,
+            'courses' => $courses->map(
+                fn($course) => $this->formatCourseResponse($course)
+            )
+        ]);
+    }
+
+
 
      /**
      * View Courses publicly (for frontend)
@@ -521,29 +539,60 @@ class CourseController extends Controller
     {
         $user = Auth::user();
 
-        if ($user->hasAnyRole(['admin', 'super_admin', 'moderator'])) {
-            // Admins/mods get all courses
-            $courses = Course::with(['teacher', 'creator', 'category', 'subcategory', 'thumbnail','modules','lessons.module'])->get();
-        } elseif ($user->hasRole('teacher')) {
-            // Teacher gets: courses they created OR assigned as teacher
-            $courses = Course::with(['teacher', 'creator', 'category', 'subcategory', 'thumbnail','modules','lessons.module'])
-                ->where('created_by', $user->id)
-                ->orWhere('teacher_id', $user->id)
-                ->get();
-
-        } else {
+        if (!$user->hasAnyRole(['teacher', 'moderator', 'admin', 'super_admin'])) {
             return response()->json([
                 'status' => false,
                 'message' => 'Unauthorized'
             ], 403);
         }
 
+        $courses = Course::with([
+            'teacher',
+            'creator',
+            'category',
+            'subcategory',
+            'thumbnail',
+            'modules',
+            'lessons.module'
+        ])
+            ->where('created_by', $user->id)
+            ->orWhere('teacher_id', $user->id)
+            ->get();
+
         return response()->json([
-            'status'  => true,
-        'courses' => $courses->map(fn($course) => $this->formatCourseResponse($course))
-        ], 201);
+            'status' => true,
+            'courses' => $courses->map(
+                fn($course) => $this->formatCourseResponse($course)
+            )
+        ]);
     }
 
+    //     public function getMyCourses(Request $request)
+    // {
+    //     $user = Auth::user();
+
+    //     if ($user->hasAnyRole(['admin', 'super_admin', 'moderator'])) {
+    //         // Admins/mods get all courses
+    //         $courses = Course::with(['teacher', 'creator', 'category', 'subcategory', 'thumbnail','modules','lessons.module'])->get();
+    //     } elseif ($user->hasRole('teacher')) {
+    //         // Teacher gets: courses they created OR assigned as teacher
+    //         $courses = Course::with(['teacher', 'creator', 'category', 'subcategory', 'thumbnail','modules','lessons.module'])
+    //             ->where('created_by', $user->id)
+    //             ->orWhere('teacher_id', $user->id)
+    //             ->get();
+
+    //     } else {
+    //         return response()->json([
+    //             'status' => false,
+    //             'message' => 'Unauthorized'
+    //         ], 403);
+    //     }
+
+    //     return response()->json([
+    //         'status'  => true,
+    //     'courses' => $courses->map(fn($course) => $this->formatCourseResponse($course))
+    //     ], 201);
+    // }
 
 
     /**
@@ -563,12 +612,15 @@ class CourseController extends Controller
         );
         
         /// Check permisison
-        if (!$isOwnerOrAssignedTeacher && !$user->hasAnyRole(['admin', 'super_admin'])) {
+        if (!$isOwnerOrAssignedTeacher && !$user->hasAnyRole(['admin','super_admin'])) {
             return response()->json([
                 'status' => false,
-                'message' => 'Unauthorized to edit this course',
+                'message' => 'You are not authorised to delete this course.',
             ], 403);
         }
+
+        $course->deleted_by = Auth::id();
+        $course->save();
 
         $course->delete();
 
@@ -583,7 +635,7 @@ class CourseController extends Controller
      */
     public function deletedCourses()
     {
-        $courses = Course::onlyTrashed()->with(['thumbnail', 'teacher', 'creator', 'category', 'subcategory','modules','lessons.module'])->get();
+        $courses = Course::onlyTrashed()->with(['thumbnail', 'teacher','deletedBy', 'creator', 'category', 'subcategory','modules','lessons.module'])->get();
 
         return response()->json([
             'status' => true,
@@ -604,6 +656,10 @@ class CourseController extends Controller
         }
 
         $course->restore();
+
+        $course -> deleted_by = null;
+        $course -> save();
+
 
         return response()->json([
             'status' => true,
@@ -717,6 +773,13 @@ class CourseController extends Controller
 
             'teacher' => $course->teacher,
             'creator' => $course->creator,
+            
+            'deleted_by' => $course->deletedBy ? [
+                'id' => $course->deletedBy->id,
+                'name' => $course->deletedBy->name,
+            ] : null,
+
+            'deleted_at' => $course->deleted_at,
                
             'lessons_count' =>$course->lessons_count ?? $course->lessons->count(),
 

@@ -34,11 +34,13 @@ class User extends Authenticatable implements MustVerifyEmail
     'two_factor_code',
     'suspended_until',
     'is_suspended',
+    'suspended_at',
     'suspension_reason',
     'two_factor_verified_at',
     'professional_title',
     'bio',
     'social_links',
+    'last_login_at'
     ];
     /**
      * The attributes that should be hidden for serialization.
@@ -61,7 +63,9 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
         'two_factor_verified_at' => 'datetime',
+        'suspended_at' => 'datetime',
         'suspended_until' => 'datetime',
+        'last_login_at' => 'datetime',
         'is_suspended'    => 'boolean',
         'password' => 'hashed',
         'social_links' => 'array',
@@ -101,7 +105,11 @@ class User extends Authenticatable implements MustVerifyEmail
                 $media->restore();
             }
 
-            foreach ($user->courses()->withTrashed()->get() as $course) {
+            foreach ($user->coursesCreated()->withTrashed()->get() as $course) {
+                $course->restore();
+            }
+
+            foreach ($user->coursesTaught()->withTrashed()->get() as $course) {
                 $course->restore();
             }
         });
@@ -116,7 +124,11 @@ class User extends Authenticatable implements MustVerifyEmail
                     }
 
                     // delete courses
-                    foreach ($user->courses as $course) {
+                    foreach ($user->coursesCreated as $course) {
+                        $course->forceDelete();
+                    }
+
+                    foreach ($user->coursesTaught as $course) {
                         $course->forceDelete();
                     }
                 }
@@ -154,6 +166,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function lessonsUploaded()
     {
         return $this->hasMany(Lesson::class, 'uploaded_by');
+    }
+
+    public function deletedBy()
+    {
+        return $this->belongsTo(User::class, 'deleted_by');
     }
 
 

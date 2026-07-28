@@ -2,79 +2,157 @@ import React, { useContext } from 'react'
 import '../../assets/css/style.scss'
 import { AuthContext } from '../backend/context/Auth'
 import RefreshLink from './RefreshLink';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { DASHBOARD_LINKS, SIDEBAR_SECTIONS } from '../../constants/nevigation/sidebarlinks';
+import { Accordion } from 'react-bootstrap';
+import { faArrowRightFromBracket, faClose, faCross } from '@fortawesome/free-solid-svg-icons';
+import { useLocation } from 'react-router-dom';
 
 
-const Sidebar = () => {
+const Sidebar = ({onNavigate, onClose }) => {
 const {user,logout,hasAnyRole} = useContext(AuthContext);
 
-const roleNames = Array.isArray(user?.roles)
-  ? user.roles.map(r => (r.name ? r.name : r))
-  : [];
+const location = useLocation();
+
+const visibleSections = SIDEBAR_SECTIONS.filter(section =>
+    hasAnyRole(section.roles)
+);
+
+const isRouteActive = (path) => {
+    const basePath = path.replace(/:\w+/g, "");
+    return location.pathname.startsWith(basePath);
+};
+
 
 
   return (
 <>
-    <div className="card sidebar shadow border-0">
-                    <div className="card-body">
-                        <h4 className='text-center'>Sidebar</h4>
-                        <ul>
-                            <li><RefreshLink to="/admin/Managecategories">Manage Categories</RefreshLink></li>
-                            <li><RefreshLink to="/dash">Dashboard</RefreshLink></li>
-                            <li><RefreshLink to="/viewprofile">View Profile</RefreshLink></li>
-                            <li><RefreshLink to="/changepassword">Change Password</RefreshLink></li>
 
-                            <li><RefreshLink to="/admin/contact-messages">Contact Messages</RefreshLink></li>
+        <div className="dashboard-sidebar card shadow border-0 h-100"  >
+            <button className="close-btn" onClick={onClose}>
+                <FontAwesomeIcon icon={faClose} className='close-btn-icon d-lg-none'/>
+            </button>
 
-                            {/* Course RefreshLinks  */}
+            <div className="sidebar-header">
 
-                            {hasAnyRole(["teacher","admin","moderator","super_admin"]) && (
-                            <>
-                            <li><RefreshLink to="/admin/courses">Manage Courses</RefreshLink></li>
-                            <li><RefreshLink to="/admin/course/create">Create Course</RefreshLink></li>
-                            <li><RefreshLink to="/admin/course/deleted-Courses/">Deleted Courses</RefreshLink></li>
-                            <li><RefreshLink to="/admin/faq/create">FAQ Section</RefreshLink></li>
-                                </>
-                            )}
+                <img
+                    src={user?.profile_pic}
+                    className="sidebar-avatar"
+                    alt={user?.name}
+                />
 
-                            {/* Lesson RefreshLinks  */}
+                <h5>{user?.name}</h5>
 
-                            {hasAnyRole(["teacher","admin","moderator","super_admin"]) && (
-                            <>
-                            {/* <li><RefreshLink to="/admin/courses">Manage Courses</RefreshLink></li> */}
-                            <li><RefreshLink to="/admin/lesson/create">Create Lesson</RefreshLink></li>
-                            <li><RefreshLink to="/admin/lesson/deleted-lessons/">Deleted Lessons</RefreshLink></li>
-                                </>
-                            )}
+                <span className="sidebar-role">
+                    {user?.roles?.[0]}
+                </span>
 
+            </div>
 
-                            {/* Admin sidebar RefreshLinks */}
+            <div className="sidebar-body">
 
+                {/* Dashboard Links */}
+                <div className="sidebar-links">
+                    {DASHBOARD_LINKS.map(item => (
 
+                        <RefreshLink
+                            key={item.path}
+                            to={item.path}
+                            className="sidebar-link"
+                            onNavigate={onNavigate}
+                        >
 
-                            {hasAnyRole(["admin","moderator","super_admin"]) && (
-                            <>
-                            <li><RefreshLink to="/admin/users">Manage Users</RefreshLink></li>
-                            <li><RefreshLink to="/admin/users/deletedusers">Deleted Users</RefreshLink></li>
-                            <li><RefreshLink to="/admin/users/suspended-users">Suspended Users</RefreshLink></li>
-                                </>
-                            )}
+                            <FontAwesomeIcon
+                                icon={item.icon}
+                                className="sidebar-link-icon"
+                            />
 
+                            <span className="sidebar-link-text">
+                                {item.title}
+                            </span>
+                        </RefreshLink>
 
-                            {/* SuperAdmin PAnel  */}
-                            {hasAnyRole(["super_admin"]) && (
-                            <>
-                            <li><RefreshLink to="#">Manage admins</RefreshLink></li>
-                            <li><RefreshLink to="#">Deleted Admins</RefreshLink></li>
-                            <li><RefreshLink to="#">Suspended Admins</RefreshLink></li>
-                                </>
-                            )}
-                            <li >
-                                <button onClick={logout} className='btn btn-danger mt-3'>Logout</button>
-                            </li>
-                        </ul>
-                    </div>
+                    ))}
 
                 </div>
+
+                {/* Sections */}
+                <div className="sidebar-section">
+                    <Accordion
+                        // alwaysOpen
+                        defaultActiveKey={
+                            visibleSections
+                                .map((section, index) =>                                                           
+                                    section.items
+                                        .filter(item => hasAnyRole(item.roles ?? section.roles))
+                                        .some(item => isRouteActive(item.path))
+                                        ? String(index)
+                                        : null
+                                )
+                                .filter(Boolean)
+                        }
+                    >
+                    {visibleSections.map((section, index) => {
+
+                        const visibleItems = section.items.filter(item =>
+                            hasAnyRole(item.roles ?? section.roles)
+                        );
+
+                        const isSectionActive = visibleItems.some(item =>
+                            isRouteActive(item.path)
+                        );
+
+                        return (
+                            <Accordion.Item
+                                eventKey={String(index)}
+                                key={section.title}
+                            >
+                                <Accordion.Header
+                                    className={isSectionActive ? "sidebar-section-active" : ""}
+                                >
+                                    <FontAwesomeIcon
+                                        icon={section.icon}
+                                        className="me-2"
+                                    />
+                                    {section.title}
+                                </Accordion.Header>
+
+                                <Accordion.Body>
+                                    {visibleItems.map(item => (
+                                        <RefreshLink
+                                            key={item.path}
+                                            to={item.path}
+                                            className="sidebar-link"
+                                            onNavigate={onNavigate}
+                                        >
+                                            <FontAwesomeIcon
+                                                icon={item.icon}
+                                                className="sidebar-link-icon"
+                                            />
+
+                                            <span className="sidebar-link-text">
+                                                {item.title}
+                                            </span>
+                                        </RefreshLink>
+                                    ))}
+                                </Accordion.Body>
+                            </Accordion.Item>
+                        );
+                    })}
+                    </Accordion>
+
+                </div>
+
+            </div>
+
+            <div className="sidebar-footer">
+
+                <button onClick={logout} className='logout-btn'><FontAwesomeIcon icon={faArrowRightFromBracket} className='logout-icon'/> Logout  </button>
+
+            </div>
+
+        </div>
+
     </>
   )
 }

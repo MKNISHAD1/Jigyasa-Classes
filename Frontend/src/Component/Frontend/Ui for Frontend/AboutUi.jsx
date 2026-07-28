@@ -17,6 +17,7 @@ import hat from '../../../assets/images/aboutpage3.png';
 import bgImage from '../../../assets/images/herobg6.png'
 import PageHero from '../../Common/CommonUI/PageHeroUi'
 import { Link } from 'react-router-dom'
+import { PUBLIC_ROUTES } from '../../../constants/nevigation/routes'
 
 const AboutUi = () => {
   return (
@@ -57,7 +58,7 @@ const AboutUi = () => {
               </p>
 
             <div className="hero-btns">
-              <Link to="/" className="primary-btn">
+              <Link to={PUBLIC_ROUTES.COURSES} className="primary-btn">
                 Explore Courses  <FontAwesomeIcon icon={faArrowRight} className='icon'/>
               </Link>
             </div>
@@ -301,7 +302,7 @@ const AboutUi = () => {
               exams with Jigyasa Classes.
             </p>
 
-            <Link to="/courses" className="primary-btn-rev">
+            <Link  to={PUBLIC_ROUTES.COURSES} className="primary-btn-rev">
               Explore Courses
               <FontAwesomeIcon icon={faArrowRight} className="icon" />
             </Link>

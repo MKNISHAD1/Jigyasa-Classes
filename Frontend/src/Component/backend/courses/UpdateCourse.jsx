@@ -357,17 +357,8 @@ const UpdateCourse = () => {
 
   return (
     <>
-      {/* Header  */}
-      <HeaderUi />
-      
-      <main>
-        <div className="container my-5">
-          <div className="row">
-            <div className="col-md-3">
-              <Sidebar />
-            </div>
-            <div className="col-md-9 dashboard">
-              <div className="card shadow border-0 p-4">
+
+              <div className="card shadow border-0 p-4" style={{background:'#ebf1f5',height:'100%'}}>
                 <h4 className="mb-3 text-center">Update Course</h4>
                 <form onSubmit={handleSubmit(onSubmit)}>
                   {/* Title */}
@@ -695,14 +686,7 @@ const UpdateCourse = () => {
                   </button>
                 </form>
               </div>
-            </div>
-          </div>
-        </div>
-      </main>
 
-      {/* Footer  */}
-      <FooterUi/>
-      
     </>
   );
 };

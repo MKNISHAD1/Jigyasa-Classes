@@ -17,6 +17,7 @@ import CourseFaqs from '../../backend/courses/CourseFaqs';
 import bgImage from '../../../assets/images/herobg6.png'
 import no_lesson from '../../../assets/images/not-found2.jpeg'
 import { Accordion } from 'react-bootstrap';
+import { PUBLIC_ROUTES } from '../../../constants/nevigation/routes';
 
 
 const ViewCourseUi = () => {
@@ -1128,7 +1129,7 @@ const ViewCourseUi = () => {
                     Explore more courses you might be <span>interested in.</span> 
                 </p>
 
-              <Link to="/courses" className="view-all-btn">
+              <Link to={PUBLIC_ROUTES.COURSES} className="view-all-btn">
                   View All <FontAwesomeIcon icon={faArrowRight}/>
               </Link>
             </div>
@@ -1199,7 +1200,11 @@ const ViewCourseUi = () => {
                     </span>
 
                     <Link target='_top'
-                      to={`/CourseView/${item.id}/${item.title?.en}`}
+                      to={PUBLIC_ROUTES.COURSE_VIEW
+                          .replace(":id",item.id)
+                          .replace(":title", item.title?.en)
+                        } 
+                      // to={`/CourseView/${item.id}/${item.title?.en}`}
                       className="view-course-btn"
                     >
                       View Course 

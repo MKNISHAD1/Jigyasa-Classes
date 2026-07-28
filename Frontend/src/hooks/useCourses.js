@@ -21,7 +21,7 @@ export const useCourses = ({
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const res = await fetch(apiUrl + "courses", {
+        const res = await fetch(apiUrl + "public-courses", {
           headers: { Accept: "application/json" },
         });
 

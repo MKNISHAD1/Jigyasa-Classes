@@ -19,6 +19,7 @@ import { useCategories } from '../../../hooks/useCategories'
 import { Link } from 'react-router-dom'
 import { Offcanvas } from 'react-bootstrap'
 import RenderFilterUi from '../../Common/CommonUI/RenderFilterUi'
+import { PUBLIC_ROUTES } from '../../../constants/nevigation/routes'
 
 const AllCoursesUi = () => {
 
@@ -462,7 +463,11 @@ const filteredCourses =
                               </span>
 
                               <Link
-                                to={`/CourseView/${course.id}/${course.title?.en}`}
+                                to={PUBLIC_ROUTES.COURSE_VIEW
+                                    .replace(":id",course.id)
+                                    .replace(":title", course.title?.en)
+                                  } 
+                                // to={`/CourseView/${course.id}/${course.title?.en}`}
                                 className="view-course-btn"
                                 >
                                 View Course 

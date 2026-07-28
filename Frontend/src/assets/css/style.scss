@@ -20,6 +20,14 @@ $fifth-color:#FFFFFF;
 @use 'viewcourseui' ;
 @use 'coursecurriculum';
 @use  'coursefaqui' ;
+@use 'sidebar';
+@use 'dashboardlayout';
+@use 'dashboardui';
+@use 'viewprofileui';
+@use 'editprofileui';
+@use 'coursedashboardui';
+@use 'userdashboardui';
+
 
 // Primary Font Family : Inter
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
@@ -1641,18 +1649,6 @@ ul{
           }
 }
 
-/* Give the actions column enough space */
-.rdt_TableCol:nth-last-child(1),
-.rdt_TableCell:nth-last-child(1) {
-  min-width: 220px; /* adjust based on buttons width */
-}
-
-/* Flexbox for buttons */
-.actions-cell {
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap; /* ensures responsiveness */
-}
 
 
 // .box{

@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { AuthContext } from "../backend/context/Auth";
 import { Navigate, useLocation } from "react-router-dom";
+import { AUTH_ROUTES } from "../../constants/nevigation/routes";
 
 const RequireAuth = ({ children, allowedRoles }) => {
   const { user, hasAnyRole, loading, twoFactorRequired } = useContext(AuthContext);
@@ -18,15 +19,15 @@ const RequireAuth = ({ children, allowedRoles }) => {
 
     // If user needs 2FA
   if (twoFactorRequired) {
-    return <Navigate to="/two-factor" state={{ from: location }} replace />;
+    return <Navigate to={AUTH_ROUTES.TWO_FACTOR} state={{ from: location }} replace />;
   }
 
   if (!user) {
-    return <Navigate to="/login" state={{ from: location }} replace />;
+    return <Navigate to={AUTH_ROUTES.LOGIN} state={{ from: location }} replace />;
   }
 
-  if (allowedRoles && !hasAnyRole(allowedRoles)) {
-    return <Navigate to="/unauthorized" replace />;
+  if (allowedRoles?.length && !hasAnyRole(allowedRoles)) {
+    return <Navigate to={AUTH_ROUTES.UNAUTHORIZED} replace />;
   }
 
   return children;

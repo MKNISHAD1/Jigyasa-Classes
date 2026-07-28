@@ -7,6 +7,7 @@ import Header from "../Common/Header";
 import Footercomp from '../Common/footer';
 import FooterUi from "../Common/CommonUI/FooterUi";
 import HeaderUi from "../Common/CommonUI/HeaderUi";
+import { AUTH_ROUTES } from "../../constants/nevigation/routes";
 
 const Resetpassword = () => {
   const [searchParams] = useSearchParams();
@@ -36,7 +37,7 @@ const Resetpassword = () => {
 
     if (result.status) {
       toast.success(result.message);
-      navigate("/login");
+      navigate(AUTH_ROUTES.LOGIN);
     } else {
       toast.error(result.message || "Something went wrong!");
     }

@@ -235,16 +235,9 @@ const CreateLesson = () => {
 
   return (
     <>
-      {/* Header  */}
-      <HeaderUi />
+    <div className="p-5">
 
-      <main>
-        <div className="container my-5">
-          <div className="row">
-            <div className="col-md-3">
-              <Sidebar />
-            </div>
-            <div className="col-md-9 dashboard">
+
               <div className="max-w-3xl mx-auto p-6 bg-white rounded-xl shadow-md">
                 <h2 className="text-2xl font-bold mb-4">Upload Lessons</h2>
 
@@ -421,14 +414,7 @@ const CreateLesson = () => {
                   + Add Another Lesson
                 </button>
               </div>
-            </div>
-          </div>
-        </div>
-      </main>
-
-      {/* Footer  */}
-      <FooterUi/>
-
+    </div>
     </>
   );
 };

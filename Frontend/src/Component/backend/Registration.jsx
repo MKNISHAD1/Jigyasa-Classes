@@ -11,6 +11,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import FooterUi from '../Common/CommonUI/FooterUi'
 import signupimg from "../../assets/images/signup.jpeg"
+import { AUTH_ROUTES } from '../../constants/nevigation/routes'
+import { availabilityValidator } from '../../utilities/validators'
 
 
 
@@ -30,7 +32,10 @@ const Registration = () => {
     watch,
     setError,
     formState: { errors },
-  } = useForm()
+  } = useForm({
+        mode:"onChange", // onBlur  = after leaving the field and debounce validator 
+    reValidateMode:"onChange",
+  })
 
   const onSubmit = async (data) => {
     setLoading(true);
@@ -66,7 +71,7 @@ const Registration = () => {
     else {
       // Show success message for login
       toast.success(result.message);//Registration successful! Please login to continue.
-      navigate("/login");
+      navigate(AUTH_ROUTES.LOGIN);
     }
     }
     catch(error){
@@ -134,6 +139,13 @@ const Registration = () => {
                             {
                             ...register('email', {
                               required: "Email is Required",
+                              validate :availabilityValidator(
+                                "users", // Model name
+                                "email", // Feild Name
+                                null,
+                                null,
+                                "email" // lable Name
+                              ),
                               pattern: {
                                 value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                                 message: "Invalid Email Address , Please Use Genuine Email!!!!"
@@ -157,6 +169,13 @@ const Registration = () => {
                             {
                             ...register('username', {
                               required: "Username is required.",
+                              validate :availabilityValidator(
+                                "users", // Model name
+                                "username", // Feild Name
+                                null,
+                                null,
+                                "username" // lable Name
+                              ),
                               minLength: {
                                   value: 4,
                                   message: "Username must be at least 4 characters."
@@ -219,13 +238,13 @@ const Registration = () => {
 
                           <button
                               type="button"
-                              className="btn btn-outline-secondary"
+                              className="btn view-password  btn-outline-secondary"
+                              disabled={loading}
                               onClick={()=>setShowPassword(!showPassword)}
                               >
 
                               <FontAwesomeIcon
                               icon={showPassword ? faEyeSlash : faEye}
-                              className="text-primary"
                               />
 
                             </button>
@@ -260,13 +279,13 @@ const Registration = () => {
                           />
                           <button
                             type="button"
-                            className="btn btn-outline-secondary"
+                            className="btn view-password btn-outline-secondary"
+                            disabled={loading}
                             onClick={()=>setShowPassword(!showPassword)}
                             >
 
                             <FontAwesomeIcon
                             icon={showPassword ? faEyeSlash : faEye}
-                            className="text-primary"
                             />
 
                           </button>
@@ -316,7 +335,7 @@ const Registration = () => {
 
                       <p className="fw-medium"> Already have an account?
                         <Link
-                        to="/login"
+                        to={AUTH_ROUTES.LOGIN}
                         className="ms-2"
                         >
 

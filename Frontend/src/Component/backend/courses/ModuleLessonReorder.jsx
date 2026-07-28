@@ -155,10 +155,8 @@ return (
 
   <>
 
-    {/* Header  */}
-    <HeaderUi />
 
-    <div className="container my-5">
+    <div className="container p-5">
 
       <h4 className="mb-3">
         Reorder Lessons
@@ -232,9 +230,6 @@ return (
 
     </div>
 
-    {/* Footer  */}
-    <FooterUi/>
-    
   </>
 
 );

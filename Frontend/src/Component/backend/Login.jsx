@@ -11,6 +11,7 @@ import FooterUi from "../Common/CommonUI/FooterUi";
 import loginimg from "../../assets/images/login.jpeg"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { AUTH_ROUTES, DASHBOARD_ROUTES } from "../../constants/nevigation/routes";
 
 const Login = () => {
   const { login, setTwoFactorRequired, setTwoFactorEmail,hasAnyRole } = useContext(AuthContext);
@@ -71,7 +72,7 @@ const Login = () => {
       if (result.two_factor) {
         setTwoFactorRequired(true);
         setTwoFactorEmail(data.email);
-        navigate("/two-factor");
+        navigate(AUTH_ROUTES.TWO_FACTOR);
         return;
       }
 
@@ -85,6 +86,11 @@ const Login = () => {
       const userInfo = {
         token: result.token,
         ...result.user,
+        roles: Array.isArray(result.user.roles)
+          ? result.user.roles.map(role =>
+              typeof role === "object" ? role.name : role
+            )
+          : [],
       };
 
       // it will store in local storage
@@ -96,44 +102,23 @@ const Login = () => {
 
       // It will login the user from local storage and authcontext & authprovider
       login(userInfo);
+      
 
-      // Will redirect to Dashbord page
-      // const roleNames = Array.isArray(result.user.roles)
-      //   ? result.user.roles.map((r) => (r.name ? r.name : r))
-      //   : [];
+      navigate(DASHBOARD_ROUTES.DASHBOARD)
 
-      // if (hasAnyRole(["admin","moderator"])) {
-      //   navigate("/admin");
-      // } else if (hasAnyRole(["super_admin"])) {
-      //   navigate("/superadmin");
-      // } else {
-      //   navigate("/dash");
-      // }
-
-      const roleNames = Array.isArray(result.user.roles)
-        ? result.user.roles.map((r) => (r.name ? r.name : r))
-        : [];
-
-      if (
-        roleNames.includes("admin") ||
-        roleNames.includes("moderator")
-      ) {
-        navigate("/admin");
-      } else if (
-        roleNames.includes("super_admin")
-      ) {
-        navigate("/superadmin");
-      } else {
-        navigate("/dash");
-      }
+      
     }
      catch (error) {
       toast.error("Network error, please try again.");
     }
     finally{
     setLoading(false);
+    
 }
   };
+
+
+  
 
   return (
     <>
@@ -201,11 +186,12 @@ const Login = () => {
 
                         <button
                           type="button"
-                          className="btn btn-outline-secondary"
+                          disabled={loading}
+                          className="btn  view-password  btn-outline-secondary"
                           onClick={()=>setShowPassword(!showPassword)}
                         >
 
-                        <FontAwesomeIcon icon={ showPassword ? faEyeSlash :faEye } className="text-primary"/>
+                        <FontAwesomeIcon icon={ showPassword ? faEyeSlash :faEye }/>
 
 
                         </button>
@@ -230,7 +216,7 @@ const Login = () => {
                       </label>
                     </div>
 
-                    <Link to="/forgot-password">Forget password?</Link>
+                    <Link to={AUTH_ROUTES.FORGOT_PASSWORD}>Forget password?</Link>
                     <br />
                     <br />
                     {/* Show countdown message */}
@@ -273,7 +259,7 @@ const Login = () => {
 
                       <p className="fw-medium"> Don't have an account? 
                         <Link
-                        to="/register"
+                        to={AUTH_ROUTES.REGISTER}
                         className="ms-2"
                         >
 

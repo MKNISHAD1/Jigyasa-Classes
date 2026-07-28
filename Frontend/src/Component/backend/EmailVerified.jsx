@@ -1,7 +1,8 @@
 import React, { useContext, useEffect } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from './context/Auth';
-import { apiUrl } from '../Common/http';
+import { apiUrl, token } from '../Common/http';
+import { DASHBOARD_ROUTES } from '../../constants/nevigation/routes';
 
 const EmailVerified = () => {
 const { search } = useLocation();
@@ -24,7 +25,7 @@ const { search } = useLocation();
         try {
           const res = await fetch(apiUrl + "user", {
             headers: {
-              Authorization: `Bearer ${user.token}`,
+              Authorization: `Bearer ${token()}`,
               Accept: "application/json",
             },
           });
@@ -50,7 +51,11 @@ const { search } = useLocation();
         <div className="card-body">
           <h3>Email Verification</h3>
           <p className="mt-3">{messages[status] || 'Something went wrong.'}</p>
-          <button className='btn btn-success' onClick={() => navigate("/dash")}>Back to Dashboard</button>
+          <button className='btn btn-success mt-3' 
+            onClick={() => navigate(DASHBOARD_ROUTES.DASHBOARD)}
+          >
+            Back to Dashboard
+          </button>
         </div>
       </div>
     </div>

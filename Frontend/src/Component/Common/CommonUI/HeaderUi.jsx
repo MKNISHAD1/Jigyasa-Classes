@@ -11,6 +11,7 @@ import logo2 from "../../../assets/images/Logo2.png";
 import LanguageSwitch from "./LanguageSwitch";
 import { useCategories } from "../../../hooks/useCategories";
 import { AuthContext } from "../../backend/context/Auth";
+import { AUTH_ROUTES, DASHBOARD_ROUTES, PUBLIC_ROUTES } from "../../../constants/nevigation/routes";
 
 const HeaderUi = () => {
 
@@ -44,8 +45,8 @@ const HeaderUi = () => {
   </div>
 </div> */}
 
-<div className="py-3">
-<div className="line p-2 text-center text-light">Responsive Test</div>
+<div className="py-0">
+<div className="line text-center text-light">Responsive Test</div>
 </div>
 
       {/* Production Code  */}
@@ -60,10 +61,10 @@ const HeaderUi = () => {
       </div> */}
 
       <div className="container-fluid m-0 p-0">
-        <Navbar expand="lg" className="shadow">
+        <Navbar expand="lg" className="navbar">
           {/* Left side LOGO*/}
 
-          <Navbar.Brand href="/">
+          <Navbar.Brand href={PUBLIC_ROUTES.HOME}>
             <div className="d-flex Brand_Section">
               <img src={logo2} className="Brand_Logo" />
               <div className="d-none d-md-block">
@@ -80,19 +81,19 @@ const HeaderUi = () => {
 
             <Nav className="Menu_Items_Gap">
               <li>
-                <Link to="/" className="nav-link">
+                <Link to={PUBLIC_ROUTES.HOME} className="nav-link">
                   {t("header.home")}
                 </Link>
               </li>
 
               <li>
-                <Link to="/About" className="nav-link">
+                <Link to={PUBLIC_ROUTES.ABOUT} className="nav-link">
                   {t("header.about")}
                 </Link>
               </li>
 
               <li>
-                <Link to="/Courses" className="nav-link">
+                <Link to={PUBLIC_ROUTES.COURSES} className="nav-link">
                   Courses
                 </Link>
               </li>
@@ -198,7 +199,7 @@ const HeaderUi = () => {
               </li>
 
               <li>
-                <Link to="/Contact-Us" className="nav-link">
+                <Link to={PUBLIC_ROUTES.CONTACT} className="nav-link">
                   Contact Us
                 </Link>
               </li>
@@ -260,7 +261,7 @@ const HeaderUi = () => {
                           </small>
 
                           <Link
-                            to="/dash"
+                            to={DASHBOARD_ROUTES.DASHBOARD}
                             className="Dashboard_Button"
                           >
                             View Dashboard
@@ -273,14 +274,14 @@ const HeaderUi = () => {
                         <div className="Guest_Actions">
 
                           <Link
-                            to="/register"
+                            to={AUTH_ROUTES.REGISTER}
                             className="Signup_Btn"
                           >
                             Sign Up
                           </Link>
 
                           <Link
-                            to="/login"
+                            to={AUTH_ROUTES.LOGIN}
                             className="Login_Btn"
                           >
                             Login
@@ -295,17 +296,17 @@ const HeaderUi = () => {
 
                     <div className="Sidebar_Menu">
 
-                      <Link to="/" className="Sidebar_Link">
+                      <Link to={PUBLIC_ROUTES.HOME} className="Sidebar_Link">
                         <FontAwesomeIcon icon={faHouse}/>
                         <span>Home</span>
                       </Link>
 
-                      <Link to="/about" className="Sidebar_Link">
+                      <Link to={PUBLIC_ROUTES.ABOUT} className="Sidebar_Link">
                         <FontAwesomeIcon icon={faUser}/>
                         <span>About Us</span>
                       </Link>
 
-                      <Link to="/courses" className="Sidebar_Link">
+                      <Link to={PUBLIC_ROUTES.COURSES} className="Sidebar_Link">
                         <FontAwesomeIcon icon={faBookOpen}/>
                         <span>Courses</span>
                       </Link>
@@ -380,7 +381,7 @@ const HeaderUi = () => {
 
                     {/* Contact */}
 
-                    <Link to="/Contact-Us" className="Sidebar_Link">
+                    <Link to={PUBLIC_ROUTES.CONTACT} className="Sidebar_Link">
                       <FontAwesomeIcon icon={faEnvelope}/>
                       <span>Contact Us</span>
                     </Link>
@@ -442,7 +443,7 @@ const HeaderUi = () => {
             {
               user ? (
                 <Link
-                  to="/dash"
+                  to={DASHBOARD_ROUTES.DASHBOARD}
                   className="User_Profile_Link  d-none d-xl-block"
                 >
                   <img
@@ -460,7 +461,7 @@ const HeaderUi = () => {
                 </Link>
               ) : (
                 <Link
-                  to="/login"
+                  to={AUTH_ROUTES.LOGIN}
                   className="Button_Style1  d-none d-xl-block"
                 >
                   Login/SignUp
@@ -472,7 +473,7 @@ const HeaderUi = () => {
             {
               user ? (
                 <Link
-                  to="/dash"
+                  to={DASHBOARD_ROUTES.DASHBOARD}
                   className="User_Profile_Link  d-sm-block d-xl-none"
                 >
                   <img
@@ -486,7 +487,7 @@ const HeaderUi = () => {
                 </Link>
               ) : (
                 <Link
-                  to="/login"
+                  to={AUTH_ROUTES.LOGIN}
                   className="d-none d-sm-block d-xl-none"
                 >
                   <FontAwesomeIcon icon={faCircleUser} className="User_Icon" />

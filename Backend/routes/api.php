@@ -4,11 +4,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Auth\Events\Verified;
+
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\LessonController;
 use App\Http\Controllers\CategoryCantroller;
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\RegistrationController;
+use App\Http\Controllers\AvailabilityCheckController;
+
 use App\Http\Controllers\admin\DashboardController;
 use App\Http\Controllers\admin\UserProfileController;
 use App\Http\Controllers\admin\UserManagementController;
@@ -34,29 +37,7 @@ Route::post('register',[RegistrationController::class,'register']);
 | Uniqueness checks
 |--------------------------------------------------------------------------
 */
-// Check email uniqueness
-Route::get('/check-email', function(Request $request) {
-    $email = $request->query('email');
-    $id = $request->query('id'); // optional user id
-    $query = User::where('email', $email);
-    if ($id) {
-        $query->where('id', '!=', $id);
-     }
-    $exists = $query->exists();
-    return response()->json(['exists' => $exists]);
-});
-
-// Check username uniqueness
-Route::get('/check-username', function(Request $request) {
-    $username = $request->query('username');
-    $id = $request->query('id'); // optional user id
-    $query = User::where('username', $username);
-    if ($id) {
-        $query->where('id', '!=', $id);
-    }
-    $exists = $query->exists();
-    return response()->json(['exists' => $exists]);
-});
+Route::get('/check-availability', [AvailabilityCheckController::class, 'checkAvilability']);
 
 
 
@@ -70,6 +51,7 @@ Route::get('/check-username', function(Request $request) {
 Route::post('forgot-password', [UserProfileController::class, 'forgotPassword']);
 Route::post('reset-password-link', [UserProfileController::class, 'resetPasswordlink']);
 Route::post('reset-password-otp', [UserProfileController::class, 'resetPasswordWithOtp']);
+Route::post('resend-otp', [UserProfileController::class, 'resendOtp']);
 
 
 
@@ -133,6 +115,7 @@ Route::post('email/verification-notification', function (Request $request) {
 |--------------------------------------------------------------------------
 */ 
 Route::post('2fa-otp-verify',[AuthenticationController::class,'otpverify']);
+Route::post('2fa-resend-otp',[AuthenticationController::class,'resend2faOtp']);
 
 
 
@@ -243,8 +226,8 @@ Route::delete('user-force-delete/{id}', [UserManagementController::class, 'force
 // ===================================================================================================
 
 // Public Routes
-Route::get('courses', [CourseController::class, 'courseList']);
-
+Route::get('public-courses', [CourseController::class, 'publicCourseList']);
+ 
 // Public Course View
 Route::get('Course-View/{id}', [CourseController::class, 'publicCourseView']);
 
@@ -253,8 +236,8 @@ Route::get('Course-View/{id}', [CourseController::class, 'publicCourseView']);
 Route::middleware(['auth:sanctum'])->group(function () {
     
     // List courses
-    // Route::get('courses', [CourseController::class, 'courseList'])
-    //     ->middleware('role:student|teacher|moderator|admin|super_admin');
+    Route::get('courses', [CourseController::class, 'courseList'])
+        ->middleware('role:moderator|admin|super_admin');
     
     // Show single course (with lessons)
     Route::get('view-course/{id}', [CourseController::class, 'viewCourse'])

@@ -64,18 +64,8 @@ const SuspendList = () => {
 
   return (
     <>
-      <Header />
-      <main>
-        <div className="container my-5">
-          <div className="row">
-            <div className="col-md-3">
-              {/* Sidebar Here  */}
-              <Sidebar />
-            </div>
-            <div className="col-md-9">
-              {/* Show Users */}
 
-              <div className="card shadow border-0">
+              <div className="p-5">
                 <div className="card-body p-4">
                   <div className="d-flex justify-content-between">
                     <h4 className="h5">All Users</h4>
@@ -141,10 +131,7 @@ const SuspendList = () => {
                   </table>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-      </main>
+
     </>
   );
 };

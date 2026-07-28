@@ -1,0 +1,37 @@
+// global variables 
+$primary-color:#1363b8;
+$secondary-color:#ebf1f5;
+$third-color:#162521;
+$forth-color:#047ba7;
+$fifth-color:#FFFFFF;
+
+.dashboard-layout{
+    background-color: $secondary-color;
+
+    .offcanvas{
+    width:320px !important;
+}
+    .offcanvas-body{
+        padding:0;
+    }
+
+    .offcanvas-body .dashboard-sidebar{
+        height:100%;
+        border-radius:0;
+        box-shadow:none;
+    }
+
+    .dashboard-body{
+        display: flex;
+        
+        .sidebar-content{
+            min-width: 280px;
+        }
+        
+        .dashboard-content{
+            flex: 1;
+        }
+    }
+
+
+}

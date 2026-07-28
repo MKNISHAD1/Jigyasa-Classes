@@ -1,0 +1,32 @@
+// global variables 
+$primary-color:#1363b8;
+$secondary-color:#ebf1f5;
+$optional-color:#f7f9fc;
+$third-color:#162521;
+$forth-color:#047ba7;
+$fifth-color:#FFFFFF;
+
+.dashboard-card{
+    background:$secondary-color;
+    // border-radius:16px;
+    padding:30px;
+    border:none;
+    // box-shadow:0 8px 24px rgba(0,0,0,.08);
+
+    .dashboard-page-header{
+
+        margin-bottom:30px;
+
+        h2{
+            font-size:30px;
+            font-weight:700;
+            margin-bottom:6px;
+        }
+
+        p{
+            color:#6c757d;
+            margin:0;
+        }
+
+    }
+}

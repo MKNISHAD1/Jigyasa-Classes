@@ -139,14 +139,7 @@ const Edituser = () => {
 
   return (
     <>
-      <Header />
-      <main>
-        <div className="container my-5">
-          <div className="row">
-            <div className="col-md-3">
-              <Sidebar />
-            </div>
-            <div className="col-md-9 dashboard">
+
               <div className="card shadow border-0">
                 <div className="card-body d-flex justify-content-center align-items-center">
                   <div className="profile-section p-4">
@@ -279,10 +272,7 @@ const Edituser = () => {
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-      </main>
+
     </>
   );
 };

@@ -1,0 +1,84 @@
+// global variables 
+$primary-color:#1363b8;
+$secondary-color:#ebf1f5;
+$optional-color:#f7f9fc;
+$third-color:#162521;
+$forth-color:#047ba7;
+$fifth-color:#FFFFFF;
+
+.profile-image-box{
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+
+
+    small{
+        margin-top:15px;
+        color:#777;
+    }
+
+    img{
+        
+        width:170px;
+        height:170px;
+        border-radius:50%;
+        object-fit:cover;
+        padding: 2px;
+        border:4px solid $primary-color;
+        box-shadow:0 15px 30px rgba(0,0,0,.12);
+    
+    }
+}
+
+.form-label{
+    font-weight: 500;
+}
+
+.form-control{
+    border: 1px solid $primary-color;
+}
+
+.view-password{
+
+    color: $primary-color;
+    border-color: $primary-color;
+    transition: .3s ease;
+
+
+    &:hover{
+        background-color: $primary-color;
+        color: $fifth-color;
+    }
+    
+}
+
+.space{
+    margin: 10px 120px;
+    margin-bottom: 100px;
+}
+
+@media (max-width:992px){
+    .space{
+        margin: 10px 100px;
+    margin-bottom: 100px;
+
+    }
+}
+
+@media (max-width:768px){
+    .space{
+        margin: 10px 50px;
+    margin-bottom: 100px;
+
+    }
+}
+
+@media (max-width:576px){
+    .space{
+        margin: 15px;
+    margin-bottom: 100px;
+
+    }
+}

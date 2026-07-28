@@ -51,6 +51,7 @@ class UserManagementController extends Controller
                 'email'    => $user->email,
                 'username' => $user->username,
                 'professional_title' => $user->professional_title,
+                'profile_pic' => $user->profile_pic,
                 'role'     => $highest, // ✅ single highest role only
             ];
         });
@@ -308,11 +309,15 @@ class UserManagementController extends Controller
     // 🗑️ View Trashed Users
     public function trashedUsers()
     {
-        $users = User::onlyTrashed()->orderBy('deleted_at', 'DESC')->get();
+        $users = User::onlyTrashed()
+                ->with('deletedBy')
+                ->orderBy('deleted_at', 'DESC')
+                ->get();
 
         return response()->json([
             'status' => true,
-            'user' => $users
+            'user' => $users,
+            
         ]);
     }
 
@@ -330,6 +335,11 @@ class UserManagementController extends Controller
         }
         // It will Restore Users
         $user->restore();
+
+        // clearing deleted at after restore
+        $user->deleted_by = null;
+        $user->save();
+
         
         // Activity Log
         ActivityLogger::log('Restored_User',$user);
@@ -376,6 +386,7 @@ class UserManagementController extends Controller
 
         $user = User::findOrFail($id);
         $user->is_suspended = true;
+        $user->suspended_at = now();
         $user->suspension_reason = $request->reason ?? 'No reason provided';
         $user->suspended_until = $request->until ? Carbon::parse($request->until) : null;
         $user->suspension_by = auth()->id();    // <<-- who suspended
@@ -434,6 +445,8 @@ class UserManagementController extends Controller
 
         // Reset suspension fields
         $user->is_suspended = false;
+        $user->suspended_at = null;
+        $user->suspension_by = null;
         $user->suspension_reason = null;
         $user->suspended_until = null;
         $user->save();

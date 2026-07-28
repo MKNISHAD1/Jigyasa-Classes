@@ -36,6 +36,7 @@ import bfs3 from '../../../assets/images/bf3.png'
 import { Carousel } from 'react-bootstrap';
 import { faArrowRight, faBook, faBookOpen, faClock, faDesktop, faDollar, faDollarSign, faFile, faJournalWhills, faLaptop, faLayerGroup, faMessage, faMoneyBill, faMoneyBillTransfer, faMoneyCheckDollar, faQuoteLeft, faSearch, faSearchPlus, faStar, faUserEdit, faUserGroup } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { AUTH_ROUTES, PUBLIC_ROUTES } from '../../../constants/nevigation/routes';
 
 const HomeUi = () => {
 
@@ -86,7 +87,7 @@ const HomeUi = () => {
             </p>
 
             <div className="hero-btns">
-              <Link to="/" className="primary-btn">
+              <Link to={PUBLIC_ROUTES.COURSES} className="primary-btn">
                 Start Learning  <FontAwesomeIcon icon={faArrowRight} className='icon'/>
               </Link>
             </div>
@@ -264,8 +265,6 @@ const HomeUi = () => {
                       Latest <span className='span2'> Courses</span>
                     </h3>
                     <p>Learn from newly added courses by expert instructors</p>
-                
-
               </div>
           </div>
         </div>
@@ -338,7 +337,11 @@ const HomeUi = () => {
                     </span>
 
                     <Link
-                      to={`/CourseView/${course.id}/${course.title?.en}`}
+                    to={PUBLIC_ROUTES.COURSE_VIEW
+                        .replace(":id",course.id)
+                        .replace(":title", course.title?.en)
+                      } 
+                      // to={`/CourseView/${course.id}/${course.title?.en}`}
                       className="view-course-btn"
                     >
                       View Course 
@@ -352,7 +355,7 @@ const HomeUi = () => {
 
         {/* All Courses Button */}
         <div className="text-center mt-5">
-          <Link to="/courses" className="view-course-btn py-2 px-4">
+          <Link to={PUBLIC_ROUTES.COURSES} className="view-course-btn py-2 px-4">
             More Courses <FontAwesomeIcon icon={faArrowRight}/>
           </Link>
         </div>
@@ -778,7 +781,7 @@ It helped me manage my studies along with my college schedule effortlessly.”
           
         </div>
         <div className="text-center mb-4">
-          <Link to="/Register" className="Register py-2 px-4">
+          <Link to={AUTH_ROUTES.REGISTER} className="Register py-2 px-4">
             Register Now <FontAwesomeIcon icon={faArrowRight}/>
           </Link>
         </div>

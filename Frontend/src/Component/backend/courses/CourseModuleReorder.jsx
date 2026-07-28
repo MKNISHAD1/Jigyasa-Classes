@@ -103,11 +103,7 @@ const CourseModuleReorder = () => {
   return (
     <>
 
-    {/* Header */}
-    <HeaderUi/>
-
-    <main>
-      <div className="container my-5">
+      <div className="container p-5">
         <h4 className="mb-3">Reorder Modules </h4>
 
         <DragDropContext onDragEnd={handleDragEnd}>
@@ -158,10 +154,6 @@ const CourseModuleReorder = () => {
           {saving ? "Saving..." : "Save Order"}
         </button>
       </div>
-    </main>
-
-    {/* Footer  */}
-    <FooterUi/>
 
     </>
 

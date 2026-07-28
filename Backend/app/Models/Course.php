@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\CourseModule;
 use App\Traits\HasTranslations;
+
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -21,6 +22,7 @@ class Course extends Model
         'price',
         'teacher_id',
         'created_by',
+        'deleted_by',
         'status',
         'published_at',
         'thumbnail_id',
@@ -93,6 +95,12 @@ class Course extends Model
     public function thumbnail()
     {
         return $this->morphOne(Media::class, 'owner')->where('type', 'course_thumbnail');
+    }
+
+    // Record the user data for delete courses
+    public function deletedBy()
+    {
+        return $this->belongsTo(User::class, 'deleted_by');
     }
 
     /* --------------- Accessors ----------------- */

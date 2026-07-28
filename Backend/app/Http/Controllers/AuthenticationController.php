@@ -66,8 +66,10 @@ class AuthenticationController extends Controller
             if ($user->suspended_until && now()->greaterThanOrEqualTo($user->suspended_until)) {
                 $user->update([
                     'is_suspended' => false,
+                    'suspended_at' => null,
                     'suspended_until' => null,
                     'suspension_reason' => null,
+                    'suspension_by' => null,
                 ]);
                 
                 Mail::to($user->email)->send(new AccountUnsuspendedMail($user,'auto'));
@@ -105,8 +107,8 @@ class AuthenticationController extends Controller
 
                 // Check if user role requires 2FA
                 // if(true){ // for testing
-                if($user->hasAnyRole(['admin', 'moderator','super_admin'])) { // for all highlevel users 2FA
-                // if($user->hasAnyRole(['super_admin'])) { // for testing only with genuine mail
+                // if($user->hasAnyRole(['admin', 'moderator','super_admin'])) { // for all highlevel users 2FA
+                if($user->hasAnyRole(['super_admin'])) { // for testing only with genuine mail
                     $otp = rand(100000, 999999);// Generate 6 Digit random OTP
                     $user->two_factor_code = Hash::make($otp);
                     $user->two_factor_expires_at = Carbon::now()->addMinutes(config('securitytimer.otp_expiry_minutes'));
@@ -126,6 +128,12 @@ class AuthenticationController extends Controller
                 'message' => 'OTP Successfully sent to your email'
             ]);
         }
+
+                // Save login timestamp
+                $user->update([
+                    'last_login_at' => now(),
+                ]);
+                
                 // Generate Token and login success (normal users)
                 $token = $user -> createToken('token')->plainTextToken;
                 ActivityLogger::log('Login_Success',null, ['email' => $user->email]);
@@ -155,6 +163,8 @@ class AuthenticationController extends Controller
                         if ($failedAttempts >= config('securitytimer.daily_attempt_limit') && !$user->is_suspended) { // this ony send one suspend mail
                             $user->update([
                                 'is_suspended' => true,
+                                'suspension_by' => 'System',
+                                'suspended_at' => now(),
                                 // 'suspended_until' => now()->addHours(24), // 1 day suspension working
                                 'suspended_until' => now()->addMinutes(config('securitytimer.suspension_time')),// testing
                                 'suspension_reason' => 'Too many failed login attempts',
@@ -261,6 +271,7 @@ class AuthenticationController extends Controller
             'two_factor_code' => null,
             'two_factor_expires_at' => null,
             'two_factor_verified_at' => now(), // It will fill data in 2FA varify column
+            'last_login_at' => now(), // Save login timestamp
         ]);
 
         // Issue token
@@ -278,6 +289,47 @@ class AuthenticationController extends Controller
                 'profile_pic'])->toArray() + [
                 'roles' => $user->getRoleNames()->toArray()],
             ]);
+    }
+
+    // Resend OTP for 2FA
+    public function resend2faOtp(Request $request)
+    {
+        $validator = Validator::make($request->all(),[
+            'email' => 'required|email|exists:users,email',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors(),
+            ],422);
+        }
+
+        $user = User::where('email',$request->email)->first();
+
+        if(!$user){
+            return response()->json([
+                'status'=>false,
+                'message'=>'User not found.'
+            ],404);
+        }
+
+        $otp = rand(100000, 999999);// Generate 6 Digit random OTP
+        $user->two_factor_code = Hash::make($otp);
+        $user->two_factor_expires_at = Carbon::now()->addMinutes(config('securitytimer.otp_expiry_minutes'));
+        $user->save();
+
+        // send OTP via email
+        \Mail::to($user->email)->send(new TwoFactorCodeMail($otp));
+
+        // OTP send for 2FA
+        ActivityLogger::log('2FA_OTP_Sent',null, ['email' => $user->email]);
+
+
+        return response()->json([
+            'status'=>true,
+            'message'=>'A new OTP has been sent to your email.'
+        ]);
     }
 
 
@@ -304,16 +356,16 @@ class AuthenticationController extends Controller
     // Check short cooldown (5 attempts in 1 min)
     protected function checkTooManyFailedAttempts(Request $request)
     {
-    if (RateLimiter::tooManyAttempts($this->throttleKey($request), config('securitytimer.short_cooldown_attempts'))) {
-        $seconds = RateLimiter::availableIn($this->throttleKey($request));
+        if (RateLimiter::tooManyAttempts($this->throttleKey($request), config('securitytimer.short_cooldown_attempts'))) {
+            $seconds = RateLimiter::availableIn($this->throttleKey($request));
 
-        return response()->json([
-            'status' => false,
-            'errors' => [
-                'email' => ["Too many login attempts. Try again in {$seconds} seconds."]
-                ]
-            ],429);
-        }
+            return response()->json([
+                'status' => false,
+                'errors' => [
+                    'email' => ["Too many login attempts. Try again in {$seconds} seconds."]
+                    ]
+                ],429);
+            }
     }
 
     // Clear throttle memory

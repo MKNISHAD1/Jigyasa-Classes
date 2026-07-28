@@ -1,0 +1,239 @@
+// global variables 
+$primary-color:#1363b8;
+$secondary-color:#ebf1f5;
+$third-color:#162521;
+$forth-color:#047ba7;
+$fifth-color:#FFFFFF;
+
+.dashboard-sidebar{
+    border-radius:0;
+    overflow:hidden;
+    background:rgb(1, 1, 78);
+    padding:0;
+}
+
+.close-btn{
+    background-color:transparent;
+    border: 0;
+    padding: 15px 25px 0 0;
+    margin-left: auto;
+
+    .close-btn-icon{
+        color: $primary-color;
+        font-size: 30px;
+        transition: .4s ease;
+
+        &:hover{
+            transform: rotate(90deg);
+            cursor: pointer ;
+        }
+
+    }
+}
+
+.sidebar-header{
+    text-align:center;
+    padding:20px 20px;
+    border-bottom:1px solid #eef2f7;
+    // background-color: red;
+}
+
+.sidebar-avatar{
+    width:90px;
+    height:90px;
+    border-radius:50%;
+    object-fit:cover;
+    border:4px solid #edf4ff;
+    margin-bottom:15px;
+}
+
+.sidebar-header h5{
+    margin-bottom:10px;
+    font-weight:700;
+    color: $fifth-color;
+}
+
+.sidebar-role{
+    display:inline-block;
+    padding:5px 14px;
+    background:#edf4ff;
+    color:#0d6efd;
+    border-radius:30px;
+    font-size:13px;
+    text-transform:capitalize;
+    font-weight:600;
+}
+
+
+// .sidebar-body{
+//     padding:20px;
+// }
+
+
+.sidebar-links{
+    display:flex;
+    flex-direction:column;
+    gap:3px;
+    // background-color: red;
+    padding-top: 20px ;
+    // padding-left: 10px;
+}
+
+
+.sidebar-link{
+    // background-color: green;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:12px 16px;
+    border-radius:0;
+    color:#4b5563;
+    text-decoration:none;
+    transition:.3s;
+    font-weight:600;
+    // padding:15px;
+
+    .sidebar-link-icon{
+        width:18px;
+        // font-size:16px;
+        color: $fifth-color;
+    }
+
+    .sidebar-link-text{
+        color: $fifth-color;
+    }
+    &:hover{
+        background:$fifth-color;
+        color:$primary-color;
+        transform: scale(1.04);
+        .sidebar-link-icon{
+            color: $primary-color;
+        }
+        .sidebar-link-text{
+            color: $primary-color;
+        }
+    }
+}
+
+.sidebar-link.active{
+    background-color:$primary-color;
+    &:hover{
+        background-color: $fifth-color;
+    }
+}
+
+
+// accordon
+
+.sidebar-section{
+    padding-bottom: 20px;
+    // padding-left: 10px;
+
+.accordion-item{
+    border:none;
+    background:rgb(1, 1, 78);
+    transition: .3s;
+
+}
+
+.accordion-button{
+    background:transparent;
+    color: $fifth-color;
+    box-shadow:none;
+    gap:3;
+    font-weight:600;
+    padding:15px;
+
+    &:hover{
+        background-color: $fifth-color;
+        color: $primary-color;
+        transform: scale(1.04);
+
+    }  
+
+}
+.accordion-button::after{
+    background-image: url("../../assets/images/down-arrow2.svg");
+}
+
+.accordion-button:not(.collapsed)::after{
+    background-image: url("../../assets/images/down-arrow1.svg");
+}
+
+
+.accordion-button:not(.collapsed){
+    color:$fifth-color;
+   background-color:$primary-color;
+}
+
+
+.accordion-body{
+    background-color: $secondary-color;
+    // padding:10px 15px 15px;
+    padding: 10px 0;
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+
+    .sidebar-link{
+        border-radius:0;
+        background-color: $secondary-color;
+        padding-left: 30px;
+        
+
+    .sidebar-link-icon{
+        width:18px;
+        color: $primary-color;
+    }
+
+    .sidebar-link-text{
+        color: $primary-color;
+    }
+    &:hover{
+        background:$fifth-color;
+        color:$primary-color;
+        transform:scale(1.03);
+
+        .sidebar-link-icon{
+            color: $primary-color;
+        }
+        .sidebar-link-text{
+            color: $primary-color;
+        }
+    }
+}
+}
+}
+
+.sidebar-footer{
+    padding:20px;
+    border-top:1px solid #eef2f7;
+}
+
+
+.sidebar-footer button{
+    width:100%;
+    border-radius:12px;
+    padding:10px;
+    color: $fifth-color;
+    background-color: red;
+    border: 2px solid red;
+    font-size: 17x;
+    font-weight: 600;
+    transition: 0.25s;
+
+    .logout-icon{
+        color: $fifth-color; 
+    }
+    &:hover{
+        background-color: $fifth-color;
+        color: red;
+        transform: scale(1.04);
+        border: 2px solid red;
+        .logout-icon{
+            color: red;
+        }      
+        
+    }
+}
+

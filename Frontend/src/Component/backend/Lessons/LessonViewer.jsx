@@ -95,16 +95,8 @@ const LessonViewer = () => {
 
   return (
     <>
-      {/* Header */}
-      <HeaderUi />
 
-      <main>
-        <div className="container my-4">
-          <div className="row">
-            <div className="col-md-3">
-              <Sidebar />
-            </div>
-            <div className="col-md-9">
+            <div className="p-5">
               <div className="card shadow border-0 p-4">
                 <h3 className="fw-bold text-center mb-4">
                   {currentLesson.title?.[i18n.language] || currentLesson.title?.en || "Untitled"}
@@ -185,12 +177,7 @@ const LessonViewer = () => {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </main>
 
-      {/* Footer  */}
-      <FooterUi />
     </>
   );
 };

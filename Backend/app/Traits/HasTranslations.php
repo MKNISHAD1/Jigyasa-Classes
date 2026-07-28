@@ -23,7 +23,18 @@ trait HasTranslations
         $fk = $this->getTranslationForeignKey();
 
         // Load existing translation row
-        $translation = $this->translations()
+        $relation = $this->translations();
+
+        $model = $relation->getRelated();
+
+        if (in_array(
+            \Illuminate\Database\Eloquent\SoftDeletes::class,
+            class_uses_recursive($model)
+        )) {
+            $relation = $relation->withTrashed();
+        }
+
+        $translation = $relation
             ->where('locale', $locale)
             ->where($fk, $this->id)
             ->first();
@@ -85,6 +96,15 @@ trait HasTranslations
                 'reviewed_by' => null,
                 'reviewed_at' => null,
             ];
+
+            if (
+                $translation &&
+                method_exists($translation, 'trashed') &&
+                $translation->trashed()
+            ) {
+                $translation->restore();
+            }
+
 
             if ($translation) {
                  $translation->fill(array_merge($translatedData, $meta))->save();

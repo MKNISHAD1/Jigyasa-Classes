@@ -6,6 +6,10 @@ $third-color:#162521;
 $forth-color:#047ba7;
 $fifth-color:#FFFFFF;
 
+.navbar{
+    // box-shadow:0 10px 20px rgba(13,110,253,.25);
+    border-bottom: 1px solid $primary-color;
+}
  .media_label{
   background-color: $forth-color;
   color: $secondary-color;

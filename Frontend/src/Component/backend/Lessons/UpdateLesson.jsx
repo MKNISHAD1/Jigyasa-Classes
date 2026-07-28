@@ -176,16 +176,8 @@ useEffect(() => {
 
   return (
     <>
-      {/* Header */}
-      <HeaderUi />
 
-      <main>
-        <div className="container my-5">
-          <div className="row">
-            <div className="col-md-3">
-              <Sidebar />
-            </div>
-            <div className="col-md-9 dashboard">
+            <div className="p-5">
               <div className="card shadow border-0 p-4 position-relative">
                 {uploading && (
                   <div className="position-absolute top-0 bottom-0 start-0 end-0 d-flex justify-content-center align-items-center bg-white bg-opacity-75">
@@ -374,8 +366,7 @@ useEffect(() => {
                 </form>
               </div>
             </div>
-          </div>
-        </div>
+
 
         {/* Confirm Modal */}
         {showConfirmModal && (
@@ -414,11 +405,7 @@ useEffect(() => {
             </div>
           </div>
         )}
-      </main>
 
-      {/* Footer  */}
-      <FooterUi/>
-      
     </>
   );
 };

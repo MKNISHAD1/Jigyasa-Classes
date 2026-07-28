@@ -8,17 +8,33 @@ import DataTable from "react-data-table-component";
 import { useTranslation } from "react-i18next";
 import HeaderUi from "../../Common/CommonUI/HeaderUi";
 import FooterUi from "../../Common/CommonUI/FooterUi";
+import { COURSE_ROUTES, DASHBOARD_ROUTES } from "../../../constants/nevigation/routes";
+import { faAngleRight, faFilter, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEdit, faEye } from "@fortawesome/free-regular-svg-icons";
+import CourseTable from "./CourseTable";
+import MobileCourseCard from "./MobileCourseCard";
+import PageNotFound from "../../../assets/images/not-found.jpeg"
+import ConfirmationDialogBoxUi from "../../Common/CommonUI/ConfirmationDialogBoxUi";
+
 
 const CourseList = () => {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filterText, setFilterText] = useState("");
   const {i18n} = useTranslation();
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [selectedCourse, setSelectedCourse] = useState(null);
+  const [loadingDelete, setLoadingDelete] = useState(false);
+
 
   // Fetch Courses
   const fetchCourses = async () => {
     try {
-      const res = await fetch(apiUrl + "courses", {
+      setLoading(true);
+
+      //Fetch Courses
+      const res = await fetch(apiUrl + "courses", { 
         method: "GET",
         headers: {
           Accept: "application/json",
@@ -42,11 +58,15 @@ const CourseList = () => {
   };
 
   // Delete Course
-  const deleteCourse = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this course?")) return;
+const handleDelete = async () => {
 
-    try {
-      const res = await fetch(apiUrl + "delete-course/" + id, {
+    if (!selectedCourse) return;
+
+    setLoadingDelete(true);
+
+    try{
+
+      const res = await fetch(apiUrl + "delete-course/" + selectedCourse.id, {
         method: "DELETE",
         headers: {
           Accept: "application/json",
@@ -57,7 +77,7 @@ const CourseList = () => {
       const result = await res.json();
 
       if (result.status) {
-        setCourses((prev) => prev.filter((c) => c.id !== id));
+        setCourses((prev) => prev.filter((c) => c.id !== selectedCourse.id));
         toast.success(result.message);
       } else {
         toast.error(result.message || "Failed to delete course");
@@ -65,96 +85,49 @@ const CourseList = () => {
     } catch (error) {
       console.error("Delete error:", error);
       toast.error("Something went wrong while deleting course");
+    } finally{
+
+      setLoadingDelete(false);
+
+      setDeleteOpen(false);
+
+      setSelectedCourse(null);
+
     }
+
   };
+
+  // helper function dialog
+const openDeleteDialog = (course) => {
+    setSelectedCourse(course);
+    setDeleteOpen(true);
+};
 
   useEffect(() => {
     fetchCourses();
   }, []);
 
-  if (loading) return <p className="text-center my-5">Loading courses...</p>;
-
-  // Columns for DataTable
-  const columns = [
-    { name: "ID", selector: (row) => row.id, sortable: true, width: "60px" },
-    {
-      name: "Thumbnail",
-      cell: (row) => (
-        <img
-          src={row.thumbnail || "/default-course.png"}
-          alt="thumbnail"
-          width="50"
-          height="50"
-          className="rounded"
+if (loading) {
+  return (
+    <div className="dashboard-card mt-4">
+      <div
+        className="d-flex flex-column justify-content-center align-items-center"
+        style={{ minHeight: "350px" }}
+      >
+        <div
+          className="spinner-border text-success "
+          style={{ width: "3rem", height: "3rem" }}
         />
-      ),
-      width: "80px",
-    },
-    {
-      name: "Title",
-      selector: (row) => row.title?.[i18n.language] || row.title?.en,
-      sortable: true,
-      wrap: true,
-    },
-    {
-      name: "Category",
-      selector: (row) => row.category?.name?.[i18n.language] || row.category?.name?.en || "N/A",
-      sortable: true,
-    },
-    {
-      name: "Subcategory",
-      selector: (row) => row.subcategory?.name?.[i18n.language] || row.subcategory?.name?.en || "N/A",
-      sortable: true,
-    },
-    {
-      name: "Teacher",
-      selector: (row) => row.teacher?.name || "N/A",
-      sortable: true,
-    },
-    {
-      name: "Status",
-      cell: (row) => (
-        <span
-          className={`badge ${
-            row.status === "published" ? "bg-success" : "bg-secondary"
-          }`}
-        >
-          {row.status}
-        </span>
-      ),
-      sortable: true,
-    },
-    {
-      name: "Price",
-      selector: (row) => (row.price ? `$${parseFloat(row.price).toFixed(2)}` : "Free"),
-      sortable: true,
-    },
-    {
-      name: "Actions",
-      cell: (row) => (
-        <div className="d-flex gap-2">
-          <Link
-            to={`/admin/course/view-course/${row.id}`}
-            className="btn btn-sm btn-info"
-          >
-            View
-          </Link>
-          <Link
-            to={`/admin/course/update-course/${row.id}`}
-            className="btn btn-sm btn-primary"
-          >
-            Update
-          </Link>
-          <button
-            onClick={() => deleteCourse(row.id)}
-            className="btn btn-sm btn-danger"
-          >
-            Delete
-          </button>
-        </div>
-      ),
-    },
-  ];
+
+        <h5 className="mt-3 mb-1">Loading Courses...</h5>
+
+        <small className="text-muted">
+          Please wait while we fetching courses.
+        </small>
+      </div>
+    </div>
+  );
+}
 
   // Apply search filter
   const filteredCourses = courses.filter((course) => {
@@ -188,60 +161,167 @@ const CourseList = () => {
 
   });
 
+
   return (
     <>
-    {/* Header  */}
-      <HeaderUi />
 
-      <main>
-        <div className="container my-5">
-          <div className="row">
-            <div className="col-md-3">
-              <Sidebar />
+    
+      <div className="dashboard-card mt-4">
+        
+        {/* header */}
+        <div className="d-flex justify-content-between align-items-center">
+            <section className="breadcrumb-section m-0">
+                <h3>Manage <span>Courses</span></h3>
+
+                <Link className='bread-link' to={DASHBOARD_ROUTES.DASHBOARD}>Home</Link>
+                <span><FontAwesomeIcon icon={faAngleRight} className="icon"/></span>
+
+                <Link className='bread-link' to=""><span>All Course</span></Link>
+
+            </section>
+
+            <Link to={COURSE_ROUTES.CREATE} className="edit-btn m-0">
+            <FontAwesomeIcon icon={faPlus} className="icon"/>  Create Course
+            </Link>
+        </div>
+
+        <hr className="mb-4"/>
+
+        
+        <p className="text-muted text-center mb-4 course-list-heading">Manage all created courses published or draft all </p>
+
+        {/* Search */}
+        <div className="d-flex align-items-center gap-2 mb-4 search-toolbar">
+            <div className="input-group flex-grow-1">
+
+            <span className="input-group-text">
+                <i className="fa-solid fa-search"></i>
+            </span>
+                <input
+                type="text"
+                placeholder="Search by title, category, subcategory, or ID"
+                className="form-control"
+                value={filterText}
+                onChange={(e) => setFilterText(e.target.value)}
+                />
             </div>
-            <div className="col-md-9">
-              <div className="card shadow border-0">
-                <div className="card-body p-4">
-                  <div className="d-flex justify-content-between align-items-center mb-3">
-                    <h4 className="h5">All Courses</h4>
-                    <Link
-                      to="/admin/course/create"
-                      className="btn btn-success"
-                    >
-                      Create Course
-                    </Link>
-                  </div>
-                  <hr />
 
-                  {/* Search */}
-                  <div className="d-flex mb-3 gap-3">
-                    <input
-                      type="text"
-                      placeholder="Search by title, category, subcategory, or ID"
-                      className="form-control"
-                      value={filterText}
-                      onChange={(e) => setFilterText(e.target.value)}
+            <button
+                className="btn border-primary text-primary d-flex align-items-center justify-content-center gap-2 flex-shrink-0"
+                disabled
+            >
+                <FontAwesomeIcon icon={faFilter} />
+                <span>Filter</span>
+            </button>
+        </div>
+
+
+        {
+            courses.length === 0 ? (
+                
+                // if no courses created yet
+                <div className="empty-courses text-center py-5">
+                    <img
+                        src={PageNotFound}
+                        alt="No courses found"
+                        className="empty-img"
+                    />
+
+                    <h4>No Course Found</h4>
+
+                    <p>You haven't created or been assigned any courses yet. Once you create a course or one is assigned to you, it will appear here.</p>
+        
+                    
+
+                    <Link
+                        className="edit-btn"
+                        to={COURSE_ROUTES.CREATE}
+                        >
+                        <FontAwesomeIcon icon={faPlus} /> Create Course
+                    </Link>
+                </div>
+
+            ) : filteredCourses.length === 0 ? (
+
+                // if no search result  match found
+                <div className="empty-courses text-center py-5">
+                    <img
+                    src={PageNotFound}
+                    alt="No courses found"
+                    className="empty-img"
+                    />
+
+                    <h4>No Match Found</h4>
+
+                    <p> Try Another search keyword. </p>
+
+                </div>
+
+            ) : (
+
+                // Search result  
+                <>
+                  {/* Desktop */}
+                  <div className="d-none d-lg-block">
+                    <CourseTable
+                      courses={filteredCourses}
+                      onDelete={openDeleteDialog}
                     />
                   </div>
 
-                  {/* DataTable */}
-                  <DataTable
-                    columns={columns}
-                    data={filteredCourses}
-                    pagination
-                    paginationPerPage={25}
-                    highlightOnHover
-                    striped
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </main>
+                  {/* Mobile */}
+                  <div className=" d-block d-lg-none">
+                    <MobileCourseCard
+                      courses={filteredCourses}
+                      onDelete={openDeleteDialog}
+                    />
+                  </div>
+                </>
 
-      {/* Footer */}
-      <FooterUi />
+            )
+            
+        }
+
+      </div>
+
+      {/* Confirmation Dialog Box */}
+
+      <ConfirmationDialogBoxUi
+
+        open={deleteOpen}
+
+        title="Delete Course"
+        confirmText="Delete"
+        confirmVariant="danger"
+
+        loading={loadingDelete}
+
+        onCancel={() => {
+            setDeleteOpen(false);
+            setSelectedCourse(null);
+        }}
+
+        onConfirm={handleDelete}
+    >
+
+        Are you sure you want to delete <br />
+
+        <strong>
+
+            {" "}
+            {selectedCourse?.title?.en}
+
+        </strong>
+
+        ?
+
+        <br /><br />
+
+        <p className="text-danger" style={{fontSize:'12px'}}> This action cannot be undone.</p>
+
+      </ConfirmationDialogBoxUi>
+
+
     </>
   );
 };

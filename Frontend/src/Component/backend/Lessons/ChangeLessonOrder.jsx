@@ -92,10 +92,7 @@ const ChangeLessonOrder = () => {
   return (
     <>
 
-    {/* Header  */}
-    <HeaderUi/>
-
-    <div className="container my-5">
+    <div className="container p-5">
       <h4 className="mb-3">Reorder Lessons</h4>
 
       <DragDropContext onDragEnd={handleDragEnd}>
@@ -143,9 +140,6 @@ const ChangeLessonOrder = () => {
       </button>
     </div>
 
-    {/* Footer  */}
-    <FooterUi/>
-    
     </>
 
   );

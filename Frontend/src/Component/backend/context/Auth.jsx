@@ -12,9 +12,16 @@ export const AuthProvider = ({ children }) => {
   const [twoFactorEmail, setTwoFactorEmail] = useState(null);
 
 
-  const login = (userInfo) => {
-    setUser(userInfo);
-  };
+const login = (userInfo) => {
+  setUser({
+    ...userInfo,
+    roles: Array.isArray(userInfo.roles)
+      ? userInfo.roles.map(role =>
+          typeof role === "object" ? role.name : role
+        )
+      : [],
+  });
+};
 
   const logout = () => {
     localStorage.removeItem("userInfo");
@@ -76,17 +83,21 @@ export const AuthProvider = ({ children }) => {
 
 
   // Helper: check if user has one of the allowed roles
-const hasAnyRole = (allowedRoles = []) => {
-  if (!user || !user.roles) return false;
-  
-  // roles could be array of objects or strings
-  const roleNames = Array.isArray(user.roles)
-    ? user.roles.map(r => (r.name ? r.name : r))
-    : [user.roles];
+  const hasAnyRole = (allowedRoles = []) => {
+    if (!user?.roles) return false;
 
-  return allowedRoles.some(role => roleNames.includes(role));
-};
+    return allowedRoles.some(role =>
+      user.roles.includes(role)
+    );
+  };
 
+  //Check Single Role
+    const hasRole = (role) => {
+      return user?.roles?.includes(role);
+    };
+
+    // Check again
+    const isAuthenticated = !!user;
 
 
     // Listen for localStorage changes across tabs
@@ -109,10 +120,15 @@ const hasAnyRole = (allowedRoles = []) => {
         user,
         login,
         logout,
-        hasAnyRole,
         loading,
+        
+        hasAnyRole,
+        hasRole,
+        isAuthenticated,
+        
         twoFactorRequired,
         setTwoFactorRequired,
+
         twoFactorEmail,
         setTwoFactorEmail,
       }}

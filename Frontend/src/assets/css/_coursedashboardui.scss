@@ -1,0 +1,624 @@
+// global variables 
+$primary-color:#1363b8;
+$secondary-color:#ebf1f5;
+$optional-color:#f7f9fc;
+$third-color:#162521;
+$forth-color:#047ba7;
+$fifth-color:#FFFFFF;
+
+
+/////////////  search toolbar   ///////////
+.search-toolbar {
+    .input-group {
+        min-width: 0;
+    }
+
+    button {
+        white-space: nowrap;
+        min-width: 120px;
+    }
+}
+
+@media (max-width: 576px) {
+
+    .search-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+
+        button {
+            width: 100%;
+        }
+    }
+
+}
+
+///////////////  Badges  //////////////////
+
+.badge{
+    min-width: 70px;
+}
+
+.badge-published{
+    width: max-content !important; 
+    padding:  5px 8px;
+    background:#c9f7d7;
+    text-transform: capitalize;
+}
+
+.badge-draft{
+    width: max-content !important; 
+    margin: auto;
+    padding:  5px 8px;
+    background:#dadbda;
+    text-transform: capitalize;
+}
+
+/* //////////////////////////////////////
+                  Course Table
+*/ /////////////////////////////////////
+
+
+.course-thumbnail{
+    aspect-ratio: 16/9;
+}
+
+.course-title{
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-transform: capitalize;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.course-category{
+    font-size: 12px;
+    font-weight: 550;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+}
+
+.teacher-name{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+/* ////////////////////////////////////////////////////////
+ Responsive wrapper for react-data-table-component.
+ Fine-grained breakpoints prevent layout shifts caused by
+ fixed sidebar + dashboard padding + DataTable width calculations.
+ Reuse this class for all admin tables.
+*////////////////////////////////////////////////////////
+
+@media (max-width:1300px){
+    .table-wrapper {
+        max-width: 100%;
+    }
+}
+
+@media (max-width:1250px){
+    .table-wrapper {
+        max-width: 100%;
+    }
+}
+
+@media (max-width:1220px){
+    .table-wrapper {
+        max-width: 820px;
+    }
+}
+
+@media (max-width:1190px){
+    .table-wrapper {
+        max-width: 800px;
+    }
+}
+
+@media (max-width:1165px){
+    .table-wrapper {
+        max-width: 770px;
+    }
+}
+
+@media (max-width:1140px){
+    .table-wrapper {
+        max-width: 730px;
+    }
+}
+
+@media (max-width:1100px){
+    .table-wrapper {
+        max-width: 690px;
+    }
+}
+
+@media (max-width:1060px){
+    .table-wrapper {
+        max-width: 630px;
+    }
+}
+
+@media (max-width:1000px){
+    .table-wrapper {
+        max-width: 610px;
+    }
+}
+
+
+/*///////////////////////////////////////////////////////
+                   // Action Buttons Desktop
+*////////////////////////////////////////////////////////
+
+
+.action-buttons{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+
+}
+
+.action-btn{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    border-radius: 5px;
+    padding: 6px;
+    text-decoration: none;
+    margin: 0;
+    border: 1px solid #d1d5db;
+
+}
+
+.btn-view{
+    background-color: $secondary-color;
+    color: #2563eb;
+    border-color: #2563eb;
+    text-align: center;
+    transition: .3s;
+
+    &:hover{
+        background: #2563eb;
+        color: #fff;
+        transform: translateY(-4px);
+
+
+    }
+
+}
+
+.btn-edit{
+    background-color: $secondary-color;
+    color: #f59e0b;
+    border-color: #f59e0b;
+    text-align: center;
+    transition: .3s;
+
+    &:hover{
+        background: #f59e0b;
+        color: #fff;
+        transform: translateY(-4px)
+
+    }
+
+}
+
+.btn-delete{
+    background-color: $secondary-color;
+    color: #ef4444;
+    border-color: #ef4444;
+    text-align: center;
+    transition: .3s;
+
+    &:hover{
+        background: #ef4444;
+        color: #fff;
+        transform: translateY(-4px)
+
+    }
+}
+
+.btn-suspend{
+    background-color: $secondary-color;
+    color: red;
+    text-align: center;
+    transition: .3s;
+    border: 1px solid red;
+
+    &:hover{
+        background-color: red;
+        color: $fifth-color;
+        transform: translateY(-4px)
+
+    }
+}
+
+.btn-restore{
+    background-color: $secondary-color;
+    color: green;
+    text-align: center;
+    transition: .3s;
+    border: 1px solid green;
+
+    &:hover{
+        background-color: green;
+        color: $fifth-color;
+        transform: translateY(-4px)
+
+    }
+}
+
+/////////////// Action Button Mobile   ///////////////////////
+
+
+.action-menu-wrapper{
+    position: relative;
+}
+
+.action-dropdown{
+    position: absolute;
+    bottom: -50px;
+    right: 40px;
+    min-width: 150px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(0,0,0,.15);
+    border: 1px solid #e9ecef;
+    overflow: hidden;
+    z-index: 999;
+}
+
+.dropdown-action{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    width: 100%;
+    padding: 12px 16px;
+
+    border: 0;
+    // background: #fff;
+    // color: #333;
+    text-decoration: none;
+    cursor: pointer;
+
+    span{
+        color: inherit;
+    }
+
+}
+
+
+
+
+/*///////////////////////////////////////////////////////
+                    Mobile Course Card list
+*////////////////////////////////////////////////////////
+
+.course-mobile-card{
+    background:#fff;
+    border-radius:10px;
+    padding:16px;
+    margin-bottom:10px;
+    box-shadow:0 4px 15px rgba(0,0,0,.05);
+    border: 1px solid rgb(209, 210, 211);
+    transition: .3s;
+
+    &:hover{
+        transform: scale(1.04);
+        box-shadow: 0 8px 20px rgba(10, 28, 189, 0.2);
+    }
+}
+
+.course-mobile-body-left{
+    display:flex;
+    justify-content: space-between;
+    gap:12px;
+    align-items:center;
+}
+
+.course-mobile-body-right{
+    // background-color: red;
+    display:flex;
+    gap:8px;
+    flex-direction: column;
+    justify-content:space-between;
+    align-items:center;
+    align-items:flex-end;
+}
+
+.course-no{
+    width: 24px;
+    color: $third-color;
+    font-weight: 600;
+    padding: 0 10px;
+    font-size: 13px;
+}
+
+.course-mobile-thumbnail{
+    width:80px;
+    height:70px;
+    object-fit:cover;
+    border-radius:10px;
+    flex-shrink:0;
+    aspect-ratio: 16/9 ;
+    cursor: pointer;
+}
+
+.course-info{
+    // background-color: red;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    margin: 0;
+    justify-content: center;
+
+    flex:1;
+
+    .icon{
+        color:$primary-color;
+        font-size: 12px;
+        padding-right:5px;
+    
+    }
+
+}
+
+
+.course-title-link{
+    color: inherit;
+    text-decoration: none;
+
+    &:hover{
+        color: $primary-color;
+    }
+}
+
+.course-mobile-title{
+
+    font-size:15px;
+    margin: 0;
+    font-weight:550;
+    line-height:1.35;
+    display:-webkit-box;
+    -webkit-line-clamp:2;
+    -webkit-box-orient:vertical;
+    overflow:hidden;
+    text-transform: capitalize;
+    cursor: pointer;
+
+}
+
+.course-mobile-category{
+    color:#555;
+    font-weight: 450;
+    font-size:12px;
+    margin: 2px 0;
+    text-transform: capitalize;
+}
+
+.course-mobile-teacher{
+    font-size:13px;
+    font-weight: 400;
+    color:$primary-color;
+    margin: 0;
+}
+
+.course-mobile-price{
+    font-size:15px;
+    font-weight:bold;
+}
+
+
+/* ==========================================
+                TABLETS
+========================================== */
+
+@media (max-width:992px){
+
+    .badge{
+        min-width: 65px;
+    }
+
+    .badge-published{
+        font-size: 9px;
+        padding: 5px 8px;
+    }
+
+    .badge-draft{
+        font-size: 9px;
+        padding: 5px 8px;
+    }
+
+}
+
+/* ==========================================
+            SMALL MOBILE
+========================================== */
+
+@media (max-width:768px){
+
+    .course-no{
+        font-size: 12px;
+    }
+
+    .course-mobile-thumbnail{
+        width: 70px;
+        height: 50px;
+        border-radius: 5px;
+    }
+
+    .course-mobile-title{
+        font-size: 13px;
+    }
+
+    .course-mobile-category{
+        font-size: 9px;
+    }
+
+    .course-info{
+        .icon{
+            font-size: 10px;
+        }
+    }
+    .course-mobile-teacher{
+        font-size: 10px;
+    }
+
+    .course-mobile-price{
+        font-size: 12px;
+    }
+
+    .badge{
+        min-width: 60px;
+    }
+
+    .badge-published{
+        font-size: 8px;
+        padding: 5px;
+    }
+
+    .badge-draft{
+        font-size:8px;
+        padding: 5px;
+    }
+
+ 
+}
+
+/* ==========================================
+            VERY SMALL
+========================================== */
+
+@media (max-width:576px){
+
+    .course-list-heading{
+        font-size: 14px;
+    }
+
+    .course-mobile-card{
+        padding: 8px;
+    }
+
+    .course-no{
+        width: 15px;
+        font-size: 9px;
+        padding: 0 7px;
+        
+    }
+
+    .course-mobile-thumbnail{
+        width: 60px;
+        height: 50px;
+        border-radius: 3px;
+        aspect-ratio: 16/9;
+    }
+
+    .course-mobile-title{
+        font-size: 10px;
+    }
+
+    .course-mobile-category{
+        font-size: 8px;
+    }
+
+    .course-info{
+        .icon{
+            font-size: 9px;
+        }
+    }
+    .course-mobile-teacher{
+        font-size: 9px;
+    }
+
+    .course-mobile-body-right{
+        gap: 0;
+    }
+
+    .course-mobile-price{
+        font-size: 9px;
+    }
+
+    .badge{
+        min-width: 40px;
+        border-radius: 3px;
+    }
+
+    .badge-published{
+        font-size: 7px;
+        padding: 4px;
+        font-weight: 600;
+    }
+
+    .badge-draft{
+        font-size:7px;
+        padding: 4px;
+        font-weight: 600;
+    }
+
+
+
+}
+
+
+
+
+
+/*///////////////////////////////////////////////////////
+                    Confirmation Dialog Box
+*////////////////////////////////////////////////////////
+
+.confirm-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.45);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index:1200;
+}
+
+.confirm-dialog{
+    width:420px;
+    max-width:92%;
+    background:#fff;
+    border-radius:16px;
+    overflow:hidden;
+    box-shadow:0 18px 45px rgba(0,0,0,.15);
+}
+
+.confirm-header{
+    padding: 15px 0;
+    border-bottom:1px solid $primary-color;
+}
+
+.confirm-body{
+    padding:20px 24px;
+    color:#555;
+    line-height:1.6;
+}
+
+.confirm-footer{
+    display:flex;
+    justify-content:flex-end;
+    gap:12px;
+    padding:18px 24px;
+    border-top:1px solid $primary-color;
+
+    .btn-light{
+        border: 1px solid grey;
+    }
+}
+
+
+
+
+
+
+
+

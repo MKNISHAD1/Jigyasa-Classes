@@ -49,11 +49,10 @@ class UserProfileController extends Controller
                 'professional_title' => $user->professional_title,
                 'bio' => $user->bio,
                 'social_links' => $user->social_links,
+                'last_login_at' => $user->last_login_at,
             ]
         ]);
     }
-
-
 
     // Update Profile Function
 
@@ -64,7 +63,8 @@ class UserProfileController extends Controller
 
         $validator = Validator::make($request->all(), [
             'name'       => 'sometimes|string|max:255',
-            'mobile_no'  => 'sometimes|string|max:15',
+            'username' => 'sometimes|string|max:25',
+            'mobile_no'  => 'sometimes|string|max:10',
             'address'    => 'sometimes|string|nullable',
             'profile_pic' => 'sometimes|image|mimes:jpg,jpeg,png,webp|max:2048',
             'professional_title' => 'sometimes|string|max:255|nullable',
@@ -126,6 +126,7 @@ class UserProfileController extends Controller
             ]);
     }
 
+    // Change Password
     public function changePassword(Request $request)
     {
         $user = auth()->user();
@@ -194,79 +195,75 @@ class UserProfileController extends Controller
 
 
         // Send Reset Link if email match
-    try {
-        Mail::send('emails.passwordReset', [
-            'url' => $frontendUrl,
-            'otp' => $otp
-        ], function ($message) use ($request) {
-            $message->to($request->email);
-            $message->subject('Reset Your Password');
-        });
+        try {
 
-        return response()->json([
-            'status' => true,
-            'message' => 'Password reset link & OTP sent to your email successfully !!!'
-        ]);
+            $this->sendPasswordResetOtp($request->email);
 
-    } catch (\Exception $e) {
-    return response()->json([
-        'status' => false,
-        'message' => 'Unable to send reset link...',
-        'error' => $e->getMessage()
-    ],500);
+            return response()->json([
+                'status' => true,
+                'message' => 'Password reset link & OTP sent successfully.'
+            ]);
 
+        } catch (\Exception $e) {
+
+            return response()->json([
+                'status' => false,
+                'message' => 'Unable to send reset email.',
+                'error' => $e->getMessage()
+            ],500);
+
+        }
     }
-}
 
 
     // 📌 Step 2: User submits new password from Reset Link
     public function resetPasswordlink(Request $request)
-{
-    $validator = Validator::make($request->all(),[
-        'token' =>'required',
-        'email' => 'required|email|exists:users,email',
-        'password' => 'required|min:8|confirmed',
-    ]);
-    
-    if ($validator->fails()){
-        return response()->json([
-            'status' => false,
-            'errors' => $validator->errors()
-        ],422);
-    }
+    {
+        $validator = Validator::make($request->all(),[
+            'token' =>'required',
+            'email' => 'required|email|exists:users,email',
+            'password' => 'required|min:8|confirmed',
+        ]);
+        
+        if ($validator->fails()){
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors()
+            ],422);
+        }
 
-    // Find reset record
-    $reset = DB::table('password_reset_tokens')
-        ->where('email', $request->email)
-        ->first();
+        // Find reset record
+        $reset = DB::table('password_reset_tokens')
+            ->where('email', $request->email)
+            ->first();
 
-    if (!$reset) {
-        return response()->json([
+        if (!$reset) {
+            return response()->json([
+                'status' => false, 
+                'message' => 'Invalid reset request'
+            ],400);
+        }
+
+        // Check token validity
+        if (!Hash::check($request->token, $reset->token)) {
+            return response()->json([
             'status' => false, 
-            'message' => 'Invalid reset request'
-        ],400);
-    }
+            'message' => 'Invalid or expired token'], 400);
+        }
 
-    // Check token validity
-    if (!Hash::check($request->token, $reset->token)) {
+        // Update user password
+        $user = User::where('email', $request->email)->first();
+        $user->password = Hash::make($request->password);
+        $user->save();
+
+        // Delete reset token (so it can’t be reused)
+        DB::table('password_reset_tokens')->where('email', $request->email)->delete();
+
         return response()->json([
-        'status' => false, 
-        'message' => 'Invalid or expired token'], 400);
+            'status' => true,
+            'message' => 'Password reset successfully!'
+        ]);
     }
-
-    // Update user password
-    $user = User::where('email', $request->email)->first();
-    $user->password = Hash::make($request->password);
-    $user->save();
-
-    // Delete reset token (so it can’t be reused)
-    DB::table('password_reset_tokens')->where('email', $request->email)->delete();
-
-    return response()->json([
-        'status' => true,
-        'message' => 'Password reset successfully!'
-    ]);
-}
 
     // 📌 Step 3: User submits new password from OTP Request
     public function resetPasswordWithOtp(Request $request)
@@ -317,6 +314,76 @@ class UserProfileController extends Controller
         ]);
 
     }
+
+    private function sendPasswordResetOtp($email)
+    {
+        // Generate token + OTP
+        $token = Str::random(64);
+        $otp = rand(100000, 999999);
+
+        // Store / Update token
+        DB::table('password_reset_tokens')->updateOrInsert(
+            ['email' => $email],
+            [
+                'email' => $email,
+                'token' => Hash::make($token),
+                'otp' => Hash::make($otp),
+                'created_at' => now(),
+            ]
+        );
+
+        // Frontend reset link
+        $frontendUrl = "http://localhost:5173/reset-password?token=" .
+            $token .
+            "&email=" .
+            urlencode($email);
+
+        Mail::send(
+            'emails.passwordReset',
+            [
+                'url' => $frontendUrl,
+                'otp' => $otp
+            ],
+            function ($message) use ($email) {
+                $message->to($email);
+                $message->subject('Reset Your Password');
+            }
+        );
+    }
+
+    // Resend OTP for Reset Password 
+    public function resendOtp(Request $request)
+    {
+        $validator = Validator::make($request->all(),[
+            'email' => 'required|email|exists:users,email',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors()
+            ],422);
+        }
+
+        try {
+
+            $this->sendPasswordResetOtp($request->email);
+
+            return response()->json([
+                'status' => true,
+                'message' => 'A new verification code has been sent to your email.'
+            ]);
+
+        } catch (\Exception $e) {
+
+            return response()->json([
+                'status' => false,
+                'message' => 'Unable to resend OTP.'
+            ],500);
+
+        }
+    }
+
 
     // Check supension Status 
     public function suspensionStatus(Request $request)

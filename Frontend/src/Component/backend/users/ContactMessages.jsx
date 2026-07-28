@@ -55,19 +55,8 @@ const ContactMessages = () => {
 
   return (
     <>
-      <HeaderUi />
 
-      <main>
-        <div className="container my-5">
-          <div className="row">
-
-            <div className="col-md-3">
-              <Sidebar />
-            </div>
-
-            <div className="col-md-9">
-
-              <div className="card shadow border-0 p-4">
+              <div className="p-4">
 
                 <h4 className="mb-4">
                   Contact Messages
@@ -165,11 +154,6 @@ const ContactMessages = () => {
 
               </div>
 
-            </div>
-
-          </div>
-        </div>
-      </main>
     </>
   );
 };
