@@ -24,6 +24,11 @@ export const ROLE_GROUPS = {
     ROLES.TEACHER,
   ],
 
+  ADMIN_ACCESS_ONLY: [
+    ROLES.ADMIN,
+    ROLES.SUPER_ADMIN
+  ],
+
   SUPER_ADMIN_ONLY: [
     ROLES.SUPER_ADMIN,
   ],

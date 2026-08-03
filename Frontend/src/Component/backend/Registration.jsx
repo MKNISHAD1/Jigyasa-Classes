@@ -124,7 +124,7 @@ const Registration = () => {
                                   value: 50,
                                   message: "Name cannot exceed 50 characters."
                               }
-                            })
+                            }) 
                             }
                             type="text" className={`form-control ${errors.name && 'is-invalid'}`} placeholder='Enter Your name here....' disabled={loading} />
                           {

@@ -217,7 +217,7 @@ Route::post('user-restore/{id}', [UserManagementController::class, 'restoreUser'
 // 🔹 Force delete users (only super_admin)
 Route::delete('user-force-delete/{id}', [UserManagementController::class, 'forceDeleteUser'])
     ->middleware(['auth:sanctum', 'checkrolehierarchy', 'role:super_admin']);
-
+ 
 
 
 

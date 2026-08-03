@@ -68,12 +68,28 @@ class UserManagementController extends Controller
     public function newuser(Request $request)
     {
         $validator = Validator::make($request->all(), [
-        'name' => 'required|string|max:255',
-        'username' => 'required|string|max:255|unique:users',
-        'email' => 'required|string|email|max:255|unique:users',
-        'password' => 'required|string|min:8',
-        'mobile_no' => 'required|string',
-        'role'      => 'required|in:student,teacher,moderator,admin'
+
+            'name' => 'required|string|min:3|max:50',
+            'username' => [
+                'required',
+                'min:4',
+                'max:50',
+                'regex:/^[A-Za-z0-9_]+$/',
+                'unique:users,username,NULL,id,deleted_at,NULL'
+            ],
+            'email' => 'required|string|email|max:255|unique:users,email,NULL,id,deleted_at,NULL',
+            'password' => [
+                'required',
+                'string',
+                'min:8',
+                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?#&]).+$/'
+            ],
+            'mobile_no' => [
+                'required',
+                'regex:/^[6-9][0-9]{9}$/',
+                'unique:users,mobile_no,NULL,id,deleted_at,NULL'
+            ], 
+            'role'      => 'required|in:student,teacher,moderator,admin'
         ]);
         if ($validator-> fails()) {
             return response()->json([

@@ -79,6 +79,7 @@ export const SIDEBAR_SECTIONS = [
                 title: "Deleted Users",
                 path: USER_ROUTES.DELETED,
                 icon: faTrash,
+                roles : ROLE_GROUPS.ADMIN_ACCESS_ONLY
             },
             {
                 title: "Suspended User",
