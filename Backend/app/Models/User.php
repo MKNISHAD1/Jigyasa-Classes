@@ -173,6 +173,10 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsTo(User::class, 'deleted_by');
     }
 
+    public function suspendedBy()
+    {
+        return $this->belongsTo(User::class, 'suspension_by');
+    }
 
 
 

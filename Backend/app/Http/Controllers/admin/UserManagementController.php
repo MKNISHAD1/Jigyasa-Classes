@@ -422,7 +422,7 @@ class UserManagementController extends Controller
     public function suspendedUsersList()
     {
         $users = User::where('is_suspended', true)
-            ->with('roles')
+            ->with(['roles','suspendedBy'])
             ->get();
 
         return response()->json([

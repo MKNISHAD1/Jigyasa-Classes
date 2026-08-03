@@ -163,7 +163,7 @@ class AuthenticationController extends Controller
                         if ($failedAttempts >= config('securitytimer.daily_attempt_limit') && !$user->is_suspended) { // this ony send one suspend mail
                             $user->update([
                                 'is_suspended' => true,
-                                'suspension_by' => 'System',
+                                'suspension_by' => null,
                                 'suspended_at' => now(),
                                 // 'suspended_until' => now()->addHours(24), // 1 day suspension working
                                 'suspended_until' => now()->addMinutes(config('securitytimer.suspension_time')),// testing

@@ -11,6 +11,7 @@ const ActionButtons = ({
   suspendLink,
   onSuspend,
   onRestore,
+  onLiftSuspension,
   showLabel = false,
 
   mobile = false,
@@ -117,6 +118,23 @@ if (mobile) {
                     </button>
                   )}
 
+                  {/* Lift Suspension Button */}
+
+                  {onLiftSuspension && (
+                    <button
+                      className="dropdown-action btn-restore"
+                      onClick={() => {
+                          onLiftSuspension();
+                          closeMenu();
+                      }}
+
+                    >
+                      <FontAwesomeIcon icon={faRotateLeft} />
+                      <span>Lift Suspenison</span>
+                    </button>
+                  )}
+
+                  {/* Redirect Suspension Link */}
                   {suspendLink && (
                     <Link
                       to={suspendLink}
@@ -204,6 +222,15 @@ if (mobile) {
         </button>
       )}
 
+      {onLiftSuspension && (
+        <button
+          onClick={onLiftSuspension}
+          className="action-btn btn-restore"
+          title="List Suspension"
+        >
+          <FontAwesomeIcon icon={faRotateLeft} /> {showLabel && <span>Lift Suspension</span>}
+        </button>
+      )}
     </div>
   );
 };

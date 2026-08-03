@@ -4,6 +4,7 @@ import Sidebar from "../../Common/Sidebar";
 import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { apiUrl, token } from "../../Common/http";
+import { USER_ROUTES } from "../../../constants/nevigation/routes";
 
 const SuspendUser = () => {
   const [user, setUser] = useState(null);
@@ -63,7 +64,7 @@ const SuspendUser = () => {
       if (!res.ok) throw new Error("Failed to suspend user");
 
       alert("✅ User suspended successfully");
-      navigate("/admin/users");
+      navigate(USER_ROUTES.LIST);
     } catch (err) {
       alert("❌ " + err.message);
     } finally {
