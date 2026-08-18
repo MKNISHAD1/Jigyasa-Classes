@@ -41,19 +41,7 @@ $fifth-color:#FFFFFF;
       font-weight: 600;
       padding: 20px 0 5px 0;
     }
-    .category-pill{
-      color: $fifth-color;
-      background-color: $primary-color;
-      padding: 5px ;
-      font-size: small;
-      font-weight: 600;
-      border-radius: 5px;
-      transition: .3s ease;
-      &:hover{
-        color: $primary-color;
-        background-color: $fifth-color;
-      }
-    }
+
     .rating-enrollcount{
       padding: 15px 0 10px 0;
       .icon{
@@ -139,6 +127,24 @@ $fifth-color:#FFFFFF;
 
   }
 }
+
+
+
+// Categort Pils 
+.category-pill{
+  color: $fifth-color;
+  background-color: $primary-color;
+  padding: 5px;
+  font-size: small;
+  font-weight: 600;
+  border-radius: 5px;
+  transition: .3s ease;
+  &:hover{
+    color: $primary-color;
+    background-color: $fifth-color;
+  }
+}
+
 
 // Course details 
 .Course-Details{
@@ -1488,6 +1494,102 @@ $fifth-color:#FFFFFF;
   }
 }
 
+
+
+////////////////* FAQ Page *////////////////
+
+
+
+/* FAQ Form */
+
+.faq-form {
+  width: 100%;
+}
+
+
+.input-with-icon {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  .input-icon {
+    width: 18px;
+    color: #1769d1;
+    flex-shrink: 0;
+  }
+
+  .form-control {
+    flex: 1;
+  }
+}
+
+
+/* FAQ Filters */
+
+.faq-filters {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+
+.faq-filter-type {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 140px;
+
+  svg {
+    color: #1769d1;
+    flex-shrink: 0;
+  }
+}
+
+
+.faq-search {
+  position: relative;
+  flex: 1;
+
+  svg {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #777;
+    z-index: 2;
+  }
+
+  .form-control {
+    padding-left: 38px;
+  }
+}
+
+
+/* FAQ Table */
+
+.faq-table {
+  width: 100%;
+}
+
+
+/* Mobile */
+
+@media (max-width: 768px) {
+
+  .faq-filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .faq-filter-type {
+    width: 100%;
+  }
+
+  .faq-search {
+    width: 100%;
+  }
+
+}
 
 
 

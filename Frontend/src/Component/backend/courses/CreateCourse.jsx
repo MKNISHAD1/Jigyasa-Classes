@@ -5,16 +5,20 @@ import { useForm } from "react-hook-form";
 import { apiUrl, token } from "../../Common/http";
 import { toast } from "react-toastify";
 import { AuthContext } from "../context/Auth";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import HeaderUi from "../../Common/CommonUI/HeaderUi";
 import FooterUi from "../../Common/CommonUI/FooterUi";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faA, faAngleRight, faArrowLeft, faChartSimple, faFile, faFileEdit, faFlag, faFolderClosed, faFolderTree, faGlobe, faIndianRupee, faPlug, faPlus, faRupee, faStar, faTrash, faUpload, faUserTie } from "@fortawesome/free-solid-svg-icons";
+import { COURSE_ROUTES, DASHBOARD_ROUTES } from "../../../constants/nevigation/routes";
+import { availabilityValidator } from "../../../utilities/validators";
 
-const CreateCourse = () => {
+const CreateCourse = () => { 
   const { hasAnyRole } = useContext(AuthContext);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const [teachers, setTeachers] = useState([]);
-  const [isDisable, setIsDisable] = useState(false);
   const [categories, setCategories] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
   const [thumbnailPreview, setThumbnailPreview] = useState(null);
@@ -29,8 +33,11 @@ const CreateCourse = () => {
     watch,
     reset,
     setError,
-    formState: { errors },
-  } = useForm();
+    formState: { errors, isSubmitting },
+  } = useForm({ 
+      mode:"onChange", // onBlur  = after leaving the field and debounce validator 
+      reValidateMode:"onChange",
+    });
 
   const selectedCategory = watch("category_id");
   const thumbnailFile = watch("thumbnail");
@@ -106,6 +113,7 @@ const CreateCourse = () => {
   useEffect(() => {
     const fetchTeachers = async () => {
       try {
+        setLoading(true);
         const res = await fetch(apiUrl + "teachers", {
           headers: {
             Accept: "application/json",
@@ -116,6 +124,8 @@ const CreateCourse = () => {
         if (result.status) setTeachers(result.teachers);
       } catch (err) {
         console.error("Failed to load teachers", err);
+      } finally{
+        setLoading(false);
       }
     };
     fetchTeachers();
@@ -123,30 +133,44 @@ const CreateCourse = () => {
 
   // ✅ Fetch categories
   useEffect(() => {
-    fetch(apiUrl + "categories", {
-      headers: { Authorization: `Bearer ${token()}` },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.status) setCategories(data.categories);
-      });
+    try{
+      setLoading(true);
+      fetch(apiUrl + "categories", {
+        headers: { Authorization: `Bearer ${token()}` },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.status) setCategories(data.categories);
+        });
+    } catch {
+      toast.error("Something Went Wrong, Please Try Again")
+    } finally{
+      setLoading(false);
+    }
   }, []);
 
   // ✅ Fetch subcategories based on category
   useEffect(() => {
     if (!selectedCategory) return;
-    fetch(`${apiUrl}categories/${selectedCategory}/subcategories`, {
-      headers: { Authorization: `Bearer ${token()}` },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.status) setSubcategories(data.subcategories);
-      });
+    try{
+      setLoading(true);
+      fetch(`${apiUrl}categories/${selectedCategory}/subcategories`, {
+        headers: { Authorization: `Bearer ${token()}` },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.status) setSubcategories(data.subcategories);
+        });
+    } catch{
+      toast.error("Something Went Wrong, Please Try Again")
+    } finally{
+      setLoading(false);
+    }
   }, [selectedCategory]);
 
 
   const onSubmit = async (formData) => {
-    setIsDisable(true);
+    setLoading(true);
 
     const payload = new FormData();
     for (const key in formData) {
@@ -197,7 +221,7 @@ const CreateCourse = () => {
         toast.success(result.message);
         reset(); // clear form
         setThumbnailPreview(null);
-        navigate("/admin/courses");
+        navigate(COURSE_ROUTES.MY_COURSE);
       } else {
         if (result.error) {
           for (const key in result.error) {
@@ -208,257 +232,348 @@ const CreateCourse = () => {
         }
       }
     } catch (err) {
-      console.error(err);
       toast.error("Server error, please try again later.");
     } finally {
-      setIsDisable(false);
+      setLoading(false);
     }
   };
 
+
   return (
-    <>
+    <> 
 
-      
-            <div className="p-5">
-              <div className="card shadow border-0 p-4">
-                <h4>Create New Course</h4>
-                <form onSubmit={handleSubmit(onSubmit)}>
+    {/* Breadcrumbs */}
+    <div className="d-flex justify-content-between align-items-center">
+      <section className="breadcrumb-section">
+        <h3>Create <span>Course</span></h3>
 
-                  
-                  {/* Title */}
-                  <div className="mb-3">
-                    <label className="form-label">Course Title (English) </label>
-                    <input
-                      {...register("title_en", { required: "This field is required" })}
-                      type="text"
-                      className={`form-control ${errors.title_en && "is-invalid"}`}
-                      placeholder="Enter course title in english"
-                    />
-                    {errors.title_en && (
-                      <p className="invalid-feedback">{errors.title_en.message}</p>
-                    )}
-                  </div>
-                   <div className="mb-3">
-                    <label className="form-label">Course Title (Hindi) </label>
-                    <input
-                      {...register("title_hi")}
-                      type="text"
-                      className={`form-control ${errors.title_hi && "is-invalid"}`}
-                      placeholder="कोर्स का शीर्षक"
-                    />
-                    {errors.title_hi && (
-                      <p className="invalid-feedback">{errors.title_hi.message}</p>
-                    )}
-                  </div>
+        <Link className='bread-link' to={DASHBOARD_ROUTES.DASHBOARD}>Home</Link>
+        <span><FontAwesomeIcon icon={faAngleRight}/></span>
+        
 
-                  {/* Description */}
-                  <div className="mb-3">
-                    <label className="form-label">Course Description (English)</label>
-                    <textarea
-                      {...register("description_en", {
-                        required: "This field is required",
-                      })}
-                      className={`form-control ${
-                        errors.description_en && "is-invalid"
-                      }`}
-                      placeholder="Enter course description in english"
-                    />
-                    {errors.description_en && (
-                      <p className="invalid-feedback">
-                        {errors.description_en.message}
-                      </p>
-                    )}
-                  </div>
-                    <div className="mb-3">
-                    <label className="form-label">Course Description (Hindi)</label>
-                    <textarea
-                      {...register("description_hi")}
-                      className={`form-control ${
-                        errors.description_hi && "is-invalid"
-                      }`}
-                      placeholder="कोर्स विवरण (हिंदी)"
-                    />
-                    {errors.description_hi && (
-                      <p className="invalid-feedback">
-                        {errors.description_hi.message}
-                      </p>
-                    )}
-                  </div>
+        <Link className='bread-link' to=""><span>Create Course</span></Link>
+      </section>
 
-                  {/* Category & Subcategory */}
-                  <div className="row">
-                    <div className="col-md-6 mb-3">
-                      <label className="form-label">Category</label>
-                      <select
-                        {...register("category_id", {
-                          required: "Select a category",
-                        })}
-                        className={`form-control ${
-                          errors.category_id && "is-invalid"
-                        }`}
-                      >
-                        <option value="">-- Select Category --</option>
-                        {categories.map((cat) => (
-                          <option key={cat.id} value={cat.id}>
-                            {cat.name[i18n.language] ?? cat.name?.en} {/* pick en/hi dynamically */}
-                          </option>
-                        ))}
+      <Link to={COURSE_ROUTES.MY_COURSE} className="edit-btn">
+      <FontAwesomeIcon icon={faArrowLeft} className="icon"/> Return
+      </Link>
+    </div>
 
-                        {/* this is react safe  gaurd logic will always rensder string value
-                        
-                        <option key={cat.id} value={cat.id}>
-                          {typeof cat.name[i18n.language] === "string"
-                          
-                            ? cat.name[i18n.language]
-                            : cat.name.en}
-                        </option> */}
-                      </select>
-                      {errors.category_id && (
-                        <p className="invalid-feedback">
-                          {errors.category_id.message}
-                        </p>
-                      )}
-                    </div>
 
-                    <div className="col-md-6 mb-3">
-                      <label className="form-label">Subcategory (Optional)</label>
-                      <select {...register("subcategory_id")} className="form-control">
-                        <option value="">-- Select Subcategory --</option>
-                        {subcategories.map((sub) => (
-                          <option key={sub.id} value={sub.id}>
-                            {sub.name[i18n.language] ?? sub.name?.en} {/* pick en/hi dynamically */}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  </div>
+    <div className="dashboard-card my-4">
 
-                  {/* Price */}
-                  <div className="mb-3">
-                    <label className="form-label">Price (Optional)</label>
-                    <input
-                      {...register("price")}
-                      type="number"
-                      className="form-control"
-                      placeholder="Enter price in INR"
-                    />
-                  </div>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          
+          {/* Title */}
+          <div className="row mb-3">
 
-                  {/* Language */}
+              {/* Title Eng */}
+            <div className="col-md-6">
+              <div className="mb-3">
+                <label className="form-label"> 
+                  <FontAwesomeIcon icon={faA} className="icon" />
+                  Course Title (English) <b className="text-danger">*</b>
+                </label>
+                <input
+                  {...register("title_en", { 
+                      required: "This field is required",
+                      minLength: {
+                            value: 5,
+                            message: "Course Title atleast be minimum 8 characters"
+                        },
+                      maxLength : {
+                        value : 255,
+                        message: "Course Title length exceeded, Kindly make it with in 255 characters"
+                      },
+                      validate :availabilityValidator(
+                        "courses", // Model name
+                        "title", // Feild Name
+                        null,
+                        null,
+                        "Course Name" // lable Name
+                      ) })}
+                  type="text"
+                  disabled={loading}
+                  className={`form-control ${errors.title_en && "is-invalid"}`}
+                  placeholder="Enter course title in english"
+                />
+                {errors.title_en && (
+                  <p className="invalid-feedback">{errors.title_en.message}</p>
+                )}
 
-                  <div className="mb-3">
+              </div>            
+            </div>
 
-                    <label className="form-label">
-                      Language
-                    </label>
+              {/* Title Hi */}
+            <div className="col-md-6">
+              <div className="mb-3">
+                <label className="form-label">
+                  <FontAwesomeIcon icon={faA} className="icon" />
+                  Course Title (Hindi) </label>
+                <input
+                  {...register("title_hi",{
+                    minLength: {
+                      value: 5,
+                            message: "Course Title atleast be minimum 8 characters"
+                        },
+                      maxLength : {
+                        value : 255,
+                        message: "Course Title length exceeded, Kindly make it with in 255 characters"
+                      }
+                  })}
+                  type="text"
+                  disabled={loading}
+                  className={`form-control ${errors.title_hi && "is-invalid"}`}
+                  placeholder="कोर्स का शीर्षक"
+                />
+                {errors.title_hi && (
+                  <p className="invalid-feedback">{errors.title_hi.message}</p>
+                )}
+              </div>
+            </div>
 
-                    <select
-                      {...register("language", {
-                        required: "Language is required"
-                      })}
-                      className={`form-control ${
-                        errors.language && "is-invalid"
-                      }`}
-                    >
+          </div>
 
-                      <option value="">
-                        Select Language
-                      </option>
+          {/* Description */}
+          <div className="row mb-3">
 
-                      <option value="English">
-                        English
-                      </option>
+            {/* Description Eng */}
+            <div className="col-md-6">
+              <div className="mb-3">
+                <label className="form-label">
+                  <FontAwesomeIcon icon={faFileEdit} className="icon" />
+                  Course Description (English) <b className="text-danger">*</b>
+                </label>
+                <textarea
+                  {...register("description_en", {
+                    required: "This field is required",
+                  })}
+                  rows={5}
+                  className={`form-control ${
+                    errors.description_en && "is-invalid"
+                  }`}
+                  placeholder="Enter course description in english"
+                  disabled={loading}
+                />
+                {errors.description_en && (
+                  <p className="invalid-feedback">
+                    {errors.description_en.message}
+                  </p>
+                )}
+              </div>              
+            </div>
 
-                      <option value="Hindi">
-                        Hindi
-                      </option>
+            {/* Description Hi */}
+            <div className="col-md-6">
+              <div className="mb-3">
+                <label className="form-label">
+                  <FontAwesomeIcon icon={faFileEdit} className="icon" />
+                  Course Description (Hindi)
+                </label>
+                <textarea
+                  {...register("description_hi")}
+                  className={`form-control ${
+                    errors.description_hi && "is-invalid"
+                  }`}
+                  rows={5}
+                  disabled={loading}
+                  placeholder="कोर्स विवरण (हिंदी)"
+                />
+                {errors.description_hi && (
+                  <p className="invalid-feedback">
+                    {errors.description_hi.message}
+                  </p>
+                )}
+              </div>              
+            </div>
 
-                      <option value="Both">
-                        Both
-                      </option>
+          </div>
 
-                    </select>
+          {/* Category & Subcategory */}        
+          <div className="row mb-3">
+            {/* Category */}
+            <div className="col-md-6 mb-3">
+              <label className="form-label">
+                <FontAwesomeIcon icon={faFolderClosed} className="icon" />
+                Category <b className="text-danger">*</b>
+              </label>
+              <select
+                {...register("category_id", {
+                  required: "Select a category",
+                })}
+                disabled={loading}
+                className={`form-control ${
+                  errors.category_id && "is-invalid"
+                }`}
+              >
+                <option value="">-- Select Category --</option>
+                {categories.map((cat) => (
+                  <option key={cat.id} value={cat.id}>
+                    {cat.name[i18n.language] ?? cat.name?.en} {/* pick en/hi dynamically */}
+                  </option>
+                ))}
+              </select>
+              {errors.category_id && (
+                <p className="invalid-feedback">
+                  {errors.category_id.message}
+                </p>
+              )}
+            </div>
 
-                    {errors.language && (
-                      <p className="invalid-feedback">
-                        {errors.language.message}
-                      </p>
-                    )}
+            {/* Sub Category */}
+            <div className="col-md-6 mb-e">
+              <label className="form-label">
+                <FontAwesomeIcon icon={faFolderTree} className="icon" />
+                Subcategory (Optional)
+                </label>
+              <select {...register("subcategory_id")} 
+              className="form-control"
+              disabled={loading}
+              >
+                <option value="">-- Select Subcategory --</option>
+                {subcategories.map((sub) => (
+                  <option key={sub.id} value={sub.id}>
+                    {sub.name[i18n.language] ?? sub.name?.en} {/* pick en/hi dynamically */}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-                  </div>
+          </div>
 
-                  {/* Difficulty Level */}
+          {/* Language and Difficulty Level */}
+          <div className="row mb-3">
 
-                  <div className="mb-3">
+            {/* Language */}
+            <div className="col-md-6">
+              <div className="mb-3">
 
-                    <label className="form-label">
-                      Difficulty Level
-                    </label>
+                <label className="form-label">
+                <FontAwesomeIcon icon={faGlobe} className="icon" />
 
-                    <select
-                      {...register("difficulty_level", {
-                        required:
-                          "Difficulty level is required"
-                      })}
-                      className={`form-control ${
-                        errors.difficulty_level &&
-                        "is-invalid"
-                      }`}
-                    >
+                  Language <b className="text-danger">*</b>
+                </label>
 
-                      <option value="">
-                        Select Difficulty
-                      </option>
+                <select
+                  {...register("language", {
+                    required: "Language is required"
+                  })}
+                  disabled={loading}
+                  className={`form-control ${
+                    errors.language && "is-invalid"
+                  }`}
+                >
 
-                      <option value="Beginner">
-                        Beginner
-                      </option>
+                  <option value="">
+                    Select Language
+                  </option>
 
-                      <option value="Intermediate">
-                        Intermediate
-                      </option>
+                  <option value="English">
+                    English
+                  </option>
 
-                      <option value="Advanced">
-                        Advanced
-                      </option>
+                  <option value="Hindi">
+                    Hindi
+                  </option>
 
-                      <option value="All Levels">
-                        All Levels
-                      </option>
+                  <option value="Both">
+                    Both
+                  </option>
 
-                    </select>
+                </select>
 
-                    {errors.difficulty_level && (
-                      <p className="invalid-feedback">
-                        {errors.difficulty_level.message}
-                      </p>
-                    )}
+                {errors.language && (
+                  <p className="invalid-feedback">
+                    {errors.language.message}
+                  </p>
+                )}
 
-                  </div>
+              </div>              
+            </div>
 
-                  {/* Highlights */}
+              {/* Difficulty Level */}
+            <div className="col-md-6">
+              <div className="mb-3">
 
-                  <div className="mb-3">
+                <label className="form-label">
+                <FontAwesomeIcon icon={faChartSimple} className="icon" />
+                  Difficulty Level <b className="text-danger">*</b>
+                </label>
 
-                    <label className="form-label">
-                      Course Highlights
-                    </label>
+                <select
+                  {...register("difficulty_level", {
+                    required:
+                      "Difficulty level is required"
+                  })}
+                  className={`form-control ${
+                    errors.difficulty_level &&
+                    "is-invalid"
+                  }`}
+                  disabled={loading}
+                >
 
-                    {highlights.map(
-                      (highlight, index) => (
+                  <option value="">
+                    Select Difficulty
+                  </option>
 
-                      <div
-                        className="row mb-2"
-                        key={index}
-                      >
+                  <option value="Beginner">
+                    Beginner
+                  </option>
 
-                        <div className="col-md-5">
+                  <option value="Intermediate">
+                    Intermediate
+                  </option>
 
+                  <option value="Advanced">
+                    Advanced
+                  </option>
+
+                  <option value="All Levels">
+                    All Levels
+                  </option>
+
+                </select>
+
+                {errors.difficulty_level && (
+                  <p className="invalid-feedback">
+                    {errors.difficulty_level.message}
+                  </p>
+                )}
+
+              </div>              
+            </div>
+          </div>
+
+
+          {/* Highlights */}
+          <label className="form-label">
+            <FontAwesomeIcon icon={faStar} className="icon" />
+             Course Highlights
+          </label>
+          <div className="box mb-4" style={{
+            backgroundColor:'#ebf1f5',
+            padding:'15px',
+            borderRadius:'10px'
+          }}>
+            <div className="mb-3">
+
+              {highlights.map(
+                (highlight, index) => (
+
+                <div
+                  className="row mb-2"
+                  key={index}
+                >
+                  {/* Enter Highlight  */}
+                  <div className="col-md-11">
+                      <div className="row">
+                        <div className="col-md-6">
                           <input
                             type="text"
                             className="form-control"
                             placeholder="Highlight (English)"
                             value={highlight.en}
+                            disabled={loading}
                             onChange={(e) =>
                               updateHighlight(
                                 index,
@@ -467,137 +582,203 @@ const CreateCourse = () => {
                               )
                             }
                           />
-
-                        </div>
-
-                        <div className="col-md-5">
-
-                          <input
-                            type="text"
-                            className="form-control"
-                            placeholder="Highlight (Hindi)"
-                            value={highlight.hi}
-                            onChange={(e) =>
-                              updateHighlight(
-                                index,
-                                "hi",
-                                e.target.value
-                              )
-                            }
-                          />
-
-                        </div>
-
-                        <div className="col-md-2">
-
-                          <button
-                            type="button"
-                            className="btn btn-danger w-100"
-                            onClick={() =>
-                              removeHighlight(index)
-                            }
-                          >
-                            ✕
-                          </button>
-
-                        </div>
-
                       </div>
 
-                    ))}
+                      <div className="col-md-6">
 
-                    <button
-                      type="button"
-                      className="btn btn-secondary"
-                      onClick={addHighlight}
-                    >
-                      Add Highlight
-                    </button>
-
-                  </div>
-
-
-                  {/* Teacher */}
-                  <div className="mb-3">
-                    <label className="form-label">Assign Teacher</label>
-                    <select
-                      {...register("teacher_id", {
-                        required: "Teacher is required",
-                      })}
-                      className={`form-control ${
-                        errors.teacher_id && "is-invalid"
-                      }`}
-                    >
-                      <option value="">Select a teacher</option>
-                      {teachers.map((teacher) => (
-                        <option key={teacher.id} value={teacher.id}>
-                          {teacher.name} ({teacher.email})
-                        </option>
-                      ))}
-                    </select>
-                    {errors.teacher_id && (
-                      <p className="invalid-feedback">
-                        {errors.teacher_id.message}
-                      </p>
-                    )}
-                  </div>
-
-                  {/* Status */}
-                  <div className="mb-3">
-                    <label className="form-label">Status</label>
-                    <select
-                      {...register("status", { required: "Select status" })}
-                      className={`form-control ${errors.status && "is-invalid"}`}
-                    >
-                      <option value="">-- Select Status --</option>
-                      <option value="draft">Draft</option>
-                      <option value="published">Published</option>
-                    </select>
-                    {errors.status && (
-                      <p className="invalid-feedback">{errors.status.message}</p>
-                    )}
-                  </div>
-
-                  {/* Thumbnail */}
-                  <div className="mb-3">
-                    <input
-                      {...register("thumbnail")}
-                      id="thumbnail-input"
-                      type="file"
-                      className="form-control"
-                      accept="image/*"
-                    />
-
-                    {thumbnailPreview && (
-                      <div className="mt-2">
-                        <img
-                          src={thumbnailPreview}
-                          alt="Thumbnail preview"
-                          style={{ maxHeight: "150px", borderRadius: "8px" }}
+                        <input
+                          type="text"
+                          className="form-control"
+                          placeholder="Highlight (Hindi)"
+                          value={highlight.hi}
+                          disabled={loading}
+                          onChange={(e) =>
+                            updateHighlight(
+                              index,
+                              "hi",
+                              e.target.value
+                            )
+                          }
                         />
-
-                        <button
-                          type="button"
-                          className="btn btn-sm btn-danger mt-2"
-                          onClick={removeThumbnail}
-                        >
-                          Remove Thumbnail
-                        </button>
                       </div>
-                    )}
                     </div>
 
-                  {/* Submit */}
-                  <button
-                    type="submit"
-                    className="btn btn-warning"
-                    disabled={isDisable}
-                  >
-                    {isDisable ? "Creating..." : "Create Course"}
-                  </button>
-                </form>
-              </div>
+                  </div>
+
+                  {/* Remove Hightlight */}
+                  {highlights.length > 1 && (
+                    <div className="col-md-1">
+
+                      <button
+                        type="button"
+                        className="btn btn-light"
+                        onClick={() =>
+                          removeHighlight(index)
+                        }
+                      >
+                        <FontAwesomeIcon icon={faTrash} className=" text-danger" />
+                      </button>
+
+                    </div>
+                  )}
+                </div>
+
+
+              ))}
+
+              {/* Add Highlights */}
+              <button
+                type="button"
+                className="btn w-100 mt-3"
+                style={{
+                  borderRadius:'5px',
+                  border:'2px dashed #1363b8'
+                }}
+                onClick={addHighlight}
+              >
+                <small className="text-primary fw-bold">
+                  <FontAwesomeIcon icon={faPlus}  /> Add Highlights
+                </small>
+              </button>
+
             </div>
+          </div>
+
+          {/* Teacher */}
+
+          {hasAnyRole(["moderator","admin","super_admin"]) 
+            && (
+              <div className="mb-3">
+                <label className="form-label">
+                  <FontAwesomeIcon icon={faUserTie} className="icon" />
+                  Assign Teacher (Optional)</label>
+                <select
+                  {...register("teacher_id")}
+                  className={`form-control ${
+                    errors.teacher_id && "is-invalid"
+                  }`}
+                >
+                  <option value="">Select a teacher</option>
+                  {teachers.map((teacher) => (
+                    <option key={teacher.id} value={teacher.id}>
+                      {teacher.name} ({teacher.email})
+                    </option>
+                  ))}
+                </select>
+                {errors.teacher_id && (
+                  <p className="invalid-feedback">
+                    {errors.teacher_id.message}
+                  </p>
+                )}
+              </div>
+          )}
+
+          {/* Price & Status*/}
+          <div className=" row mb-4">
+
+            {/* Price */}
+            <div className="col-md-6">
+              <label className="form-label">
+                <FontAwesomeIcon icon={faIndianRupee} className="icon" />
+                Price (Optional)</label>
+              <input
+                {...register("price")}
+                type="number"
+                min={0}
+                max={999999}
+                step={1}
+                disabled={loading}
+                className="form-control"
+                placeholder="leave empty for free course"
+              />
+            </div>
+
+            {/* Status */}
+            <div className="col-md-6">
+              <label className="form-label"> 
+                <FontAwesomeIcon icon={faFlag} className="icon" />
+                Course Status <b className="text-danger">*</b></label>
+              <select
+                {...register("status", { required: "Select status" })}
+                className={`form-control ${errors.status && "is-invalid"}`}
+              >
+                <option value="">-- Select Status --</option>
+                <option value="draft"> Draft</option>
+                <option value="published">Published</option>
+              </select>
+              {errors.status && (
+                <p className="invalid-feedback">{errors.status.message}</p>
+              )}
+            </div>
+
+          </div>
+
+          {/* Thumbnail */}
+          <div className="mb-4">
+            <label className="form-label"> 
+              <FontAwesomeIcon icon={faUpload} className="icon" />
+              Upload Thumbnail</label>
+            <input
+              {...register("thumbnail")}
+              id="thumbnail-input"
+              type="file"
+              disabled={loading}
+              className="form-control"
+              accept="image/*"
+            />
+            <small className="text-muted">Allowed Formate : JPG, PNG, JPEG (Max Size : 2 MB)</small>
+
+            {thumbnailPreview && (
+              <div className="mt-3 text-center">
+                <img
+                  src={thumbnailPreview}
+                  alt="Thumbnail preview"
+                  style={{ maxHeight: "200px", borderRadius: "10px" }}
+                /> <br />
+
+                <button
+                  type="button"
+                  className="btn btn-sm btn-danger mt-2"
+                  onClick={removeThumbnail}
+                >
+                  <FontAwesomeIcon icon={faTrash}/> Remove Thumbnail
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Submit */}
+          <button
+              type="submit"
+              className="btn submit-btn"
+              disabled={loading || isSubmitting}  
+          >
+              {loading ? (
+
+                <>
+                  <span
+                    className="spinner-border spinner-border-sm me-2 text-primary"
+                    role="status"
+                  />
+
+                    <span className='text-primary'>Creating Course... </span>
+
+                  </>
+
+                  ) : (
+
+                    <>
+                    <FontAwesomeIcon icon={faPlus}/> Create Course
+                    </>
+
+                )}
+          </button>
+
+        </form>
+
+        </div>
+
+
 
     </>
   );

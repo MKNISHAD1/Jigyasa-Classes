@@ -15,8 +15,7 @@ class FaqController extends Controller
     {
         $locale = $request->query('locale', app()->getLocale());
 
-        $faqs = Faq::where('status', true)
-            ->latest()
+        $faqs = Faq::latest()
             ->get()
             ->map(fn ($faq) => $this->formatFaqResponse($faq, $locale));
 

@@ -2,23 +2,28 @@ import React, { useEffect, useState } from 'react'
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { toast } from 'react-toastify';
 import { apiUrl, token } from '../../Common/http';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import i18n from '../../../i18n/i18n';
 import HeaderUi from '../../Common/CommonUI/HeaderUi';
 import FooterUi from '../../Common/CommonUI/FooterUi';
+import { COURSE_ROUTES, DASHBOARD_ROUTES } from '../../../constants/nevigation/routes';
+import { faAngleRight, faArrowLeft, faGripVertical, faSave } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const CourseModuleReorder = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
+  const navigate = useNavigate(); 
 
   const [modules, setModules] = useState([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [hasChanges, setHasChanges] = useState(false);
 
-  // Fetch lessons
+  // Fetch Module
   useEffect(() => {
     const fetchModule = async () => {
       try {
+        setLoading(true);
         const res = await fetch(`${apiUrl}course/${id}/modules`, {
           headers: { Authorization: `Bearer ${token()}` },
         });
@@ -38,11 +43,11 @@ const CourseModuleReorder = () => {
         setModules(modulesData);
         
         } else {
-          toast.error(data.message || "Failed to fetch lessons");
+          toast.error(data.message || "Failed to fetch modules");
         }
       } catch (err) {
         console.error(err);
-        toast.error("Server error while fetching lessons");
+        toast.error("Server error while fetching modules");
       } finally {
         setLoading(false);
       }
@@ -65,6 +70,7 @@ const CourseModuleReorder = () => {
     }));
 
     setModules(reordered);
+    setHasChanges(true);
   };
 
   // Save new order to backend
@@ -86,6 +92,7 @@ const CourseModuleReorder = () => {
       const data = await res.json();
       if (data.message) {
         toast.success(data.message);
+        setHasChanges(false);
         navigate(`/admin/course/${id}/course-modules`);
       } else {
         toast.error("Failed to save lesson order");
@@ -98,16 +105,55 @@ const CourseModuleReorder = () => {
     }
   };
 
-  if (loading) return <p>Loading lessons...</p>;
+if (loading) {
+  return (
+    <div className="dashboard-card mt-4">
+      <div
+        className="d-flex flex-column justify-content-center align-items-center"
+        style={{ minHeight: "350px" }}
+      >
+        <div
+          className="spinner-border text-success "
+          style={{ width: "3rem", height: "3rem" }}
+        />
+
+        <h5 className="mt-3 mb-1">Fetching Course Module...</h5>
+
+        <small className="text-muted">
+          Please wait while we fetch your course module.
+        </small>
+      </div>
+    </div>
+  );
+}
 
   return (
     <>
 
-      <div className="container p-5">
-        <h4 className="mb-3">Reorder Modules </h4>
+      {/* Breadcrumbs */}
+      <div className="d-flex justify-content-between align-items-center">
+          <section className="breadcrumb-section">
+              <h3>Course <span>Structure</span></h3>
+
+              <Link className='bread-link' to=""><span>My Course</span></Link>
+              <span><FontAwesomeIcon icon={faAngleRight}/></span>
+              <Link className='bread-link' to={`/admin/course/${id}/course-modules`}><span>Module</span></Link>
+              <span><FontAwesomeIcon icon={faAngleRight}/></span>
+              <Link className='bread-link' to="">Module Reorder</Link>
+
+          </section>
+
+          <Link to={`/admin/course/${id}/course-modules`} className="edit-btn">
+          <FontAwesomeIcon icon={faArrowLeft} className="icon"/>  Return
+          </Link>
+      </div>
+
+      <div className="dashboard-card my-4">
+        <h4 className="mb-1 text-center"><span>Reorder</span> Modules </h4>
+        <p className='text-muted text-center'>Kindly drag and drop modules to change their order</p>
 
         <DragDropContext onDragEnd={handleDragEnd}>
-          <Droppable droppableId="lessons-droppable">
+          <Droppable droppableId="modules-droppable">
             {(provided) => (
               <div
                 {...provided.droppableProps}
@@ -129,13 +175,14 @@ const CourseModuleReorder = () => {
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
                       >
-                        <span>
-                          {module.order}. {module.title?.[i18n.language] || module.title?.en}
+                        <span className="text-capitalize">
+                        <FontAwesomeIcon icon={faGripVertical} className='mx-2'/>  {module.order} . {module.title?.[i18n.language] || module.title?.en}
                         </span>
 
-                        <span className="badge bg-primary ">
-                          {module.lessons_count} Lessons
-                      </span>
+                        <span className="badge bg-primary module-lesson-count">
+                          {module.lessons_count}{" "}
+                          {module.lessons_count === 1 ? "Lesson" : "Lessons"}
+                        </span>
                       </div>
                     )}
                   </Draggable>
@@ -147,11 +194,30 @@ const CourseModuleReorder = () => {
         </DragDropContext>
 
         <button
-          className="btn btn-success mt-3"
+          className="btn green-btn mt-3"
           onClick={saveOrder}
-          disabled={saving}
+          disabled={saving || !hasChanges}
         >
-          {saving ? "Saving..." : "Save Order"}
+          {saving ?  (
+          
+              <>
+                <span
+                  className="spinner-border spinner-border-sm me-2 text-light"
+                  role="status"
+                />
+
+                  <span className='text-light'>Saving Order... </span>
+
+                </>
+
+                ) : (
+
+                  <> 
+
+                  <FontAwesomeIcon icon={faSave}/> Save Order
+                  </>
+
+              )}
         </button>
       </div>
 

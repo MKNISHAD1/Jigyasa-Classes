@@ -82,7 +82,7 @@ const MobileCourseCard = ({
                       ?
                       "badge-published text-success"
                       :
-                      "badge-draft text-secondary"
+                      "badge-draft"
                       }`}>
                          {course.status}
                       </span>

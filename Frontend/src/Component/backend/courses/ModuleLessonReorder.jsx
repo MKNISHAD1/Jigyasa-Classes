@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import {DragDropContext,Droppable,Draggable} from "@hello-pangea/dnd";
-import {useParams,useNavigate} from "react-router-dom";
+import {useParams,useNavigate, Link} from "react-router-dom";
 import {apiUrl,token} from "../../Common/http";
 import { toast } from "react-toastify";
 import i18n from "../../../i18n/i18n";
 import HeaderUi from "../../Common/CommonUI/HeaderUi";
 import FooterUi from "../../Common/CommonUI/FooterUi";
+import { faAngleRight, faArrowLeft, faGripVertical, faSave } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const ModuleLessonReorder = () => {
 
@@ -14,13 +16,15 @@ const ModuleLessonReorder = () => {
   const [lessons, setLessons] = useState([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [hasChanges, setHasChanges] = useState(false);
+  
 
   useEffect(() => {
 
     const fetchLessons = async () => {
 
       try {
-
+        setLoading(true);
         const res = await fetch(
           `${apiUrl}course/${id}/module/${moduleId}/lessons`,
           {
@@ -90,6 +94,7 @@ const ModuleLessonReorder = () => {
     );
 
   setLessons(reordered);
+  setHasChanges(true);
 
 };
 
@@ -125,10 +130,10 @@ const saveOrder = async () => {
     if (data.status) {
 
       toast.success(data.message);
+      setHasChanges(false);
+      
+      navigate(`/admin/course/${id}/course-modules`);
 
-      navigate(
-        `/admin/course/${id}/course-modules`
-      );
 
     }
 
@@ -137,7 +142,7 @@ const saveOrder = async () => {
     console.error(error);
 
     toast.error(
-      "Failed to save order"
+      "Failed while saving lesson order"
     );
 
   } finally {
@@ -148,19 +153,54 @@ const saveOrder = async () => {
 
 };
 
-if (loading)
-  return <p>Loading lessons...</p>;
+if (loading) {
+  return (
+    <div className="dashboard-card mt-4">
+      <div
+        className="d-flex flex-column justify-content-center align-items-center"
+        style={{ minHeight: "350px" }}
+      >
+        <div
+          className="spinner-border text-success "
+          style={{ width: "3rem", height: "3rem" }}
+        />
+
+        <h5 className="mt-3 mb-1">Fetching Course Lessons...</h5>
+
+        <small className="text-muted">
+          Please wait while we fetch your lessons.
+        </small>
+      </div>
+    </div>
+  );
+}
 
 return (
 
   <>
 
 
-    <div className="container p-5">
+      {/* Breadcrumbs */}
+      <div className="d-flex justify-content-between align-items-center">
+          <section className="breadcrumb-section">
+              <h3>Course <span>Structure</span></h3>
 
-      <h4 className="mb-3">
-        Reorder Lessons
-      </h4>
+              <Link className='bread-link' to=""><span>My Course</span></Link>
+              <span><FontAwesomeIcon icon={faAngleRight}/></span>
+              <Link className='bread-link' to={`/admin/course/${id}/course-modules`}><span>Module</span></Link>
+              <span><FontAwesomeIcon icon={faAngleRight}/></span>
+              <Link className='bread-link' to="">Lesson Reorder</Link>
+
+          </section>
+
+          <Link to={`/admin/course/${id}/course-modules`} className="edit-btn">
+          <FontAwesomeIcon icon={faArrowLeft} className="icon"/>  Return
+          </Link>
+      </div>
+
+    <div className="dashboard-card my-4">
+      <h4 className="mb-1 text-center"><span>Reorder</span> Lessons </h4>
+      <p className='text-muted text-center'>Kindly drag and drop lessons to change their order</p>
 
       <DragDropContext
         onDragEnd={handleDragEnd}
@@ -195,10 +235,12 @@ return (
                       {...provided.dragHandleProps}
                       className="list-group-item"
                     >
-
-                      {lesson.order}.
+                    <span className="text-capitalize">
+                      <FontAwesomeIcon icon={faGripVertical} className='mx-2'/> 
+                      {lesson.order} . 
                       {" "}
                       {lesson.title?.[i18n.language] || lesson.title?.en}
+                    </span>
 
                     </div>
 
@@ -221,11 +263,28 @@ return (
       <button
         className="btn btn-success mt-3"
         onClick={saveOrder}
-        disabled={saving}
+        disabled={saving || !hasChanges}
       >
-        {saving
-          ? "Saving..."
-          : "Save Order"}
+        {saving ?  (
+        
+            <>
+              <span
+                className="spinner-border spinner-border-sm me-2 text-light"
+                role="status"
+              />
+
+                <span className='text-light'>Saving Order... </span>
+
+              </>
+
+              ) : (
+
+                <> 
+
+                <FontAwesomeIcon icon={faSave}/> Save Order
+                </>
+
+            )}
       </button>
 
     </div>

@@ -1,26 +1,36 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { apiUrl, token } from "../../Common/http";
 import Header from "../../Common/Header";
 import Sidebar from "../../Common/Sidebar";
 import { toast } from "react-toastify";
 import HeaderUi from "../../Common/CommonUI/HeaderUi";
 import FooterUi from "../../Common/CommonUI/FooterUi";
+import { faA, faAngleRight, faArrowLeft, faCamera, faChartSimple, faFileEdit, faFlag, faFloppyDisk, faFolderClosed, faFolderTree, faGlobe, faIndianRupee, faL, faPlus, faStar, faTrash, faUpload } from "@fortawesome/free-solid-svg-icons";
+import { COURSE_ROUTES, DASHBOARD_ROUTES } from "../../../constants/nevigation/routes";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { availabilityValidator } from "../../../utilities/validators";
+import { AuthContext } from "../context/Auth";
 
 const UpdateCourse = () => {
+  
+  const { hasAnyRole } = useContext(AuthContext);
   const { id } = useParams();
   const navigate = useNavigate();
 
   const [course, setCourse] = useState(null);
   const [preview, setPreview] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [loadingPreview, setLoadingPreview] = useState(false);
   const [categories, setCategories] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
   const [teachers, setTeachers] = useState([]);
-  const [isChanged, setIsChanged] = useState(false);
+  const [originalHighlights, setOriginalHighlights] = useState([]);
+  const [selectedFile, setSelectedFile] = useState(null);
 
-  const [highlights, setHighlights] = useState([ { en: "", hi: ""} ]);
+  const [highlights, setHighlights] = useState([]);
 
 
   const {
@@ -29,8 +39,11 @@ const UpdateCourse = () => {
     reset,
     setValue,
     watch,
-    formState: { errors, isSubmitting },
-  } = useForm();
+    formState: { errors, isSubmitting, isDirty },
+  } = useForm({
+      mode:"onChange", // onBlur  = after leaving the field and debounce validator 
+      reValidateMode:"onChange",
+    });
 
   const selectedCategory = watch("category_id");
 
@@ -38,6 +51,7 @@ const UpdateCourse = () => {
   useEffect(() => {
     const fetchCourse = async () => {
       try {
+        setLoading(true);
         const res = await fetch(apiUrl + "view-course/" + id, {
           headers: {
             Accept: "application/json",
@@ -48,6 +62,7 @@ const UpdateCourse = () => {
 
         if (result.status) {
           setCourse(result.course);
+
           // ✅ Use full URL directly
           setPreview(result.course.thumbnail ? result.course.thumbnail : null);
 
@@ -77,23 +92,17 @@ const UpdateCourse = () => {
           });
 
           // Set Highlight function
-          setHighlights(
-            result.course.highlights?.en?.length
-              ? result.course.highlights.en.map(
-                  (enText, index) => ({
-                    en: enText,
-                    hi:
-                      result.course.highlights?.hi?.[index]
-                      || ""
-                  })
-                )
-              : [
-                  {
-                    en: "",
-                    hi: ""
-                  }
-                ]
-          );
+          const fetchedHighlights =
+              result.course.highlights?.en?.length
+                  ? result.course.highlights.en.map((enText, index) => ({
+                      en: enText,
+                      hi: result.course.highlights?.hi?.[index] || ""
+                  }))
+                  : [];
+
+          setHighlights(fetchedHighlights);
+          setOriginalHighlights(fetchedHighlights);
+
 
           // Fetch subcategories for this course
           if (result.course.category?.id) {
@@ -114,8 +123,9 @@ const UpdateCourse = () => {
           toast.error("Failed to load course");
         }
       } catch (err) {
-        console.error(err);
         toast.error("Something went wrong while fetching course");
+      } finally{
+        setLoading(false);
       }
     };
 
@@ -180,6 +190,12 @@ const UpdateCourse = () => {
     fetchSubs();
   }, [selectedCategory]);
 
+const highlightsChanged =
+    JSON.stringify(highlights) !==
+    JSON.stringify(originalHighlights);
+
+const thumbnailChanged = selectedFile !== null;
+
 
   // ✅ Fetch teachers
   useEffect(() => {
@@ -196,35 +212,60 @@ const UpdateCourse = () => {
         console.log("✅ Teachers fetched:", data.teachers);
       } catch (err) {
         console.error("❌ Error fetching teachers:", err);
-      }
+      } 
     };
     fetchTeachers();
   }, []);
 
-
-  // Track form changes to enable Update button
-  useEffect(() => {
-    const subscription = watch((value, { type }) => {
-      if (type === "change") setIsChanged(true);
-    });
-    return () => subscription.unsubscribe();
-  }, [watch]);
+// Destructer for profile img
+const {
+    onChange : thumbnailOnChange,
+    ...thumbnailRegister
+} = register("thumbnail");
 
   // Handle file preview
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setLoadingPreview(true);
-      const newPreview = URL.createObjectURL(file);
-      setTimeout(() => {
-        setPreview(newPreview);
-        setLoadingPreview(false);
-        setIsChanged(true);
-      }, 300); // slight delay for smooth loading animation
-    } else {
-       setPreview(course?.thumbnail || null);
-    }
-  };
+const handleFileChange = (e) => {
+  const file = e.target.files[0];
+
+  if (!file) {
+    setSelectedFile(null);
+    setPreview(course?.thumbnail || null);
+
+    return;
+  }
+
+  const allowedTypes = [
+    "image/jpeg",
+    "image/jpg",
+    "image/png",
+  ];
+
+  if (!allowedTypes.includes(file.type)) {
+    toast.error("Only JPG, JPEG and PNG files are allowed.");
+    return;
+  }
+
+  if (file.size > 2 * 1024 * 1024) {
+    toast.error("Maximum thumbnail size is 2 MB.");
+    return;
+  }
+  
+  setSelectedFile(file);
+
+  if (preview?.startsWith("blob:")) {
+    URL.revokeObjectURL(preview);
+  }
+
+  setLoadingPreview(true);
+
+  const newPreview = URL.createObjectURL(file);
+
+  setTimeout(() => {
+    setPreview(newPreview);
+    setLoadingPreview(false);
+  }, 300);
+};
+
 
   // Highlights Functions 
 
@@ -248,8 +289,6 @@ const UpdateCourse = () => {
       )
     );
 
-    setIsChanged(true);
-
   };
 
   const updateHighlight = (
@@ -263,8 +302,6 @@ const UpdateCourse = () => {
     updated[index][field] = value;
 
     setHighlights(updated);
-
-    setIsChanged(true);
 
   };
 
@@ -321,6 +358,7 @@ const UpdateCourse = () => {
 
 
     try {
+      setSaving(true);
       const res = await fetch(apiUrl + "update-course/" + id, {
         method: "POST",
         headers: {
@@ -338,354 +376,592 @@ const UpdateCourse = () => {
         // Update UI immediately
         setCourse(result.course);
         setPreview(result.course.thumbnail || null);
-        setIsChanged(false);
 
         setTimeout(() => {
-          navigate("/admin/courses");
+          navigate(COURSE_ROUTES.MY_COURSE);
         }, 800);
       } else {
 
         toast.error(result.message || "Update failed");
       }
     } catch (err) {
-      console.error(err);
       toast.error("Something went wrong");
+    }
+    finally{
+      setSaving(false);
     }
   };
 
+if (loading) {
+  return (
+    <div className="dashboard-card mt-4">
+      <div
+        className="d-flex flex-column justify-content-center align-items-center"
+        style={{ minHeight: "350px" }}
+      >
+        <div
+          className="spinner-border text-success "
+          style={{ width: "3rem", height: "3rem" }}
+        />
+
+        <h5 className="mt-3 mb-1">Fetching Course Information...</h5>
+
+        <small className="text-muted">
+          Please wait while we fetch your course information.
+        </small>
+      </div>
+    </div>
+  );
+}
 
 
   return (
     <>
 
-              <div className="card shadow border-0 p-4" style={{background:'#ebf1f5',height:'100%'}}>
-                <h4 className="mb-3 text-center">Update Course</h4>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                  {/* Title */}
-                  <div className="mb-3">
-                    <label className="form-label">Title</label>
-                    <input
-                      {...register("title_en", { required: "Title is required" })}
-                      className={`form-control ${errors.title_en && "is-invalid"}`}
-                    />
-                    {errors.title_en && (
-                      <p className="invalid-feedback">{errors.title_en.message}</p>
-                    )}
-                  </div>
+      {/* Breadcrumbs */}
+      <div className="d-flex justify-content-between align-items-center">
+          <section className="breadcrumb-section">
+              <h3>Edit <span>Course</span></h3>
 
-                   <div className="mb-3">
-                    <label className="form-label">Title (Hindi)</label>
-                    <input
-                      {...register("title_hi")}
-                      className={`form-control ${errors.title_hi && "is-invalid"}`}
-                    />
-                    {errors.title_hi && (
-                      <p className="invalid-feedback">{errors.title_hi.message}</p>
-                    )}
-                  </div>
+              <Link className='bread-link' to={DASHBOARD_ROUTES.DASHBOARD}>Home</Link>
+              <span><FontAwesomeIcon icon={faAngleRight}/></span>
+              <Link className='bread-link' to={COURSE_ROUTES.MY_COURSE}>My Course</Link>
+              <span><FontAwesomeIcon icon={faAngleRight}/></span>
+              <Link className='bread-link' to=""><span>Edit Course</span></Link>
+
+          </section>
+
+          <Link to={COURSE_ROUTES.MY_COURSE} className="edit-btn">
+          <FontAwesomeIcon icon={faArrowLeft} className="icon"/>  Return
+          </Link>
+      </div>
 
 
-                  {/* Description */}
-                  <div className="mb-3">
-                    <label className="form-label">Description</label>
-                    <textarea
-                      {...register("description_en")}
-                      className="form-control"
-                      rows="4"
-                    />
-                  </div>
+      <div className="dashboard-card my-4">                
+        <form onSubmit={handleSubmit(onSubmit)}>
 
-                  <div className="mb-3">
-                    <label className="form-label">Description (Hindi)</label>
-                    <textarea
-                      {...register("description_hi")}
-                      className="form-control"
-                      rows="4"
-                    />
-                  </div>
 
-                  {/* Highlights */}
+          {/* Thumbnail */}
+          <div className="my-4">
 
-                  <div className="mb-3">
-                    <label className="form-label">
-                      Course Highlights
-                    </label>
+            <label className="form-label"> 
+              <FontAwesomeIcon icon={faUpload} className="icon" />
+              Update Thumbnail</label>
 
-                    {highlights.map(
-                      (highlight, index) => (
+            <small className="text-muted">Supported Formates : JPG, PNG, JPEG • Maximum size : 2 MB</small>
 
-                        <div
-                          className="row mb-2"
-                          key={index}
-                        >
+            <div className="mt-3 text-center position-relative">
+              {loadingPreview ? (
+                <div
+                  className="spinner-border text-primary"
+                  style={{ width: "3rem", height: "3rem" }}
+                  role="status"
+                ></div>
+              ) : (
+                <>
+                  <p className="mb-2 fw-semibold text-secondary">
+                    {selectedFile
+                      ? "Selected Thumbnail"
+                      : "Current Thumbnail"}
+                  </p>
 
-                          <div className="col-md-5">
+                  {/* Thumbnail img */}
+                  <img
+                    src={
+                      preview
+                        ? preview
+                        : course?.thumbnail
+                        ? course.thumbnail
+                        : "/images/default-thumbnail.jpg"
+                    }
+                    alt="Course Thumbnail"
+                    className="rounded border"
+                    width="180"
+                    style={{ objectFit: "cover" }}
+                  />
 
-                            <input
-                              type="text"
-                              className="form-control"
-                              placeholder="Highlight (English)"
-                              value={highlight.en}
-                              onChange={(e) =>
-                                updateHighlight(
-                                  index,
-                                  "en",
-                                  e.target.value
-                                )
-                              }
-                            />
+                  {/* Show File Name */}
+                  {selectedFile && (
+                    <small className="text-success d-block mt-2">
+                      Selected File: {selectedFile.name}
+                    </small>
+                  )}
 
-                          </div>
-
-                          <div className="col-md-5">
-
-                            <input
-                              type="text"
-                              className="form-control"
-                              placeholder="Highlight (Hindi)"
-                              value={highlight.hi}
-                              onChange={(e) =>
-                                updateHighlight(
-                                  index,
-                                  "hi",
-                                  e.target.value
-                                )
-                              }
-                            />
-
-                          </div>
-
-                          <div className="col-md-2">
-
-                            <button
-                              type="button"
-                              className="btn btn-danger w-100"
-                              onClick={() =>
-                                removeHighlight(index)
-                              }
-                            >
-                              ✕
-                            </button>
-
-                          </div>
-
-                        </div>
-
-                      )
-                    )}
-
+                  {/* Remove  thumbnail button */}
+                  {selectedFile && (
                     <button
                       type="button"
-                      className="btn btn-secondary"
-                      onClick={addHighlight}
+                      className="btn btn-sm btn-outline-danger mt-2"
+
+                      onClick={() => {
+                          if (preview?.startsWith("blob:")) {
+                              URL.revokeObjectURL(preview);
+                          }
+
+                          setSelectedFile(null);
+
+                          setPreview(course?.thumbnail || null);
+
+                          setValue("thumbnail", null, {
+                              shouldDirty: false,
+                          });
+                      }}
                     >
-                      Add Highlight
+                      <FontAwesomeIcon icon={faTrash} /> Remove Thumbnail
                     </button>
+                  )}
+                </>
+              )}
+            </div>
 
-                  </div>
+            <div className="text-center">
+              <input
+              id="course_thumbnail"
+                type="file"
+                hidden
+                accept="image/*"
+                {...thumbnailRegister}
+                onChange={(e) => {
+                  thumbnailOnChange(e);
+                  handleFileChange(e);
+                }}
+                className="form-control"
+                disabled={saving}
+              />
+              <label
+                  htmlFor="course_thumbnail"
+                  className="btn btn-primary my-3"
+              >
+                <FontAwesomeIcon icon={faCamera} className="me-2"/>
+                {selectedFile ? "Change Thumbnail" : "Choose Thumbnail"}
+              </label> <br />
+            </div>
 
-                  {/* Price */}
-                  <div className="mb-3">
-                    <label className="form-label">Price</label>
-                    <input
-                      type="number"
-                      {...register("price")}
-                      className="form-control"
-                    />
-                  </div>
+          </div>
 
-                  {/* Category */}
-                  <div className="mb-3">
-                    <label className="form-label">Category</label>
-                    <select {...register("category_id")} className="form-control">
-                      <option value="">-- Select Category --</option>
-                      {categories.map((cat) => (
-                        <option key={cat.id} value={cat.id}>
-                          {cat.name?.en}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+          {/* Title Eng*/}
+          <div className="mb-4">
+            <label className="form-label"> 
+              <FontAwesomeIcon icon={faA} className="icon" />
+              Course Title (English)
+            </label>            
+            <input
+              {...register("title_en", { required: "Title is required",
 
-                  {/* Subcategory */}
-                  <div className="mb-3">
-                    <label className="form-label">Subcategory</label>
-                    <select {...register("subcategory_id")} className="form-control">
-                      <option value="">-- Select Subcategory --</option>
-                      {subcategories.map((sub) => (
-                        <option key={sub.id} value={sub.id}>
-                          {sub.name?.en}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+               minLength: {
+                  value: 5,
+                  message: "Course Title atleast be minimum 8 characters"
+                },
+                maxLength : {
+                  value : 255,
+                  message: "Course Title length exceeded, Kindly make it with in 255 characters"
+                },
+                validate :availabilityValidator(
+                  "courses", // Model name
+                  "title", // Feild Name
+                  course.id, // self id 
+                  course.title, // self title
+                  "Course Name" // lable Name
+                ) })}
+              className={`form-control ${errors.title_en && "is-invalid"}`}
+              disabled={saving}
+            />
+            {errors.title_en && (
+              <p className="invalid-feedback">{errors.title_en.message}</p>
+            )}
+          </div>
 
-                  {/* Languages */}
-                  <div className="mb-3">
-                    <label className="form-label">
-                      Language
-                    </label>
+          {/* Title Hindi */}
 
-                    <select
-                      {...register("language")}
-                      className="form-control"
-                    >
-                      <option value="">
-                        Select Language
-                      </option>
-
-                      <option value="English">
-                        English
-                      </option>
-
-                      <option value="Hindi">
-                        Hindi
-                      </option>
-
-                      <option value="Both">
-                        Both
-                      </option>
-                    </select>
-                  </div>
-                    
-                  {/* Difficulty Level */}
-                  <div className="mb-3">
-                    <label className="form-label">
-                      Difficulty Level
-                    </label>
-
-                    <select
-                      {...register("difficulty_level")}
-                      className="form-control"
-                    >
-                      <option value="">
-                        Select Difficulty
-                      </option>
-
-                      <option value="Beginner">
-                        Beginner
-                      </option>
-
-                      <option value="Intermediate">
-                        Intermediate
-                      </option>
-
-                      <option value="Advanced">
-                        Advanced
-                      </option>
-
-                      <option value="All Levels">
-                        All Levels
-                      </option>
-                    </select>
-                  </div>
-
-                  {/* Teacher */}
-                  <div className="mb-3">
-                    <label className="form-label">Teacher</label>
-                    <select
-                      {...register("teacher_id", { required: "Teacher is required" })}
-                      className={`form-control ${errors.teacher_id && "is-invalid"}`}
-                    >
-                      <option value="">-- Select Teacher --</option>
-                      {teachers.map((t) => (
-                        <option key={t.id} value={t.id}>
-                          {t.name}
-                        </option>
-                      ))}
-                    </select>
-                    {errors.teacher_id && (
-                      <p className="invalid-feedback">{errors.teacher_id.message}</p>
-                    )}
-                  </div>
-
-                  {/* Status */}
-                  <div className="mb-3">
-                    <label className="form-label">Status</label>
-                    <select {...register("status")} className="form-control">
-                      <option value="draft">Draft</option>
-                      <option value="published">Published</option>
-                      <option value="archived">Archived</option>
-                    </select>
-                  </div>
+          <div className="mb-4">
+            <label className="form-label"> 
+              <FontAwesomeIcon icon={faA} className="icon" />
+              Course Title (Hindi)
+            </label>              
+            <input
+              {...register("title_hi")}
+              className={`form-control ${errors.title_hi && "is-invalid"}`}
+              disabled={saving}
+            />
+            {errors.title_hi && (
+              <p className="invalid-feedback">{errors.title_hi.message}</p>
+            )}
+          </div>
 
 
-                  {/* Thumbnail */}
-                  <div className="mb-3">
-                    <label className="form-label">Thumbnail</label>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      {...register("thumbnail")}
-                      onChange={handleFileChange}
-                      className="form-control"
-                    />
+          {/* Description Eng */}
+          <div className="mb-4">
+              <label className="form-label">
+                <FontAwesomeIcon icon={faFileEdit} className="icon" />
+                Course Description (English)
+              </label>            
+              <textarea
+                {...register("description_en")}
+                className="form-control"
+                rows={5}
+                disabled={saving}
+              />
+          </div>
 
-                    <div className="mt-3 text-center position-relative">
-                      {loadingPreview ? (
-                        <div
-                          className="spinner-border text-primary"
-                          style={{ width: "3rem", height: "3rem" }}
-                          role="status"
-                        ></div>
-                      ) : (
-                        <>
-                          <p className="mb-1 text-muted">
-                            {preview
-                              ? "Current / Selected Thumbnail:"
-                              : course?.thumbnail
-                              ? "Current Thumbnail:"
-                              : "Default Thumbnail:"}
-                          </p>
-                          <img
-                            src={
-                              preview
-                                ? preview
-                                : course?.thumbnail
-                                ? course.thumbnail
-                                : "/images/default-thumbnail.jpg"
-                            }
-                            alt="Course Thumbnail"
-                            className="rounded border"
-                            width="180"
-                            style={{ objectFit: "cover" }}
-                          />
+          {/* Description Hindi */}
+          <div className="mb-4">
+            <label className="form-label">                
+              <FontAwesomeIcon icon={faFileEdit} className="icon" />
+                Course Description (Hindi)
+            </label>
+            <textarea
+              {...register("description_hi")}
+              className="form-control"
+              rows={5}
+              disabled={saving}
+            />
+          </div>
 
-                          {watch("thumbnail")?.length > 0 && (
-                            <button
-                              type="button"
-                              className="btn btn-sm btn-outline-danger mt-2"
-                              onClick={() => {
-                              setPreview(course?.thumbnail || null);
-                              setValue("thumbnail", null);
-                              setIsChanged(false);
-                              }}
-                            >
-                              Remove Thumbnail
-                            </button>
-                          )}
-                        </>
-                      )}
+          {/* Highlights */}          
+          <label className="form-label mb-2">
+            <FontAwesomeIcon icon={faStar} className="icon" />
+            Course Highlights
+          </label>
+
+          <div className="box mb-4" style={{
+            backgroundColor:'#ebf1f5',
+            padding:'15px',
+            borderRadius:'10px'
+          }}>
+            <div className="mb-4">
+
+              {
+                highlights.length === 0 ? (
+                    <>
+                    <div className="text-center py-2">
+
+                      <FontAwesomeIcon 
+                        icon={faStar}
+                        className="text-warning mb-3"
+                        size="2x"/>
+
+                        <h6>No Highlights Added Yet</h6>
+
+                        <p className="text-muted mb-3">
+                          Add key leaning, outcomes or important features of this course.
+                        </p>
+
+                        {/* Add Highlights */}
+                        <button
+                          type="button"
+                          className="btn w-100 mt-3"
+                          style={{
+                            borderRadius:'5px',
+                            border:'2px dashed #1363b8'
+                          }}
+                          onClick={addHighlight}
+                        >
+                          <small className="text-primary fw-bold">
+                            <FontAwesomeIcon icon={faPlus}  /> Add Highlights
+                          </small>
+                        </button>
                     </div>
-                  </div>
 
-                  <button
-                    type="submit"
-                    className="btn btn-primary"
-                    disabled={isSubmitting || !isChanged}
-                  >
-                    {isSubmitting ? "Updating..." : "Update Course"}
-                  </button>
+                    </>
+                ) : (
+                      <>
+                        {highlights.map(
+                          (highlight, index) => (
+          
+                            <div
+                              className="row mb-2"
+                              key={index}
+                            >
+          
+                            {/* Enter Highlight  */}
+                            <div className="col-md-11">
+                              <div className="row">
+          
+                                {/* English Highlights */}
+                                <div className="col-md-6">
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    placeholder="Highlight (English)"
+                                    value={highlight.en}
+                                    disabled={saving}
+                                    onChange={(e) =>
+                                      updateHighlight(
+                                        index,
+                                        "en",
+                                        e.target.value
+                                      )
+                                    }
+                                  />
+                                </div>
+          
+                                {/* Hindi Highlights */}
+                                <div className="col-md-6">
+          
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    placeholder="Highlight (Hindi)"
+                                    value={highlight.hi}
+                                    disabled={saving}
+                                    onChange={(e) =>
+                                      updateHighlight(
+                                        index,
+                                        "hi",
+                                        e.target.value
+                                      )
+                                    }
+                                  />
+                                </div>
+          
+                              </div>
+                            </div>
+          
+                            {/* Remove Hightlight */}
+                            {highlights.length > 1 && (
+                              <div className="col-md-1">
+          
+                                <button
+                                  type="button"
+                                  className="btn btn-light"
+                                  onClick={() =>
+                                    removeHighlight(index)
+                                  }
+                                >
+                                  <FontAwesomeIcon icon={faTrash} className=" text-danger" />
+                                </button>
+          
+                              </div>
+                            )}
+          
+                            </div>
+          
+                          ))}
 
-                  <button
-                    type="button"
-                    className="btn btn-secondary ms-2"
-                    onClick={() => navigate("/admin/courses")}
+                          {/* Add Highlights */}
+                          <button
+                            type="button"
+                            className="btn w-100 mt-3"
+                            style={{
+                              borderRadius:'5px',
+                              border:'2px dashed #1363b8'
+                            }}
+                            onClick={addHighlight}
+                          >
+                            <small className="text-primary fw-bold">
+                              <FontAwesomeIcon icon={faPlus}  /> Add Another Highlights
+                            </small>
+                          </button>
+                      </>
+                )
+              }
+
+
+
+            </div>
+          </div>
+
+          {/* Category & Subcategory*/}
+          <div className="row mb-4">
+
+            {/* Category */}
+            <div className="col-md-6">
+              <label className="form-label">
+                <FontAwesomeIcon icon={faFolderClosed} className="icon" />
+                Category 
+              </label>
+              <select {...register("category_id")} disabled={saving} className="form-control">
+                <option value="">-- Select Category --</option>
+                {categories.map((cat) => (
+                  <option key={cat.id} value={cat.id}>
+                    {cat.name?.en}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Subcategory */}
+            <div className="col-md-6">
+              <label className="form-label">
+                <FontAwesomeIcon icon={faFolderTree} className="icon" />
+                Subcategory 
+              </label>
+                <select {...register("subcategory_id")} disabled={saving} className="form-control">
+                  <option value="">-- Select Subcategory --</option>
+                  {subcategories.map((sub) => (
+                    <option key={sub.id} value={sub.id}>
+                      {sub.name?.en}
+                    </option>
+                  ))}
+                </select>
+            </div>
+          </div>
+
+          {/* Languages & Difficulty level*/}
+          <div className="row mb-4">
+            
+            {/* Language */}
+            <div className="col-md-6">
+              <label className="form-label">
+              <FontAwesomeIcon icon={faGlobe} className="icon" />
+                Language 
+              </label>
+
+              <select
+                {...register("language")}
+                className="form-control"
+                disabled={saving}
+              >
+                <option value="">
+                  Select Language
+                </option>
+
+                <option value="English">
+                  English
+                </option>
+
+                <option value="Hindi">
+                  Hindi
+                </option>
+
+                <option value="Both">
+                  Both
+                </option>
+              </select>
+            </div>
+
+            {/* Difficulty Level */}
+            <div className="col-md-6">
+                <label className="form-label">
+                <FontAwesomeIcon icon={faChartSimple} className="icon" />
+                  Difficulty Level 
+                </label>
+
+              <select
+                {...register("difficulty_level")}
+                className="form-control"
+                disabled={saving}
+              >
+                <option value="">
+                  Select Difficulty
+                </option>
+
+                <option value="Beginner">
+                  Beginner
+                </option>
+
+                <option value="Intermediate">
+                  Intermediate
+                </option>
+
+                <option value="Advanced">
+                  Advanced
+                </option>
+
+                <option value="All Levels">
+                  All Levels
+                </option>
+              </select>
+            </div>
+          </div>
+            
+
+          {/* Assign Teacher Only for Admin Access Role*/}
+
+          {hasAnyRole(["moderator","admin","super_admin"]) 
+            && (
+                <div className="mb-3">
+                  <label className="form-label">Teacher</label>
+                  <select
+                    {...register("teacher_id", { required: "Teacher is required" })}
+                    className={`form-control ${errors.teacher_id && "is-invalid"}`}
+                    disabled={saving}
                   >
-                    Cancel
-                  </button>
-                </form>
-              </div>
+                    <option value="">-- Select Teacher --</option>
+                    {teachers.map((t) => (
+                      <option key={t.id} value={t.id}>
+                        {t.name}
+                      </option>
+                    ))}
+                  </select>
+                  {errors.teacher_id && (
+                    <p className="invalid-feedback">{errors.teacher_id.message}</p>
+                  )}
+                </div>
+            )}
+
+
+          {/* Price & Status */}
+          <div className=" row mb-4">
+
+            {/* Price */}
+            <div className="col-md-6">
+              <label className="form-label">
+                <FontAwesomeIcon icon={faIndianRupee} className="icon" />
+                Course Price</label>            
+              <input
+                type="number"
+                min={0}
+                max={999999}
+                step={1}
+                disabled={saving}
+                {...register("price")}
+                className="form-control"
+              />
+            </div>
+
+            {/* Status */}
+            <div className="col-md-6">
+              <label className="form-label"> 
+                <FontAwesomeIcon icon={faFlag} className="icon" />
+                Course Status 
+              </label>
+              <select {...register("status")} disabled={saving} className="form-control">
+                <option value="draft">Draft</option>
+                <option value="published">Published</option>
+                <option value="archived">Archived</option>
+              </select>
+            </div>
+
+          </div>
+
+          {/* Submit button */}
+          <button
+            type="submit"
+            className="btn green-btn"
+            disabled={ saving || isSubmitting || (!isDirty && !highlightsChanged && !thumbnailChanged)}
+          >
+            {saving ? (
+
+              <>
+                <span
+                  className="spinner-border spinner-border-sm me-2 text-light"
+                  role="status"
+                />
+
+                  <span className='text-light'>Saving Changes... </span>
+
+                </>
+
+                ) : (
+
+                  <>
+                  <FontAwesomeIcon icon={faFloppyDisk}/> Save Changes
+                  </>
+
+              )}
+          </button>
+
+          {/* Cancel  Button */}
+          <button
+            type="button"
+            className="btn gray-btn mx-4"
+            onClick={() => navigate(COURSE_ROUTES.MY_COURSE)}
+          >
+            Cancel
+          </button>
+        </form>
+      </div>
 
     </>
   );

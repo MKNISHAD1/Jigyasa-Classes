@@ -2,11 +2,12 @@ import React, { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faEye } from "@fortawesome/free-regular-svg-icons";
-import { faBan, faEllipsisVertical, faRotateLeft, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faBan, faEllipsisVertical, faPen, faRotateLeft, faTrash } from "@fortawesome/free-solid-svg-icons";
 
 const ActionButtons = ({
   viewLink,
   editLink,
+  onEdit,
   onDelete,
   suspendLink,
   onSuspend,
@@ -75,16 +76,26 @@ if (mobile) {
 
                   {/* Edit Button */}
 
-                  {editLink && (
+                  {onEdit ? (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        onEdit();
+                        closeMenu?.();
+                      }}
+                    >
+                      <FontAwesomeIcon icon={faPen} />
+                      Edit
+                    </button>
+                  ) : editLink ? (
                     <Link
                       to={editLink}
-                      className="dropdown-action btn-edit"
                       onClick={closeMenu}
                     >
-                      <FontAwesomeIcon icon={faEdit} />
-                      <span>Edit</span>
+                      <FontAwesomeIcon icon={faPen} />
+                      Edit
                     </Link>
-                  )}
+                  ) : null}
 
                   {/* Delete Button */}
 
@@ -171,15 +182,26 @@ if (mobile) {
         </Link>
       )}
 
-      {editLink && (
+      {onEdit ? (
+        <button
+          type="button"
+          className="action-btn btn-edit"
+          title="Edit"
+          onClick={onEdit}
+        >
+          <FontAwesomeIcon icon={faPen} />
+          {showLabel && " Edit"}
+        </button>
+      ) : editLink ? (
         <Link
           to={editLink}
           className="action-btn btn-edit"
           title="Edit"
         >
-          <FontAwesomeIcon icon={faEdit} /> {showLabel && <span>Edit</span>}
+          <FontAwesomeIcon icon={faPen} />
+          {showLabel && " Edit"}
         </Link>
-      )}
+      ) : null}
 
       {onDelete && (
         <button

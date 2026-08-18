@@ -7,6 +7,11 @@ import { useTranslation } from "react-i18next";
 import ProtectedVideoPlayer from "./LessonViewer";
 import HeaderUi from "../../Common/CommonUI/HeaderUi";
 import FooterUi from "../../Common/CommonUI/FooterUi";
+import nolesson from "../../../assets/images/not-found2.jpeg"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowDown19, faArrowDownShortWide, faCheck, faCheckDouble, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { LESSON_ROUTES } from "../../../constants/nevigation/routes";
+import ActionButtons from '../../Common/CommonUI/ActionButtonsUi';
 
 const LessonTable = ({ lessons = [], courseId, onLessonDeleted, reloadLessons}) => {
   const { i18n } = useTranslation();
@@ -122,7 +127,7 @@ const LessonTable = ({ lessons = [], courseId, onLessonDeleted, reloadLessons}) 
             </a>
           ))
         ) : (
-          <span className="text-gray-400">No files</span>
+          <span className="text-gray-400 text-dark"> - </span>
         ),
     },
 
@@ -155,28 +160,34 @@ const LessonTable = ({ lessons = [], courseId, onLessonDeleted, reloadLessons}) 
     {
       name: "Actions",
       cell: (row) => (
-        <div className="d-flex gap-2">
-        {/* ✅ View Button triggers modal */}
-          <Link
-            to={`/admin/course/${courseId}/lesson/${row.id}/lessonplayer`}
-            className="btn btn-sm btn-success"
-          > View
-          </Link>
+        // <div className="d-flex gap-2">
+        // {/* ✅ View Button triggers modal */}
+        //   <Link
+        //     to={`/admin/course/${courseId}/lesson/${row.id}/lessonplayer`}
+        //     className="btn btn-sm btn-success"
+        //   > View
+        //   </Link>
 
 
-          <Link
-            to={`/admin/course/${courseId}/lesson/${row.id}/edit`}
-            className="btn btn-sm btn-primary"
-          > Edit
-          </Link>
-          <button
-            disabled={loading}
-            onClick={() => deleteLesson(row.id)}
-            className="btn btn-sm btn-danger"
-          >
-            {loading ? "Deleting..." : "Delete"}
-          </button>
-        </div>
+        //   <Link
+        //     to={`/admin/course/${courseId}/lesson/${row.id}/edit`}
+        //     className="btn btn-sm btn-primary"
+        //   > Edit
+        //   </Link>
+        //   <button
+        //     disabled={loading}
+        //     onClick={() => deleteLesson(row.id)}
+        //     className="btn btn-sm btn-danger"
+        //   >
+        //     {loading ? "Deleting..." : "Delete"}
+        //   </button>
+        // </div>
+
+          <ActionButtons
+            viewLink={`/admin/course/${courseId}/lesson/${row.id}/lessonplayer`}
+            editLink={`/admin/course/${courseId}/lesson/${row.id}/edit`}
+            onDelete={() => onDelete(row)}
+            />
 
       ),
     },
@@ -189,23 +200,24 @@ const LessonTable = ({ lessons = [], courseId, onLessonDeleted, reloadLessons}) 
 
       <div className="mt-4">
         <div className="d-flex justify-content-between align-items-center mb-3">
-          <h4 className="h5">Lessons {selectedLessons.length > 0 && `(Selected: ${selectedLessons.length})`}</h4>
+          <h6>{selectedLessons.length > 0 && `Selected: ${selectedLessons.length}`}</h6>
 
           <div className="d-flex gap-2">
-            <Link to={`/admin/course/${courseId}/lesson/ChangeLessonOrder`} className="btn btn-warning">
-              Change Order
+            <Link to={`/admin/course/${courseId}/lesson/ChangeLessonOrder`} className="btn yellow-btn">
+              <FontAwesomeIcon icon={faArrowDownShortWide}/> Change Order
             </Link>
-            <Link to={`/admin/lesson/create`} className="btn btn-success">
-              Create Lesson
+            <Link to={`/admin/lesson/create`} className="btn green-btn">
+             <FontAwesomeIcon icon={faPlus} /> Create Lesson
             </Link>
             <Link to={`/admin/course/${courseId}/lessons/trashed`} className="btn btn-outline-danger">
-              View Deleted Lessons
+            <FontAwesomeIcon icon={faTrash} /> Deleted Lessons
             </Link>
             <button onClick={bulkDeleteLessons} className="btn btn-danger" disabled={selectedLessons.length === 0}>
-              Delete Selected
+            <FontAwesomeIcon icon={faCheck} /> Delete Selected
             </button>
           </div>
         </div>
+      <div className = "table-wrapper" >
         <DataTable 
         columns={columns} 
         data={lessons}         
@@ -216,7 +228,32 @@ const LessonTable = ({ lessons = [], courseId, onLessonDeleted, reloadLessons}) 
         highlightOnHover 
         striped 
         progressPending={loading}
+        noDataComponent={
+          <div className="text-center py-1">
+            <hr />
+              <img
+                  src={nolesson}
+                  alt="No lessons"
+                  style={{ width: "180px" }}
+              />
+
+              <h6 className="mt-3">No lessons found</h6>
+
+              <p className="text-muted mb-3">
+                  Start by creating your first lesson for this course.
+              </p>
+
+              <Link
+                  to={LESSON_ROUTES.CREATE}
+                  className="btn btn-style-1"
+              >
+                  <FontAwesomeIcon icon={faPlus}/> Create Lesson
+              </Link>
+              <hr />
+          </div>
+        }
       />
+      </div>
         {/* ✅ Modal player (only shown when lesson selected) */}
         {selectedLesson && (
           <ProtectedVideoPlayer

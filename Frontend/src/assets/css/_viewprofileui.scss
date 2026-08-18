@@ -148,7 +148,7 @@ $fifth-color:#FFFFFF;
 
 
 .breadcrumb-section{
-    margin: 25px 25px 0 25px;
+    padding: 25px 0 0 25px;
     h3{
         font-size: 20px;
         font-weight: 700;
@@ -185,6 +185,8 @@ $fifth-color:#FFFFFF;
    &:hover{
     color: $primary-color;
     background-color: $fifth-color;
+       border: 1px solid $primary-color;
+
    }
 }
 
@@ -209,8 +211,8 @@ $fifth-color:#FFFFFF;
 
     span{
         margin-left:10px;
-        font-size:1.1rem;
-        font-weight:700;
+        font-size:19px;
+        font-weight:600;
     }
     
     .header{
@@ -221,7 +223,7 @@ $fifth-color:#FFFFFF;
     .icon{
         color:$primary-color;
         margin: auto;
-        font-size: 25px;
+        font-size: 18px;
     }
 
 }
@@ -373,6 +375,17 @@ $fifth-color:#FFFFFF;
     }
     .dashboard-card{
         margin-bottom:20px;
+    }
+
+    .card-header-custom{
+        span{
+            font-size:18px;
+            font-weight:600;
+        }
+
+        .icon{
+            font-size: 18px;
+        }   
     }
 
 }

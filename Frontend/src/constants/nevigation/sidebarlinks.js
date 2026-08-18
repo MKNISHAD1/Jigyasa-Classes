@@ -8,7 +8,7 @@ import {
   CONTACT_ROUTES,
 } from "./routes";
 
-import { faHouse,faUser,faLock,faUsers,faBookOpen,faCirclePlus,faTrash,faCircleQuestion,faGraduationCap,faGlobe,faFolderTree,faEnvelope,faShieldHalved, faQuestion, faUserPen, faBook, faBan } from "@fortawesome/free-solid-svg-icons";
+import { faHouse,faUser,faLock,faUsers,faBookOpen,faCirclePlus,faTrash,faCircleQuestion,faGraduationCap,faGlobe,faFolderTree,faEnvelope,faShieldHalved, faQuestion, faUserPen, faBook, faBan, faLayerGroup } from "@fortawesome/free-solid-svg-icons";
 
 import { ROLE_GROUPS } from "./roles";
 import { FaBook } from "react-icons/fa";
@@ -104,16 +104,16 @@ export const SIDEBAR_SECTIONS = [
             },
             
             {
-                title: "Manage Courses",
-                path: COURSE_ROUTES.LIST,
-                icon: faBookOpen,
-                roles: ROLE_GROUPS.ADMIN_ACCESS,
-
-            },
-            {
                 title: "Create Course",
                 path: COURSE_ROUTES.CREATE,
                 icon: faCirclePlus,
+            },
+            {
+                title: "Manage Courses",
+                path: COURSE_ROUTES.LIST,
+                icon: faLayerGroup,
+                roles: ROLE_GROUPS.ADMIN_ACCESS,
+
             },
             {
                 title: "Deleted Courses",

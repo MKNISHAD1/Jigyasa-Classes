@@ -120,7 +120,7 @@ const CourseTable = ({
       cell: (row) => (
         <span
           className={`badge ${
-            row.status === "published" ? "badge-published text-success" : "badge-draft text-secondary"
+            row.status === "published" ? "badge-published text-success" : "badge-draft"
           }`}
         >
           {row.status}

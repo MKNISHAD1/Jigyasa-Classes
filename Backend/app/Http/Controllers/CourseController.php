@@ -15,40 +15,8 @@ use Illuminate\Support\Facades\Auth;
 
 class CourseController extends Controller
 {
-    /**
-     * Display a listing of courses
-     * - Admin & SuperAdmin can see all
-     * - Teacher/Moderator can see only their own
-     * - Student will only see published ones (when we build frontend API)
-     */
 
-    // this is working for logged in users only 
-    // public function courseList()
-    // {
-    //     $user = Auth::user();
-
-    //     $query = Course::with(['thumbnail', 'teacher', 'creator', 'category', 'subcategory'])
-    //         ->orderByDesc('created_at');
-
-    //     if ($user->hasRole(['admin', 'super_admin'])) {
-    //         $courses = $query->get();
-    //     } elseif ($user->hasRole(['teacher', 'moderator'])) {
-    //         $courses = $query->where('created_by', $user->id)->orWhere('teacher_id', $user->id)->get();
-    //     } else {
-    //         $courses = $query->where('status', 'published')->get();
-    //     }
-
-
-    //     // change 1
-    //     $courses = $courses->map(fn ($course) => $this->formatCourseResponse($course));
-
-    //     return response()->json([
-    //         'status' => true,
-    //         'courses' => $courses
-    //     ]);
-    // }
-
-    // Course-list for addmin access role logged-in  useer
+    // Course-list for admin access role logged-in  useer
     public function courseList()
     {
         $user = Auth::user(); // may be null for public users
@@ -119,11 +87,11 @@ class CourseController extends Controller
     }
 
 
-
      /**
      * View Courses publicly (for frontend)
      */
-    public function publicCourseView($id)
+    
+     public function publicCourseView($id)
     {
         $course = Course::with([
             'lessons.module', 
@@ -206,13 +174,36 @@ class CourseController extends Controller
 
             'category_id'   => 'required|exists:categories,id',
             'subcategory_id'=> 'nullable|exists:subcategories,id',
-            'price'         => 'nullable|numeric|min:0',
+            'price'         => 'nullable|numeric|between :0,999999',
             'status'        => 'required|in:draft,published',
             'thumbnail'     => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-            'teacher_id'    => 'required|exists:users,id'
+            'teacher_id'    => 'nullable|exists:users,id'
         ]);
         
-        // $thumbnailId = null;
+        // Decide COurse Instructor
+        $teacherId = $request->filled('teacher_id') 
+                    ? $request->teacher_id
+                    : $user->id;
+
+        
+        // preventy to asssign course to a student
+        if ($request->filled('teacher_id')) {
+
+            $assignedUser = User::find($teacherId);
+
+            if (!$assignedUser->hasAnyRole([
+                'teacher',
+                'moderator',
+                'admin',
+                'super_admin'
+            ])) {
+
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Selected user cannot be assigned as instructor.'
+                ], 422);
+            }
+        }
 
         // Create course first 
         $course = Course::create([
@@ -225,7 +216,7 @@ class CourseController extends Controller
             'published_at' => $request->status === 'published' ? now() : null,
             // 'thumbnail_id' => $thumbnailId,
             'created_by'   => $user->id,
-            'teacher_id' => $request->teacher_id ?? $user->id,
+            'teacher_id' => $teacherId,
 
             'language' => $request->language,
             'difficulty_level' => $request->difficulty_level,
@@ -498,6 +489,7 @@ class CourseController extends Controller
         // -------------------- 9. HANDLE THUMBNAIL -----------------
 
         if ($request->hasFile('thumbnail')) {
+
             $image = $request->file('thumbnail');
             $filename = Str::slug($request->title_en ?? $course->title) . '_' . time() . '.' . $image->getClientOriginalExtension();
             $path = $image->storeAs('uploads/courses', $filename, 'public');
@@ -643,7 +635,9 @@ class CourseController extends Controller
         ], 200);
     }
 
-
+    /**
+     * Restore courses (soft deleted - restore)
+     */
     public function restoreCourse($id)
     {
         $course = Course::onlyTrashed()->find($id);
@@ -668,6 +662,9 @@ class CourseController extends Controller
         ], 200);
     }
 
+    /**
+     * Permanently Delete courses
+     */
     public function forceDeleteCourse($id)
     {
         $course = Course::onlyTrashed()->find($id);
@@ -773,6 +770,8 @@ class CourseController extends Controller
 
             'teacher' => $course->teacher,
             'creator' => $course->creator,
+            'created_at' => $course->created_at,
+            'updated_at' => $course->updated_at,
             
             'deleted_by' => $course->deletedBy ? [
                 'id' => $course->deletedBy->id,

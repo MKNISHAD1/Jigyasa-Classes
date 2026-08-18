@@ -129,8 +129,7 @@ const isChanged =
         defaultBiography[user?.role?.[0]] ||
         "No biography has been added yet.";
 
-  // Destructer for profile img
-
+// Destructer for profile img
 const {
     onChange,
     ...profilePicRegister
