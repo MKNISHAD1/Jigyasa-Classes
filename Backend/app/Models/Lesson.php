@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Support\Str;
 use App\Traits\HasTranslations;
+use App\Services\BunnyStorageService;
+
 use Illuminate\Support\Facades\Http;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
@@ -98,14 +100,18 @@ class Lesson extends Model
 
 
 
-    // get attached materials
+    // get attached materials bunny
     public function getMaterialsAttribute()
     {
         return $this->media->map(function ($file) {
             return [
-                'id'   => $file->id,
-                'url'  => asset('storage/' . $file->url),
-                'name' => basename($file->url),
+                'id' => $file->id,
+
+                'url' => $this->generateBunnySignedUrl(
+                    parse_url($file->url, PHP_URL_PATH)
+                ),
+
+                'name' => $file->original_name ?? basename($file->url),
             ];
         });
     }
@@ -122,28 +128,31 @@ class Lesson extends Model
 
     public function getSignedUrlAttribute()
     {
+        return $this->generateBunnySignedUrl(
+            "{$this->bunny_storage_path}/{$this->storage_object_name}"
+        );
+    }
+
+    public function generateBunnySignedUrl($path)
+    {
         $pullZoneUrl = rtrim(env('BUNNY_PULLZONE_URL'), '/');
         $securityKey = env('BUNNY_SIGNING_KEY');
-        $expiryTime = time() + env('BUNNY_TOKEN_EXPIRY', 600); // default 10 min
+        $expiryTime = time() + env('BUNNY_TOKEN_EXPIRY', 600);
 
-        // must include leading slash as per Bunny’s docs
-        $videoPath = '/' . ltrim("{$this->bunny_storage_path}/{$this->storage_object_name}", '/');
+        // Must include leading slash
+        $path = '/' . ltrim($path, '/');
 
-        // Build the hash base: key + path + expiry
-        $hashableBase = $securityKey . $videoPath . $expiryTime;
+        // Build hash base
+        $hashableBase = $securityKey . $path . $expiryTime;
 
-        // Generate raw binary MD5
+        // MD5 → Base64 → URL-safe
         $token = md5($hashableBase, true);
-
-        // Convert to Base64 and make URL-safe
         $token = base64_encode($token);
         $token = strtr($token, '+/', '-_');
         $token = str_replace('=', '', $token);
 
-        // Final signed playback URL
-        return "{$pullZoneUrl}{$videoPath}?token={$token}&expires={$expiryTime}";
+        return "{$pullZoneUrl}{$path}?token={$token}&expires={$expiryTime}";
     }
-
 
     public function refreshSignedUrl()
     {
@@ -211,44 +220,126 @@ class Lesson extends Model
             $lesson->media()->withTrashed()->restore();
         });
 
-        //Force Delete From DB and Bunny Storage
-        static::forceDeleted(function ($lesson) {
-            // Delete materials locally
-            foreach ($lesson->media()->withTrashed()->get() as $file) {
-                if (Storage::exists($file->url)) {
-                    Storage::delete($file->url);
+        // Force Delete From DB and Bunny Storage
+        static::forceDeleting(function ($lesson) {
+
+            $bunny = app(BunnyStorageService::class);
+
+            $errors = [];
+
+            /*
+            |--------------------------------------------------------------------------
+            | 1. Delete entire Bunny HLS folder
+            |--------------------------------------------------------------------------
+            |
+            | Example:
+            | course-name/lesson-videos/uuid/
+            |
+            | This removes playlist.m3u8 + all segment_XXXXX.ts files.
+            |
+            */
+            if (!empty($lesson->bunny_storage_path)) {
+                try {
+
+                    $bunny->deleteHlsFolder(
+                        $lesson->bunny_storage_path
+                    );
+
+                } catch (\Throwable $e) {
+
+                    $errors[] = 'HLS folder: ' . $e->getMessage();
+
+                    \Log::error(
+                        'Bunny HLS cleanup failed during lesson force delete.',
+                        [
+                            'lesson_id' => $lesson->id,
+                            'path' => $lesson->bunny_storage_path,
+                            'error' => $e->getMessage(),
+                        ]
+                    );
                 }
-                $file->forceDelete();
-        }
-
-            // Delete translations permanently
-            $lesson->translations()->withTrashed()->forceDelete();
-
-        // Delete from Bunny CDN
-        try {
-            $storageZone = env('BUNNY_STORAGE_ZONE');
-            $apiKey      = env('BUNNY_API_KEY');
-            $regionHost  = env('BUNNY_REGION', 'sg.storage.bunnycdn.com');
-
-            // Correct file path on Bunny storage
-            $remoteFile = ltrim($lesson->bunny_storage_path . '/' . $lesson->storage_object_name, '/');
-
-            $url = "https://{$regionHost}/{$storageZone}/{$remoteFile}";
-
-
-            $response = Http::withHeaders([
-                'AccessKey' => $apiKey,
-            ])->delete($url);
-
-            if ($response->successful()) {
-                \Log::info("✅ Deleted Bunny file: {$remotePath}");
-            } else {
-                \Log::warning("⚠ Bunny delete failed for {$remotePath}: {$response->status()}");
             }
-            }
-            catch (\Throwable $e) {
-                    \Log::error("❌ Bunny delete exception for lesson {$lesson->id}: " . $e->getMessage());
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | 2. Get all lesson materials
+            |--------------------------------------------------------------------------
+            |
+            | withTrashed() is required because a lesson may already have been
+            | soft-deleted and its materials may also be soft-deleted.
+            |
+            */
+            $mediaFiles = $lesson->media()
+                ->withTrashed()
+                ->get();
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | 3. Delete every material from Bunny
+            |--------------------------------------------------------------------------
+            */
+            foreach ($mediaFiles as $media) {
+
+                try {
+
+                    $bunny->deleteMaterial($media);
+
+                } catch (\Throwable $e) {
+
+                    $errors[] =
+                        "Material {$media->id}: " . $e->getMessage();
+
+                    \Log::error(
+                        'Bunny lesson material cleanup failed during force delete.',
+                        [
+                            'lesson_id' => $lesson->id,
+                            'media_id' => $media->id,
+                            'url' => $media->url,
+                            'error' => $e->getMessage(),
+                        ]
+                    );
                 }
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | 4. IMPORTANT:
+            |    Do NOT permanently delete the Lesson if Bunny cleanup failed.
+            |--------------------------------------------------------------------------
+            |
+            | This prevents a DB record from disappearing while Bunny files remain.
+            |
+            | The next force-delete attempt can retry the cleanup.
+            |
+            */
+            if (!empty($errors)) {
+
+                throw new \RuntimeException(
+                    'Bunny cleanup failed. Lesson was NOT permanently deleted. '
+                    . implode(' | ', $errors)
+                );
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | 5. Bunny cleanup succeeded.
+            |    Now permanently remove database children.
+            |--------------------------------------------------------------------------
+            */
+
+            foreach ($mediaFiles as $media) {
+                $media->forceDelete();
+            }
+
+
+            // Permanently delete lesson translations
+            $lesson->translations()
+                ->withTrashed()
+                ->forceDelete();
         });
     }
 

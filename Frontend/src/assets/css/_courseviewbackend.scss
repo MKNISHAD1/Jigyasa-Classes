@@ -41,6 +41,15 @@ $fifth-color:#FFFFFF;
 }
 
 
+.btn{
+  &:disabled{
+    opacity: .4;
+    pointer-events: auto !important;
+    cursor:not-allowed;
+  }
+}
+
+
 //  Button Style
 .btn-style-1{
   background-color: $secondary-color;

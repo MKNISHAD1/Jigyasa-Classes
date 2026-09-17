@@ -188,6 +188,7 @@ Route::get("suspended-users-list", [UserManagementController::class, "suspendedU
 
 
 
+
 // ===================================================================================================
 //                                       Suspension Routes
 // ===================================================================================================
@@ -328,93 +329,224 @@ Route::post('course/{courseId}/module/{moduleId}/reorder-lessons',[CourseModuleC
 // ===================================================================================================
 
 Route::middleware(['auth:sanctum'])->group(function () {
+
+    /*
+    |--------------------------------------------------------------------------
+    | Lesson Upload / HLS Processing
+    |--------------------------------------------------------------------------
+    |
+    | Flow:
+    |
+    | start-upload
+    |      ↓
+    | video upload
+    |      ↓
+    | process-hls
+    |      ↓
+    | complete-upload
+    |
+    | Cancellation can happen at any stage.
+    |--------------------------------------------------------------------------
+    */
+
+
+    // Start a new lesson video upload session
+    Route::post(
+        'lessons/start-upload',
+        [LessonController::class, 'startUpload']
+    )->middleware('role:teacher|moderator|admin|super_admin');
+
+    Route::post(
+        'lessons/proxy-upload',
+        [LessonController::class, 'proxyUpload']
+    )->middleware('role:teacher|moderator|admin|super_admin');
+
+
+    // Process uploaded source video into HLS
+    Route::post(
+        'lessons/{uploadUuid}/process-hls',
+        [LessonController::class, 'processHls']
+    )->middleware('role:teacher|moderator|admin|super_admin');
+
+
+    // Complete HLS upload and create the Lesson record
+    Route::post(
+        'lessons/{uploadUuid}/complete-upload',
+        [LessonController::class, 'completeUpload']
+    )->middleware('role:teacher|moderator|admin|super_admin');
+
+    Route::get(
+        'lessons/{uploadUuid}/upload-status',
+        [LessonController::class, 'uploadStatus']
+    )->middleware('role:teacher|moderator|admin|super_admin');
+
+
+    // Cancel upload / HLS processing
+    Route::post(
+        'lessons/{uploadUuid}/cancel-upload',
+        [LessonController::class, 'cancelUpload']
+    )->middleware('role:teacher|moderator|admin|super_admin');
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Lesson Materials
+    |--------------------------------------------------------------------------
+    */
+
+    Route::post(
+        'lessons/{lessonId}/upload-materials',
+        [LessonController::class, 'uploadMaterials']
+    )->middleware('role:teacher|moderator|admin|super_admin');
+
+
+    Route::get(
+        'courses/{courseId}/download-material/{materialId}',
+        [LessonController::class, 'downloadMaterial']
+    )->middleware('role:teacher|moderator|admin|super_admin');
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Existing Lesson Routes
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get(
+        'course/{courseId}/lessons',
+        [LessonController::class, 'lessonList']
+    )->middleware('role:student|teacher|moderator|admin|super_admin');
+
+
+    Route::get(
+        'courses/{courseId}/view-lesson/{id}',
+        [LessonController::class, 'viewLesson']
+    )->middleware('role:student|teacher|moderator|admin|super_admin');
+
+
+    Route::post(
+        'courses/{courseId}/create-lesson',
+        [LessonController::class, 'createLesson']
+    )->middleware('role:teacher|moderator|admin|super_admin');
+
+
+    Route::put(
+        'courses/{courseId}/update-lesson/{id}',
+        [LessonController::class, 'updateLesson']
+    )->middleware('role:teacher|moderator|admin|super_admin');
+
+
+    Route::delete(
+        'courses/{courseId}/delete-lesson/{id}',
+        [LessonController::class, 'deleteLesson']
+    )->middleware('role:teacher|moderator|admin|super_admin');
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Lesson Reordering
+    |--------------------------------------------------------------------------
+    */
+
+    Route::post(
+        'courses/{courseId}/lesson/reorder-lessons',
+        [LessonController::class, 'reorderLessons']
+    )->middleware('role:teacher|moderator|admin|super_admin');
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Trash / Restore
+    |--------------------------------------------------------------------------
+    */
+
+    Route::delete(
+        'courses/{courseId}/lessons/bulk-delete',
+        [LessonController::class, 'bulkDeleteLessons']
+    )->middleware('role:teacher|moderator|admin|super_admin');
+
+
+    Route::post(
+        'courses/{courseId}/lessons/bulk-restore',
+        [LessonController::class, 'bulkRestoreLessons']
+    )->middleware('role:teacher|moderator|admin|super_admin');
+
+
+    Route::delete(
+        'courses/{courseId}/lessons/bulk-force-delete',
+        [LessonController::class, 'bulkForceDeleteLessons']
+    )->middleware('role:teacher|moderator|admin|super_admin');
+
+
+    Route::get(
+        'courses/{courseId}/lessons/trashed',
+        [LessonController::class, 'trashedLessons']
+    )->middleware('role:teacher|moderator|admin|super_admin');
+
+
+    Route::post(
+        'courses/{courseId}/restore-lesson/{id}',
+        [LessonController::class, 'restoreLesson']
+    )->middleware('role:teacher|moderator|admin|super_admin');
+
+
+    Route::delete(
+        'courses/{courseId}/force-delete-lesson/{id}',
+        [LessonController::class, 'forceDeleteLesson']
+    )->middleware('role:teacher|moderator|admin|super_admin');
+
+
+    Route::get(
+        'courses/{courseId}/lessons/trashed-by-teacher',
+        [LessonController::class, 'trashedLessonsByUser']
+    )->middleware('role:teacher|moderator|admin|super_admin');
+
+
+    Route::post(
+        'courses/{courseId}/lessons/{id}/restore-by-teacher',
+        [LessonController::class, 'restoreLessonByUser']
+    )->middleware('role:teacher|moderator|admin|super_admin');
+
+
+    Route::delete(
+        'courses/{courseId}/lessons/{id}/force-delete-by-teacher',
+        [LessonController::class, 'forceDeleteLessonByUser']
+    )->middleware('role:teacher|moderator|admin|super_admin');
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Signed Playback URL
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get(
+        'lessons/{id}/refresh-url',
+        [LessonController::class, 'refreshSignedUrl']
+    )->middleware('role:teacher|student|moderator|admin|super_admin');
+
     
-    // List lessons for a course
-    Route::get('courses/{courseId}/lessons', [LessonController::class, 'lessonList'])
-        ->middleware('role:student|teacher|moderator|admin|super_admin');
-    
-    // Show single lesson
-    Route::get('courses/{courseId}/view-lesson/{id}', [LessonController::class, 'viewLesson'])
-        ->middleware('role:student|teacher|moderator|admin|super_admin');
-    
-    // 🔒 Generate temporary signed upload URL (for Clean Lesson Upload Flow)
-    Route::post('lessons/{lessonId}/generate-upload-url', [LessonController::class, 'generateSignedUploadUrl'])
-        ->middleware('role:teacher|moderator|admin|super_admin');
-
-    // Create lesson (teacher, moderator, admin, super_admin)
-    Route::post('courses/{courseId}/create-lesson', [LessonController::class, 'createLesson'])
-        ->middleware('role:teacher|moderator|admin|super_admin');
-
-    // upload material after lesson video (teacher, moderator, admin, super_admin)
-    Route::post('lessons/{lessonId}/upload-materials', [LessonController::class, 'uploadMaterials'])
-        ->middleware('role:teacher|moderator|admin|super_admin');
-
-    // ✅ Finalize Bunny upload and store video URL
-    Route::post('lessons/{lessonId}/finalize-upload', [LessonController::class, 'finalizeUpload'])
-        ->middleware('role:teacher|moderator|admin|super_admin');
-
-    // Update lesson (owner OR admin/super_admin)
-    Route::put('courses/{courseId}/update-lesson/{id}', [LessonController::class, 'updateLesson'])
-        ->middleware('role:teacher|moderator|admin|super_admin');
-    
-    // Delete lesson (owner OR admin/super_admin)
-    Route::delete('courses/{courseId}/delete-lesson/{id}', [LessonController::class, 'deleteLesson'])
-        ->middleware('role:teacher|moderator|admin|super_admin');
-
-    // 📌 Bulk soft delete lessons for a course
-    Route::delete('courses/{courseId}/lessons/bulk-delete', [LessonController::class, 'bulkDeleteLessons'])
-        ->middleware('role:teacher|moderator|admin|super_admin');
-
-    // 📌 Bulk restore lessons for a course
-    Route::post('courses/{courseId}/lessons/bulk-restore', [LessonController::class, 'bulkRestoreLessons'])
-        ->middleware('role:teacher|moderator|admin|super_admin');
-
-    // 📌 Bulk soft delete lessons for a course
-    Route::delete('courses/{courseId}/lessons/bulk-force-delete', [LessonController::class, 'bulkForceDeleteLessons'])
-        ->middleware('role:teacher|moderator|admin|super_admin');
-
-    // 📌 List of deleted lessons of courses
-    Route::get('courses/{courseId}/lessons/trashed', [LessonController::class, 'trashedLessons'])
-        ->middleware('role:teacher|moderator|admin|super_admin');
-
-    // Restore
-    Route::post('courses/{courseId}/restore-lesson/{id}', [LessonController::class, 'restoreLesson'])
-        ->middleware('role:teacher|moderator|admin|super_admin');
-
-    // Force delete
-    Route::delete('courses/{courseId}/force-delete-lesson/{id}', [LessonController::class, 'forceDeleteLesson'])
-        ->middleware('role:teacher|moderator|admin|super_admin');
-
-    // 📂 Trashed lessons - teacher-specific
-    Route::get('courses/{courseId}/lessons/trashed-by-teacher', [LessonController::class, 'trashedLessonsByUser'])
-        ->middleware('role:teacher|moderator|admin|super_admin');
-
-    // ♻ Restore lesson (teacher only for own lessons)
-    Route::post('courses/{courseId}/lessons/{id}/restore-by-teacher', [LessonController::class, 'restoreLessonByUser'])
-        ->middleware('role:teacher|moderator|admin|super_admin');
-
-    // 🗑 Force delete lesson (teacher only for own lessons)
-    Route::delete('courses/{courseId}/lessons/{id}/force-delete-by-teacher', [LessonController::class, 'forceDeleteLessonByUser'])
-        ->middleware('role:teacher|moderator|admin|super_admin');
-
-    // Change the order of Lessosn in Course 
-    Route::post('courses/{courseId}/lesson/Reorder-Lessons', [LessonController::class, 'reorderLessons'])
-        ->middleware('role:teacher|moderator|admin|super_admin');
-    
-    // refresh teh valid playback url after expire 
-    Route::get('/lessons/{id}/refresh-url', [LessonController::class, 'refreshSignedUrl'])
-        ->middleware('role:teacher|student|admin|super_admin');
-
-    // laravel proxy upload to bunny
-    Route::post('/lessons/{lesson}/proxy-upload', [LessonController::class, 'proxyUpload'])
-        ->middleware('role:teacher|student|admin|super_admin');
 
 
-});
+    /*
+    |--------------------------------------------------------------------------
+    | Legacy / Other Upload Routes
+    |--------------------------------------------------------------------------
+    |
+    | Keep these ONLY if they are still used elsewhere.
+    |--------------------------------------------------------------------------
+    */
 
+    // Route::post(
+    //     'lessons/{lessonId}/generate-upload-url',
+    //     [LessonController::class, 'generateSignedUploadUrl']
+    // )->middleware('role:teacher|moderator|admin|super_admin');
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('teachers', [UserManagementController::class, 'getTeachers']);
+    // Route::post(
+    //     'lessons/{lessonId}/finalize-upload',
+    //     [LessonController::class, 'finalizeUpload']
+    // )->middleware('role:teacher|moderator|admin|super_admin');
+
 });
 
 

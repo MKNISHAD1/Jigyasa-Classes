@@ -53,6 +53,8 @@ import DashboardLayout from "./Component/Frontend/DashboardUi/DashboardLayout";
 import EditProfile from "./Component/backend/EditProfile";
 import MyCourse from "./Component/backend/courses/MyCourse";
 import ViewUserProfile from "./Component/backend/users/ViewUserProfile";
+import LessonManagement from "./Component/backend/Lessons/LessonManagement";
+import SidebarLessonManagement from "./Component/backend/Lessons/SidebarLessonManagement";
 
 
 function App() {
@@ -359,6 +361,24 @@ function App() {
               <ModuleLessonReorder />
             </RequireAuth>
           } />
+
+
+        {/* Manage Lessons */}
+        <Route path={LESSON_ROUTES.MANAGE} 
+          element={
+            <RequireAuth allowedRoles={ROLE_GROUPS.COURSE_ACCESS}>
+              <LessonManagement />
+            </RequireAuth>
+          } />
+
+        {/* Sidebar Manage Lessons */}
+        <Route path={LESSON_ROUTES.MANAGE_LESSONS} 
+          element={
+            <RequireAuth allowedRoles={ROLE_GROUPS.COURSE_ACCESS}>
+              <SidebarLessonManagement />
+            </RequireAuth>
+          } />
+
 
         {/* Create Lesson */}
         <Route

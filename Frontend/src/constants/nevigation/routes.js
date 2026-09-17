@@ -61,6 +61,8 @@ export const COURSE_ROUTES = {
 // Lesson Rotes
 export const LESSON_ROUTES = {
   CREATE: `${LESSON}/create`,
+  MANAGE: `${LESSON}/:courseId/course-lessons`,
+  MANAGE_LESSONS: `${LESSON}/Manage-lessons`,
   TRASH: `${COURSE}/:courseId/lessons/trashed`,
   ORDER: `${COURSE}/:courseId/lesson/changelessonorder`,
   EDIT: `${COURSE}/:courseId/lesson/:lessonId/edit`,

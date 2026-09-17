@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faEye } from "@fortawesome/free-regular-svg-icons";
-import { faBan, faEllipsisVertical, faPen, faRotateLeft, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faBan, faEllipsisVertical, faPen, faRotate, faRotateLeft, faTrash } from "@fortawesome/free-solid-svg-icons";
 
 const ActionButtons = ({
   viewLink,
@@ -124,7 +124,7 @@ if (mobile) {
                       }}
 
                     >
-                      <FontAwesomeIcon icon={faRotateLeft} />
+                      <FontAwesomeIcon icon={faRotate} />
                       <span>Restore</span>
                     </button>
                   )}
@@ -140,7 +140,7 @@ if (mobile) {
                       }}
 
                     >
-                      <FontAwesomeIcon icon={faRotateLeft} />
+                      <FontAwesomeIcon icon={faRotate} />
                       <span>Lift Suspenison</span>
                     </button>
                   )}
@@ -240,7 +240,7 @@ if (mobile) {
           className="action-btn btn-restore"
           title="Restore"
         >
-          <FontAwesomeIcon icon={faRotateLeft} /> {showLabel && <span>Restort</span>}
+          <FontAwesomeIcon icon={faRotate} /> {showLabel && <span>Restort</span>}
         </button>
       )}
 
@@ -250,7 +250,7 @@ if (mobile) {
           className="action-btn btn-restore"
           title="List Suspension"
         >
-          <FontAwesomeIcon icon={faRotateLeft} /> {showLabel && <span>Lift Suspension</span>}
+          <FontAwesomeIcon icon={faRotate} /> {showLabel && <span>Lift Suspension</span>}
         </button>
       )}
     </div>

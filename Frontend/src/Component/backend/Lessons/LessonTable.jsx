@@ -94,7 +94,11 @@ const LessonTable = ({ lessons = [], courseId, onLessonDeleted, reloadLessons}) 
   };
 
   const columns = [
-    { name: "Order", selector: (row) => row.order || "-", sortable: true, width: "80px" },
+    { name: "#", 
+      cell:(row,index) => index + 1, 
+      width: "55px"
+    },
+
     {
       name: "Title",
       selector: (row) => row.title?.[i18n.language] || row.title?.en || "Untitled",
@@ -203,9 +207,7 @@ const LessonTable = ({ lessons = [], courseId, onLessonDeleted, reloadLessons}) 
           <h6>{selectedLessons.length > 0 && `Selected: ${selectedLessons.length}`}</h6>
 
           <div className="d-flex gap-2">
-            <Link to={`/admin/course/${courseId}/lesson/ChangeLessonOrder`} className="btn yellow-btn">
-              <FontAwesomeIcon icon={faArrowDownShortWide}/> Change Order
-            </Link>
+
             <Link to={`/admin/lesson/create`} className="btn green-btn">
              <FontAwesomeIcon icon={faPlus} /> Create Lesson
             </Link>

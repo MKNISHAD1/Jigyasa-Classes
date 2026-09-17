@@ -8,7 +8,7 @@ import {
   CONTACT_ROUTES,
 } from "./routes";
 
-import { faHouse,faUser,faLock,faUsers,faBookOpen,faCirclePlus,faTrash,faCircleQuestion,faGraduationCap,faGlobe,faFolderTree,faEnvelope,faShieldHalved, faQuestion, faUserPen, faBook, faBan, faLayerGroup } from "@fortawesome/free-solid-svg-icons";
+import { faHouse,faUser,faLock,faUsers,faBookOpen,faCirclePlus,faTrash,faCircleQuestion,faGraduationCap,faGlobe,faFolderTree,faEnvelope,faShieldHalved, faQuestion, faUserPen, faBook, faBan, faLayerGroup, faCirclePlay } from "@fortawesome/free-solid-svg-icons";
 
 import { ROLE_GROUPS } from "./roles";
 import { FaBook } from "react-icons/fa";
@@ -140,6 +140,11 @@ export const SIDEBAR_SECTIONS = [
                 title: "Create Lesson",
                 path: LESSON_ROUTES.CREATE,
                 icon:faCirclePlus,
+            },
+            {
+                title: "Manage Lessons",
+                path: LESSON_ROUTES.MANAGE_LESSONS,
+                icon:faCirclePlay,
             },
         ],
     },

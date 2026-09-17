@@ -79,7 +79,9 @@ return Application::configure(basePath: dirname(__DIR__))
         // -----------------------------
         $schedule->call(function () {
             $trashed = Lesson::onlyTrashed()
-                ->where('deleted_at', '<', now()->subDays(30))
+                ->where('deleted_at', '<', now()->subDays(15))
+                // ->where('deleted_at', '<', now()->subMinutes(2))// purge after 2 minute
+
                 ->get();
 
             foreach ($trashed as $lesson) {
@@ -88,19 +90,31 @@ return Application::configure(basePath: dirname(__DIR__))
 
             \Log::info("Auto-purged {$trashed->count()} deleted lessons older than 30 days.");
         })->dailyAt('02:00');// RUN ONCE DAILY AT 2:00 AM
+        // })->everyMinute();// RUN every minute
         
         // -----------------------------
         // Auto-purge deleted courses (>30 days)
         // -----------------------------
         $schedule->call(function () {
             $count = Course::onlyTrashed()
-                ->where('deleted_at', '<', now()->subDays(30))
+                ->where('deleted_at', '<', now()->subDays(15))
+                // ->where('deleted_at', '<', now()->subMinutes(2)) // purge after 2 minute
+
                 ->forceDelete();
 
             if($count) {
                 \Log::info("Auto-purged {$count} deleted courses older than 30 days.");
             }
         })->dailyAt('03:00'); // run once daily at 3 AM
+        // })->everyMinute();// RUN every minute
+
+        
+        // -----------------------------
+        // Process Bunny cleanup tasks
+        // -----------------------------
+        $schedule->command('bunny:cleanup')
+            ->everyMinute()
+            ->withoutOverlapping();
 
     })
 

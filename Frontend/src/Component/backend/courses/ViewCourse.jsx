@@ -1,13 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import Header from "../../Common/Header";
-import Sidebar from "../../Common/Sidebar";
 import { apiUrl, token } from "../../Common/http";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import LessonTable from "../Lessons/LessonTable";
-import HeaderUi from "../../Common/CommonUI/HeaderUi";
-import FooterUi from "../../Common/CommonUI/FooterUi";
 import { faAngleLeft, faAngleRight, faArrowLeft, faArrowRight, faBarChart, faCalendar, faCalendarDay, faChartSimple, faCheck, faCheckCircle, faCircleMinus, faCirclePlay, faClock, faClockRotateLeft, faFileAlt, faFileLines, faFlag, faFolderClosed, faFolderTree, faIndianRupeeSign, faLanguage, faPen, faPlayCircle, faSitemap, faStar, faUsers, faUserTie } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { COURSE_ROUTES, DASHBOARD_ROUTES } from "../../../constants/nevigation/routes";
@@ -28,7 +24,7 @@ const CourseView = () => {
 
   
     // Accordon Lessoon pagination
-    const LESSONS_PER_PAGE = 2;
+    const LESSONS_PER_PAGE = 10;
     const [lessonPages, setLessonPages] = useState({});
   
     const getLessonPage = (moduleId) => {
@@ -856,6 +852,13 @@ if (!course) return <p className="text-center my-5">Course not found!</p>;
                 <FontAwesomeIcon icon={faSitemap} className="icon"/> Manage Structure
               </Link>
 
+              {/* Manage Lessons */}
+              <Link className="btn blue-btn" 
+                to={`/admin/lesson/${course.id}/course-lessons`}              
+              >
+                <FontAwesomeIcon icon={faCirclePlay} className="icon"/> Manage Lessons
+              </Link>
+
               {/* Update Course Button */}
               <Link className="btn green-btn" 
                 to={`/admin/course/update-Course/${course.id}`}
@@ -871,7 +874,17 @@ if (!course) return <p className="text-center my-5">Course not found!</p>;
                 <FontAwesomeIcon icon={faArrowLeft} /> Back To List
               </Link>
             </div>
-        </div>
+      </div>
+
+      {/* <div className="dashboard-card">
+                  Lesson Table
+          <LessonTable
+            lessons={course.lessons}
+            courseId={course.id}
+            onLessonDeleted={handleLessonDeleted}
+            reloadLessons={fetchCourse}
+          />
+      </div> */}
       
             
     </>

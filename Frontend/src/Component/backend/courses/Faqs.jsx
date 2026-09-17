@@ -8,7 +8,7 @@ import DataTable from "react-data-table-component";
 import { Modal, Button, OverlayTrigger, Popover } from "react-bootstrap";
 import HeaderUi from "../../Common/CommonUI/HeaderUi";
 import FooterUi from "../../Common/CommonUI/FooterUi";
-import { faAngleRight, faBook, faCircleQuestion, faFileAlt, faFilter, faFlag, faList, faMagnifyingGlass, faPlus, faQuestion } from "@fortawesome/free-solid-svg-icons";
+import { faAngleRight, faBook, faCircleQuestion, faFileAlt, faFilter, faFlag, faList, faMagnifyingGlass, faPlus, faQuestion, faSave } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { DASHBOARD_ROUTES } from "../../../constants/nevigation/routes";
 import { Link } from "react-router-dom";
@@ -174,10 +174,8 @@ const updateFaq = async () => {
     answer,
   };
 
-  console.log("FAQ UPDATE PAYLOAD:", body);
-
   try {
-
+    setLoading(true);
     const res = await fetch(
       `${apiUrl}update-faqs/${editFaq.id}`,
       {
@@ -213,6 +211,8 @@ const updateFaq = async () => {
     console.error("FAQ UPDATE ERROR:", err);
     toast.error("Server error");
 
+  } finally{
+    setLoading(false);
   }
 };
 
@@ -816,8 +816,28 @@ const faqTableStyles = {
                         <button
                           className="btn blue-btn"
                           onClick={updateFaq}
-                        >
-                          Save Changes
+                          disabled={loading}
+                          >
+                            {loading ? (
+
+                              <>
+                                <span
+                                  className="spinner-border spinner-border-sm me-2 text-primary"
+                                  role="status"
+                                />
+
+                                  <span className='text-primary'>Saving... </span>
+
+                                </>
+
+                                ) : (
+
+                                  <>
+                                  <FontAwesomeIcon icon={faSave}/> Save Changes
+                                  </>
+
+                              )}
+
                         </button>
 
                       </div>

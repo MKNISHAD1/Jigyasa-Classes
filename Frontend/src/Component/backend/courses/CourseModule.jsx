@@ -57,7 +57,7 @@ const CourseModule = () => {
   const [confirmationLoading, setConfirmationLoading] = useState(false);
 
   // Accordon Lessoon pagination
-  const LESSONS_PER_PAGE = 2;
+  const LESSONS_PER_PAGE = 10;
   const [lessonPages, setLessonPages] = useState({});
 
   const getLessonPage = (moduleId) => {
@@ -218,6 +218,10 @@ const currentDeletedModuleIds =
       setLoading(false);
     }
   };
+
+useEffect(() => {
+  fetchCourse();
+}, [id]);
 
   // Create Module 
 
@@ -768,30 +772,28 @@ useEffect(() => {
 }, [totalModulePages, modulePage]);
 
 useEffect(() => {
-  setLessonPages((prev) => {
-    const updated = { ...prev };
+    setLessonPages((prev) => {
+        const updated = { ...prev };
+        let changed = false;
 
-    Object.keys(updated).forEach((moduleId) => {
-      const module = modules.find(
-        (m) => m.id.toString() === moduleId.toString()
-      );
+        modules.forEach((module) => {
+            if (!module) return;
 
-      if (!module) {
-        delete updated[moduleId];
-        return;
-      }
+            const totalPages = Math.ceil(
+                (module.lessons?.length || 0) / LESSONS_PER_PAGE
+            );
 
-      const totalPages = Math.ceil(
-        (module.lessons?.length || 0) / LESSONS_PER_PAGE
-      );
+            if (
+                totalPages > 0 &&
+                updated[module.id] > totalPages
+            ) {
+                updated[module.id] = totalPages;
+                changed = true;
+            }
+        });
 
-      if (totalPages > 0 && updated[moduleId] > totalPages) {
-        updated[moduleId] = totalPages;
-      }
+        return changed ? updated : prev;
     });
-
-    return updated;
-  });
 }, [modules]);
 
 // Lodaing 
