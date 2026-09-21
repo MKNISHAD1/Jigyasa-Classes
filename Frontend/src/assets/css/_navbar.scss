@@ -1,286 +1,388 @@
- 
-// global variables 
-$primary-color:#1363b8;
-$secondary-color:#ebf1f5;
-$third-color:#162521;
-$forth-color:#047ba7;
-$fifth-color:#FFFFFF;
+ @use '../css/base/variables' as *;
 
+
+//////// Desktop Navbar \\\\\\\ 
 .navbar{
-    // box-shadow:0 10px 20px rgba(13,110,253,.25);
-    border-bottom: 1px solid $primary-color;
-}
- .media_label{
-  background-color: $forth-color;
-  color: $secondary-color;
-  padding: 10px 0;
-  text-align: center;
-}
-
-.navbar{
-    background-color: $fifth-color;
-}
-
-/////////////  🟢 Navbar Leftside Brand CSS 🟡 \\\\\\\\\\\\\ 
-
-.Brand_Section{
-    .Brand_Logo{
-    border-radius: 50%;
-    max-height: 60px;
-    width: 100%;
-    padding: 0 10px;
-    margin-left: 25px;
-    }
-    .Brand_Name{
-        text-transform: uppercase;
-        margin-top:0.3em;
-        padding-left: 1px;
-        color: $third-color;
-    }
-    .Brand_Tagline{
-        margin-top: -0.5em;
-        color: $third-color;
-        padding-left: 7px;
-        font-weight: 500;
-        font-size: 15px;
-        margin-bottom: 0;
-    }
-
-} 
-
-/////////////  🟢 Navbar Middle Nav-Items CSS 🟡 \\\\\\\\\\\\\ 
-
-.Nav_Items{
-    justify-content: center;
-
-    .Menu_Items_Gap{
-        gap: 1rem;
-    }
-
-    .nav-link{
-    color: $third-color ;
-    font-weight: 600;
-    }
-
-    .nav-link:hover{
-        color: $primary-color;
-
-    }
-
-    /////////////////////////////////🟢WORKING DROPDOWN CSS🟡  /////////////////////////
-
-    
-    .menu-item {
-    position: relative;
-    }
-
-    .dropdown-menu-custom {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    border-top: 4px solid $primary-color;
-    min-width: 240px;
-    background: $fifth-color;
-    list-style-type: none;
-    // border-radius: 6px;
-    box-shadow: 0 10px 40px rgba(0,0,0,.08);
-    display: none;
-    padding: 0;
-    z-index: 1000;
-    }
-
-    .menu-item:hover > .dropdown-menu-custom {
-    display: block;
-    }
-
-    .dropdown-item {
-    padding: 12px 18px;
-    display: flex;
-    justify-content: space-between;
-    cursor: pointer;
-    color: #222;
-    }
-
-    .dropdown-item:hover {
-    background: $secondary-color;
-    color: $primary-color;
-    font-weight: bold;
-    }
-
-    /* Submenu */
-    .has-submenu {
-    position: relative;
-    }
-
-    .submenu {
-    position: absolute;
-    top: 0;
-    left: 100%;
-    list-style-type: none;
-    text-decoration: none;
-    min-width: 240px;
-    background: $fifth-color;
-    border-top: 4px solid $primary-color;
-    // border-radius: 6px;
-    box-shadow: 0 10px 40px rgba(0,0,0,.08);
-    display: none;
-    padding: 0;
-    }
-
-    .has-submenu:hover > .submenu {
-    display: block;
-    }
-
-    .arrow {
-    opacity: 0.6;
-    }
-
-}
-
-/////////////  🟢 Navbar Rightside Icon CSS 🟡 \\\\\\\\\\\\\ 
-
-// body.modal-open{
-//   padding-right: 0 !important;
-// }
-
-.Rightside_NavItems{
-
-    display: flex;
-
-    .Cart_Icon {
-        padding: 10px;
-        background-color: $primary-color;
-        color: $fifth-color;
-        border-radius: 50%;
-        align-content: center;
-        width: 20px;
-        height: 20px;
-        border: 2px solid $primary-color;
-    }
-    .Cart_Icon:hover {
-        background-color: $secondary-color;
-        color: $primary-color;
-    }
-    .User_Icon {
-        padding: 10px;
-        background-color: $primary-color;
-        color: $fifth-color;
-        border: 2px solid $primary-color;
-        border-radius: 50%;
-        align-content: center;
-        width: 20px;
-        height: 20px;
-    }
-     .User_Icon:hover {
-        background-color: $secondary-color;
-        color: $primary-color;
-    }
-
-    .Button_Style1{
-        background-color: $primary-color;
-        color: white;
-        font-weight: 600;
-        border: 2px solid $primary-color;
-        padding: 10px;
-        text-decoration: none;
-        border-radius: 10px;
-
-    }
-
-    .Button_Style1:hover{
-        background-color: $secondary-color;
-        color:$primary-color;
-    }
-}
-
-/////////////  🟢 Language Switch Icon CSS 🟡 \\\\\\\\\\\\\ 
-
-.lang-switch {
+  border-bottom: 1px solid $primary-color;
+  background-color: $fifth-color;
+  margin: auto;
   display: flex;
   align-items: center;
-  gap: 4px;
-  font-weight: 500;
 
-   span {
-    font-size: 14px;
-    opacity: 1;
+  ////////// Navbar Middle Nav-Items CSS \\\\\\\\\\\\\ 
+  .navbar-left-part{
+    margin: auto;
+    display: flex;
   }
-  
-  span.active {
-    opacity: 1;
-    color: $primary-color;
+
+  //////////  Navbar Middle Nav-Items CSS   \\\\\\\\\\\\\ 
+  .navbar-center-part{
+    margin: auto;
+
+    .Nav_Items{
+      justify-content: center;
+
+      // .Menu_Items_Gap{
+      //   gap: 1rem;
+      // }
+
+      .nav-link{
+        color: $third-color ;
+        font-weight: 600;
+        transition: .25s ease;
+
+        &:hover{
+          color: $primary-color;
+          transform: scale(1.10);
+        }
+      }
+
+      /////////////////////////////////🟢WORKING DROPDOWN CSS🟡  /////////////////////////
+
+      .menu-item {
+        position: relative;
+      }
+
+      .dropdown-menu-custom {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        border-top: 4px solid $primary-color;
+        min-width: 240px;
+        background: $fifth-color;
+        list-style-type: none;
+        box-shadow: 0 10px 40px rgba(0,0,0,.08);
+        display: none;
+        padding: 0;
+        z-index: 1000;
+      }
+
+      .menu-item:hover > .dropdown-menu-custom {
+        display: block;
+      }
+
+      .dropdown-item {
+        padding: 10px 18px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+        color: #222;
+        transition: .3s ease;
+
+        &:hover{
+          color: $primary-color;
+          font-weight: bold;
+          transform: scale(1.03);
+        }
+      }
+
+
+      /* Submenu */
+      .has-submenu {
+        position: relative;
+      }
+
+      .submenu {
+        position: absolute;
+        top: -8%;
+        left: 100%;
+        list-style-type: none;
+        text-decoration: none;
+        min-width: 240px;
+        background: $fifth-color;
+        border-top: 4px solid $primary-color;
+        box-shadow: 0 10px 40px rgba(0,0,0,.08);
+        display: none;
+        padding: 0;
+      }
+
+      .has-submenu:hover > .submenu {
+        display: block;
+      }
+
+      .arrow {
+        opacity: 0.6;
+        font-weight: bold;
+        font-size: large;
+      }
+
+    }
   }
+
+  /////////  Navbar Rightside Icon CSS \\\\\\\\\\\\\\\
+  .navbar-right-part{
+    margin: auto;
+
+    // Language Switch BUtton
+    .lang-switch {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-weight: 500;
+
+      span {
+        font-size: 14px;
+        opacity: 1;
+        font-weight: 600;
+      }
+      
+      span.active {
+        opacity: 1;
+        color: $primary-color;
+        padding: 4px;
+        border-radius: 5px;        
+        background-color: $secondary-color;
+
+        &:hover{
+          color: $fifth-color;
+          background-color: $primary-color;
+        }
+      }
+      
+      /* Toggle */
+      .switch {
+        position: relative;
+        width: 38px;
+        height: 20px;
+      }
+      
+      .switch input {
+        display: none;
+      }
+      
+      .slider {
+        position: absolute;
+        background: #ccc;
+        border-radius: 20px;
+        inset: 0;
+        cursor: pointer;
+        transition: .25s;
+
+        &:hover{
+          transform: scale(1.10);
+        }
+        
+      }
+      
+      .slider::before {
+        content: "";
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        left: 2px;
+        top: 2px;
+        background: $fifth-color;
+        border-radius: 50%;
+        transition: 0.3s;
+      }
+      
+      input:checked + .slider {
+        background: $primary-color;
+      }
+      
+      input:checked + .slider::before {
+        transform: translateX(18px);
+      }
+    }
+
+    // Icons 
+    .Rightside_NavItems{
+      display: flex;
+      align-items: center;
+
+      // Wishlist and Login Icon
+      .Heart_Icon, .User_Icon {
+        background-color: $secondary-color;
+        color: $primary-color;
+        padding: 7px;
+        border-radius: 50%;
+        align-content: center;
+        width: 22px;
+        height: 22px;
+        border: 1px solid $primary-color;
+        transition: .25s;
+
+        &:hover{
+          background-color: $primary-color;
+          color: $fifth-color;
+          transform: scale(1.10);
+        }
+          
+      }
+
+      // Loggedin User Profile img icon
+      .Navbar_Profile{
+        width:38px;
+        height:38px;
+        border-radius:50%;
+        object-fit:cover;
+        border:1px solid $primary-color;
+        transition: .25s ease;
+
+        &:hover{
+          transform: scale(1.10);
+        }
+      }
+
+      .User_Profile_Link{
+        display:flex;
+        align-items:center;
+        gap:10px;
+        text-decoration:none;
+        color:$third-color;
+        font-weight:600;
+      }
+
+      //  Navbar Toggle Icon
+      .navbar-toggler{
+        transition: .25s;
+        padding: 4px;
+        border: 0;
   
-  /* Toggle */
-  .switch {
-    position: relative;
-    width: 38px;
-    height: 20px;
-  }
+        &:hover{
+          transform: scale(1.10);
+        }
   
-  .switch input {
-    display: none;
-  }
-  
-  .slider {
-    position: absolute;
-    background: #ccc;
-    border-radius: 20px;
-    inset: 0;
-    cursor: pointer;
-  }
-  
-  .slider::before {
-    content: "";
-    position: absolute;
-    width: 16px;
-    height: 16px;
-    left: 2px;
-    top: 2px;
-    background: $fifth-color;
-    border-radius: 50%;
-    transition: 0.3s;
-  }
-  
-  input:checked + .slider {
-    background: $primary-color;
-  }
-  
-  input:checked + .slider::before {
-    transform: translateX(18px);
+        &:focus {
+            outline: none;
+            box-shadow: none;
+            border-color: transparent; /* Ensures custom borders don't flash */
+        }
+        
+        .navbar-toggler-icon{
+          color: $primary-color;
+          font-weight: 300;
+          font-size: 17px;
+        }
+      }
+    }
+
   }
 }
 
-/////////////  🟢 Mobile OffCanvas CSS 🟡 \\\\\\\\\\\\\ 
-/// 
+////////////////////////// Desktop Navbar Responsive Condition   /////////////////////
+
+// Sm to Md
+@media (max-width: 767px) {
+  .navbar{
+
+    .navbar-right-part{
+      // Language Switch BUtton
+      .lang-switch {
+        gap:8px;
+
+        span {
+          font-size: 12px  !important;
+        }
+
+      }
+
+      .Heart_Icon, .User_Icon {
+        padding: 5px;
+        width: 18px !important;
+        height: 18px !important;
+        margin: 0 5px;
+          
+      }
+
+      // Loggedin User Profile img icon
+      .Navbar_Profile{
+        width:34px !important;
+        height:34px !important;
+      }
+    }
+  }
+}
+
+// LG — 768px to 991px
+@media (min-width: 768px) and (max-width: 991px) {
+  .navbar{
+
+    .navbar-left-part{
+      margin: 0;
+    }
+
+    .navbar-right-part{
+      margin: 0;
+
+      // Language Switch BUtton
+      .lang-switch {
+        gap:10px
+
+      }
+    }
+
+  }
+}
+
+// XL — 992px to 1199px
+@media (min-width: 992px) and (max-width: 1199px) {
+  .Menu_Items_Gap {
+    gap: 0 !important;
+    font-size: 0.9rem;
+  }
+}
+
+// XXL — 1200px to 1399px
+@media (min-width: 1200px) and (max-width: 1399px) {
+  .Menu_Items_Gap {
+    gap: 1rem !important;
+  }
+}
+
+@media (min-width: 1400px) {
+  .Menu_Items_Gap {
+    gap: 3rem !important;
+  }
+}
+
+/////////////  Mobile OffCanvas CSS  \\\\\\\\\\\\\ 
 
 .Offcanvas_header{
+
+  border-bottom: 2px solid $primary-color !important;
   .Brand_Section{
       .Brand_Logo{
         border-radius: 50%;
         max-height: 100%;
-        width: 25%;
-        // padding: 0 10px;
-        margin-left: 25px;
+        width: 30%;
+        margin: 0;
       }
       .Brand_Name{
           text-transform: uppercase;
           margin-top:0.3em;
-          font-size: 1rem;
-          padding-left: 1px;
-          color: $third-color;
+          font-size: 18px;
+          color: $primary-color;
           white-space: nowrap;
       }
       .Brand_Tagline{
           margin-top: -0.5em;
           color: $third-color;
-          // padding-left: 7px;
           font-weight: 500;
           font-size: small;
           margin-bottom: 0;
       }
 
   } 
+
+  .offcanvas-close-btn{
+      background-color:transparent;
+      border: 0;
+      margin-left: auto;
+
+      .offcanvas-close-btn-icon{
+          color: $primary-color;
+          font-size: 25px;
+          transition: .4s ease;
+
+          &:hover{
+              transform: rotate(90deg);
+              cursor: pointer ;
+          }
+
+      }
+  }
 }
 
 .New_Offcanvas{
@@ -288,54 +390,11 @@ $fifth-color:#FFFFFF;
   padding: 20px;
 }
 
-
+///////// Gues User Sign up and Sign in Button  \\\\\\\\
 .Guest_Actions{
   display:flex;
   gap:12px;
   margin-bottom:25px;
-}
-.User_Profile_Link{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  text-decoration:none;
-  color:$third-color;
-  font-weight:600;
-}
-
-.Navbar_Profile{
-  width:42px;
-  height:42px;
-  border-radius:50%;
-  object-fit:cover;
-  border:2px solid $primary-color;
-}
-
-
-.Welcome_Card{
-  text-align:center;
-  padding:20px;
-  background:#eef3ff;
-  border-radius:16px;
-  margin-bottom:20px;
-}
-
-.Welcome_Avatar{
-  width:70px;
-  height:70px;
-  border-radius:50%;
-  object-fit:cover;
-  margin-bottom:10px;
-}
-
-.Dashboard_Button{
-  display:block;
-  margin-top:12px;
-  background:$primary-color;
-  color:white;
-  text-decoration:none;
-  padding:10px;
-  border-radius:10px;
 }
 
 .Signup_Btn{
@@ -371,10 +430,73 @@ $fifth-color:#FFFFFF;
   }
 }
 
+/////////  Loged in User Welcome Card  \\\\\\\\
+.Welcome_Card{
+  text-align:center;
+  padding:30px;
+  background:#eef3ff;
+  border-radius:12px;
+  margin-bottom:20px;
+  border: 1px  solid $primary-color;
+  background-image: url('../images/sidebar-profile-bg2.jpeg');
+  background-size: cover;
+  
+  .Welcome_Avatar{
+    width:70px;
+    height:70px;
+    border-radius:50%;
+    object-fit:cover;
+    margin-bottom:10px;
+    padding: 2px;
+    border: 2px solid $primary-color;
+  }
+
+  .Welcome_Text{
+    font-weight: 600;
+    // background-color: red;
+  }
+
+  .Welcome_User_Name{
+    font-weight: 500;
+    color: $third-color;
+  }
+
+  .Welcome_User_Role{
+    background-color: $fifth-color;
+    color: $primary-color;
+    text-transform: capitalize;
+    font-weight: 600;
+    border: 1px solid $primary-color;
+    padding: 5px 15px;
+    border-radius: 30px;
+  }
+
+  .Dashboard_Button{
+    display:block;
+    margin-top:10px;
+    background:$primary-color;
+    border: 2px solid rgba(81, 79, 79, 0.4);
+    color:$fifth-color;
+    font-weight: 600;
+    font-size: 16px;
+    text-decoration:none;
+    padding:10px;
+    border-radius:10px;
+    transition: .25s ease;
+  
+    &:hover{
+      background-color: $fifth-color;
+      color: $primary-color;
+      border: 2px solid $primary-color;
+      transform: scale(1.04);
+    }
+  }
+}
+
+/////// Sidebar menu and links \\\\\\\
 .Sidebar_Menu{
   display:flex;
   flex-direction:column;
-  gap:10px;
 }
 
 .Sidebar_Link{
@@ -384,17 +506,21 @@ $fifth-color:#FFFFFF;
   padding:15px;
   border-radius:14px;
   text-decoration:none;
-  color:$primary-color;
+  border : 1px solid transparent;
   font-weight:600;
   transition:.25s;
-}
 
-.Sidebar_Link:hover{
-  background:$secondary-color;
-  color:$primary-color;
-  transform:translateX(4px);
-}
+  .Sidebar_Icon, .Sidebar_Icon_Text {
+    color: $primary-color !important;
+  }
 
+
+  &:hover{
+    background:$secondary-color;
+    transform: scale(1.04);
+    border: 1px solid  $primary-color;
+  }
+}
 
 .Menu_Header{
   display:flex;
@@ -405,94 +531,151 @@ $fifth-color:#FFFFFF;
 
 .Sidebar_SubLink{
   display:block;
-  padding:10px 15px;
+  padding: 15px !important;
+  background-color: $secondary-color;
   color:$third-color;
   text-decoration:none;
-    transition:.25s;
+  font-weight: 500;
+  transition:.25s;
+  
+  &:hover{
+    color:$primary-color;
+    background-color: $fifth-color;
+    transform: scale(1.04);
+  }
 }
 
-.Sidebar_SubLink:hover{
-  color:$primary-color;
-  transform:translateX(4px);
+/////// Sidebar  Accordion Style
+.Sidebar_Accordion {
+
+    // accorden header
+    .accordion-button {
+      gap: 0;
+      padding: 17px ;
+      margin-top: 1px;
+      border-radius: 14px !important;
+      transition: .25s ease;
+      border: 1px solid transparent;
+
+      .Sidebar_Icon, .Sidebar_Icon_Text{
+        color: $primary-color;
+      }
+
+      &:hover{
+        background:$secondary-color;
+        border: 1px solid  $primary-color;
+        transform: scale(1.04);
+      }
+
+        &:focus {
+          outline: none;
+          box-shadow: none;
+        }
+
+  
+    }
+
+    // Header when OPEN
+    .accordion-button:not(.collapsed) {
+        background-color: $primary-color;
+        border-radius: 10px 10px 0 0 !important;
+        border-bottom: 1px solid $primary-color;
+        transition: .25s;
+
+        .Sidebar_Icon, .Sidebar_Icon_Text{
+          color: $fifth-color !important;
+        }
+
+        &:hover{
+          transform: scale(1.04);
+        }
+
+    }
+
+    // Actual content
+    .accordion-body {
+      background-color: $secondary-color;
+      padding: 5px;
+    }
+
+    // Bootstrap arrow
+    .accordion-button::after{
+        background-image: url("../../assets/images/down-arrow2.svg");
+    }
+
+    .accordion-button:not(.collapsed)::after{
+        background-image: url("../../assets/images/down-arrow1.svg");
+    }
 }
 
+/////// Lerning Card  \\\\\\\
 .Learning_Card{
   margin-top:25px;
-  background:#eef3ff;
+  background: $secondary-color;
   border-radius:16px;
-  padding:18px;
+  border: 1px solid $primary-color;
+  padding:15px 10px;
   display:flex;
-  gap:15px;
+  gap:10px;
   align-items:flex-start;
   margin-bottom:0;
-  font-size:14px;
-}
 
-.Trophy_Icon{
-  margin: auto;
-  font-size:32px;
-  color:$primary-color;
-}
-
-.Sidebar_Accordion{
-  margin-top:10px;
-
-  .accordion-item{
-    border:none;
-  }
-
-  .accordion-button{
-    padding:15px;
-    border-radius:14px;
-    background:white;
-    box-shadow:none;
-  }
-
-  .accordion-button:not(.collapsed){
-    background:#eef3ff;
+  .Trophy_Icon{
+    margin: auto;
+    font-size:20px;
+    background-color: $fifth-color;
+    padding: 10px;
+    border-radius: 50%;
     color:$primary-color;
   }
 
-  .accordion-button::after{
-    margin-left:auto;
+  .Trophy_Text{
+    color: $primary-color;
+    font-weight: 600;
+    font-size:12px;
   }
+
+  .Trophy_Paragraph{
+    color: #666;
+    font-weight: 400;
+    font-size: 10px;
+    margin: 0;
+  }
+
+
 }
+
+////// Logout Button   \\\\\\\\
 .Logout_Section {
   margin-top: 20px;
   span{
-    color: red;
+    color: #dc3545;
   }
-}
-
-.Logout_Btn {
-  width: 100%;
-  height: 52px;
-
-  border: 2px solid #dc3545;
-  background: white;
-  color: #dc3545;
-
-  border-radius: 14px;
-
-  font-weight: 600;
-  font-size: 16px;
-
-  transition: all 0.3s ease;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-
-.Logout_Btn:hover {
-  background: #dc3545;
-  color: white;
-  .logout{
-    color: white;
+  .Logout_Btn {
+    width: 100%;
+    height: 52px;
+    border: 2px solid #dc3545;
+    background: $fifth-color;
+    color: #dc3545;
+    border-radius: 14px;
+    font-weight: 600;
+    font-size: 16px;
+    transition: all 0.25s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  
+    &:hover {
+      background: #dc3545;
+      color: $fifth-color;
+      .logout{
+        color: $fifth-color;
+      }
+    }
+    
+    &:active {
+      transform: scale(0.98);
+    }
   }
-}
-
-.Logout_Btn:active {
-  transform: scale(0.98);
 }

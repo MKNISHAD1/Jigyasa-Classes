@@ -1,0 +1,31 @@
+@use "variables" as *;
+
+html {
+    scroll-behavior: smooth;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    color: $third-color;
+    background: $fifth-color;
+    font-family: var(--font-primary);
+}
+
+button,
+input,
+textarea,
+select {
+    font-family: inherit;
+}
+
+a {
+    text-decoration: none;
+}
+

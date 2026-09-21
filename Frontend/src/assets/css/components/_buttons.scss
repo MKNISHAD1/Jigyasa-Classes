@@ -1,0 +1,36 @@
+@use '../base/variables' as *;
+
+.primary-button{
+    background-color: $primary-color;
+    color: $fifth-color;
+    font-weight: 600;
+    border: 1px solid $primary-color;
+    padding: 10px;
+    text-decoration: none;
+    border-radius: 10px;
+    transition: .25s;
+
+    &:hover{
+        background-color: $secondary-color;
+        color: $primary-color;
+        transform: scale(1.06);
+    }
+}
+
+.primary-button-opposite{
+    background-color: $secondary-color;
+    color: $primary-color;
+    font-weight: 600;
+    border: 1px solid $primary-color;
+    padding: 10px;
+    text-decoration: none;
+    border-radius: 10px;
+    transition: .25s;
+
+    &:hover{
+        background-color: $primary-color;
+        color: $fifth-color;
+        transform: scale(1.06);
+    }
+}
+

@@ -1,0 +1,96 @@
+
+@use "../base/variables" as *;
+
+.Brand_Section{
+    display: flex;
+    align-items: center;
+
+    .Brand_Logo{
+        border-radius: 50%;
+        max-height: 60px;
+        width: 100%;
+        padding: 0 10px;
+        margin: 0 10px;
+    }
+
+    .Brand_Name{
+        text-transform: uppercase;
+        margin-top:0.3em;
+        padding-left: 1px;
+        color: $primary-color;
+    }
+
+    .Brand_Tagline{
+        margin-top: -0.5em;
+        color: $third-color;
+        padding-left: 7px;
+        font-weight: 500;
+        font-size: 15px;
+        margin-bottom: 0;
+    }
+
+} 
+
+
+//////////////////////////  Responsive Condition   /////////////////////
+
+// Below 576
+@media (max-width: 575px) {
+    
+    .Brand_Section{
+        .Brand_Logo{
+            max-height: 50px;
+            margin: 0%;
+        }
+
+        .Brand_Name{
+            font-size: 12px;
+        }
+
+        .Brand_Tagline{
+            font-size: 8px;
+            font-weight: 600;
+        }
+
+    } 
+}
+
+// MD — 576px to 767px
+@media (min-width: 576px) and (max-width: 767px) {
+    
+    .Brand_Section{
+
+        .Brand_Logo{
+            max-height: 50px;
+        }
+
+        .Brand_Name{
+            font-size: 15px;
+        }
+
+        .Brand_Tagline{
+            font-size: 11px;
+        }
+
+    } 
+}
+
+// 768px to 1199px
+@media (min-width: 768px) and (max-width: 1199px) {
+    
+    .Brand_Section{
+
+        .Brand_Logo{
+            max-height: 55px;
+        }
+
+        .Brand_Name{
+            font-size: 17px;
+        }
+
+        .Brand_Tagline{
+            font-size: 12px;
+        }
+
+    } 
+}

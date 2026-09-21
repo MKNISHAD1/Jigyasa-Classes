@@ -1046,16 +1046,15 @@ class ProcessLessonHls implements ShouldQueue
                             $requests[] = $pool
                                 ->withHeaders([
                                     'AccessKey' => $apiKey,
-                                    'Content-Type' =>
-                                        $requestFile['mime_type'],
+                                    'Content-Type' => $requestFile['mime_type'],
                                 ])
+                                ->timeout(120)
+                                ->connectTimeout(15)
                                 ->withBody(
                                     $requestFile['stream'],
                                     $requestFile['mime_type']
                                 )
-                                ->put(
-                                    $requestFile['url']
-                                );
+                                ->put($requestFile['url']);
                         }
 
                         return $requests;

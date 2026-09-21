@@ -7,6 +7,43 @@ $forth-color:#047ba7;
 $fifth-color:#FFFFFF;
 
 
+//////////////////////////  Responsive Condition   /////////////////////
+// XS — 0px to 399px
+@media (min-width: 0px) and (max-width: 399px) {
+    // ...
+}
+
+// SM — 400px to 575px
+@media (min-width: 400px) and (max-width: 575px) {
+    // ...
+}
+
+// MD — 576px to 767px
+@media (min-width: 576px) and (max-width: 767px) {
+    // ...
+}
+
+// LG — 768px to 991px
+@media (min-width: 768px) and (max-width: 991px) {
+    // ...
+}
+
+// XL — 992px to 1199px
+@media (min-width: 992px) and (max-width: 1199px) {
+    // ...
+}
+
+// XXL — 1200px to 1399px
+@media (min-width: 1200px) and (max-width: 1399px) {
+    // ...
+}
+
+// XXXL — 1400px and above
+@media (min-width: 1400px) {
+    // ...
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////
 
 /* Extra small devices (phones) */
 @media (max-width: 575.98px) {
@@ -85,16 +122,11 @@ $fifth-color:#FFFFFF;
 
 
 
-
-
 /* Large devices (laptops) */
 @media (min-width: 992px) and (max-width: 1199.98px) {
   .line { background-color: purple; }
   
-  .Menu_Items_Gap {
-    gap: 0 !important;
-    font-size: 0.9rem;
-  }
+
   ////////////////////////////////          Exam Section         ////////////////////////////////////
   .Exam-Section{
     .exampic {
@@ -125,10 +157,7 @@ $fifth-color:#FFFFFF;
 @media (min-width: 1200px) and (max-width: 1399.98px) {
   .line { background-color: blue; }
 
-  .Menu_Items_Gap {
-    gap: 1rem !important;
-  }
-  
+
   ////////////////////////////////          Exam Section         ////////////////////////////////////
   .Exam-Section{
     .exampic {
@@ -156,10 +185,6 @@ $fifth-color:#FFFFFF;
 /* XXL devices (large screens) */
 @media (min-width: 1400px) {
   .line { background-color: pink; }
-
-  .Menu_Items_Gap {
-    gap: 3rem !important;
-  }
 
   ////////////////////////////////          Exam Section         ////////////////////////////////////
   .Exam-Section{
