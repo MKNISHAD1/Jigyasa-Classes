@@ -7,827 +7,697 @@ import { Link } from 'react-router-dom';
 import { useCategories } from '../../../hooks/useCategories';
 import { useTranslation } from 'react-i18next';
 import { useCourses } from '../../../hooks/useCourses';
-import why1 from '../../../assets/images/why-1.jpeg';
-import why2 from '../../../assets/images/why-2.jpeg';
-import why3 from '../../../assets/images/why-3.jpeg';
-import why4 from '../../../assets/images/why-4.jpeg';
-
 import ProfessorIcon from "../../../assets/images/professor2.svg?react";
 import VideoIcon from "../../../assets/images/video2.svg?react";
 import MoneyIcon from "../../../assets/images/money.svg?react";
 import CertificateIcon from "../../../assets/images/certificate3.svg?react";
-
-import blackboard from '../../../assets/images/blackboard4.png';
-import student1 from '../../../assets/images/Student1.png'
-import student2 from '../../../assets/images/Student2.png'
-import student3 from '../../../assets/images/Student3.png'
-import student4 from '../../../assets/images/Student4.png'
-import student5 from '../../../assets/images/Student5.png'
-import exam from '../../../assets/images/exams1.png'
-import exam1 from '../../../assets/images/exam1.png'
-import exam2 from '../../../assets/images/exam2.png'
-import exam3 from '../../../assets/images/exam3.png'
-import exam4 from '../../../assets/images/exam4.png'
-import exam5 from '../../../assets/images/exam5.png'
-import bgImage from '../../../assets/images/herobg1.png'
-import bfs1 from '../../../assets/images/bf1.png'
-import bfs2 from '../../../assets/images/success.jpg'
-import bfs3 from '../../../assets/images/bf3.png'
+import student1 from '../../../assets/images/Student1.png';
+import student2 from '../../../assets/images/Student2.png';
+import student3 from '../../../assets/images/Student3.png';
+import student4 from '../../../assets/images/Student4.png';
+import student5 from '../../../assets/images/Student5.png';
+import student6 from '../../../assets/images/Student10.png';
+import exam1 from '../../../assets/images/exam1.png';
+import exam2 from '../../../assets/images/exam2.png';
+import exam3 from '../../../assets/images/exam3.png';
+import exam4 from '../../../assets/images/exam4.png';
+import exam5 from '../../../assets/images/exam5.png';
+import benefit from '../../../assets/images/bf3.jpeg';
 import { Carousel } from 'react-bootstrap';
-import { faArrowRight, faBook, faBookOpen, faClock, faDesktop, faDollar, faDollarSign, faFile, faJournalWhills, faLaptop, faLayerGroup, faMessage, faMoneyBill, faMoneyBillTransfer, faMoneyCheckDollar, faQuoteLeft, faSearch, faSearchPlus, faStar, faUserEdit, faUserGroup } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faArrowRight, faClock, faDesktop, faDollar,  faFile, faJournalWhills, faLaptop, faLayerGroup, faMessage, faQuoteLeft, faSearch,  faUserEdit, faUserGroup } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { AUTH_ROUTES, PUBLIC_ROUTES } from '../../../constants/nevigation/routes';
+import SectionHeading from '../../Common/CommonUI/SectionHeading';
+import CourseCardUi from '../../Common/CommonUI/CourseCardUi';
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation , Autoplay } from "swiper/modules";
+import "swiper/css";
+import 'swiper/css/autoplay';
+import "swiper/css/navigation";
+
 
 const HomeUi = () => {
 
   const {categories, loading} = useCategories();
   const { courses } = useCourses({
     status:"published",
-    limit:4,
+    limit:6,
   });
   const {i18n} = useTranslation();
 
-    const myStyle = {
-    backgroundImage: `url(${blackboard})`,
-  };
 
   
   return (
     <>
 
+    {/* Header Navbar */}
     <HeaderUi />
+
+    <div className="Home_Page_Body">
     
-    {/* Hero Section  */}
-    <section className="hero-section" 
-      style={{backgroundImage: `url(${bgImage})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat'}}>
+      {/* [1.] Hero Section  */}
+      <section className="Hero_Section" >
 
-      <div className="container-fluid hero-body">
+        <div className="container-fluid Hero_Body">
 
-        <div className="row">
+          <div className="row">
 
-          {/* LEFT CONTENT */}
-          <div className="col-lg-6 hero-content pb-2">
+            {/* LEFT CONTENT */}
+            <div className="col-lg-6 Hero_Content pb-2">
 
-            <small className="hero-tag">
-              Start Your Success Journey Today
-            </small>
+              <small className="Hero_Tag">
+                Start Your Success Journey Today
+              </small>
 
-            <h1>
-              Build Your Future With <br />
-              <span> Quality Education </span>
-              & <br /> Expert
-              <span> Mentorship</span>
-            </h1>
+              <h1>
+                Build Your Future With <br />
+                <span> Quality Education </span>
+                & <br /> Expert
+                <span> Mentorship</span>
+              </h1>
 
-            <p>
-              Learn from experienced educators, access structured study materials, and prepare confidently for competitive examinations with guided learning paths.
-            </p>
+              <p>
+                Learn from experienced educators, access structured study materials, and prepare confidently for competitive examinations with guided learning paths.
+              </p>
 
-            <div className="hero-btns">
-              <Link to={PUBLIC_ROUTES.COURSES} className="primary-btn">
-                Start Learning  <FontAwesomeIcon icon={faArrowRight} className='icon'/>
-              </Link>
+              <div className="Hero_Buttons">
+                <Link to={PUBLIC_ROUTES.COURSES} className="Primary_Button_2">
+                  Start Learning  <FontAwesomeIcon icon={faArrowRight} className='icon'/>
+                </Link>
+              </div>
+
+              <div className="Hero_Features">
+
+                <div className="Feature_Item">
+                  <FontAwesomeIcon icon={faDesktop} /> Interactive Sessions
+                </div>
+
+                <div className="Feature_Item">
+                  <FontAwesomeIcon icon={faUserGroup}/> Expert Faculty
+                </div>
+
+
+                <div className="Feature_Item">
+                  <FontAwesomeIcon icon={faFile} /> Study Material
+                </div>
+
+              </div>
+
             </div>
 
-            <div className="hero-features">
-
-              <div className="feature-item">
-                <FontAwesomeIcon icon={faDesktop} /> Interactive Sessions
-              </div>
-
-              <div className="feature-item">
-                <FontAwesomeIcon icon={faUserGroup}/> Expert Faculty
-              </div>
-
-
-              <div className="feature-item">
-                <FontAwesomeIcon icon={faFile} /> Study Material
-              </div>
+            {/* RIGHT IMAGE */}
+            <div className="col-lg-6 Hero_Img text-center">
+              <img
+                src={student5}
+                alt="Student"
+                className="Student_Img"
+              />
 
             </div>
 
           </div>
 
-          {/* RIGHT IMAGE */}
-          <div className="col-lg-6 hero-img text-center">
-            <img
-              src={student5}
-              alt="Student"
-              className="student-img"
-            />
-
-          </div>
-
         </div>
+      </section>
 
-      </div>
-    </section>
-
-
-    {/* Exams banner */}
-    {/* <div className="text-center mb-4">
       
-        <div className="gradi">
-          <div className='container'>
+      {/* [2.1] Exams Section Heading */}
+      <SectionHeading 
+        title={
+          <>
+          We Prepare You For Multiple <span> Competetitive  Exams</span>
+          </>
+        }
+        subtitle= "Structured courses designed for India's top competitive exams"    
+      />
+      {/* [2.2] Exam Section */}
+      <section className="Exam_Strip_Section">
+        <div className="Exam_Marquee">
 
-              <div className=" Exam-Section">
+          <div className="Marquee_Track">
 
-                <img src={exam} className='exampic'/>
+            {/* First Set */}
+            <div className="Exam_Item">
+              <img src={exam1} alt="UPPSC" />
+              <span>UPPSC</span>
+            </div>
 
-                <div className="exams-block">
-                  <img src={exam1} /><br />
-                  <h3>UPPSC</h3>
-                </div>
+            <div className="Exam_Item">
+              <img src={exam2} alt="RRB" />
+              <span>RRB</span>
+            </div>
 
-                <div className="exams-block">
-                  <img src={exam4} /><br />
-                  <h3>RRB</h3>
-                </div>
-                
-                <div className="exams-block">
-                  <img src={exam5} /><br />
-                  <h3>PSC</h3>
-                </div>
-                
-                <div className="exams-block">
-                  <img src={exam2} /><br />
-                  <h3>SSC</h3>
-                </div>
+            <div className="Exam_Item">
+              <img src={exam3} alt="PSC" />
+              <span>PSC</span>
+            </div>
 
-                <div className="exams-block">
-                  <img src={exam3} /><br />
-                  <h3>JEE</h3>
-                </div>
+            <div className="Exam_Item">
+              <img src={exam4} alt="SSC" />
+              <span>SSC</span>
+            </div>
 
-              </div>
-          </div>
-        </div>
+            <div className="Exam_Item">
+              <img src={exam5} alt="JEE" />
+              <span>JEE</span>
+            </div>
 
-    </div> */}
+            {/* Duplicate for infinite scroll */}
+           <div className="Exam_Item">
+              <img src={exam1} alt="UPPSC" />
+              <span>UPPSC</span>
+            </div>
 
-    <div className="text-center mb-4">
-      
-        <div className="gradi2">
-          <div className='container'>
-              <div className='pb-2 text-center'>
-                <br /><br />
+            <div className="Exam_Item">
+              <img src={exam2} alt="RRB" />
+              <span>RRB</span>
+            </div>
 
-                    <h3 className="fw-bold">
-                      We Prepare You For Multiple <span className='span2'> Competetitive  Exams</span>
-                    </h3>
-                    <p>Structured courses designed for India's top competitive exams</p>
-                
+            <div className="Exam_Item">
+              <img src={exam3} alt="PSC" />
+              <span>PSC</span>
+            </div>
 
-              </div>
-          </div>
-        </div>
-    </div>
+            <div className="Exam_Item">
+              <img src={exam4} alt="SSC" />
+              <span>SSC</span>
+            </div>
 
-    <section className="exam-marquee-section">
-      <div className="exam-marquee">
+            <div className="Exam_Item">
+              <img src={exam5} alt="JEE" />
+              <span>JEE</span>
+            </div>
 
-        <div className="marquee-track">
-
-          {/* First Set */}
-          <div className="exam-item">
-            <img src={exam1} alt="UPPSC" />
-            <span>UPPSC</span>
-          </div>
-
-          <div className="exam-item">
-            <img src={exam2} alt="RRB" />
-            <span>RRB</span>
-          </div>
-
-          <div className="exam-item">
-            <img src={exam3} alt="PSC" />
-            <span>PSC</span>
-          </div>
-
-          <div className="exam-item">
-            <img src={exam4} alt="SSC" />
-            <span>SSC</span>
-          </div>
-
-          <div className="exam-item">
-            <img src={exam5} alt="JEE" />
-            <span>JEE</span>
-          </div>
-
-          {/* Duplicate for infinite scroll */}
-
-          <div className="exam-item">
-            <img src={exam1} alt="UPPSC" />
-            <span>UPPSC</span>
-          </div>
-
-          <div className="exam-item">
-            <img src={exam2} alt="RRB" />
-            <span>RRB</span>
-          </div>
-
-          <div className="exam-item">
-            <img src={exam3} alt="PSC" />
-            <span>PSC</span>
-          </div>
-
-          <div className="exam-item">
-            <img src={exam4} alt="SSC" />
-            <span>SSC</span>
-          </div>
-
-          <div className="exam-item">
-            <img src={exam5} alt="JEE" />
-            <span>JEE</span>
           </div>
 
         </div>
 
-      </div>
+      </section>    
 
-    </section>
+      {/* [3.1] Latest Courses Section Heading */}
+      <SectionHeading 
+        title={
+          <>
+            Latest <span className='span2'> Courses</span>
+          </>
+        }
+        subtitle="Learn from newly added courses by expert instructors"
+      />
+      {/*  [3.2] Latest Courses Section Heading */}
+      <section className="Latest_Course_Section">
 
+        { loading && (
+          <div className="dashboard-card mt-4">
+            <div
+              className="d-flex flex-column justify-content-center align-items-center"
+              style={{ minHeight: "350px" }}
+            >
+              <div
+                className="spinner-border text-success "
+                style={{ width: "3rem", height: "3rem" }}
+              />
 
-    
+              <h5 className="mt-3 mb-1">Loading Courses...</h5>
 
-    {/* Latest Courses Section */}
-    <div className="text-center mb-4">
-      
-        <div className="gradi2">
-          <div className='container'>
-              <div className='pb-2 text-center'>
-                <br /><br />
-
-                    <h3 className="fw-bold">
-                      Latest <span className='span2'> Courses</span>
-                    </h3>
-                    <p>Learn from newly added courses by expert instructors</p>
-              </div>
-          </div>
-        </div>
-
-    </div>
-    <section className="Latest_Course_Section">
-      <div className="row g-4">
-
-        {loading && (
-          <div className="text-center py-5">
-            <p>Loading courses...</p>
+              <small className="text-muted">
+                Please wait while we fetching courses.
+              </small>
+            </div>
           </div>
         )}
 
-        {!loading &&
-          courses.map((course) => (
-            <div className="col-12 col-sm-6 col-lg-3" key={course.id}>
-              <div className="card h-100 course-card">
-                
-                <img
-                  src={course.thumbnail ?? "/default-course.png"}
-                  className="course-img"
-                  alt={course.title?.en}
-                />
+          {!loading && courses.length > 0 && (
+              <div className="Latest_Course_Carousel">
 
-                  <div className="card-header">
-                    <h6 className="course-title">
-                    {course.title?.[i18n.language] ?? course.title?.en}
-                  </h6>
-                  </div>
-                  <div className="container d-flex flex-row">
-                    <img
-                      src={course.teacher.profile_pic ?? "/default-course.png"}
-                      className="teacher-img"
-                      alt={course.teacher.profile_pic?.en}
-                    />
-                    <h6 className="teacher-name">
-                      {course.teacher.name}
-                    </h6>                                    
-                    <div className="ms-auto"> 
-                      <Link className='category-button' to="#" >
-                        {course.category?.name?.[i18n.language] ??
-                          course.category?.name?.en}
-                      </Link>
+                  {/* Previous Button */}
+                  <button
+                      className="Latest_Course_Nav Latest_Course_Nav_Prev"
+                      type="button"
+                      aria-label="Previous courses"
+                  >
+                      <span> <FontAwesomeIcon icon={faArrowLeft} className='Icon'/> </span>
+                  </button>
+
+
+                  {/* Swiper */}
+                  <Swiper
+                      className="Latest_Course_Swiper"
+                      modules={[Navigation,Autoplay]}
+                      loop={true} 
+                      navigation={{
+                          prevEl: ".Latest_Course_Nav_Prev",
+                          nextEl: ".Latest_Course_Nav_Next",
+                      }}
+                      // Configure Autoplay
+                      autoplay={{
+                        delay: 3000, // Time in ms before moving to the next slide (2.5s)
+                        disableOnInteraction: false, // Prevents autoplay from stopping after user swipes
+                        pauseOnMouseEnter: true, // Pauses autoplay when the user hovers over the slider
+                      }}
+                      
+                      spaceBetween={20}
+                      slidesPerView={1}
+                      slidesPerGroup={1}
+                      breakpoints={{
+                          576: {
+                              slidesPerView: 2,
+                              slidesPerGroup: 1,
+                          },
+
+                          992: {
+                              slidesPerView: 3,
+                              slidesPerGroup: 1,
+                          },
+
+                          1200: {
+                              slidesPerView: 4,
+                              slidesPerGroup: 1,
+                          },
+                      }}
+                  >
+                      {courses.map((course) => (
+                          <SwiperSlide key={course.id}>
+                              <CourseCardUi course={course} />
+                          </SwiperSlide>
+                      ))}
+                  </Swiper>
+
+
+                  {/* Next Button */}
+                  <button
+                      className="Latest_Course_Nav Latest_Course_Nav_Next"
+                      type="button"
+                      aria-label="Next courses"
+                  >
+                      <span><FontAwesomeIcon icon={faArrowRight} className='Icon' /></span>
+                  </button>
+
+              </div>
+          )}
+
+      </section>
+
+      {/* [4.] Why Choose Us Section */}
+      <section className="why-choose">
+
+        <div className="row ">
+          <h2 className="title">
+            Why Aspirants Choose <span>Jigyasa Classes</span>
+          </h2>
+
+          <div className="col-12 col-sm-6 col-lg-3">
+            <div className="why-item">
+              <div className="icon-wrapper">
+                <ProfessorIcon className="why-icon" />
+              </div>
+
+              <div className="why-content">
+                <h3>Expert <span>Faculty</span></h3>
+                <p>
+                  Learn from experienced teachers with proven success in competitive
+                  exam preparation.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="col-12 col-sm-6 col-lg-3">
+            <div className="why-item">
+              <div className="icon-wrapper">
+                <VideoIcon className="why-icon" />
+              </div>
+
+              <div className="why-content">
+                <h3>Structured <span>Curriculum</span></h3>
+                <p>
+                  Step-by-step learning paths designed according to the latest exam
+                  patterns.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="col-12 col-sm-6 col-lg-3">
+            <div className="why-item">
+              <div className="icon-wrapper">
+                <MoneyIcon className="why-icon" />
+              </div>
+
+              <div className="why-content">
+                <h3>Affordable <span>Pricing</span></h3>
+                <p>
+                  Quality education at student-friendly prices with both free and
+                  premium options.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="col-12 col-sm-6 col-lg-3">
+            <div className="why-item">
+              <div className="icon-wrapper">
+                <CertificateIcon className="why-icon" />
+              </div>
+
+              <div className="why-content">
+                <h3>Verified <span>Certification</span></h3>
+                <p>
+                  Earn certificates that showcase your learning achievements and
+                  skills.
+                </p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+      {/* [5.1] Testimonials Section Heading */}
+      <SectionHeading 
+        title={
+          <>
+            Student's <span className='span2'> Testimonials</span>
+          </>
+        } 
+        subtitle="Hear From Our Students How We've Helped Them Succeed"
+      />
+      {/* [5.2] Testimonials Section Heading */}
+      <section className="Testimonial_Section">
+        <div className="Testimonial_Overlay">
+          <Carousel
+            controls
+            indicators={true}
+            interval={4000}
+            draggable={true}
+          >
+            {/* Slide 1 */}
+            <Carousel.Item>
+              <div className="Testimonial_Content container">
+                <div className="row align-items-center crouzel-body">
+                  <div className="col-md-6 text-white">
+                    <FontAwesomeIcon icon={faQuoteLeft} className='Quote_Icon'/>
+                    <hr />
+                    <p className="Testimonial_Text">
+                      “The courses are well-structured, the explanations are clear, and the faculty truly understands exam requirements.
+  I especially liked the flexibility of learning anytime.”
+                    </p>
+                    <hr />
+                    <div className="Testimonial_Name_Role">
+                    <h5 className='Student_Name'>Priya Sharma</h5>
+                    <span className='Student_Role'>~   UPSC Aspirant</span>
                     </div>
                   </div>
 
-                <div className="card-body d-flex flex-column h-100">
-                  
-
-                  {/* <p className="course-desc small flex-grow-1 mb-2">
-                    {course.description?.[i18n.language] ??
-                      course.description?.en}
-                  </p> */}
-
-                  <div className="course-meta">
-                    <span>
-                      <FontAwesomeIcon icon={faBook} className='icon'/> {course.lessons_count || 0} Lessons
-                    </span>
-
-                    {/* Future Data */}
-                    <span><FontAwesomeIcon icon={faClock} className='icon'/> 18 Hours</span> <br />
-                    {/* <span><FontAwesomeIcon icon={faStar}/> 4.8</span>
-                    <span><FontAwesomeIcon icon={faUserGroup}/> 245</span> */}
-
-                  </div>
-                  <div className="d-flex card-footer justify-content-between align-items-center price-section">
-                    <span className="fw-bold text-success price">
-                      {course.price ? `₹${course.price}` : "Free"} 
-                    </span>
-
-                    <Link
-                    to={PUBLIC_ROUTES.COURSE_VIEW
-                        .replace(":id",course.id)
-                        .replace(":title", course.title?.en)
-                      } 
-                      // to={`/CourseView/${course.id}/${course.title?.en}`}
-                      className="view-course-btn"
-                    >
-                      View Course 
-                    </Link>
+                  <div className="col-md-6 text-center">
+                    <img
+                      src={student1}
+                      className="Testimonial_Student_Img"
+                    />
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
-      </div>
+            </Carousel.Item>
 
-        {/* All Courses Button */}
-        <div className="text-center mt-5">
-          <Link to={PUBLIC_ROUTES.COURSES} className="view-course-btn py-2 px-4">
-            More Courses <FontAwesomeIcon icon={faArrowRight}/>
-          </Link>
-        </div>
-    </section>
-
-
-    {/* Why Choose Us Section */}
-
-    <section className="why-choose">
-
-      <div className="row ">
-        <h2 className="title">
-          Why Aspirants Choose <span>Jigyasa Classes</span>
-        </h2>
-
-        <div className="col-12 col-sm-6 col-lg-3">
-          <div className="why-item">
-            <div className="icon-wrapper">
-              <ProfessorIcon className="why-icon" />
-            </div>
-
-            <div className="why-content">
-              <h3>Expert <span>Faculty</span></h3>
-              <p>
-                Learn from experienced teachers with proven success in competitive
-                exam preparation.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="col-12 col-sm-6 col-lg-3">
-          <div className="why-item">
-            <div className="icon-wrapper">
-              <VideoIcon className="why-icon" />
-            </div>
-
-            <div className="why-content">
-              <h3>Structured <span>Curriculum</span></h3>
-              <p>
-                Step-by-step learning paths designed according to the latest exam
-                patterns.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="col-12 col-sm-6 col-lg-3">
-          <div className="why-item">
-            <div className="icon-wrapper">
-              <MoneyIcon className="why-icon" />
-            </div>
-
-            <div className="why-content">
-              <h3>Affordable <span>Pricing</span></h3>
-              <p>
-                Quality education at student-friendly prices with both free and
-                premium options.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="col-12 col-sm-6 col-lg-3">
-          <div className="why-item">
-            <div className="icon-wrapper">
-              <CertificateIcon className="why-icon" />
-            </div>
-
-            <div className="why-content">
-              <h3>Verified <span>Certification</span></h3>
-              <p>
-                Earn certificates that showcase your learning achievements and
-                skills.
-              </p>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-    </section>
-
-
-    {/*  Testimonials  */}
-    <div className="text-center mb-4">
-      
-        <div className="gradi3">
-          <div className='container'>
-              <div className='pb-2 text-center'>
-                <br /><br />
-
-      <h3 className="fw-bold">
-        Student's <span className='span2'> Testimonials</span>
-      </h3>
-      <p>Hear From Our Students How We've Helped Them Succeed</p>
-                
-
-              </div>
-          </div>
-        </div>
-
-    </div>
-
-    <section className="testimonial-section" style={myStyle}>
-      <div className="testimonial-overlay">
-        <Carousel
-          controls
-          indicators={true}
-          interval={7000}
-          draggable={true}
-        >
-          {/* Slide 1 */}
-          <Carousel.Item>
-            <div className="testimonial-content container">
-              <div className="row align-items-center crouzel-body">
-                <div className="col-md-6 text-white">
-                  <FontAwesomeIcon icon={faQuoteLeft} className='quote-icon'/>
+            {/* Slide 2 */}
+            <Carousel.Item>
+              <div className="Testimonial_Content container">
+                <div className="row align-items-center crouzel-body">
+                  <div className="col-md-7 text-white">
+                  <FontAwesomeIcon icon={faQuoteLeft} className='Quote_Icon'/>
                   <hr />
-                  <p className="testimonial-text">
-                    “The courses are well-structured, the explanations are clear, and the faculty truly understands exam requirements.
-I especially liked the flexibility of learning anytime.”
+                    <p className="Testimonial_Text">
+                      “The lessons are simple, focused, and designed exactly for competitive exams.
+  What impressed me most is the balance between concept clarity and practice questions.”
+                    </p>
+                    <hr />
+                    <div className="Testimonial_Name_Role">                    
+                    <h5 className='Student_Name'>Rohan Mehta</h5>
+                    <span className='Student_Role'>~   SSC Candidate</span>
+                    </div>
+                  </div>
+
+                  <div className="col-md-5 text-center">
+                    <img
+                      src={student3}
+                      className="Testimonial_Student_Img"
+                    />
+                  </div>
+                </div>
+              </div>
+            </Carousel.Item>
+
+            {/* Slide 3  */}
+            <Carousel.Item>
+              <div className="Testimonial_Content container">
+                <div className="row align-items-center crouzel-body">
+                  <div className="col-md-7 text-white">
+                  <FontAwesomeIcon icon={faQuoteLeft} className='Quote_Icon'/>
+                    <hr />
+                    <p className="Testimonial_Text">
+                      “Each topic is explained step by step, making even difficult concepts easy to understand.
+  I gained confidence in problem-solving and improved my accuracy significantly”
+                    </p>
+                    <hr />
+                    <div className="Testimonial_Name_Role">                                    
+                    <h5 className='Student_Name'>Neha Verma</h5>
+                    <span className='Student_Role'>~   JEE Aspirant</span>
+                    </div>
+                  </div>
+
+                  <div className="col-md-5 text-center">
+                    <img
+                      src={student6}
+                      className="Testimonial_Student_Img"
+                    />
+                  </div>
+                </div>
+              </div>
+            </Carousel.Item>
+
+            {/* Slide 4  */}
+            <Carousel.Item>
+              <div className="Testimonial_Content container">
+                <div className="row align-items-center crouzel-body">
+                  <div className="col-md-7 text-white">
+                  <FontAwesomeIcon icon={faQuoteLeft} className='Quote_Icon'/>
+                    <hr />
+                    <p className="Testimonial_Text">
+                      “The faculty explains concepts deeply and provides enough practice to strengthen understanding.
+  Regular assessments helped me track my progress and improve continuously.”
+                    </p>
+                    <hr />
+                    <div className="Testimonial_Name_Role">                                    
+                    <h5 className='Student_Name'>Amit Kulkarni</h5>
+                    <span className='Student_Role'>~   JEE Aspirant</span>
+                    </div>
+                  </div>
+
+                  <div className="col-md-5 text-center">
+                    <img
+                      src={student4}
+                      className="Testimonial_Student_Img"
+                    />
+                  </div>
+                </div>
+              </div>
+            </Carousel.Item>
+
+            {/* Slide 5  */}
+            <Carousel.Item>
+              <div className="Testimonial_Content container">
+                <div className="row align-items-center crouzel-body">
+                  <div className="col-md-7 text-white">
+                  <FontAwesomeIcon icon={faQuoteLeft} className='Quote_Icon'/>
+                    <hr />
+                    <p className="Testimonial_Text">
+                      “The courses are easy to follow, and I could revise topics whenever needed.
+  It helped me manage my studies along with my college schedule effortlessly.”
+                    </p>
+                    <hr />
+                    <div className="Testimonial_Name_Role">                               
+                    <h5 className='Student_Name'>Sneha Patil</h5>
+                    <span className='Student_Role'>~ College Student</span>
+                    </div>
+                  </div>
+
+                  <div className="col-md-5 text-center">
+                    <img
+                      src={student2}
+                      className="Testimonial_Student_Img"
+                    />
+                  </div>
+                </div>
+              </div>
+            </Carousel.Item>
+
+          </Carousel>
+        </div>
+      </section>
+
+
+      {/* [6.1] Benenfit Section Heading*/}
+      <SectionHeading 
+        title={
+          <>
+            Benefits Of Learning With <span className='span2'> Jigyasa Classes</span>
+          </>
+        }
+        subtitle="Your Learning Is Simplified With Us, Disgned for Serious Aspirants"
+      />
+      {/* [6.2] Benenfit Section Heading*/}
+      <section className="Benefits_Zigzag">
+        <div className="container-fluid">
+          <div className="Zigzag_Wrapper d-flex justify-content-between">
+            
+            {/* LEFT COLUMN */}
+            <div className="Zigzag_Col Left">
+              <div className="L1">
+                <div className="Benefit_Card" tabIndex="0"  aria-labelledby="Benefit_Anytime">
+                  <div className="Benefit_Title">
+                    <FontAwesomeIcon icon={faLaptop} className='Icon'/>
+                  <h3 id="Benefit_Anytime">Learn Anytime, Anywhere</h3>
+                  </div>
+                  <p>
+                    Access your courses on mobile or desktop and study at your own pace.
                   </p>
-                  <hr />
-                  <div className="testimonial-name-role">
-                  <h5 className='sname'>Priya Sharma</h5>
-                  <span className='srole'>~   UPSC Aspirant</span>
-                  </div>
-                </div>
-
-                <div className="col-md-6 text-center">
-                  <img
-                    src={student1}
-                    className="testimonial-img"
-                  />
                 </div>
               </div>
-            </div>
-          </Carousel.Item>
 
-          {/* Slide 2 */}
-          <Carousel.Item>
-            <div className="testimonial-content container">
-              <div className="row align-items-center crouzel-body">
-                <div className="col-md-7 text-white">
-                <FontAwesomeIcon icon={faQuoteLeft} className='quote-icon'/>
-                <hr />
-                  <p className="testimonial-text">
-                    “The lessons are simple, focused, and designed exactly for competitive exams.
-What impressed me most is the balance between concept clarity and practice questions.”
+              <div className="R1">
+                <div className="Benefit_Card Alt1" tabIndex="0" aria-labelledby="Benefit_Exam_Focused">
+                  <div className="Benefit_Title">
+                    <FontAwesomeIcon icon={faJournalWhills} className='Icon'/>
+                  <h3 id="Benefit_Exam_Focused">Exam-Focused & Practical</h3>
+                  </div>
+                  <p>
+                    Courses designed to match real exam patterns with clarity.
                   </p>
-                  <hr />
-                  <div className="testimonial-name-role">                    
-                  <h5 className='sname'>Rohan Mehta</h5>
-                  <span className='srole'>~   SSC Candidate</span>
-                  </div>
                 </div>
+              </div>      
 
-                <div className="col-md-5 text-center">
-                  <img
-                    src={student3}
-                    className="testimonial-img"
-                  />
-                </div>
-              </div>
             </div>
-          </Carousel.Item>
 
-          {/* Slide 3  */}
-          <Carousel.Item>
-            <div className="testimonial-content container">
-              <div className="row align-items-center crouzel-body">
-                <div className="col-md-7 text-white">
-                <FontAwesomeIcon icon={faQuoteLeft} className='quote-icon'/>
-                  <hr />
-                  <p className="testimonial-text">
-                    “Each topic is explained step by step, making even difficult concepts easy to understand.
-I gained confidence in problem-solving and improved my accuracy significantly”
+            <div className="Zigzag_Col d-flex flex-column justify-content-center">
+              <div className="L2">          
+                <div className="Benefit_Card Center" tabIndex="0" aria-labelledby="Benefit_Multiple_Exams">
+                  <div className="Benefit_Title">
+                    <FontAwesomeIcon icon={faLayerGroup} className='Icon'/>
+                  <h3 id="Benefit_Multiple_Exams" >One Platform, Multiple Exams</h3>
+                  </div>
+                  <p>
+                    Prepare for Multiple Compitative Exams like UPSC, SSC, JEE, Banking and more.
                   </p>
-                  <hr />
-                  <div className="testimonial-name-role">                                    
-                  <h5 className='sname'>Neha Verma</h5>
-                  <span className='srole'>~   JEE Aspirant</span>
-                  </div>
-                </div>
-
-                <div className="col-md-5 text-center">
-                  <img
-                    src={student5}
-                    className="testimonial-img"
-                  />
                 </div>
               </div>
+              <img src={benefit}/>
             </div>
-          </Carousel.Item>
 
-          {/* Slide 4  */}
-          <Carousel.Item>
-            <div className="testimonial-content container">
-              <div className="row align-items-center crouzel-body">
-                <div className="col-md-7 text-white">
-                <FontAwesomeIcon icon={faQuoteLeft} className='quote-icon'/>
-                  <hr />
-                  <p className="testimonial-text">
-                    “The faculty explains concepts deeply and provides enough practice to strengthen understanding.
-Regular assessments helped me track my progress and improve continuously.”
+            {/* RIGHT COLUMN */}
+            <div className="Zigzag_Col Right">
+              <div className="R2">
+                <div className="Benefit_Card Alt2" tabIndex="0" aria-labelledby="Benefit_Flexible">
+                  <div className="Benefit_Title">
+                    <FontAwesomeIcon icon={faClock} className='Icon' />
+                  <h3 id='Benefit_Flexible'>Flexible & Pressure-Free Learning</h3>
+                  </div>
+                  <p>
+                    Recorded lessons allow revision anytime without stress.
                   </p>
-                  <hr />
-                  <div className="testimonial-name-role">                                    
-                  <h5 className='sname'>Amit Kulkarni</h5>
-                  <span className='srole'>~   JEE Aspirant</span>
-                  </div>
-                </div>
-
-                <div className="col-md-5 text-center">
-                  <img
-                    src={student4}
-                    className="testimonial-img"
-                  />
                 </div>
               </div>
-            </div>
-          </Carousel.Item>
 
-
-          {/* Slide 5  */}
-          <Carousel.Item>
-            <div className="testimonial-content container">
-              <div className="row align-items-center crouzel-body">
-                <div className="col-md-7 text-white">
-                <FontAwesomeIcon icon={faQuoteLeft} className='quote-icon'/>
-                  <hr />
-                  <p className="testimonial-text">
-                    “The courses are easy to follow, and I could revise topics whenever needed.
-It helped me manage my studies along with my college schedule effortlessly.”
+              <div className="L3">
+                <div className="Benefit_Card" tabIndex="0">
+                  <div className="Benefit_Title">
+                    <FontAwesomeIcon icon={faMessage} className='Icon'/>
+                  <h3>Interactive & Easy to Follow</h3>
+                  </div>
+                  <p>
+                    Engaging lessons with practical examples and materials.
                   </p>
-                  <hr />
-                  <div className="testimonial-name-role">                               
-                  <h5 className='sname'>Sneha Patil</h5>
-                  <span className='srole'>~ College Student</span>
-                  </div>
-                </div>
-
-                <div className="col-md-5 text-center">
-                  <img
-                    src={student2}
-                    className="testimonial-img"
-                  />
                 </div>
               </div>
             </div>
-          </Carousel.Item>
 
-        </Carousel>
-      </div>
-    </section>
-
-
-    {/*  Benenfit Section  */}
-    <div className="text-center mb-4">
-      
-        <div className="gradi2">
-          <div className='container'>
-              <div className='p-4 text-center'>
-                <br /><br />
-
-      <h3 className="fw-bold">
-        Benefits Of Learning With <span className='span2'> Jigyasa Classes</span>
-      </h3>
-      <p>Your Learning Is Simplified With Us, Disgned for Serious Aspirants</p>
-                
-
-              </div>
           </div>
         </div>
+      </section>
 
-    </div>
-    <section className="Benefits-Zigzag">
-      <div className="container-fluid gradi2">
-        <div className="zigzag-wrapper d-flex justify-content-between">
-          
-          {/* LEFT COLUMN */}
-          <div className="zigzag-col left">
-            <div className="l1">
-              <div className="benefit-card" tabIndex="0"  aria-labelledby="benefit-anytime">
-                <div className="Benefit-Title">
-                  <FontAwesomeIcon icon={faLaptop} className='icon'/>
-                <h3 id="benefit-anytime">Learn Anytime, Anywhere</h3>
+      {/* [7.1] Take Action Section Heading*/}
+      <SectionHeading
+        title={
+          <>
+            Start Learning in <span className='span2'> 3 Simple Steps </span>
+          </>
+        }
+        subtitle="Let's Start Your Leaning With Us"
+      />
+
+      {/* [7.2] Take Actionn Section */}
+      <section className="Take_Action_Section">
+        <div className="Action_cont">
+          <div className="row gx-0">
+
+            {/* Step 1 */}
+            <div className="col-md-4 Step_Wrap">
+              <div className="text-center">
+                <div className="Action_Card" tabIndex="0"  aria-labelledby="Action_1">
+                  <div className="Action_Title">
+                    <FontAwesomeIcon icon={faUserEdit} className='Icon'/>
+                    <h3 id="Action_1">Create Your Account</h3>
+                  </div>
+                  <p>
+                    Sign up in seconds using your valid email to get started.
+                  </p>
                 </div>
-                <p>
-                  Access your courses on mobile or desktop and study at your own pace.
-                </p>
               </div>
             </div>
 
-            <div className="r1">
-              <div className="benefit-card alt1" tabIndex="0" aria-labelledby="benefit-exam-focused">
-                <div className="Benefit-Title">
-                  <FontAwesomeIcon icon={faJournalWhills} className='icon'/>
-                <h3 id="benefit-exam-focused">Exam-Focused & Practical</h3>
+            {/* Step 2 */}
+            <div className="col-md-4 Step_Wrap">
+              <div className="text-center">
+                <div className="Action_Card" tabIndex="0"  aria-labelledby="Action_2">
+                  <div className="Action_Title">
+                    <FontAwesomeIcon icon={faSearch} className='Icon'/>
+                    <h3 id="Action_2">Find Your Course </h3>
+                  </div>
+                  <p>
+                  Browse courses by exam, category, or subject and choose what fits your goal.
+                  </p>
                 </div>
-                <p>
-                  Courses designed to match real exam patterns with clarity.
-                </p>
-              </div>
-            </div>      
-
-          </div>
-
-          <div className="zigzag-col d-flex flex-column justify-content-center">
-            <div className="l2">          
-              <div className="benefit-card center" tabIndex="0" aria-labelledby="benefit-multiple-exams">
-                <div className="Benefit-Title">
-                  <FontAwesomeIcon icon={faLayerGroup} className='icon'/>
-                <h3 id="benefit-multiple-exams" >One Platform, Multiple Exams</h3>
-                </div>
-                <p>
-                  Prepare for Multiple Compitative Exams like UPSC, SSC, JEE, Banking and more.
-                </p>
-              </div>
-            </div>
-            <img src={bfs2}/>
-          </div>
-
-          {/* RIGHT COLUMN */}
-          <div className="zigzag-col right">
-            <div className="r2">
-              <div className="benefit-card alt2" tabIndex="0" aria-labelledby="benefit-flexible">
-                <div className="Benefit-Title">
-                  <FontAwesomeIcon icon={faClock} className='icon' />
-                <h3 id='benefit-flexible'>Flexible & Pressure-Free Learning</h3>
-                </div>
-                <p>
-                  Recorded lessons allow revision anytime without stress.
-                </p>
-              </div>
+              </div>      
             </div>
 
-            <div className="l3">
-              <div className="benefit-card " tabIndex="0">
-                <div className="Benefit-Title">
-                  <FontAwesomeIcon icon={faMessage} className='icon'/>
-                <h3>Interactive & Easy to Follow</h3>
+            {/* Step 3 */}
+            <div className="col-md-4 Step_Wrap">
+              <div className="text-center">
+                <div className="Action_Card" tabIndex="0"  aria-labelledby="Action_3">
+                  <div className="Action_Title">
+                    <FontAwesomeIcon icon={faDollar} className='Icon'/>
+                    <h3 id="Action_3">Enroll & Start Learning</h3>
+                  </div>
+                  <p>
+                    Complete secure payment and access your course instantly on any device.
+                  </p>
                 </div>
-                <p>
-                  Engaging lessons with practical examples and materials.
-                </p>
               </div>
             </div>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    {/* Take Action Section */}
-
-    <div className="text-center mb-4">
-      
-        <div className="gradi2">
-          <div className='container'>
-              <div className='pb-2 text-center'>
-                <br /><br />
-
-      <h3 className="fw-bold">
-        Start Learning in <span className='span2'> 3 Simple Steps </span>
-      </h3>
-      <p> Let's Start Your Leaning With Us </p>
-                
-              </div>
-          </div>
-        </div>
-
-    </div>
-    <section className="Take-Action-Section">
-      <div className="action-cont gradi2">
-        <div className="row gx-0">
-
-          {/* Step 1 */}
-          <div className="col-lg-4 step-wrap">
-            <div className="p-5 text-center">
-              <div className="action-card" tabIndex="0"  aria-labelledby="action-1">
-                <div className="Action-Title">
-                  <FontAwesomeIcon icon={faUserEdit} className='icon'/>
-                  <h3 id="action-1">Create Your Account</h3>
-                </div>
-                <p>
-                  Sign up in seconds using your valid email to get started.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Step 2 */}
-          <div className="col-lg-4 step-wrap">
-            <div className="  p-5  text-center">
-              <div className="action-card" tabIndex="0"  aria-labelledby="action-2">
-                <div className="Action-Title">
-                  <FontAwesomeIcon icon={faSearch} className='icon'/>
-                  <h3 id="action-2">Find Your Course </h3>
-                </div>
-                <p>
-                 Browse courses by exam, category, or subject and choose what fits your goal.
-                </p>
-              </div>
-            </div>      
-          </div>
-
-          {/* Step 3 */}
-          <div className="col-lg-4 step-wrap">
-            <div className=" p-5  text-center">
-              <div className="action-card" tabIndex="0"  aria-labelledby="action-3">
-                <div className="Action-Title">
-                  <FontAwesomeIcon icon={faDollar} className='icon'/>
-                  <h3 id="action-3">Enroll & Start Learning</h3>
-                </div>
-                <p>
-                  Complete secure payment and access your course instantly on any device.
-                </p>
-              </div>
-            </div>
+            
           </div>
           
+          <div className="text-center ">
+            <Link to={AUTH_ROUTES.REGISTER} className="Primary_Button_2 ">
+              Register Now <FontAwesomeIcon icon={faArrowRight}/>
+            </Link>
+          </div>
         </div>
-        <div className="text-center mb-4">
-          <Link to={AUTH_ROUTES.REGISTER} className="Register py-2 px-4">
-            Register Now <FontAwesomeIcon icon={faArrowRight}/>
-          </Link>
-        </div>
-      </div>
-    </section>
+      </section>
 
+    </div>
 
-{/* Gradient Strips */}
-
-          {/* gradi 1 */}
-{/* <div className="gradi">
-  <div className='container'>
-      <div className='p-4 text-center'>
-        <br /><br /><br /><br />
-        
-      </div>
-  </div>
-
-</div>
-<br /><br /> */}
-
-          {/* gradi 2 */}
-{/* <div className="gradi2">
-  <div className='container'>
-      <div className='p-4 text-center'>
-        <br /><br /><br /><br />
-        
-      </div>
-  </div>
-
-</div> */}
-
-          {/* gradi 3 */}
-{/* <br /><br />
-<div className="gradi3">
-  <div className='container'>
-      <div className='p-4 text-center'>
-        <br /><br /><br /><br />
-        
-      </div>
-  </div>
-
-</div> */}
-
-  {/* Footer  */}
-  <FooterUi />
+    {/* Footer  */}
+    <FooterUi />
   
     </>
   )

@@ -1,0 +1,242 @@
+@use "../base/variables" as *;
+
+
+.Course_Card {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;
+
+    border: 2px solid rgba($primary-color, 0.5);
+    border-radius: 10px;
+
+    background-color: $fifth-color;
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+
+
+    //////////// Course Image ////////////
+
+    .Course_Img {
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        object-fit: cover;
+        object-position: center;
+        transition: 0.3s ease;
+    }
+
+
+    //////////// Course Header ////////////
+
+    .Course_Header {
+        padding: 12px 15px 8px;
+
+        .Course_Title {
+            display: -webkit-box;
+
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+
+            line-clamp: 2;
+
+            overflow: hidden;
+
+            margin: 0;
+
+            color: $third-color;
+
+            font-size: medium;
+            font-weight: 550;
+            line-height: 1.4;
+
+            text-transform: capitalize;
+        }
+    }
+
+
+    //////////// Teacher Information ////////////
+
+    .Teacher_Data_Row {
+        display: flex;
+        align-items: center;
+
+        padding: 0 15px 8px;
+
+        .Teacher_Img {
+            width: 30px;
+            height: 30px;
+
+            flex-shrink: 0;
+
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+
+        .Teacher_Name {
+            min-width: 0;
+
+            margin: 0;
+            padding-left: 5px;
+
+            color: $third-color;
+
+            font-size: small;
+            font-weight: 500;
+
+            text-transform: capitalize;
+
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+
+        .Category_Button {
+            flex-shrink: 0;
+
+            margin-left: auto;
+
+            padding: 2px 8px;
+
+            background-color: $secondary-color;
+            color: $primary-color;
+
+            border-radius: 5px;
+
+            font-size: small;
+            font-weight: 500;
+
+            text-decoration: none;
+
+            transition: 0.25s ease;
+
+
+            &:hover {
+                background-color: $primary-color;
+                color: $fifth-color;
+            }
+        }
+    }
+
+
+    //////////// Course Body ////////////
+
+    .Course_Body {
+        display: flex;
+        flex-direction: column;
+
+        flex: 1;
+
+        padding: 0 15px;
+
+
+        //////////// Course Meta ////////////
+
+        .Course_Meta {
+            display: flex;
+
+            justify-content: space-between;
+
+            margin: 5px 0;
+
+
+            .Course_Meta_Left,
+            .Course_Meta_Right {
+                display: flex;
+                flex-direction: column;
+
+                gap: 4px;
+            }
+
+
+            span {
+                display: flex;
+                align-items: center;
+
+                margin: 3px 0;
+
+                color: $third-color;
+
+                font-size: 11px;
+                font-weight: 500;
+            }
+
+
+            .Icon {
+                margin-right: 6px;
+
+                color: $primary-color;
+            }
+        }
+
+
+        //////////// Course Footer ////////////
+
+        .Course_Footer {
+            display: flex;
+
+            align-items: center;
+            justify-content: space-between;
+
+            margin-top: auto;
+
+            border-top: 1px solid rgba($primary-color, 0.5);
+
+
+            .Price {
+                margin: 10px 5px;
+
+                color: $primary-color;
+
+                font-weight: 700;
+            }
+
+
+            .View_Course_Button {
+                margin: 10px 5px;
+
+                padding: 3px 8px;
+
+                background-color: $primary-color;
+                color: $fifth-color;
+
+                border: 1px solid $primary-color;
+                border-radius: 4px;
+
+                font-size: small;
+                font-weight: 500;
+
+                text-decoration: none;
+
+                transition: 0.25s ease;
+
+
+                &:hover {
+                    background-color: $fifth-color;
+                    color: $primary-color;
+
+                    transform: translateX(10px);
+                }
+            }
+        }
+    }
+
+
+    //////////// Hover ////////////
+
+    &:hover {
+        transform: translateY(-10px);
+
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+
+        .Course_Img {
+            transform: scale(1.05);
+        }
+    }
+}

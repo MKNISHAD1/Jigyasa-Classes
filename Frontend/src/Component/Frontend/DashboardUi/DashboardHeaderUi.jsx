@@ -1,5 +1,4 @@
 import React, { useContext } from 'react'
-import logo from "../../../assets/images/Logo2.png"
 import { Navbar } from 'react-bootstrap'
 import { DASHBOARD_ROUTES, PUBLIC_ROUTES } from '../../../constants/nevigation/routes'
 import { useTranslation } from 'react-i18next'
@@ -8,63 +7,105 @@ import { faBars } from '@fortawesome/free-solid-svg-icons'
 import LanguageSwitch from '../../Common/CommonUI/LanguageSwitch'
 import { AuthContext } from '../../backend/context/Auth'
 import { Link } from 'react-router-dom'
+import BrandLogo from '../../Common/CommonUI/BrandLogo'
 
 const DashboardHeaderUi = ({onMenuClick }) => {
-      const { t, i18n } = useTranslation();
+      const { t } = useTranslation();
       const { user } = useContext(AuthContext);
   return (
     <>
-    <div className="dashboard-header d-flex align-items-center justify-content-between py-3">
+    <div className="container-fluid m-0 p-0 ">
+      <Navbar expand="lg" className="Navbar">
+
         {/* Left Side */}
-        <button
-            className="btn menu-btn" onClick={onMenuClick} >
-            <FontAwesomeIcon icon={faBars} style={{fontSize:'27px', color:'#1363b8'}}/>
-        </button>
-        
-        {/* Middle  */}
-        <Navbar.Brand to={DASHBOARD_ROUTES.DASHBOARD}  >
-            <div className="d-flex Brand_Section">
-                <img src={logo} className="Brand_Logo" />
-                <div className="d-md-block">
-                <h5 className="Brand_Name">
-                    <b>{t("Logo.title")}</b>
-                </h5>
-                <p className="Brand_Tagline">{t("Logo.tagline")}</p>
-                </div>
-            </div>
-        </Navbar.Brand>
+        {/*Navbar Toggle and Brand icon  */}
+          <div className="Dashbord_Left_Part">
+          
+          {/* Navbar toggle */}
+          <div className="ms-2 d-flex align-items-center">
+            <button
+              className="Navbar_Toggler"
+              aria-controls="basic-navbar-nav"
+              onClick={onMenuClick}
+            >
+              <FontAwesomeIcon icon={faBars} className="Navbar_Toggler_Icon"/>
+            </button>
+
+            {/* Navbar Brand */}
+            <Navbar.Brand href={DASHBOARD_ROUTES.DASHBOARD} >
+              <BrandLogo />
+            </Navbar.Brand>
+
+          </div>
+
+
+        </div>
 
         {/* Right Side */}
-        <div className="d-flex gap-3 px-3 Rightside_NavItems">
-            {/* Language toggle Switch */}
-            <LanguageSwitch />
+        <div className="Navbar_Right_Part">
+          <div className="d-flex gap-3 px-3 Rightside_NavItems">
+              {/* Language toggle Switch */}
+              <LanguageSwitch />
 
-            {/* Login-Button */}
-            {
-              user ? (
-                <Link
-                  to={DASHBOARD_ROUTES.DASHBOARD}
-                  className="User_Profile_Link  d-md-block"
-                >
-                  <img
-                    src={
-                      user.profile_pic ||
-                      "/images/default-user.png"
-                    }
-                    alt="profile"
-                    className="Navbar_Profile"
-                  />
-                </Link>
-              ) : (
-                <Link
-                  to={AUTH_ROUTES.LOGIN}
-                  className="Button_Style1  d-md-block"
-                >
-                  Login/SignUp
-                </Link>
-              )
-            }
+              {/* Login-Button */}
+              {
+                user ? (
+                  <Link
+                    to={DASHBOARD_ROUTES.VIEW_PROFILE}
+                    className="User_Profile_Link  d-none d-xl-block "
+                  >
+                    <img
+                      src={
+                        user.profile_pic ||
+                        "/images/default-user.png"
+                      }
+                      alt="profile"
+                      className="Navbar_Profile"
+                    />
+
+                    <span className="p-1">
+                      {user.name?.split(" ")[0]}
+                    </span>
+                  </Link>
+                ) : (
+                  <Link
+                    to={AUTH_ROUTES.LOGIN}
+                    className="Primary_Button_Opposite d-none d-xl-block"
+                  >
+                    Login/SignUp
+                  </Link>
+                )
+              }
+              
+              {/* Login icon  */}
+              {
+                user ? (
+                  <Link
+                    to={DASHBOARD_ROUTES.VIEW_PROFILE}
+                    className="User_Profile_Link d-none d-sm-block d-xl-none"
+                  >
+                    <img
+                      src={
+                        user.profile_pic ||
+                        "/images/default-user.png"
+                      }
+                      alt="profile"
+                      className="Navbar_Profile"
+                    />
+                  </Link>
+                ) : (
+                  <Link
+                    to={AUTH_ROUTES.LOGIN}
+                    className="d-none d-sm-block d-xl-none "
+                  >
+                    <FontAwesomeIcon icon={faCircleUser} className="User_Icon d-flex" />
+                  </Link>
+                )
+              }
+          </div>
         </div>
+
+      </Navbar>
     </div>
     </>
   )

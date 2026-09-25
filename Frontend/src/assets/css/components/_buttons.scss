@@ -1,6 +1,6 @@
 @use '../base/variables' as *;
 
-.primary-button{
+.Primary_Button{
     background-color: $primary-color;
     color: $fifth-color;
     font-weight: 600;
@@ -17,7 +17,7 @@
     }
 }
 
-.primary-button-opposite{
+.Primary_Button_Opposite{
     background-color: $secondary-color;
     color: $primary-color;
     font-weight: 600;
@@ -34,3 +34,42 @@
     }
 }
 
+.Primary_Button_2{
+    border: none;
+    background: $primary-color;
+    color: white;
+    padding: 15px 28px;
+    border-radius: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: 0.25s;
+
+    .icon{
+    padding-left: 10px;
+    }
+
+    &:hover{
+    background-color: $fifth-color;
+    color:$primary-color;
+    }
+}
+
+.Primary_Button_Opposite_2{
+    border: none;
+    background: $primary-color;
+    background-color: white;
+    padding: 15px 28px;
+    border-radius: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: 0.25s;
+
+    .icon{
+    padding-left: 10px;
+    }
+
+    &:hover{
+    color: $fifth-color;
+    background-color:$primary-color;
+    }
+}

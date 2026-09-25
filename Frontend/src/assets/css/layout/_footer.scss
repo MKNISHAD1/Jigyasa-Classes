@@ -1,0 +1,337 @@
+@use '../base/variables' as *;
+
+.astra-footer {
+
+  background: radial-gradient(
+      circle at top left,
+      #0f2a5f,
+      #071a3a 60%
+  );
+  color: #e5e7eb;
+
+  /* subtle grid pattern */
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+  }
+
+  .footer-wrapper {
+    position: relative;
+    z-index: 2;
+    border-radius: 20px;
+    padding: 60px 40px 20px;
+  }
+
+  /* ---------- BRAND ---------- */
+
+  .footer-brand {
+    .logo {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 15px;
+      color: #fff;
+    }
+
+    p {
+      font-size: 0.95rem;
+      color: #cbd5e1;
+      line-height: 1.6;
+      max-width: 250px;
+    }
+  }
+
+  /* ---------- SOCIAL ---------- */
+
+  .socials {
+    margin-top: 20px;
+    display: flex;
+    gap: 14px;
+
+    i {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    i:hover {
+      background: #2563eb;
+      transform: translateY(-3px);
+    }
+  }
+
+  /* ---------- LINKS ---------- */
+
+  .footer-links {
+
+    h5 {
+      color: #fff;
+      font-weight: 600;
+      margin-bottom: 18px;
+      font-size: 20px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      margin-bottom: 10px;
+      color: #cbd5e1;
+      cursor: pointer;
+      transition: 0.25s;
+      font-size: 15px;
+    }
+
+    li:hover {
+      color: #60a5fa;
+      padding-left: 6px;
+    }
+  }
+
+  /* ---------- Contact US ---------- */
+    .footer-contact {
+
+  h5 {
+    color: #fff;
+    font-weight: 600;
+    margin-bottom: 18px;
+    font-size: 20px;
+  }
+
+  .contact-item {
+    color:$fifth-color;
+    margin-bottom: 12px;
+    line-height: 1.6;
+    font-size: 0.95rem;
+    font-size: 16px;
+    transition: 0.25s;
+
+    &:hover{
+
+      font-weight: 500;
+      color: #60a5fa;
+      padding-left: 6px;
+    }
+  }
+}
+
+  /* ---------- BOTTOM BAR ---------- */
+
+  .footer-bottom {
+    margin-top: 50px;
+    padding: 18px 0;
+    border-top: 1px solid rgba(255,255,255,0.12);
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+
+    p {
+      margin: 0;
+      font-size: 0.85rem;
+      color: #94a3b8;
+    }
+
+    .policy-links {
+      display: flex;
+      gap: 20px;
+
+      span {
+        cursor: pointer;
+        font-size: 0.85rem;
+        color: #cbd5e1;
+      }
+
+      span:hover {
+        color: #60a5fa;
+      }
+    }
+  }
+}
+
+/* Extra small devices (phones) */
+@media (max-width: 575.98px) {
+  .astra-footer{
+    .footer-top{
+      display: block;
+      margin: auto;
+
+    .footer-brand {
+      margin-bottom: 20px;
+      width: 100%;
+    }
+
+    .footer-links {
+      margin-bottom: 20px;
+      width: 100%;
+
+      h5{
+        margin: 30px 0 12px ;
+      }
+    }
+      
+    .footer-contact{
+      margin-bottom: 20px;
+      width: 100%;
+      h5{
+        margin: 30px 0 12px ;
+      }
+    }
+
+
+
+    }
+  }
+}
+
+
+/* Small devices (large phones) */
+@media (min-width: 576px) and (max-width: 767.98px) {
+  .astra-footer{
+    .footer-brand {
+      margin-bottom: auto;
+
+      .logo {
+        font-size: 28px;
+      }
+
+      p {
+        font-size: 0.95rem;
+      }
+    }
+
+    .footer-links {
+      padding: 0 0 20px 20px;
+
+      h5 {
+        font-size: 20px;
+      }
+      li {
+        font-size: 17px;
+      }
+    }
+      
+    .footer-contact{
+      h5 {
+        font-size: 20px;
+      }
+
+      .contact-item {
+        font-size: 15px;
+      }
+    }
+  }
+}
+
+/* Medium devices (tablets) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .astra-footer{
+    
+    
+
+      .footer-brand {
+        // background-color: red;
+        margin-bottom: auto;
+
+        .logo {
+          font-size: 28px;
+        }
+
+        p {
+          font-size: 0.95rem;
+        }
+      }
+
+      .footer-links {
+        // background-color: rgb(63, 45, 130);
+        padding: 0 0 20px 20px;
+
+          h5 {
+            font-size: 20px;
+
+          }
+
+          li {
+            font-size: 17px;
+          }
+
+      }
+      
+      .footer-contact{
+        // background-color: aqua;
+        h5 {
+          font-size: 20px;
+        }
+
+        .contact-item {
+          font-size: 15px;
+        }
+      }
+  }
+  
+}
+
+
+/* Large devices (laptops) */
+@media (min-width: 992px) and (max-width: 1199.98px) {
+
+  .astra-footer{
+    
+
+    .footer-brand {
+      .logo {
+        font-size: 24px;
+      }
+
+      p {
+        font-size: 0.85rem;
+      }
+    }
+
+    .footer-links {
+        h5 {
+          font-size: 17px;
+        }
+        li {
+          font-size: 14px;
+        }
+
+    }
+        
+    .footer-contact{
+      h5 {
+        font-size: 17px;
+      }
+      .contact-item {
+        font-size: 13px;
+      }
+    }
+  }
+}
+
+
+/* Extra large devices (desktops) */
+@media (min-width: 1200px) and (max-width: 1399.98px) {
+
+}
+
+/* XXL devices (large screens) */
+@media (min-width: 1400px) {
+}

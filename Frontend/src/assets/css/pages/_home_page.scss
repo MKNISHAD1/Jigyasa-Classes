@@ -1,0 +1,1110 @@
+@use '../base/variables' as *;
+
+.Home_Page_Body{
+    background-color: $secondary-color;
+
+    ////////////  👇 [1.] Hero Section 👇 \\\\\\\\\\\\\\\\\\
+    .Hero_Section {
+        padding: 30px 20px 0 20px;
+        border-bottom: 1px solid $primary-color;
+        background-image: url('../../images/herobg1.png');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        
+        .Hero_Body{
+            padding-top: 20px;
+
+            // Left Side Content
+            .Hero_Content{
+                
+                .Hero_Tag {
+                    color: $primary-color;
+                    font-size: 20px;
+                    font-weight: 600;
+                }
+
+                h1{
+                    font-size: 40px;
+                    font-weight: 800;
+                    line-height: 1.2;
+                    color: $third-color;
+                    margin: 30px  0;
+                }
+
+                p{
+                    font-size: 18px;
+                    line-height: 1.8;
+                    color: $third-color;
+                    max-width: 550px;
+                }
+
+                .Hero_Buttons{
+                    padding: 25px 0 10px 0;
+                }
+
+                .Hero_Features {
+                    margin-top: 45px;
+                    display: flex;
+                    gap: 15px;
+                    flex-wrap: wrap;
+
+                    .Feature_Item{
+                        background:$fifth-color;
+                        padding: 12px 18px;
+                        border-radius: 14px;
+                        box-shadow: 0 10px 30px rgba(0,0,0,.06);
+                        font-weight: 600;
+                        transition: 0.25s;
+
+                        &:hover{
+                            background-color: $primary-color;
+                            color: $fifth-color;
+                            transform: translateY(-2px);
+                            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.09);
+                        }
+                    }
+                }
+            }
+            // Right Side Student Img
+            .Hero_Img{
+                padding-bottom: 10px;
+
+                .Student_Img{
+                    max-width: 100%;
+                    height: auto;
+                    border-radius: 50%;
+                    border: 2px dashed $primary-color;
+                }
+            }
+        }
+    }
+
+    ////////////  👇 [2.] Exam Strip Section 👇 \\\\\\\\\\\\\\\\\\
+    .Exam_Strip_Section {
+        padding: 20px 0;
+        background: $fifth-color;
+        overflow: hidden;
+
+        .Exam_Marquee {
+            overflow: hidden;
+            position: relative;
+
+            .Marquee_Track {
+                display: flex;
+                width: max-content;
+                animation: marqueeMove 25s linear infinite;
+                gap: 40px;
+
+                &:hover{
+                    animation-play-state: paused;
+                }
+                
+                .Exam_Item {
+                    min-width: 180px;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    text-align: center;
+                    gap: 12px;
+                
+                    img {
+                        width: 90px;
+                        height: 90px;
+                        object-fit: contain;
+                    }
+                
+                    span {
+                        font-size: 13px;
+                        font-weight: 600;
+                        color: $third-color;
+                    }
+                }
+            }
+        }
+    }
+    // Marquee Animation
+    @keyframes marqueeMove {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-50%);
+    }
+    }
+
+    ////////////👇 [3.] Latest Courses Section 👇\\\\\\\\\\\\\\\\\\
+    .Latest_Course_Section {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+
+
+        .Latest_Course_Carousel {
+            position: relative;
+            width: 100%;
+
+            /*
+            * Space reserved for the arrows.
+            */
+            padding: 0 45px;
+        }
+
+
+        .Latest_Course_Swiper {
+            width: 100%;
+            padding: 10px 5px 25px;
+
+            .swiper-slide {
+                height: auto;
+                display: flex;
+                justify-content: center;
+            }
+
+
+            .Course_Card {
+                width: 100%;
+                max-width: 320px;
+            }
+        }
+
+
+        /*
+        * Custom navigation buttons
+        */
+
+        .Latest_Course_Nav {
+            position: absolute;
+            top: 50%;
+            z-index: 10;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            border: 1px solid rgba($primary-color, 0.4);
+            border-radius: 50%;
+            background-color: $fifth-color;
+            color: $primary-color;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.10);
+            transform: translateY(-50%);
+            cursor: pointer;
+            transition:
+                background-color 0.25s ease,
+                color 0.25s ease,
+                opacity 0.25s ease;
+
+            .Icon{
+                color: inherit;
+            }
+            span {
+                font-size: 20px;
+                line-height: 1;
+            }
+            &:hover {
+                background-color: $primary-color;
+                color: $fifth-color;
+
+                .Icon {
+                    color: $fifth-color;
+                }
+            }
+
+            &.swiper-button-disabled {
+                opacity: 0.35;
+                pointer-events: none;
+            }
+        }
+
+
+        .Latest_Course_Nav_Prev {
+            left: 0;
+        }
+
+
+        .Latest_Course_Nav_Next {
+            right: 0;
+        }
+    }
+
+    ////////////👇 [5.] Testimonials Section 👇\\\\\\\\\\\\\\\\\\
+    .Testimonial_Section {
+        background-image: url('../../images/blackboard4.png');
+        background-position: center;
+        background-repeat:round;
+        background-size: cover;
+        position: relative;
+        border-radius: 30px;
+        margin: 2%;
+
+        .carousel-indicators {
+            button {
+                width: 10px;
+                height: 10px;
+                margin: 0 5px;
+                padding: 0;
+                border: 0;
+                background-color: $secondary-color;
+                border-radius: 50%;
+            }
+        }
+
+
+        .Quote_Icon {
+            width: 60px;
+            color: $fifth-color;
+            font-size: 5rem;
+        }
+
+        .Testimonial_Text {
+        font-size: larger;
+        font-style: italic;
+        line-height: 1.7;
+        margin: 50px 0;
+        font-weight: 200;
+        color: $optional-color;
+        font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        }
+
+        .Testimonial_Name_Role{
+            padding-top: 10px;
+            .Student_Name {
+                font-size: large;
+                padding: 0;
+                margin: 0;
+            }
+            .Student_Role {
+                padding: 0;
+                font-size: small;
+                color: $fifth-color;
+            }
+        }
+
+        .Testimonial_Student_Img {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+            border-radius: 16px;
+        }
+
+        .carousel-control-prev, .carousel-control-next {
+            display: none;
+        }
+    }
+
+
+    ////////////👇 [6.] Beneifits Section 👇\\\\\\\\\\\\\\\\\\
+    .Benefits_Zigzag {
+    padding: 30px  10px ;
+
+    .Center{
+        margin: auto;
+    }
+
+    img{
+        width:400px;
+        border-radius: 20px;
+        border: 2px solid rgba($primary-color, 0.6);
+    }
+    .Zigzag_Wrapper {
+        display: grid;
+        grid-template-columns: 1fr 320px 1fr;
+        gap: 20px;
+        align-items: start;
+    }
+
+    .Zigzag_Col {
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+
+        &.Left {
+        align-items: flex-start;
+        padding-top:100px;
+        text-align: left;
+        }
+
+        &.Right {
+        align-items: flex-start;
+        padding-top: 100px;
+        text-align: left;
+        }
+    }
+
+    .Benefit_Title{
+        display: flex;
+        align-items: center;
+        padding: 10px 0;
+        
+        h3 {
+        margin-top: auto;
+        margin-left: 5%;
+        font-size: 1.05rem;
+        font-weight: 600;
+        color: $primary-color;
+        }
+    }
+    
+    .Icon {
+        width: 20px;
+        height: 20px;
+        padding: 3%;
+        border-radius: 5px;
+        background: $secondary-color;
+        border: 1px solid rgba($primary-color, 0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: $primary-color;
+        transition: all 0.3s ease;
+    }
+
+    .Benefit_Card {
+        background: $fifth-color;
+        border: 1px solid rgba($primary-color, 0.4);
+        padding: 22px 26px;
+        border-radius: 18px;
+        max-width: 360px;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+        transition: all 0.3s ease;
+        position: relative;
+
+        outline: none;
+        -webkit-tap-highlight-color: transparent;
+        
+        p {
+        font-size: 0.9rem;
+        color: #555;
+        margin: 0;
+        line-height: 1.5;
+        text-align: center;
+        }
+
+
+
+        &:hover,
+        &:focus-visible {
+        transform: translateY(-6px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.09);
+
+        .Icon {
+            background: $primary-color;
+            color: $fifth-color;
+            transform: scale(1.05);
+        }
+
+        &:focus-visible {
+        outline: 1px solid rgba($primary-color, 0.5);
+        outline-offset: 4px;
+        }
+
+        &:active {
+        transform: scale(0.98);
+        }
+        }
+    }
+    }
+
+////////////👇 [7.] Take Action Section    👇\\\\\\\\\\\\\\\\\\
+
+.Take_Action_Section {
+
+    .Action_cont {
+        width: 100%;
+    }
+
+    .Step_Wrap {
+        position: relative;
+        padding: 10px;
+    }
+
+    .Action_Card {
+        width: 100%;
+        max-width: 360px;
+        margin: 0 auto;
+
+        padding: 22px 26px;
+
+        background: $fifth-color;
+        border-radius: 18px;
+
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+
+        outline: none;
+        -webkit-tap-highlight-color: transparent;
+
+        transition:
+            transform 0.3s ease,
+            box-shadow 0.3s ease;
+
+        .Action_Title {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+
+            h3 {
+                margin: 0 0 0 3%;
+                color: #1f2937;
+                font-size: 1.05rem;
+                font-weight: 600;
+                line-height: 1.3;
+            }
+        }
+
+        .Icon {
+            width: 20px;
+            height: 20px;
+            padding: 3%;
+
+            flex-shrink: 0;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 5px;
+            background: #eef4ff;
+            color: $primary-color;
+
+            transition:
+                background 0.3s ease,
+                color 0.3s ease,
+                transform 0.3s ease;
+        }
+
+        p {
+            margin: 0;
+
+            color: #555;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        &:hover,
+        &:focus-visible {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.09);
+
+            .Icon {
+                background: $primary-color;
+                color: $fifth-color;
+                transform: scale(1.05);
+            }
+        }
+
+        &:focus-visible {
+            outline: 1px solid rgba($primary-color, 0.5);
+            outline-offset: 4px;
+        }
+
+        &:active {
+            transform: scale(0.98);
+        }
+    }
+
+
+    .Register {
+        background-color: $primary-color;
+        color: $fifth-color;
+
+        border: 1px solid $primary-color;
+        border-radius: 10px;
+
+        text-decoration: none;
+        font-weight: 500;
+
+        transition: 0.25s ease;
+
+        &:hover {
+            background-color: $fifth-color;
+            color: $primary-color;
+            border-color: $primary-color;
+            box-shadow: 0 5px 15px rgba(37, 99, 235, 0.2);
+        }
+    }
+}
+
+/* =========================================================
+   HORIZONTAL FLOW — 768px AND ABOVE
+   ========================================================= */
+
+@media (min-width: 768px) {
+
+    .Take_Action_Section {
+
+        .Step_Wrap:not(:last-child)::after {
+            content: "==>";
+
+            position: absolute;
+            top: 50%;
+            right: -8px;
+
+            transform: translateY(-50%);
+
+            font-size: 24px;
+            font-weight: 600;
+            line-height: 1;
+
+            color: $primary-color;
+            opacity: 0.45;
+
+            pointer-events: none;
+
+            transition:
+                transform 0.3s ease,
+                opacity 0.3s ease;
+        }
+
+        .Step_Wrap:hover::after,
+        .Step_Wrap:focus-within::after {
+            transform: translate(6px, -50%);
+            opacity: 0.9;
+        }
+    }
+}
+
+/* =========================================================
+   VERTICAL FLOW — BELOW 768px
+   ========================================================= */
+
+@media (max-width: 767px) {
+
+    .Take_Action_Section {
+
+        .Step_Wrap {
+            margin-bottom: 65px;
+        }
+
+        .Step_Wrap:last-child {
+            margin-bottom: 0;
+        }
+
+        .Step_Wrap:not(:last-child)::after {
+            content: "⇓";
+
+            position: absolute;
+            left: 50%;
+            bottom: -52px;
+
+            transform: translateX(-50%);
+
+            font-size: 46px;
+            font-weight: 600;
+            line-height: 1;
+
+            color: $primary-color;
+            opacity: 0.45;
+
+            pointer-events: none;
+        }
+
+        .Action_Card {
+            margin: 0 auto;
+        }
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//              RESPONSIVE MediaQury 
+//////////////////////////////////////////////////////////////////////////////
+
+/* Extra small devices (phones) */
+@media (max-width: 575.98px) {
+
+    ////////////////// 👇 [1.] Hero Section 👇 \\\\\\\\\\\\\\\\\\
+    .Hero_Section {
+        padding: 20px 15px 0 15px;
+        text-align: left;
+
+        .Hero_Body{
+            .Hero_Content{
+    
+                .Hero_Tag {
+                    font-size: 16px;
+                }
+    
+                h1 {
+                    font-size: 34px ;
+                    margin: 20px 0 ;
+                }
+    
+                p {
+                    font-size: 16px ;
+                    line-height: 1.7 ;
+                    max-width: 100% ;
+                }
+    
+                .Hero_Buttons {
+                    padding: 20px 0 ;
+                }
+    
+                .Hero_Features {
+                    justify-content: center ;
+                    margin-top: 25px ;
+    
+                    .Feature_Item {
+                        justify-content: center ;
+                        text-align: center ;
+                    }
+                }
+            }
+    
+            .Hero_Img{
+                padding: 0 ;
+    
+                .Student_Img {
+                    max-width: 50% ;
+                    padding-top: 30px ;
+                    border: none ;
+                    border-radius: 0 ;
+                }
+            }
+        }
+
+    }  
+
+    ////////////👇 [6.] Beneifits Section 👇\\\\\\\\\\\\\\\\\\
+    .Benefits_Zigzag {
+        img {
+        width: 90%;
+        margin: 10px auto 0;
+        display: block;
+        }
+    }
+}
+
+/* Small devices (large phones) */
+@media (min-width: 576px) and (max-width: 767.98px) {
+
+    ////////////////// 👇 [1.] Hero Section 👇 \\\\\\\\\\\\\\\\\\
+    .Hero_Section {
+        text-align: left;
+        padding: 20px 20px 0 ;
+
+        .Hero_Body{
+            .Hero_Content{
+                h1{
+                    font-size: 38px;
+                }
+
+                p{
+                    max-width: 100%;
+                }
+
+                .Hero_Features {
+                    justify-content: center;
+                }
+            }  
+            .Hero_Img{
+                padding: 0 ;
+                .Student_Img {
+                    max-width: 50% ;
+                    padding-top: 30px ;
+                    border: none ;
+                    border-radius: 0 ;
+                }
+            }
+        }
+    }
+}
+
+/* Mobile */
+@media (max-width: 767.98px) {
+
+    ////////////👇 [2.] Exam Strip Section 👇 \\\\\\\\\\\\\\\\\\
+    .Exam_Strip_Section{
+        .Exam_Marquee{
+            .Marquee_Track{
+                gap: 30px;
+                .Exam_Item {
+                min-width: 120px;
+                gap: 10px;
+            
+                img {
+                    width: 70px;
+                    height: 70px;
+                }
+            
+                span {
+                    font-size: 16px;
+                }
+                }
+            }
+        }
+    }
+    
+    ////////////👇 [5.] Testimonial Section 👇\\\\\\\\\\\\\\\\\\
+    .Testimonial_Section{
+        .crouzel-body{
+            padding: 10px;
+
+            .Quote_Icon {
+                width: 40px;
+                color: $fifth-color;
+                font-size: 3rem;
+                padding: 10px;
+            }
+            .Testimonial_Text {
+                text-align: center;
+                font-size: medium;
+                font-weight: 400;
+            }
+            .Testimonial_Name_Role{
+                  padding: 10px;
+                  .sname {
+                    font-size: medium;
+                    padding: 0;
+                    margin: 0;
+                  }
+                  .srole {
+                    padding: 0;
+                    font-size: small;
+                  }
+            } 
+            .Testimonial_Student_Img {
+                width: 300px;
+                height: 300px;
+                margin-bottom: 20px;
+            }
+        }
+    }
+
+    ////////////👇 [6.] Beneifits Section 👇\\\\\\\\\\\\\\\\\\
+    .Benefits_Zigzag {
+
+    .Zigzag_Wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      align-items:unset;
+
+    }
+
+    .L1{
+      margin-left: auto;
+    }
+    .R1{
+      margin-right: auto;
+    }
+    .L2{
+      margin-left: auto;
+    }
+    .R2{
+      margin-right: auto;
+    }
+    .L3{
+      margin-left: auto;
+    }
+
+    .Zigzag_Col {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    &.Left {
+      align-items: flex-start;
+      text-align: left;
+      padding: 0;
+      
+    }
+
+    &.Right {
+      align-items: flex-start;
+      text-align: left;
+      padding: 0;
+    }
+  }
+  .Benefit_Card {
+    width:100%;
+    padding: 20px;
+    border-radius: 14px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+    background-color: $fifth-color ;
+
+    &.Alt2, &.Alt1 {
+      background-color:rgba(105, 168, 240, 0.384);
+    }
+    p { 
+      font-size: small;
+      font-weight: 450;
+    }
+  }
+
+    .Benefit_Title {
+      h3{
+        font-size: medium;
+      }
+    }
+
+    .Icon {
+      width: 18px;
+      height: 18px;
+      padding: 5px;
+    }
+
+    img {
+      width: 50%;
+      margin: 10px auto 0;
+      display: block;
+    }
+    }
+}
+
+/* Medium devices (tablets) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+
+    ////////////////// 👇 [1.] Hero Section 👇 \\\\\\\\\\\\\\\\\\
+    .Hero_Section {
+        padding-top: 20px;
+
+        .Hero_Body{
+            .Hero_Content{
+                h1{
+                    font-size: 42px;
+                }
+
+                p{
+                    max-width: 100%;
+                }
+
+                .Hero_Features{
+                    gap: 12px;
+                    .Feature_Item{
+                        font-size: 14px;
+                    }
+                }
+            }
+            .Hero_Img{
+                padding: 0;
+                .Student_Img {
+                    max-width: 50% ;
+                    padding-top: 30px;
+                    border: none;
+                    border-radius: 0;
+                }
+            }
+        }
+
+    }
+
+    ////////////👇 [5.] Testimonial Section 👇\\\\\\\\\\\\\\\\\\
+    .Testimonial_Section{
+        .crouzel-body{
+            padding: 10px;
+
+            .Quote_Icon {
+                width: 34px;
+                color: $fifth-color;
+                font-size: 4rem;
+            }
+            .Testimonial_Text {
+                font-size: small;
+                font-style: italic;
+                line-height: 1.7;
+                margin: 30px 0;
+                font-weight: 200;
+                color: $optional-color;
+                font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            }
+            .Testimonial_Name_Role{
+                padding: 10px;
+                .Student_Name {
+                    font-size: small;
+                    padding: 0;
+                    margin: 0;
+                }
+                .Student_Role {
+                    padding: 0;
+                    font-size: x-small;
+                }
+            }
+            .Testimonial_Student_Img {
+                width: 100%;
+                height: 300px;
+                object-fit: cover;
+                border-radius: 16px;
+            }        
+        }
+    }
+
+    ////////////👇 [6.] Benefits Section 👇\\\\\\\\\\\\\\\\\\
+    .Benefits_Zigzag {
+
+        .Zigzag_Wrapper {
+            grid-template-columns: 0.9fr 1.2fr 0.9fr;
+            gap: 15px;
+        }
+
+        .Zigzag_Col {
+            min-width: 0;
+        }
+
+        img {
+            width: 100%;
+            max-width: 300px;
+            margin: 20px auto;
+        }
+
+        .Benefit_Card {
+            padding: 12px;
+            border-radius: 10px;
+
+            .Benefit_Title {
+                h3 {
+                    font-size: 14px;
+                    line-height: 1.3;
+                }
+            }
+
+            p {
+                font-size: 13px;
+                line-height: 1.5;
+            }
+        }
+    }
+}
+
+/* Large devices (laptops) */
+@media (min-width: 992px) and (max-width: 1199.98px) {
+
+    ////////////////// 👇 [1.] Hero Section 👇 \\\\\\\\\\\\\\\\\\
+    .Hero_Section {
+        .Hero_Body{
+            .Hero_Content{
+                h1{
+                    font-size: 40px;
+                }
+
+                p{
+                    max-width: 100%;
+                }
+
+                .Hero_Features{
+                    padding-bottom: 20px;
+                    .Feature_Item {
+                        font-size: 10px;
+                    }
+                }
+            }
+
+            .Hero_Img{
+                .Student_Img{
+                    max-width: 100%;
+                }
+            }
+        }
+    }
+
+    ////////////👇 [5.] Testimonial Section 👇\\\\\\\\\\\\\\\\\\
+    .Testimonial_Section{
+        .crouzel-body{
+            padding: 20px;
+
+            .Quote_Icon {
+                width: 50px;
+                color: $fifth-color;
+                font-size: 5rem;
+            }
+            .Testimonial_Text {
+                font-size: medium;
+                font-style: italic;
+                line-height: 1.7;
+                margin: 40px 0;
+                font-weight: 200;
+                color: $optional-color;
+                font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            }
+            .Testimonial_Name_Role{
+                padding: 10px;
+                .Student_Name {
+                    font-size: medium;
+                    padding: 0;
+                    margin: 0;
+                }
+                .Student_Role {
+                    padding: 0;
+                    font-size: x-small;
+                }
+            } 
+            .Testimonial_Student_Img {
+                width: 100%;
+                height: 380px;
+                object-fit: cover;
+                border-radius: 16px;
+            }
+        }
+    }
+    
+    ////////////👇 [6.] Benefits Section 👇\\\\\\\\\\\\\\\\\\
+    .Benefits_Zigzag {
+        .Zigzag_Wrapper {
+        grid-template-columns: 1fr 260px 1fr;
+        gap: 16px;
+        }
+
+        img {
+        width: 420px;
+        }
+
+        .Zigzag_Col.Left,
+        .Zigzag_Col.Right {
+        padding-top: 60px;
+        }
+    }
+
+}
+
+/* Extra large devices (desktops) */
+@media (min-width: 1200px) and (max-width: 1399.98px) {
+
+    .Hero_Section{
+        .Hero_Body{
+            .Hero_Content{
+                h1{
+                    font-size: 40px;
+                }
+                .Hero_Features{
+                    .Feature_Item {
+                        font-size: 12px;
+                    }
+                }
+            }
+            .Hero_Img{
+                .Student_Img {
+                    max-width: 90%;
+                }
+            }
+        }
+    }
+}
+
+/* XXL devices (large screens) */
+@media (min-width: 1400px) {
+
+    .Hero_Section {
+        padding-top: 70px ;
+
+        .Hero_Body{
+            .Hero_Content{
+                h1{
+                    font-size: 62px;
+                }
+                p{
+                    font-size: 20px;
+                }
+            }
+            .Hero_Img{
+                .Student_Img {
+                    max-width: 100%;
+                }
+            }
+        }
+    }
+
+}
+
+}

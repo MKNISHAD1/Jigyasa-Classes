@@ -16,13 +16,10 @@ import BrandLogo from "./BrandLogo";
 const HeaderUi = () => {
 
   const { categories, subcategories, loading } = useCategories();
-
-  const [show, setShow] = useState(false);
   const { t, i18n } = useTranslation();
-
+  const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-
   const { user, logout } = useContext(AuthContext);
 
   return (
@@ -34,10 +31,10 @@ const HeaderUi = () => {
 
       {/* Navbar Production Code */}
       <div className="container-fluid m-0 p-0">
-        <Navbar expand="lg" className="navbar">
+        <Navbar expand="lg" className="Navbar">
 
           {/* Navbar Left Part: Brand Logo Section */}
-          <div className="navbar-left-part">
+          <div className="Navbar_Left_Part">
             
             <Navbar.Brand href={PUBLIC_ROUTES.HOME}>
               <BrandLogo/>
@@ -46,7 +43,7 @@ const HeaderUi = () => {
           </div>
 
           {/* Navbar Center Part: Nav Link and Dropdown Section */}
-          <div className="navbar-center-part">
+          <div className="Navbar_Center_Part">
 
             <Navbar.Collapse id="basic-navbar-nav" className="d-none Nav_Items">
 
@@ -61,11 +58,11 @@ const HeaderUi = () => {
                 </li>
 
                 {/* Dropdown Exams  */}
-                <li className="menu-item has-dropdown">
+                <li className="Menu_Item has-dropdown">
                   <span className="nav-link">Exams <FontAwesomeIcon icon={faAngleDown}/></span>
-                  <ul className="dropdown-menu-custom Nav_Dropdown">
+                  <ul className="Dropdown_Menu_Custom Nav_Dropdown">
                       {loading && (
-                        <li className="dropdown-item text-muted">Loading...</li>
+                        <li className="Dropdown_Item text-muted">Loading...</li>
                       )}
 
                       {!loading &&
@@ -76,17 +73,17 @@ const HeaderUi = () => {
                             <li key={cat.id} className={subs.length ? "has-submenu" : ""}>
                               {subs.length ? (
                                 <>
-                                  <span className="dropdown-item submenu-title">
+                                  <span className="Dropdown_Item Submenu_Title">
                                     {cat.name[i18n.language] ?? cat.name.en}
-                                    <span className="arrow"> › </span>
+                                    <span className="Arrow"> › </span>
                                   </span>
 
-                                  <ul className="submenu">
+                                  <ul className="Submenu">
                                     {subs.map((sub) => (
                                       <li key={sub.id}>
                                         <Link
                                           to={`/exams/${cat.id}/${sub.id}`}
-                                          className="dropdown-item"
+                                          className="Dropdown_Item"
                                         >
                                           {sub.name[i18n.language] ?? sub.name.en}
                                         </Link>
@@ -97,7 +94,7 @@ const HeaderUi = () => {
                               ) : (
                                 <Link
                                   to={`/exams/${cat.id}`}
-                                  className="dropdown-item"
+                                  className="Dropdown_Item"
                                 >
                                   {cat.name[i18n.language] ?? cat.name.en}
                                 </Link>
@@ -116,36 +113,36 @@ const HeaderUi = () => {
                 </li>
 
                 {/* Dropdown Pages */}
-                <li className="menu-item has-dropdown">
+                <li className="Menu_Item has-dropdown">
                   <span className="nav-link">Pages <FontAwesomeIcon icon={faAngleDown}/></span>
 
-                  <ul className="dropdown-menu-custom">
+                  <ul className="Dropdown_Menu_Custom">
                     <li>
-                      <Link to="/CourseCard" className="dropdown-item">
+                      <Link to="/CourseCard" className="Dropdown_Item">
                         Course Card
                       </Link>
                     </li>
 
                     <li className="has-submenu">
-                      <span className="dropdown-item submenu-title">
-                        Instructors <span className="arrow"> › </span>
+                      <span className="Dropdown_Item Submenu_Title">
+                        Instructors <span className="Arrow"> › </span>
                       </span>
 
-                      <ul className="submenu">
+                      <ul className="Submenu">
                         <li>
-                          <Link to="/instructors" className="dropdown-item">
+                          <Link to="/instructors" className="Dropdown_Item">
                             Instructors
                           </Link>
                         </li>
                         <li>
-                          <Link to="/become-instructor" className="dropdown-item">
+                          <Link to="/become-instructor" className="Dropdown_Item">
                             Become Instructor
                           </Link>
                         </li>
                         <li>
                           <Link
                             to="/instructor-details"
-                            className="dropdown-item"
+                            className="Dropdown_Item"
                           >
                             Instructor Details
                           </Link>
@@ -154,13 +151,13 @@ const HeaderUi = () => {
                     </li>
 
                     <li>
-                      <Link to="/faq" className="dropdown-item">
+                      <Link to="/faq" className="Dropdown_Item">
                         FAQ
                       </Link>
                     </li>
 
                     <li>
-                      <Link to="/privacy-policy" className="dropdown-item">
+                      <Link to="/privacy-policy" className="Dropdown_Item">
                         Privacy Policy
                       </Link>
                     </li>
@@ -188,7 +185,7 @@ const HeaderUi = () => {
               <Offcanvas show={show} onHide={handleClose} placement="start" scroll={true}>
 
                 {/* Brand Logo Header Section*/}
-                <Offcanvas.Header className="Offcanvas_header">
+                <Offcanvas.Header className="Offcanvas_Header">
 
                   {/* Brandd Logo */}
                   <Offcanvas.Title >
@@ -196,8 +193,8 @@ const HeaderUi = () => {
                   </Offcanvas.Title>
 
                   {/* Canvas Close Button */}
-                  <button className="offcanvas-close-btn" onClick={handleClose}>
-                      <FontAwesomeIcon icon={faClose} className='offcanvas-close-btn-icon'/>
+                  <button className="Offcanvas_Close_Btn" onClick={handleClose}>
+                      <FontAwesomeIcon icon={faClose} className='Offcanvas_Close_Btn_Icon'/>
                   </button>
                 
 
@@ -415,7 +412,7 @@ const HeaderUi = () => {
           </div>
 
           {/* Navbar Right Part : Login and Wishlist Section */}
-          <div className="navbar-right-part">
+          <div className="Navbar_Right_Part">
 
             <div className="d-flex gap-3 px-3 Rightside_NavItems">
 
@@ -453,7 +450,7 @@ const HeaderUi = () => {
                 ) : (
                   <Link
                     to={AUTH_ROUTES.LOGIN}
-                    className="primary-button-opposite d-none d-xl-block"
+                    className="Primary_Button_Opposite d-none d-xl-block"
                   >
                     Login/SignUp
                   </Link>
@@ -488,12 +485,12 @@ const HeaderUi = () => {
 
               {/*Navbar Toggle icon  */}
               <button
-                className="navbar-toggler"
-                aria-controls="basic-navbar-nav"
+                className="Navbar_Toggler d-sm-block d-lg-none"
+                aria-controls="basic-navbar-nav "
                 onClick={handleShow}
               >
 
-                <FontAwesomeIcon icon={faBars} className="navbar-toggler-icon"/>
+                <FontAwesomeIcon icon={faBars} className="Navbar_Toggler_Icon"/>
               </button>
 
             </div>
