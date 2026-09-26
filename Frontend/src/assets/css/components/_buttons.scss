@@ -44,13 +44,13 @@
     text-decoration: none;
     transition: 0.25s;
 
-    .icon{
-    padding-left: 10px;
+    .Icon{
+        padding-left: 5px;
     }
 
     &:hover{
-    background-color: $fifth-color;
-    color:$primary-color;
+        background-color: $fifth-color;
+        color:$primary-color;
     }
 }
 
@@ -64,12 +64,12 @@
     text-decoration: none;
     transition: 0.25s;
 
-    .icon{
-    padding-left: 10px;
+    .Icon{
+        padding-left: 5px;
     }
 
     &:hover{
-    color: $fifth-color;
-    background-color:$primary-color;
+        color: $fifth-color;
+        background-color:$primary-color;
     }
 }

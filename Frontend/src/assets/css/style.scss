@@ -33,6 +33,8 @@ $fifth-color:#FFFFFF;
 
 // Pages CSS
 @use '../css/pages/home_page';
+@use '../css/pages/about_page';
+
 
 // Components CSS
 @use '../css/components/brand';
@@ -75,120 +77,6 @@ $fifth-color:#FFFFFF;
   border: $secondary-color solid 2px;
 }
 
-////////////👇 Section  Why Choose Us  👇\\\\\\\\\\\\\\\\\\
-
-
-.why-choose {
-
-  .row{
-    --bs-gutter-x: 0;
-  }
-
-  background: rgb(236, 242, 244);
-  padding: 25px 0 10px 0;
-
-  .title{
-    text-align:center;
-    margin-bottom:50px;
-    font-size:30px;
-    font-weight:700;
-  }
-
-  span{
-    color:$primary-color;
-  }
-
-  .why-item{
-    text-align:center;
-    padding:20px;
-    transition: 0.3s ease;
-
-    &:hover{
-      transform: translateY(-5px);
-    }
-  }
-
-  .icon-wrapper{
-    width:120px;
-    height:120px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    margin:0 auto 20px;
-
-    border-radius:50%;
-    background:$fifth-color;
-
-    border:2px solid rgba(35, 102, 247, 0.397);
-
-    transition:.3s ease;
-  }
-
-  .why-icon{
-    width:70px;
-    height:70px;
-    color:$primary-color;
-    transition: 0.3s ease;
-  }
-
-  .why-item:hover  .icon-wrapper {
-    transform:translateY(-5px);
-    border-color:$primary-color;
-    box-shadow: 0 5px 15px rgba(37, 99, 235,0.2);
-    
-  }
-
-  .why-icon:hover{
-    transform:scale(1.1);
-  }
-
-  h3{
-    font-size:1.2rem;
-    font-weight:600;
-    margin-bottom:12px;
-  }
-
-  p{
-    font-size:.95rem;
-    line-height:1.7;
-    color:$third-color;
-    margin:0;
-    text-align:center;
-  }
-}
-////////////////// 👆 Section Why Choose Us 👆 \\\\\\\\\\\\\\\\\\
-
-
-////////////👇 Section  Extra  👇\\\\\\\\\\\\\\\\\\
-//after hero section
-.gradi{
-  background: #EBF1F5;
-  background: linear-gradient(180deg,rgba(235, 241, 245, 1) 0%, rgba(208, 224, 237, 1) 20%, rgba(223, 233, 241, 1) 51%, rgba(235, 241, 245, 1) 78%, rgba(255, 255, 255, 1) 100%);
-}
-
-//
-.gradi2{
-  background: #FFFFFF;
-  background: linear-gradient(0deg,rgba(255, 255, 255, 1) 0%, rgba(208, 224, 237, 1) 20%, rgba(223, 233, 241, 1) 51%, rgba(235, 241, 245, 1) 78%, rgba(255, 255, 255, 1) 100%);
-}
-
-//  After why chooe us
-.gradi3{
-  background: #F7F9FC;
-  background: linear-gradient(180deg,rgba(247, 249, 252, 1) 0%, rgba(208, 224, 237, 1) 42%, rgba(223, 233, 241, 1) 59%, rgba(235, 241, 245, 1) 78%, rgba(255, 255, 255, 1) 100%);
-}
-
-.testpic{
-  background-color: $primary-color;
-  color: white;
-}
-
-
-
-
-////////////////// 👆 Section Extra 👆 \\\\\\\\\\\\\\\\\\
 
 
 //////////////////////////////////////////////////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\

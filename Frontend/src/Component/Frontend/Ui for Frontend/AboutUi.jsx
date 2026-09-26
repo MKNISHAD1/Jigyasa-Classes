@@ -3,7 +3,7 @@ import HeaderUi from '../../Common/CommonUI/HeaderUi'
 import FooterUi from '../../Common/CommonUI/FooterUi'
 import student from '../../../assets/images/aboutstudimg.png'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowRight, faBullseye, faCircleCheck, faEye, faGraduationCap,  } from '@fortawesome/free-solid-svg-icons'
+import { faArrowRight, faBullseye, faCircleCheck, faEye, faGraduationCap, faRoute,  } from '@fortawesome/free-solid-svg-icons'
 
 import ProfessorIcon from "../../../assets/images/professor2.svg?react";
 import VideoIcon from "../../../assets/images/video2.svg?react";
@@ -18,144 +18,145 @@ import bgImage from '../../../assets/images/herobg6.png'
 import PageHero from '../../Common/CommonUI/PageHeroUi'
 import { Link } from 'react-router-dom'
 import { PUBLIC_ROUTES } from '../../../constants/nevigation/routes'
+import SectionHeading from '../../Common/CommonUI/SectionHeading'
 
 const AboutUi = () => {
   return (
     <>
-    {/* Header component  */}
-    <HeaderUi />
+      {/* Header component  */}
+      <HeaderUi />
 
-    {/* Hero Section  */}
+      {/* [1.] Hero Section  */}
+      <section className="Hero_Section" 
+        // style={{backgroundImage: `url(${bgImage})`,
+        //   backgroundSize: 'cover',
+        //   backgroundPosition: 'center',             
+        //   backgroundRepeat: 'no-repeat'}}
+          >
 
-    <section className="hero-section" 
-      style={{backgroundImage: `url(${bgImage})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat'}}>
+        <div className="container-fluid Hero_Body">
 
-      <div className="container-fluid hero-body">
+          <div className="row">
 
-        <div className="row">
+            {/* LEFT CONTENT */}
+            <div className="col-lg-6 Hero_Content pb-2">
 
-          {/* LEFT CONTENT */}
-          <div className="col-lg-6 hero-content pb-2">
+              <small className="Hero_Tag">ABOUT US </small>
 
-            <small className="hero-tag">
-        ABOUT US
-            </small>
+              <h1>
+                Building
+                <span> Aspirants. </span>
+                <br /> Empowering
+                <span> Futures.</span>
+              </h1>
 
-            <h1>
-              Building
-              <span> Aspirants. </span>
-              <br /> Empowering
-              <span> Futures.</span>
-            </h1>
+              <p>
+                Helping thousands of students prepare for <br />
+                competitive exams with structured courses, <br />
+                expert guidance and practical learning.            
+                </p>
 
-            <p>
-              Helping thousands of students prepare for <br />
-              competitive exams with structured courses, <br />
-              expert guidance and practical learning.            
-              </p>
+              <div className="Hero_Buttons">
+                <Link to={PUBLIC_ROUTES.COURSES} className="Primary_Button_2">
+                  Explore Courses  <FontAwesomeIcon icon={faArrowRight} className='Icon'/>
+                </Link>
+              </div>
 
-            <div className="hero-btns">
-              <Link to={PUBLIC_ROUTES.COURSES} className="primary-btn">
-                Explore Courses  <FontAwesomeIcon icon={faArrowRight} className='icon'/>
-              </Link>
+
             </div>
 
+            {/* RIGHT IMAGE */}
+            <div className="col-lg-6 Hero_Img text-center">
+              <img
+                className='Student_Img'
+                src={student}
+                alt="Student"
 
-          </div>
+              />
 
-          {/* RIGHT IMAGE */}
-          <div className="col-lg-6 hero-img text-center">
-            <img
-              src={student}
-              alt="Student"
-              width="80%" 
-              height="100%"
-            />
+            </div>
 
           </div>
 
         </div>
+      </section>
 
-      </div>
-    </section>
+      {/* [2.] Mission-Vision Section  */}
 
-    {/* Mission-Vision Section  */}
+      <section className="Our_Story">
+          <div className="container">
 
-  <section className="our-story">
-      <div className="container">
+              <div className="row align-items-center">
 
-          <div className="row align-items-center g-5">
+                  {/* Left Content */}
+                  <div className="col-lg-5 Heading">
 
-              {/* Left Content */}
-              <div className="col-lg-5">
+                      <span className="Section_Tag">
+                          OUR STORY
+                      </span>
 
-                  <span className="section-tag">
-                      OUR STORY
-                  </span>
+                      <h2 className="Section_Title">
+                          A Journey Of <span>Trust</span> <br />
+                          And <span>Excellence</span>
+                      </h2>
 
-                  <h2 className="section-title">
-                      A Journey Of <span>Trust</span> <br />
-                      And <span>Excellence</span>
-                  </h2>
+                      <p className="Story_Text">
+                          Jigyasa Classes was created with one simple goal —
+                          to make quality competitive exam preparation accessible,
+                          affordable, and effective for every student.
+                      </p>
 
-                  <p className="story-text">
-                      Jigyasa Classes was created with one simple goal —
-                      to make quality competitive exam preparation accessible,
-                      affordable, and effective for every student.
-                  </p>
+                      <p className="Story_Text">
+                          We believe success comes from consistency,
+                          expert guidance and structured learning.
+                          Every course is designed to help aspirants
+                          confidently achieve their dream career.
+                      </p>
 
-                  <p className="story-text">
-                      We believe success comes from consistency,
-                      expert guidance and structured learning.
-                      Every course is designed to help aspirants
-                      confidently achieve their dream career.
-                  </p>
+                  </div>
 
-              </div>
+                  {/* Right Cards */}
+                  <div className="col-lg-7">
 
-              {/* Right Cards */}
-              <div className="col-lg-7">
+                      <div className="row g-4">
 
-                  <div className="row g-4">
+                          <div className="col-md-6">
 
-                      <div className="col-md-6">
+                              <div className="Story_Card">
 
-                          <div className="story-card">
+                                  <div className="Story_Icon" >
+                                      <FontAwesomeIcon icon={faRoute} />
+                                  </div>
 
-                              <div className="story-icon" >
-                                  <BullseyeIcon className="why-icon" />
+                                  <h4>Our Mission</h4>
+
+                                  <p>
+                                      To provide affordable, high-quality,
+                                      structured education that helps every
+                                      aspirant achieve success through effective learning.
+                                  </p>
+
                               </div>
-
-                              <h4>Our Mission</h4>
-
-                              <p>
-                                  To provide affordable, high-quality,
-                                  structured education that helps every
-                                  aspirant achieve success through effective learning.
-                              </p>
 
                           </div>
 
-                      </div>
+                          <div className="col-md-6">
 
-                      <div className="col-md-6">
+                              <div className="Story_Card">
 
-                          <div className="story-card">
+                                  <div className="Story_Icon">
+                                      <FontAwesomeIcon icon={faEye}/>
+                                  </div>
 
-                              <div className="story-icon">
-                                  <FontAwesomeIcon icon={faEye} className='why-icon'/>
+                                  <h4>Our Vision</h4>
+
+                                  <p>
+                                      To become India's trusted online learning
+                                      platform that empowers millions of students
+                                      preparing for competitive exams.
+                                  </p>
+
                               </div>
-
-                              <h4>Our Vision</h4>
-
-                              <p>
-                                  To become India's trusted online learning
-                                  platform that empowers millions of students
-                                  preparing for competitive exams.
-                              </p>
 
                           </div>
 
@@ -166,161 +167,158 @@ const AboutUi = () => {
               </div>
 
           </div>
+      </section>
 
-      </div>
-  </section>
+      {/* [3.1] Why Choose Us Section */}
+      <SectionHeading 
+        title={
+          <>
+            Why Choose <span className='span2'> Jigyasa Classes ?</span>
+          </>
+        }
+        subtitle="Here Reason Why aspirants Choosen Jigyasa Classes"
+      />
 
-    {/* Why student choose ?  */}
+      {/* [3.2] Why Choose Us Section */}
+      <section className="Why_Choose">
+        <div className="row ">
+          <div className="col-12 col-sm-6 col-lg-3">
+            <div className="Why_Item">
+              <div className="Icon_Wrapper">
+                <ProfessorIcon className="Why_Icon" />
+              </div>
 
-    <section className="why-choose">
-
-      <div className="row">
-        <h2 className="title">
-          Why Aspirants Choose <span>Jigyasa Classes</span>
-        </h2>
-
-        <div className="col-12 col-sm-6 col-lg-3">
-          <div className="why-item">
-            <div className="icon-wrapper">
-              <ProfessorIcon className="why-icon" />
-            </div>
-
-            <div className="why-content">
-              <h3>Expert <span>Faculty</span></h3>
-              <p>
-                Learn from experienced teachers with proven success in competitive
-                exam preparation.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="col-12 col-sm-6 col-lg-3">
-          <div className="why-item">
-            <div className="icon-wrapper">
-              <VideoIcon className="why-icon" />
-            </div>
-
-            <div className="why-content">
-              <h3>Structured <span>Curriculum</span></h3>
-              <p>
-                Step-by-step learning paths designed according to the latest exam
-                patterns.
-              </p>
+              <div className="Why_Content">
+                <h3>Expert <span>Faculty</span></h3>
+                <p>
+                  Learn from experienced teachers with proven success in competitive
+                  exam preparation.
+                </p>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="col-12 col-sm-6 col-lg-3">
-          <div className="why-item">
-            <div className="icon-wrapper">
-              <MoneyIcon className="why-icon" />
-            </div>
+          <div className="col-12 col-sm-6 col-lg-3">
+            <div className="Why_Item">
+              <div className="Icon_Wrapper">
+                <VideoIcon className="Why_Icon" />
+              </div>
 
-            <div className="why-content">
-              <h3>Affordable <span>Pricing</span></h3>
-              <p>
-                Quality education at student-friendly prices with both free and
-                premium options.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="col-12 col-sm-6 col-lg-3">
-          <div className="why-item">
-            <div className="icon-wrapper">
-              <CertificateIcon className="why-icon" />
-            </div>
-
-            <div className="why-content">
-              <h3>Verified <span>Certification</span></h3>
-              <p>
-                Earn certificates that showcase your learning achievements and
-                skills.
-              </p>
+              <div className="Why_Content">
+                <h3>Structured <span>Curriculum</span></h3>
+                <p>
+                  Step-by-step learning paths designed according to the latest exam
+                  patterns.
+                </p>
+              </div>
             </div>
           </div>
-        </div>
 
-      </div>
+          <div className="col-12 col-sm-6 col-lg-3">
+            <div className="Why_Item">
+              <div className="Icon_Wrapper">
+                <MoneyIcon className="Why_Icon" />
+              </div>
 
-    </section>
-
-    <br />
-
-    {/* Our Approach Section  */}
-
-    <div className="Approach-Section container">
-      <div className="row">
-        <div className="col-md-6">
-
-                  <span className="section-tag">
-                      OUR APPROACH
-                  </span>
-
-                  <h2 className="section-title">
-                      Learning Made <span>Simple</span> <br />
-                      And <span>Effective</span>
-                  </h2>
-
-                  
-                  <p className="story-text">
-          We believe that the right guidance, regular practice and <br />consistent effort can help any student succeed.
-                  </p>
-
-          <div className="approch-body ">
-
-
-          <div className="iconbody">
-        <small className='icon-text'><FontAwesomeIcon icon={faCircleCheck} className='check-icon'/>Concept-based learning with clear explanation</small>
-          <small className='icon-text'><FontAwesomeIcon icon={faCircleCheck} className='check-icon'/>Practice with tests and real exam questions</small>
-          <small className='icon-text'><FontAwesomeIcon icon={faCircleCheck} className='check-icon'/>Continuous support and doubt clarification</small>
+              <div className="Why_Content">
+                <h3>Affordable <span>Pricing</span></h3>
+                <p>
+                  Quality education at student-friendly prices with both free and
+                  premium options.
+                </p>
+              </div>
+            </div>
           </div>
+
+          <div className="col-12 col-sm-6 col-lg-3">
+            <div className="Why_Item">
+              <div className="Icon_Wrapper">
+                <CertificateIcon className="Why_Icon" />
+              </div>
+
+              <div className="Why_Content">
+                <h3>Verified <span>Certification</span></h3>
+                <p>
+                  Earn certificates that showcase your learning achievements and
+                  skills.
+                </p>
+              </div>
+            </div>
           </div>
+
         </div>
 
-        <div className="col-md-6 text-center">
-          <img src={img1} alt="" width="90%" height="100%"/>
-        </div>
-      </div>
-    </div>
+      </section>
 
-    <br />
+      <br />
 
-    
-    {/* CTA button  */}
-    <div className="CTA-Section container">
-      <div className="row align-items-center">
+      {/* [4.] Our Approach Section  */}
 
-        <div className="col-lg-7 col-md-7 col-12">
-          <div className="cta-body">
-            <h3>Ready To Start Your Learning Journey?</h3>
+      <div className="Approach_Section">
+        <div className="row align-items-center">
+          <div className="col-md-6 Approach_Body">
 
-            <p>
-              Join thousands of aspirants preparing for competitive
-              exams with Jigyasa Classes.
+            <span className="Section_Tag">
+                OUR APPROACH
+            </span>
+
+            <h2 className="Section_Title">
+                Learning Made <span>Simple</span> <br />
+                And <span>Effective</span>
+            </h2>
+
+                    
+            <p className="Story_Text">
+              We believe that the right guidance, regular practice and consistent effort can help any student succeed.
             </p>
 
-            <Link  to={PUBLIC_ROUTES.COURSES} className="primary-btn-rev">
-              Explore Courses
-              <FontAwesomeIcon icon={faArrowRight} className="icon" />
-            </Link>
+            <div className="Approach_List">
+              {/* <div className="Icon_Body"> */}
+                <small className='Text_Icon'><FontAwesomeIcon icon={faCircleCheck} className='Check_Icon'/>Concept-based learning with clear explanation</small>
+                <small className='Text_Icon'><FontAwesomeIcon icon={faCircleCheck} className='Check_Icon'/>Practice with tests and real exam questions</small>
+                <small className='Text_Icon'><FontAwesomeIcon icon={faCircleCheck} className='Check_Icon'/>Continuous support and doubt clarification</small>
+              {/* </div> */}
+            </div>
+          </div>
+
+          <div className="col-md-6 Approach_Img">
+            <img src={img1} className='Study_Img' alt="Students doing Study"/>
           </div>
         </div>
-
-        <div className="col-lg-5 col-md-5 col-12">
-          <div className="hat-img">
-            <img src={hat} alt="Graduation Cap" />
-          </div>
-        </div>
-
       </div>
-    </div>
-    <br />
 
-    {/* footer component  */}
-    <FooterUi />
+      {/* CTA button  */}
+      <div className="CTA_Section">
+        <div className="row align-items-center CTA_Body">
+
+          <div className="col-lg-7 col-md-7 col-12">
+            <div className="CTA_Info">
+              <h3>Ready To Start Your Learning Journey?</h3>
+
+              <p>
+                Join thousands of aspirants preparing for competitive
+                exams with Jigyasa Classes.
+              </p>
+
+              <Link  to={PUBLIC_ROUTES.COURSES} className="Primary_Button_Opposite_2">
+                Explore Courses
+                <FontAwesomeIcon icon={faArrowRight} className="Icon" />
+              </Link>
+            </div>
+          </div>
+
+          <div className="col-lg-5 col-md-5 col-12">
+            <div className="Hat_Img">
+              <img src={hat} alt="Graduation Cap" />
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <br />
+
+      {/* footer component  */}
+      <FooterUi />
     </>
   )
 }

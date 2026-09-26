@@ -1,14 +1,14 @@
 @use '../base/variables' as *;
 
 .Section_Heading {
-    background-image: url(../../images/section-heading-bg1.jpeg);
+    background-image: url(../../images/section-heading-bg5.1.jpeg);
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
 
     .Blur_Overlap {
       /* The element must have a transparent or semi-transparent background */
-      background-color: rgba(255, 255, 255, 0.3); 
+      background-color: rgba(255, 255, 255, 0.5); 
       
       /* Apply the blur effect to the background behind this card */
       backdrop-filter: blur(4px); 
