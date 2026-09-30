@@ -37,12 +37,10 @@ class Lesson extends Model
         'is_free_preview' => 'boolean',
         'published_at'    => 'datetime',
         'view_count'      => 'integer',
-
-        
+        'duration'        => 'integer',
     ];
     
     protected $appends = [
-
         'is_locked', // auto-derived
         'materials'
     ];
@@ -62,9 +60,12 @@ class Lesson extends Model
 
     public function module()
     {
-        return $this->belongsTo(
-            CourseModule::class
-        );
+        return $this->belongsTo(CourseModule::class);
+    }
+
+    public function uploads()
+    {
+        return $this->hasMany(LessonUpload::class);
     }
 
     public function uploader()
@@ -335,11 +336,13 @@ class Lesson extends Model
                 $media->forceDelete();
             }
 
-
             // Permanently delete lesson translations
             $lesson->translations()
                 ->withTrashed()
                 ->forceDelete();
+
+            // Permanently delete successful upload records
+            $lesson->uploads()->delete();
         });
     }
 

@@ -12,7 +12,6 @@ $fifth-color:#FFFFFF;
 @use 'pagehero' ;
 @use 'infoitem' ;
 @use 'breakpoints' ;
-@use 'aboutpage' ;
 @use 'contactus' ;
 @use 'allcourses' ;
 @use 'viewcourseui' ;
@@ -31,64 +30,23 @@ $fifth-color:#FFFFFF;
 @use '../css/base/global';
 @use '../css/base/variables';
 
-// Pages CSS
-@use '../css/pages/home_page';
-@use '../css/pages/about_page';
-
+// layout CSS
+@use '../css/layout/header';
+@use '../css/layout/footer';
 
 // Components CSS
 @use '../css/components/brand';
 @use '../css/components/buttons';
 @use '../css/components/section_headings';
 @use '../css/components/coursecard';
+@use '../css/components/course_discovery_section';
 
-// layout CSS
-@use '../css/layout/header';
-@use '../css/layout/footer';
+// Pages CSS
+@use '../css/pages/home_page';
+@use '../css/pages/about_page';
+@use '../css/pages/all_courses_ui_page';
+@use '../css/pages/contact_us_page';
 
-
-.Button_Style{
-    background-color: $primary-color;
-    color: white;
-    font-weight: 400;
-    border: 1px solid $primary-color;
-    padding: 5px 10px;
-    font-size: medium;
-    text-decoration: none;
-    border-radius: 10px;
-}
-
-.Button_Style:hover{
-    background-color: $secondary-color;
-    color:$primary-color;
-}
-
-.Button-opposite{
-  background-color: $fifth-color;
-  border-radius: 10px;
-  color : $primary-color;
-  font-weight: 600;
-  padding: 10px;
-}
-
-.Button-opposite:hover{
-  color : $fifth-color;
-  background-color: $primary-color;
-  border: $secondary-color solid 2px;
-}
-
-
-
-//////////////////////////////////////////////////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\
-.test{
-    padding: 5px 20px;
-    // border-bottom: 2px solid black;
-}
-.test1{
-      // border-bottom: 2px solid black;
-      margin: 0;
-      padding: 0;
-}
 
 
 

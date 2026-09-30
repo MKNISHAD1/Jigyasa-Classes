@@ -206,7 +206,7 @@ const HomeUi = () => {
                 style={{ minHeight: "300px" }}
               >
                 <div
-                  className="spinner-border text-success "
+                  className="spinner-border text-primary"
                   style={{ width: "3rem", height: "3rem" }}
                 />
 
@@ -684,7 +684,7 @@ const HomeUi = () => {
             </div>
             
             <div className="Action_Button">
-              <Link to={AUTH_ROUTES.REGISTER} className="Primary_Button_2 shadow">
+              <Link to={AUTH_ROUTES.REGISTER} className=" btn blue-btn shadow">
                 Register Now <FontAwesomeIcon icon={faArrowRight} className='Icon'/>
               </Link>
             </div>

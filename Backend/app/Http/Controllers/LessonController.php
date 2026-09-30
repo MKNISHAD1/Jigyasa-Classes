@@ -1318,6 +1318,8 @@ class LessonController extends Controller
                 '/' .
                 $lessonUpload->hls_storage_path .
                 '/playlist.m3u8',
+
+            'duration' => $lessonUpload->duration,
         ]);
 
         /*
@@ -1328,8 +1330,10 @@ class LessonController extends Controller
 
         $lessonUpload->update([
             'lesson_id' => $lesson->id,
+            'temporary_file_path' => null,
+            'temporary_storage_path' => null,
+            'temporary_object_name' => null,
         ]);
-
 
         /*
         |--------------------------------------------------------------------------
@@ -1560,37 +1564,8 @@ class LessonController extends Controller
     }
 
     /**
-     * Delete study materials for an existing lesson in bunny server
-     */
-    // private function deleteBunnyMaterial(Media $media)
-    // {
-    //     $storageZone = env('BUNNY_STORAGE_ZONE');
-    //     $regionHost  = env('BUNNY_REGION', 'de.storage.bunnycdn.com');
-    //     $accessKey   = env('BUNNY_API_KEY');
-
-    //     $path = parse_url($media->url, PHP_URL_PATH);
-
-    //     if (!$path) {
-    //         throw new \Exception('Invalid Bunny material URL.');
-    //     }
-
-    //     $path = ltrim($path, '/');
-
-    //     $deleteUrl = "https://{$regionHost}/{$storageZone}/{$path}";
-
-    //     $response = Http::withHeaders([
-    //         'AccessKey' => $accessKey,
-    //     ])->delete($deleteUrl);
-
-    //     if (!$response->successful() && $response->status() !== 404) {
-    //         throw new \Exception(
-    //             "Failed to delete Bunny material. " .
-    //             "Status: {$response->status()}"
-    //         );
-    //     }
-
-    //     return true;
-    // } 
+    * Delete study materials for an existing lesson in bunny server
+    */
 
     private function deleteBunnyMaterial(Media $media)
     {
@@ -1977,287 +1952,6 @@ class LessonController extends Controller
      * Deletes the temporary Bunny file and the temporary
      * LessonUpload record. No Lesson is created at this stage.
      */
-
-    // public function cancelUpload(Request $request, $uploadUuid)
-    // {
-    //     $user = Auth::user();
-
-    //     /*
-    //     |--------------------------------------------------------------------------
-    //     | Authorization
-    //     |--------------------------------------------------------------------------
-    //     */
-
-    //     if (!$user->hasAnyRole([
-    //         'teacher',
-    //         'moderator',
-    //         'admin',
-    //         'super_admin'
-    //     ])) {
-    //         return response()->json([
-    //             'status' => false,
-    //             'message' => 'Unauthorized'
-    //         ], 403);
-    //     }
-
-    //     /*
-    //     |--------------------------------------------------------------------------
-    //     | Validate UUID
-    //     |--------------------------------------------------------------------------
-    //     */
-
-    //     if (!$uploadUuid || !Str::isUuid($uploadUuid)) {
-    //         return response()->json([
-    //             'status' => false,
-    //             'message' => 'Invalid upload UUID.'
-    //         ], 422);
-    //     }
-
-    //     /*
-    //     |--------------------------------------------------------------------------
-    //     | Atomically request cancellation
-    //     |--------------------------------------------------------------------------
-    //     */
-
-    //     $result = DB::transaction(function () use (
-    //         $uploadUuid,
-    //         $user
-    //     ) {
-
-    //         $upload = LessonUpload::where(
-    //             'upload_uuid',
-    //             $uploadUuid
-    //         )
-    //         ->lockForUpdate()
-    //         ->first();
-
-    //         if (!$upload) {
-    //             return [
-    //                 'response' => response()->json([
-    //                     'status' => false,
-    //                     'message' => 'Upload session not found.'
-    //                 ], 404),
-    //                 'upload' => null,
-    //             ];
-    //         }
-
-    //         /*
-    //         |--------------------------------------------------------------------------
-    //         | Ownership
-    //         |--------------------------------------------------------------------------
-    //         */
-
-    //         if ((int) $upload->user_id !== (int) $user->id) {
-    //             return [
-    //                 'response' => response()->json([
-    //                     'status' => false,
-    //                     'message' => 'Unauthorized.'
-    //                 ], 403),
-    //                 'upload' => null,
-    //             ];
-    //         }
-
-    //         /*
-    //         |--------------------------------------------------------------------------
-    //         | Already cancelled
-    //         |--------------------------------------------------------------------------
-    //         */
-
-    //         if ($upload->status === 'cancelled') {
-    //             return [
-    //                 'response' => response()->json([
-    //                     'status' => true,
-    //                     'message' => 'Upload was already cancelled.'
-    //                 ]),
-    //                 'upload' => null,
-    //             ];
-    //         }
-
-    //         /*
-    //         |--------------------------------------------------------------------------
-    //         | Already completed
-    //         |--------------------------------------------------------------------------
-    //         */
-
-    //         if ($upload->status === 'completed') {
-    //             return [
-    //                 'response' => response()->json([
-    //                     'status' => false,
-    //                     'message' =>
-    //                         'This upload has already been completed.'
-    //                 ], 409),
-    //                 'upload' => null,
-    //             ];
-    //         }
-
-    //         /*
-    //         |--------------------------------------------------------------------------
-    //         | Already cancelling
-    //         |--------------------------------------------------------------------------
-    //         */
-
-    //         if ($upload->status === 'cancelling') {
-    //             return [
-    //                 'response' => response()->json([
-    //                     'status' => true,
-    //                     'message' =>
-    //                         'Cancellation is already in progress.'
-    //                 ]),
-    //                 'upload' => null,
-    //             ];
-    //         }
-
-    //         /*
-    //         |--------------------------------------------------------------------------
-    //         | Request cancellation
-    //         |--------------------------------------------------------------------------
-    //         |
-    //         | This is the important state transition.
-    //         |
-    //         | processHls() can no longer change this upload to "processed"
-    //         | because its final update requires status = "processing".
-    //         |
-    //         */
-
-    //         $upload->update([
-    //             'status' => 'cancelling',
-    //         ]);
-
-    //         return [
-    //             'response' => null,
-    //             'upload' => $upload,
-    //         ];
-    //     });
-
-    //     /*
-    //     |--------------------------------------------------------------------------
-    //     | Immediate response
-    //     |--------------------------------------------------------------------------
-    //     */
-
-    //     if ($result['response']) {
-    //         return $result['response'];
-    //     }
-
-    //     $upload = $result['upload'];
-
-    //     /*
-    //     |--------------------------------------------------------------------------
-    //     | Cleanup
-    //     |--------------------------------------------------------------------------
-    //     |
-    //     | At this point the upload is already "cancelling".
-    //     |
-    //     | processHls() is therefore no longer allowed to mark it "processed".
-    //     | However, processHls() may still be running FFmpeg or uploading to Bunny.
-    //     |
-    //     | We perform cleanup here, then finalize cancellation only if the state
-    //     | is still "cancelling".
-    //     |--------------------------------------------------------------------------
-    //     */
-
-    //     try {
-
-
-    //         /*
-    //         |--------------------------------------------------------------------------
-    //         | Finalize cancellation atomically
-    //         |--------------------------------------------------------------------------
-    //         */
-
-    //         $updated = LessonUpload::where(
-    //             'id',
-    //             $upload->id
-    //         )
-    //         ->where('status', 'cancelling')
-    //         ->update([
-    //             'status' => 'cancelled',
-    //         ]);
-
-
-    //         /*
-    //         |--------------------------------------------------------------------------
-    //         | Another operation changed the state
-    //         |--------------------------------------------------------------------------
-    //         */
-
-    //         if ($updated !== 1) {
-
-    //             $upload->refresh();
-
-    //             \Log::warning(
-    //                 'UPLOAD CANCELLATION STATE CHANGED DURING CLEANUP',
-    //                 [
-    //                     'upload_uuid' =>
-    //                         $upload->upload_uuid,
-
-    //                     'status' =>
-    //                         $upload->status,
-    //                 ]
-    //             );
-
-    //             return response()->json([
-    //                 'status' => false,
-    //                 'message' =>
-    //                     'Upload cancellation could not be finalized.'
-    //             ], 409);
-    //         }
-
-
-    //         \Log::info(
-    //             'LESSON UPLOAD CANCELLED',
-    //             [
-    //                 'upload_uuid' =>
-    //                     $upload->upload_uuid,
-
-    //                 'user_id' =>
-    //                     $user->id,
-    //             ]
-    //         );
-
-
-    //         return response()->json([
-    //             'status' => true,
-    //             'message' =>
-    //                 'Lesson upload cancelled successfully.'
-    //         ]);
-
-
-    //     } catch (\Throwable $e) {
-
-    //         \Log::error(
-    //             'LESSON UPLOAD CANCELLATION FAILED',
-    //             [
-    //                 'upload_uuid' =>
-    //                     $uploadUuid,
-
-    //                 'user_id' =>
-    //                     $user->id,
-
-    //                 'error' =>
-    //                     $e->getMessage(),
-    //             ]
-    //         );
-
-
-    //         /*
-    //         |--------------------------------------------------------------------------
-    //         | IMPORTANT
-    //         |--------------------------------------------------------------------------
-    //         |
-    //         | Keep the state as "cancelling".
-    //         |
-    //         | Do NOT change it back to uploaded, processing, or processed.
-    //         |
-    //         */
-
-    //         return response()->json([
-    //             'status' => false,
-    //             'message' =>
-    //                 'Failed to completely cancel the lesson upload.'
-    //         ], 500);
-    //     }
-    // }
     
     public function cancelUpload(Request $request, $uploadUuid)
     {
@@ -3687,26 +3381,6 @@ class LessonController extends Controller
     }
 
     /**
-     * Verify and regenarate signed url for 10 min only
-     */
-
-    // public function refreshSignedUrl($id)
-    // {
-    //     $lesson = Lesson::findOrFail($id);
-
-    //     // Important: ensure the current user can access the course/lesson
-    //     if (! auth()->user() || ! method_exists(auth()->user(), 'canAccessLesson') || ! auth()->user()->canAccessLesson($lesson)) {
-    //         return response()->json(['error' => 'Unauthorized'], 403);
-    //     }
-
-    //     return response()->json([
-    //         'url' => $lesson->signed_url,
-    //         'bunny_video_url' => $lesson->bunny_video_url,
-    //         'expires_in' => env('BUNNY_TOKEN_EXPIRY', 600),
-    //     ]);
-    // }
-
-    /**
      * Generate a fresh Bunny signed URL.
      */
     public function refreshSignedUrl($id)
@@ -3738,131 +3412,6 @@ class LessonController extends Controller
         ]);
     }
 
-    // public function refreshTestHlsUrl()
-    // {
-    //     $securityKey = env('BUNNY_SIGNING_KEY');
-
-    //     $path = '/hsl-test-folder/playlist.m3u8';
-
-    //     $expires = time() + 180;
-
-    //     $tokenPath = '/hsl-test-folder/';
-
-    //     $parameterData = 'token_path=' . $tokenPath;
-
-    //     $hashableBase =
-    //         $securityKey .
-    //         $tokenPath .
-    //         $expires .
-    //         $parameterData;
-
-    //     $token = base64_encode(
-    //         hash('sha256', $hashableBase, true)
-    //     );
-
-    //     $token = strtr($token, '+/', '-_');
-    //     $token = rtrim($token, '=');
-
-    //     $zoneUrl = rtrim(env('BUNNY_PULLZONE_URL'), '/');
-
-    //     $url =
-    //         $zoneUrl .
-    //         '/bcdn_token=' . $token .
-    //         '&expires=' . $expires .
-    //         '&token_path=' . rawurlencode($tokenPath) .
-    //         $path;
-
-    //     return response()->json([
-    //         'url' => $url,
-    //         'expires_at' => $expires,
-    //         'expires_in' => 180,
-    //     ]);
-    // }
-
-    // Test HLS URL
-    // public function testHlsUrl()
-    // {
-    //     $securityKey = env('BUNNY_SIGNING_KEY');
-
-    //     $path = '/hsl-test-folder/';
-    //     $playlist = 'playlist.m3u8';
-
-    //     $expires = time() + 3600;
-
-    //     // Directory token
-    //     $parameterData = 'token_path=' . $path;
-
-    //     $hashableBase =
-    //         $securityKey .
-    //         $path .
-    //         $expires .
-    //         $parameterData;
-
-    //     $token = base64_encode(
-    //         hash('sha256', $hashableBase, true)
-    //     );
-
-    //     $token = strtr($token, '+/', '-_');
-    //     $token = rtrim($token, '=');
-
-    //     $zoneUrl = rtrim(env('BUNNY_PULLZONE_URL'), '/');
-
-    //     // PATH-BASED TOKEN
-    // $url =
-    //     $zoneUrl .
-    //     '/bcdn_token=' . $token .
-    //     '&expires=' . $expires .
-    //     '&token_path=' . rawurlencode($path) .
-    //     $path .
-    //     $playlist;
-
-    //     return response($url, 200)
-    //         ->header('Content-Type', 'text/plain');
-    // }
-
-    // public function testHlsUrl()
-    // {
-    //     $securityKey = env('BUNNY_SIGNING_KEY');
-
-    //     $path = '/hsl-test-folder/playlist.m3u8';
-
-    //     // TEST: 180 seconds
-    //     $expires = time() + 180;
-
-    //     // Directory containing playlist + segments
-    //     $tokenPath = '/hsl-test-folder/';
-
-    //     // Bunny requires token_path in the hash
-    //     $parameterData = 'token_path=' . $tokenPath;
-
-    //     $hashableBase =
-    //         $securityKey .
-    //         $tokenPath .
-    //         $expires .
-    //         $parameterData;
-
-    //     $token = base64_encode(
-    //         hash('sha256', $hashableBase, true)
-    //     );
-
-    //     $token = strtr($token, '+/', '-_');
-    //     $token = rtrim($token, '=');
-
-    //     $zoneUrl = rtrim(env('BUNNY_PULLZONE_URL'), '/');
-
-    //     return response()->json([
-    //         'url' =>
-    //             $zoneUrl .
-    //             '/bcdn_token=' . $token .
-    //             '&expires=' . $expires .
-    //             '&token_path=' . rawurlencode($tokenPath) .
-    //             $path,
-
-    //         'expires_at' => $expires,
-    //         'expires_in' => 180,
-    //     ]);
-    // }
-
     /**
      * Helper: Format lesson with absolute media URLs
      */
@@ -3893,6 +3442,7 @@ class LessonController extends Controller
                     'is_locked'       => $lesson->is_locked,
                     'published_at'    => $lesson->published_at,
                     'updated_at'      => $lesson->updated_at,
+                    'duration'        => $lesson->duration,
                     'module' => [
                         'id' => $lesson->module?->id,
                         'title' => [

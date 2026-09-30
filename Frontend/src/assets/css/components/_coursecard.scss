@@ -4,30 +4,83 @@
 .Course_Card {
     width: 100%;
     height: 100%;
-
     display: flex;
     flex-direction: column;
-
     overflow: hidden;
-
     border: 2px solid rgba($primary-color, 0.5);
     border-radius: 10px;
-
     background-color: $fifth-color;
-
     transition:
         transform 0.25s ease,
         box-shadow 0.25s ease;
 
+    /////////// Course Image ////////////
 
-    //////////// Course Image ////////////
-
-    .Course_Img {
+    .Course_Image_Wrapper {
+        position: relative;
         width: 100%;
-        aspect-ratio: 16 / 9;
-        object-fit: cover;
-        object-position: center;
-        transition: 0.3s ease;
+        overflow: hidden;
+
+        
+        .Course_Image_Link {
+            display: block;
+        }
+
+        .Course_Img {
+            display: block;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            object-fit: cover;
+            object-position: center;
+            transition: 0.3s ease;
+        }
+
+
+        //////////// Difficulty Badge ////////////
+
+        .Difficulty_Badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+
+            padding: 4px 9px;
+
+            border-radius: 20px;
+
+            color: $fifth-color;
+
+            font-size: 11px;
+            font-weight: 600;
+
+            line-height: 1.2;
+
+            white-space: nowrap;
+
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+        }
+
+
+        .Difficulty_Beginner {
+            background-color: rgba(40, 167, 69, 0.82);
+        }
+
+
+        .Difficulty_Intermediate {
+            background-color: rgba(255, 159, 28, 0.85);
+        }
+
+
+        .Difficulty_Advanced {
+            background-color: rgba(220, 53, 69, 0.82);
+        }
+
+
+        .Difficulty_All_Levels {
+            background-color: rgba(13, 110, 253, 0.82);
+        }
     }
 
 
@@ -35,6 +88,12 @@
 
     .Course_Header {
         padding: 12px 15px 8px;
+        border-top: 1px solid rgba($primary-color, 0.5);
+
+        .Course_Title_Link {
+            color: inherit;
+            text-decoration: none;
+        }
 
         .Course_Title {
             display: -webkit-box;
@@ -53,7 +112,6 @@
             font-size: medium;
             font-weight: 550;
             line-height: 1.4;
-
             text-transform: capitalize;
         }
     }
@@ -220,8 +278,7 @@
                 &:hover {
                     background-color: $fifth-color;
                     color: $primary-color;
-
-                    transform: translateX(10px);
+                    transform: scale(1.07);
                 }
             }
         }
@@ -237,6 +294,105 @@
 
         .Course_Img {
             transform: scale(1.05);
+        }
+    }
+}
+
+@media (max-width: 575.98px) {
+    .Course_Card{
+        // border: 2px solid rgba(red, 0.5); 
+        width: 300px;
+
+        //////////// Course Header ////////////
+        .Course_Header {
+            padding: 10px;
+
+            .Course_Title {
+                font-size: 18px;
+                font-weight: 600;
+                line-height: 1.3;
+            }
+        }
+
+        //////////// Teacher Information ////////////
+        .Teacher_Data_Row {
+            // background-color: red;
+            padding: 5px 10px;
+
+            .Teacher_Img {
+                width: 35px;
+                height: 35px;
+            }
+
+            .Teacher_Name {
+                font-size: 15px;
+            }
+
+            .Category_Button {
+                font-size: 15px;
+                font-weight: 600;
+                border: 1px solid rgba($primary-color, 0.5) ;
+                &:hover {
+                    background-color: $primary-color;
+                    color: $fifth-color;
+                }
+            }
+        }
+
+        //////////// Course Body ////////////
+
+        .Course_Body {
+
+            //////////// Course Meta ////////////
+
+            .Course_Meta {
+                display: flex;
+                justify-content: space-between;
+                margin: 10px 0;
+
+                span {
+                    margin: 5px 0;
+                    font-size: 14px;
+                }
+
+                .Icon {
+                    margin-right: 6px;
+                    font-size: 16px;
+                    color: $primary-color;
+                }
+            }
+
+
+            //////////// Course Footer ////////////
+
+            .Course_Footer {
+                display: flex;
+
+                align-items: center;
+                justify-content: space-between;
+
+                margin-top: auto;
+
+                border-top: 1px solid rgba($primary-color, 0.5);
+
+                .Price{
+                    font-size: 18px;
+                }
+                .View_Course_Button {
+
+                    padding: 7px 13px;
+                    font-size: 15px;
+                    font-weight: 600;
+
+
+                    &:hover {
+                        background-color: $fifth-color;
+                        color: $primary-color;
+
+                        transform: scale(1.07);
+                    }
+                }
+            }
         }
     }
 }

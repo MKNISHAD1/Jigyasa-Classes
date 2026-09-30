@@ -1,95 +1,180 @@
 // src/hooks/useCourses.js
+
 import { useEffect, useState } from "react";
 import { apiUrl } from "../Component/Common/http";
 
-
 /**
- * Base hook to fetch & control courses
+ * Base hook to fetch & control public courses
+ *
+ * Used by:
+ * - Homepage
+ * - All Courses page
  */
 export const useCourses = ({
-  status,          // "published"
-  categoryId,      // number
-  subcategoryId,   // number
-  sortBy = "created_at", // "created_at" | "price"
-  order = "desc",  // "asc" | "desc"
-  limit,           // number
+    status,
+    categoryId,
+    subcategoryId,
+    sortBy = "created_at",
+    order = "desc",
+    limit,
 } = {}) => {
 
-  const [courses, setCourses] = useState([]);
-  const [loading, setLoading] = useState(true);
+    const [courses, setCourses] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchCourses = async () => {
-      try {
-        const res = await fetch(apiUrl + "public-courses", {
-          headers: { Accept: "application/json" },
-        });
 
-        const data = await res.json();
+    useEffect(() => {
 
-        if (!data?.status) return;
+        const fetchCourses = async () => {
 
-        let result = [...data.courses];
+            try {
+                setLoading(true);
+                setError(null);
 
-        /* 🔴 FILTERS 🔴 */
+                const response = await fetch( apiUrl + "public-courses",
+                    {
+                        headers: {
+                            Accept: "application/json",
+                        },
+                    }
+                );
 
-        // Status filter
-        if (status) {
-          result = result.filter(course => course.status === status);
-        }
 
-        // Category filter
-        if (categoryId) {
-          result = result.filter(
-            course => course.category?.id === Number(categoryId)
-          );
-        }
+                if (!response.ok) {
+                    throw new Error(
+                        `Failed to fetch courses: ${response.status}`
+                    );
+                }
 
-        // Subcategory filter
-        if (subcategoryId) {
-          result = result.filter(
-            course => course.subcategory?.id === Number(subcategoryId)
-          );
-        }
+                const data = await response.json();
 
-        /* 🔵 SORTING 🔵 */
-        if (sortBy) {
-          result.sort((a, b) => {
-            let valA = a[sortBy];
-            let valB = b[sortBy];
+                if (!data?.status || !Array.isArray(data.courses)) {
+                    throw new Error("Invalid course response.");
+                }
 
-            // Date sorting
-            if (sortBy.includes("at")) {
-              valA = new Date(valA);
-              valB = new Date(valB);
+                let result = [...data.courses];
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | FILTERS
+                |--------------------------------------------------------------------------
+                */
+
+                // Status
+                if (status) { result = result.filter(
+                        course => course.status === status
+                    );
+                }
+
+
+                // Category
+                if (categoryId) {
+                    result = result.filter(
+                        course =>
+                            course.category?.id === Number(categoryId)
+                    );
+                }
+
+
+                // Subcategory
+                if (subcategoryId) {
+                    result = result.filter(
+                        course =>
+                            course.subcategory?.id === Number(subcategoryId)
+                    );
+                }
+
+                /*
+                |--------------------------------------------------------------------------
+                | SORTING
+                |--------------------------------------------------------------------------
+                */
+
+                if (sortBy) {
+                    result.sort((a, b) => {
+
+                        let valueA = a?.[sortBy];
+                        let valueB = b?.[sortBy];
+
+                        // Date fields
+                        if (
+                            sortBy === "created_at" ||
+                            sortBy === "updated_at" ||
+                            sortBy === "published_at"
+                        ) {
+                            valueA = valueA
+                                ? new Date(valueA).getTime()
+                                : 0;
+
+                            valueB = valueB
+                                ? new Date(valueB).getTime()
+                                : 0;
+                        }
+
+                        // Price
+                        else if (sortBy === "price") {
+                            valueA = Number(valueA || 0);
+                            valueB = Number(valueB || 0);
+                        }
+
+                        // Numeric fields
+                        else {
+                            valueA = Number(valueA || 0);
+                            valueB = Number(valueB || 0);
+                        }
+
+                        return order === "asc"
+                            ? valueA - valueB
+                            : valueB - valueA;
+                    });
+                }
+
+                /*
+                |--------------------------------------------------------------------------
+                | LIMIT
+                |--------------------------------------------------------------------------
+                */
+
+                if (Number.isFinite(Number(limit)) && Number(limit) > 0) {
+                    result = result.slice(0, Number(limit));
+                }
+
+                setCourses(result);
+
+            } catch (err) {
+
+                console.error(
+                    "Failed to fetch courses:",
+                    err
+                );
+
+                setError(err);
+                setCourses([]);
+
+            } finally {
+
+                setLoading(false);
             }
+        };
 
-            // Price sorting
-            if (sortBy === "price") {
-              valA = parseFloat(valA || 0);
-              valB = parseFloat(valB || 0);
-            }
 
-            return order === "asc" ? valA - valB : valB - valA;
-          });
-        }
+        fetchCourses();
 
-        /* 🟢 LIMIT / SLICE 🟢 */
-        if (limit) {
-          result = result.slice(0, limit);
-        }
+    }, [
+        status,
+        categoryId,
+        subcategoryId,
+        sortBy,
+        order,
+        limit,
+    ]);
 
-        setCourses(result);
 
-      } catch (err) {
-        console.error("Failed to fetch courses", err);
-      } finally {
-        setLoading(false);
-      }
+    return {
+        courses,
+        loading,
+        error,
     };
-
-    fetchCourses();
-  }, [status, categoryId, subcategoryId, sortBy, order, limit]);
-
-  return { courses, loading };
 };

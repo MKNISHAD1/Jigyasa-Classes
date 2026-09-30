@@ -7,13 +7,25 @@
     border: 1px solid $primary-color;
     padding: 10px;
     text-decoration: none;
-    border-radius: 10px;
+    border-radius: 7px;
     transition: .25s;
 
     &:hover{
         background-color: $secondary-color;
         color: $primary-color;
         transform: scale(1.06);
+    }
+    &:disabled{
+        color: $primary-color;
+        background-color: $secondary-color;
+        border: 1px solid $primary-color;
+        opacity: .4;
+        pointer-events: auto !important;
+        cursor:not-allowed;
+
+        &:hover{
+            transform: none;
+        }
     }
 }
 
@@ -28,9 +40,21 @@
     transition: .25s;
 
     &:hover{
+        transform: scale(1.06);
         background-color: $primary-color;
         color: $fifth-color;
-        transform: scale(1.06);
+    }
+    &:disabled{
+        background-color: $primary-color;
+        color: $fifth-color;
+        border: 1px solid $primary-color;
+        opacity: .4;
+        pointer-events: auto !important;
+        cursor:not-allowed;
+
+        &:hover{
+            transform: none;
+        }
     }
 }
 
@@ -52,6 +76,14 @@
         background-color: $fifth-color;
         color:$primary-color;
     }
+
+    &:disabled{
+        background-color: $fifth-color;
+        color:$primary-color;
+        opacity: .4;
+        pointer-events: auto !important;
+        cursor:not-allowed;
+    }
 }
 
 .Primary_Button_Opposite_2{
@@ -71,5 +103,13 @@
     &:hover{
         color: $fifth-color;
         background-color:$primary-color;
+    }
+
+    &:disabled{
+        color: $fifth-color;
+        background-color:$primary-color;
+        opacity: .4;
+        pointer-events: auto !important;
+        cursor:not-allowed;
     }
 }

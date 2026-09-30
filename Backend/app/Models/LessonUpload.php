@@ -25,11 +25,15 @@ class LessonUpload extends Model
         'hls_storage_path',
         'temporary_storage_path',
         'temporary_object_name',
-
+        'duration',
         'status',
         'lesson_id',
     ];
 
+    protected $casts = [
+        'duration'        => 'integer',
+    ];
+    
     protected static function booted()
     {
         static::creating(function ($upload) {

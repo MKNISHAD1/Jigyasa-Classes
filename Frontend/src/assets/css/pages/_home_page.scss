@@ -57,6 +57,7 @@
                         box-shadow: 0 10px 30px rgba(0,0,0,.06);
                         font-weight: 600;
                         transition: 0.25s;
+                        color: $primary-color;
 
                         &:hover{
                             background-color: $primary-color;
@@ -372,114 +373,110 @@
 
     ////////////👇 [6.] Beneifits Section 👇\\\\\\\\\\\\\\\\\\
     .Benefits_Zigzag {
-    padding: 30px  10px ;
+        padding: 30px  10px ;
 
-    .Center{
-        margin: auto;
-    }
-
-    img{
-        width:400px;
-        border-radius: 20px;
-        border: 2px solid rgba($primary-color, 0.6);
-    }
-    .Zigzag_Wrapper {
-        display: grid;
-        grid-template-columns: 1fr 320px 1fr;
-        gap: 20px;
-        align-items: start;
-    }
-
-    .Zigzag_Col {
-        display: flex;
-        flex-direction: column;
-        gap: 40px;
-
-        &.Left {
-        align-items: flex-start;
-        padding-top:100px;
-        text-align: left;
+        .Center{
+            margin: auto;
         }
 
-        &.Right {
-        align-items: flex-start;
-        padding-top: 100px;
-        text-align: left;
+        img{
+            width:400px;
+            border-radius: 20px;
+            border: 2px solid rgba($primary-color, 0.6);
         }
-    }
+        .Zigzag_Wrapper {
+            display: grid;
+            grid-template-columns: 1fr 320px 1fr;
+            gap: 20px;
+            align-items: start;
+        }
 
-    .Benefit_Title{
-        display: flex;
-        align-items: center;
-        padding: 10px 0;
+        .Zigzag_Col {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+
+            &.Left {
+                align-items: flex-start;
+                padding-top:100px;
+                text-align: left;
+            }
+
+            &.Right {
+                align-items: flex-start;
+                padding-top: 100px;
+                text-align: left;
+            }
+        }
+
+        .Benefit_Title{
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            
+            h3 {
+                margin-top: auto;
+                margin-left: 5%;
+                font-size: 1.05rem;
+                font-weight: 600;
+                color: $primary-color;
+            }
+        }
         
-        h3 {
-        margin-top: auto;
-        margin-left: 5%;
-        font-size: 1.05rem;
-        font-weight: 600;
-        color: $primary-color;
-        }
-    }
-    
-    .Icon {
-        width: 20px;
-        height: 20px;
-        padding: 3%;
-        border-radius: 5px;
-        background: $secondary-color;
-        border: 1px solid rgba($primary-color, 0.4);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: $primary-color;
-        transition: all 0.3s ease;
-    }
-
-    .Benefit_Card {
-        background: $fifth-color;
-        border: 1px solid rgba($primary-color, 0.4);
-        padding: 22px 26px;
-        border-radius: 18px;
-        max-width: 360px;
-        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
-        transition: all 0.3s ease;
-        position: relative;
-
-        outline: none;
-        -webkit-tap-highlight-color: transparent;
-        
-        p {
-        font-size: 0.9rem;
-        color: #555;
-        margin: 0;
-        line-height: 1.5;
-        text-align: center;
-        }
-
-
-
-        &:hover,
-        &:focus-visible {
-        transform: translateY(-6px);
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.09);
-
         .Icon {
-            background: $primary-color;
-            color: $fifth-color;
-            transform: scale(1.05);
+            width: 20px;
+            height: 20px;
+            padding: 3%;
+            border-radius: 5px;
+            background: $secondary-color;
+            border: 1px solid rgba($primary-color, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: $primary-color;
+            transition: all 0.3s ease;
         }
 
-        &:focus-visible {
-        outline: 1px solid rgba($primary-color, 0.5);
-        outline-offset: 4px;
-        }
+        .Benefit_Card {
+            background: $fifth-color;
+            border: 1px solid rgba($primary-color, 0.4);
+            padding: 22px 26px;
+            border-radius: 18px;
+            max-width: 360px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease;
+            position: relative;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+            
+            p {
+                font-size: 0.9rem;
+                color: #555;
+                margin: 0;
+                line-height: 1.5;
+                text-align: center;
+            }
 
-        &:active {
-        transform: scale(0.98);
+            &:hover, &:focus-visible {
+                transform: translateY(-6px);
+                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.09);
+
+            .Icon {
+                background: $primary-color;
+                color: $fifth-color;
+                transform: scale(1.05);
+            }
+
+            &:focus-visible {
+                outline: 1px solid rgba($primary-color, 0.5);
+                outline-offset: 4px;
+            }
+
+            &:active {
+                transform: scale(0.98);
+                }
+            }
         }
-        }
-    }
     }
 
     ////////////👇 [7.] Take Action Section    👇\\\\\\\\\\\\\\\\\\
@@ -630,6 +627,7 @@
                         .Feature_Item {
                             justify-content: center ;
                             text-align: center ;
+                            font-size: 13px;
                         }
                     }
                 }
@@ -638,7 +636,7 @@
                     padding: 0 ;
         
                     .Student_Img {
-                        max-width: 50% ;
+                        max-width: 70% ;
                         padding-top: 30px ;
                         border: none ;
                         border-radius: 0 ;

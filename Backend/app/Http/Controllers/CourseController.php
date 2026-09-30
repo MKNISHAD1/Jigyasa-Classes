@@ -15,7 +15,6 @@ use Illuminate\Support\Facades\Auth;
 
 class CourseController extends Controller
 {
-
     // Course-list for admin access role logged-in  useer
     public function courseList()
     {
@@ -52,9 +51,22 @@ class CourseController extends Controller
         }
 
         // Format response (your existing logic)
-        $courses = $courses->map(fn ($course) =>
-            $this->formatCourseResponse($course)
-        );
+        $courses = $courses->map(function ($course) {
+
+            return $this->formatCourse($course, [
+                'description',
+                'highlights',
+                'language',
+                'difficulty_level',
+                'status',
+                'published_at',
+                'creator',
+                'subcategory',
+                'created_at',
+                'updated_at',
+            ]);
+
+        });
 
         return response()->json([
             'status'  => true,
@@ -63,44 +75,45 @@ class CourseController extends Controller
     }
 
     // Course list for public users
-
     public function publicCourseList()
     {
         $courses = Course::with([
-                'thumbnail',
-                'teacher',
-                'creator',
-                'category',
-                'subcategory'
-            ])
-            ->withCount('lessons')
-            ->where('status', 'published')
-            ->latest()
-            ->get();
+            'thumbnail',
+            'teacher',
+            'category',
+            'subcategory'
+        ])
+        ->withCount('lessons')
+        ->withSum('lessons as total_duration', 'duration')
+        ->where('status', 'published')
+        ->latest()
+        ->get();
 
         return response()->json([
             'status' => true,
-            'courses' => $courses->map(
-                fn($course) => $this->formatCourseResponse($course)
-            )
+            'courses' => $courses->map(function ($course) {
+                return $this->formatCourse($course, [
+                    'subcategory','status','difficulty_level','created_at'
+                ]);
+            }),
         ]);
     }
 
-
-     /**
-     * View Courses publicly (for frontend)
-     */
-    
-     public function publicCourseView($id)
+    /**
+    * View Courses publicly (for frontend)
+    */
+    public function publicCourseView($id)
     {
         $course = Course::with([
-            'lessons.module', 
-            'thumbnail', 
+            'lessons.module',
+            'thumbnail',
             'teacher',
             'category',
             'subcategory',
-            'modules'
-        ])->findOrFail($id);
+            'modules.lessons',
+        ])
+        ->withCount('lessons')
+        ->findOrFail($id);
 
         // SIMILAR COURSES
 
@@ -133,19 +146,36 @@ class CourseController extends Controller
 
         return response()->json([
             'status' => true,
-            'course' => $this->formatCourseResponse($course),
 
-            // similar  courses
-            'similar_courses' => $similarCourses->map(
-                fn($item) => $this->formatCourseResponse($item)
-            ),
+            'course' => $this->formatCourse($course, [
+                'description',
+                'highlights',
+                'language',
+                'difficulty_level',
+                'status',
+                'published_at',
+                'creator',
+                'subcategory',
+                'created_at',
+                'updated_at',
+                'modules',
+                'lessons',
+            ]),
+
+            'similar_courses' => $similarCourses->map(function ($item) {
+
+                return $this->formatCourse($item, [
+                    'subcategory',
+                ]);
+
+            }),
         ]);
     }
 
     /**
      * Store a new course
      * - Only teacher/moderator/admin/superadmin allowed
-     */
+    */
     public function createCourse(Request $request)
     {
         $user = Auth::user();
@@ -214,10 +244,8 @@ class CourseController extends Controller
             'price'        => $request->price,
             'status' => $request->status,
             'published_at' => $request->status === 'published' ? now() : null,
-            // 'thumbnail_id' => $thumbnailId,
             'created_by'   => $user->id,
             'teacher_id' => $teacherId,
-
             'language' => $request->language,
             'difficulty_level' => $request->difficulty_level,
             'highlights' => $request->highlights,
@@ -232,7 +260,6 @@ class CourseController extends Controller
 
         $generalModule->saveTranslation('title', 'hi', 'सामान्य');
 
-
         // Save translations
         $course->saveTranslation('title', 'hi', $request->title_hi);
         $course->saveTranslation('description', 'hi', $request->description_hi);
@@ -243,14 +270,11 @@ class CourseController extends Controller
             $course->translateFields(['title', 'description','highlights'], 'hi');
         }
 
-
-
         // Storng thumanil if provided
         if ($request->hasFile('thumbnail')) {
             $image = $request->file('thumbnail');
             $filename = Str::slug($request->title_en) . '_' . time() . '.' . $image->getClientOriginalExtension();
             $path = $image->storeAs('uploads/courses', $filename, 'public');
-
             
             // Create media record
             $media = Media::create([
@@ -259,7 +283,6 @@ class CourseController extends Controller
                 'owner_id'   => $course->id,   // ✅ FIXED now relation with course module
                 'owner_type' => Course::class, 
                 'uploaded_by'=> $user->id, // it will store user id of uploader
-
             ]);
             
             $course->thumbnail_id = $media->id;
@@ -267,12 +290,30 @@ class CourseController extends Controller
 
         }
 
-
         return response()->json([
             'status' => true,
             'message' => 'Course created successfully',
-            // chnage 3
-            'course' => $this->formatCourseResponse($course->load(['thumbnail', 'teacher', 'creator', 'category', 'subcategory']))
+            'course' => $this->formatCourse(
+                $course->load([
+                    'thumbnail',
+                    'teacher',
+                    'creator',
+                    'category',
+                    'subcategory'
+                ]),
+                [
+                    'description',
+                    'highlights',
+                    'language',
+                    'difficulty_level',
+                    'status',
+                    'published_at',
+                    'creator',
+                    'subcategory',
+                    'created_at',
+                    'updated_at',
+                ]
+            )
         ], 201);
     }
 
@@ -281,12 +322,37 @@ class CourseController extends Controller
      */
     public function viewCourse($id)
     {
-        $course = Course::with(['lessons.module','modules', 'thumbnail', 'teacher', 'creator', 'category', 'subcategory'])->findOrFail($id);
+        $course = Course::with([
+            'lessons.module',
+            'modules.lessons',
+            'thumbnail',
+            'teacher',
+            'creator',
+            'category',
+            'subcategory',
+        ])
+        ->withCount('lessons')
+        ->findOrFail($id);
 
         return response()->json([
             'status' => true,
-            //change  4
-            'course' => $this->formatCourseResponse($course)
+
+            'course' => $this->formatCourse($course, [
+                'description',
+                'highlights',
+                'language',
+                'difficulty_level',
+                'status',
+                'published_at',
+                'creator',
+                'subcategory',
+                'created_at',
+                'updated_at',
+                'deleted_by',
+                'deleted_at',
+                'modules',
+                'lessons',
+            ]),
         ]);
     }
 
@@ -326,19 +392,13 @@ class CourseController extends Controller
             'status'        => 'sometimes|in:draft,published,archived',
             'thumbnail'   => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'teacher_id' => 'sometimes|exists:users,id',
-
             'language' => 'sometimes|in:Hindi,English,Both',
-
             'difficulty_level' => 'sometimes|in:Beginner,Intermediate,Advanced,All Levels',
-
             'highlights' => 'nullable|array',
             'highlights.*' => 'string|max:255',
-
             'highlights_hi' => 'nullable|array',
             'highlights_hi.*' => 'string|max:255',
-
         ]);
-
 
         // -------------------- 2. LOAD OLD VALUES ------------------
         $oldTitleEn = $course->title;
@@ -350,7 +410,6 @@ class CourseController extends Controller
         $oldDescHi  = $translationHi?->description ?? null;
         $oldHighlightsHi = $translationHi?->highlights ?? [];
 
-
         // -------------------- 3. NEW VALUES -----------------------
         $newTitleEn = $request->title_en;
         $newDescEn  = $request->description_en;
@@ -360,14 +419,12 @@ class CourseController extends Controller
         $newDescHi  = $request->description_hi;
         $newHighlightsHi = $request->highlights_hi;
 
-
         // -------------------- 4. DETECT ENGLISH CHANGES -----------
         $titleEnChanged = $request->has('title_en') && $newTitleEn !== $oldTitleEn;
         $descEnChanged  = $request->has('description_en') && $newDescEn !== $oldDescEn;
         $highlightsEnChanged =
             $request->has('highlights') &&
             $newHighlightsEn != $oldHighlightsEn;
-
 
         // -------------------- 5. DETECT REAL MANUAL HINDI INPUT ---
         $titleHiManuallyChanged =
@@ -385,7 +442,6 @@ class CourseController extends Controller
         $highlightsHiManuallyChanged =
             $request->has('highlights_hi') &&
             $newHighlightsHi != $oldHighlightsHi;
-
 
         // -------------------- 6. SAVE MANUAL HINDI ----------------
         if ($titleHiManuallyChanged) {
@@ -406,48 +462,23 @@ class CourseController extends Controller
 
         // -------------------- 7. UPDATE MAIN COURSE FIELDS --------
         $course->update([
-            // 'title'          => $newTitleEn,
-            // 'description'    => $newDescEn,
-            // 'category_id'    => $request->category_id,
-            // 'subcategory_id' => $request->subcategory_id,
-            // 'price'          => $request->price,
-            // 'status'         => $request->status,
-            // 'published_at'   => $request->status === 'published' ? now() : null,
-            // 'teacher_id'     => $request->teacher_id ?? $course->teacher_id,
-            // 'language' => $request->language,
-            // 'difficulty_level' => $request->difficulty_level,
-            // 'highlights' => $request->highlights,
 
                 'title' => $request->title_en ?? $course->title,
-
                 'description' => $request->description_en ?? $course->description,
-
                 'category_id' => $request->category_id ?? $course->category_id,
-
                 'subcategory_id' => $request->subcategory_id ?? $course->subcategory_id,
-
                 'price' => $request->price ?? $course->price,
-
                 'status' => $request->status ?? $course->status,
-
                 'published_at' =>
                     ($request->status ?? $course->status) === 'published'
                         ? ($course->published_at ?? now())
                         : null,
 
-                'teacher_id' =>
-                    $request->teacher_id ?? $course->teacher_id,
-
-                'language' =>
-                    $request->language ?? $course->language,
-
-                'difficulty_level' =>
-                    $request->difficulty_level ?? $course->difficulty_level,
-
-                'highlights' =>
-                    $request->highlights ?? $course->highlights,
+                'teacher_id' => $request->teacher_id ?? $course->teacher_id,
+                'language' =>  $request->language ?? $course->language,
+                'difficulty_level' => $request->difficulty_level ?? $course->difficulty_level,
+                'highlights' => $request->highlights ?? $course->highlights,
         ]);
-
 
         // -------------------- 8. FORCE AUTO TRANSLATE IF NEEDED ---
         $fieldsToTranslate = [];
@@ -485,7 +516,6 @@ class CourseController extends Controller
             $course->translateFields($fieldsToTranslate, 'hi');
         }
 
-
         // -------------------- 9. HANDLE THUMBNAIL -----------------
 
         if ($request->hasFile('thumbnail')) {
@@ -510,28 +540,53 @@ class CourseController extends Controller
 
             $course->thumbnail_id = $media->id;
             $course->save();
-
         }
 
         return response()->json([
-            'status'  => true,
+            'status' => true,
             'message' => 'Course updated successfully',
-            'course'  => $this->formatCourseResponse($course->load(['thumbnail', 'teacher', 'creator', 'category', 'subcategory']))
-
+            'course' => $this->formatCourse(
+                $course->load([
+                    'thumbnail',
+                    'teacher',
+                    'creator',
+                    'category',
+                    'subcategory',
+                ]),
+                [
+                    'description',
+                    'highlights',
+                    'language',
+                    'difficulty_level',
+                    'status',
+                    'published_at',
+                    'creator',
+                    'subcategory',
+                    'created_at',
+                    'updated_at',
+                    'deleted_by',
+                    'deleted_at',
+                ]
+            ),
         ]);
 
     }
 
     /**
-     * fetch the courses 
-     * - moderator/Admin/SuperAdmin can seee all courses
-     * - Teacher can see only created by him and assigned to him only
+     * Fetch the courses
+     * - Moderator/Admin/SuperAdmin can see all courses
+     * - Teacher can see only created by him and assigned to him
      */
     public function getMyCourses(Request $request)
     {
         $user = Auth::user();
 
-        if (!$user->hasAnyRole(['teacher', 'moderator', 'admin', 'super_admin'])) {
+        if (!$user->hasAnyRole([
+            'teacher',
+            'moderator',
+            'admin',
+            'super_admin'
+        ])) {
             return response()->json([
                 'status' => false,
                 'message' => 'Unauthorized'
@@ -544,48 +599,36 @@ class CourseController extends Controller
             'category',
             'subcategory',
             'thumbnail',
-            'modules',
-            'lessons.module'
         ])
-            ->where('created_by', $user->id)
-            ->orWhere('teacher_id', $user->id)
-            ->get();
+        ->withCount('lessons')
+        ->where(function ($query) use ($user) {
+            $query->where('created_by', $user->id)
+                ->orWhere('teacher_id', $user->id);
+        })
+        ->latest()
+        ->get();
 
         return response()->json([
             'status' => true,
-            'courses' => $courses->map(
-                fn($course) => $this->formatCourseResponse($course)
-            )
+
+            'courses' => $courses->map(function ($course) {
+
+                return $this->formatCourse($course, [
+                    'description',
+                    'highlights',
+                    'language',
+                    'difficulty_level',
+                    'status',
+                    'published_at',
+                    'creator',
+                    'subcategory',
+                    'created_at',
+                    'updated_at',
+                ]);
+
+            }),
         ]);
     }
-
-    //     public function getMyCourses(Request $request)
-    // {
-    //     $user = Auth::user();
-
-    //     if ($user->hasAnyRole(['admin', 'super_admin', 'moderator'])) {
-    //         // Admins/mods get all courses
-    //         $courses = Course::with(['teacher', 'creator', 'category', 'subcategory', 'thumbnail','modules','lessons.module'])->get();
-    //     } elseif ($user->hasRole('teacher')) {
-    //         // Teacher gets: courses they created OR assigned as teacher
-    //         $courses = Course::with(['teacher', 'creator', 'category', 'subcategory', 'thumbnail','modules','lessons.module'])
-    //             ->where('created_by', $user->id)
-    //             ->orWhere('teacher_id', $user->id)
-    //             ->get();
-
-    //     } else {
-    //         return response()->json([
-    //             'status' => false,
-    //             'message' => 'Unauthorized'
-    //         ], 403);
-    //     }
-
-    //     return response()->json([
-    //         'status'  => true,
-    //     'courses' => $courses->map(fn($course) => $this->formatCourseResponse($course))
-    //     ], 201);
-    // }
-
 
     /**
      * Delete a course (soft delete)
@@ -623,15 +666,43 @@ class CourseController extends Controller
     }
 
     /**
-     * Deleted courses (soft deleted - trashed )
+     * Deleted courses (soft deleted - trashed)
      */
     public function deletedCourses()
     {
-        $courses = Course::onlyTrashed()->with(['thumbnail', 'teacher','deletedBy', 'creator', 'category', 'subcategory','modules','lessons.module'])->get();
+        $courses = Course::onlyTrashed()
+            ->with([
+                'thumbnail',
+                'teacher',
+                'deletedBy',
+                'creator',
+                'category',
+                'subcategory',
+            ])
+            ->withCount('lessons')
+            ->get();
 
         return response()->json([
             'status' => true,
-            'courses' => $courses->map(fn ($course) => $this->formatCourseResponse($course))
+
+            'courses' => $courses->map(function ($course) {
+
+                return $this->formatCourse($course, [
+                    'description',
+                    'highlights',
+                    'language',
+                    'difficulty_level',
+                    'status',
+                    'published_at',
+                    'creator',
+                    'subcategory',
+                    'created_at',
+                    'updated_at',
+                    'deleted_by',
+                    'deleted_at',
+                ]);
+
+            }),
         ], 200);
     }
 
@@ -651,20 +722,44 @@ class CourseController extends Controller
 
         $course->restore();
 
-        $course -> deleted_by = null;
-        $course -> save();
+        $course->deleted_by = null;
+        $course->save();
 
+        $course->load([
+            'thumbnail',
+            'teacher',
+            'creator',
+            'category',
+            'subcategory',
+        ]);
+
+        $course->loadCount('lessons');
 
         return response()->json([
             'status' => true,
+
             'message' => 'Course restored successfully',
-            'course' => $this->formatCourseResponse($course->load(['thumbnail', 'teacher', 'creator', 'category', 'subcategory', 'modules','lessons.module']))
+
+            'course' => $this->formatCourse($course, [
+                'description',
+                'highlights',
+                'language',
+                'difficulty_level',
+                'status',
+                'published_at',
+                'creator',
+                'subcategory',
+                'created_at',
+                'updated_at',
+                'deleted_by',
+                'deleted_at',
+            ]),
         ], 200);
     }
 
     /**
      * Permanently Delete courses
-     */
+    */
     public function forceDeleteCourse($id)
     {
         $course = Course::onlyTrashed()->find($id);
@@ -692,7 +787,6 @@ class CourseController extends Controller
             ], 403);
         }
 
-
         // if course has a thumbnail in media, delete it as well
 
             if ($course->thumbnail_id) {
@@ -711,171 +805,16 @@ class CourseController extends Controller
         ], 200);
     }
 
-
-
-    /**
-     * Helper: format response with English + Hindi fields
-     */
-    private function formatCourseResponse(Course $course)
+    // New Formatter
+    private function formatCourse(Course $course, array $options = []) 
     {
-        return [
-
-
+        $data = [
             'id' => $course->id,
 
             'title' => [
                 'en' => $course->title,
-                'hi' => $course->translateField('title', 'hi') ?? $course->title,
-            ],
-
-            'description' => [
-                'en' => $course->description,
-                'hi' => $course->translateField('description', 'hi') ?? $course->description,
-            ],
-
-            'highlights' => [
-                'en' => $course->highlights ?? [],
-                'hi' => $course->translateField('highlights', 'hi')
-                        ?? $course->highlights
-                        ?? [],
-            ],
-
-            'language' => $course->language,
-            'difficulty_level' => $course->difficulty_level,
-
-            'price' => $course->price,
-            'status' => $course->status,
-            'published_at' => $course->published_at,
-            'thumbnail' => $course->thumbnail_url,
-            
-            // Category
-            'category' => $course->category ? [
-                'id'   => $course->category->id,
-
-                'name' => [
-                    'en' => $course->category->name,
-                    'hi' => $course->category->translateField('name','hi') ?? $course->category->name,
-                    ],
-            ] : null,
-
-            // Subcategory
-            'subcategory' => $course->subcategory ? [
-                'id'   => $course->subcategory->id,
-
-                'name' => [
-                    'en' => $course->subcategory->name,
-                    'hi' => $course->subcategory->translateField('name','hi') ?? $course->subcategory->name,
-                ],
-            ] : null,
-
-            'teacher' => $course->teacher,
-            'creator' => $course->creator,
-            'created_at' => $course->created_at,
-            'updated_at' => $course->updated_at,
-            
-            'deleted_by' => $course->deletedBy ? [
-                'id' => $course->deletedBy->id,
-                'name' => $course->deletedBy->name,
-            ] : null,
-
-            'deleted_at' => $course->deleted_at,
-               
-            'lessons_count' =>$course->lessons_count ?? $course->lessons->count(),
-
-            // Modules 
-            'modules' => $course->modules->map(function ($module) {
-
-                $moduleLessons = $module->lessons;
-
-                return [
-                    'id' => $module->id,
-
-                    'title' => [
-                        'en' => $module->title,
-                        'hi' => $module->translateField('title', 'hi')
-                            ?? $module->title,
-                    ],
-
-                    'order' => $module->order,
-
-                    'lessons_count' => $moduleLessons->count(),
-
-                    'lessons' => $moduleLessons->map(function ($lesson) {
-                        return [
-                            'id' => $lesson->id,
-
-                            'title' => [
-                                'en' => $lesson->title,
-                                'hi' => $lesson->translateField('title', 'hi')
-                                    ?? $lesson->title,
-                            ],
-
-                            'order' => $lesson->order,
-
-                            'status' => $lesson->status,
-                        ];
-                    })->values(),
-                ];
-        }),
-            // Lessons
-
-            'lessons' => $course->lessons->map(function ($lesson) {
-
-            $module = $lesson->module;
-                return [
-                    'id'       => $lesson->id,
-
-                    'title'    => [
-                        'en' => $lesson->title,
-                        'hi' => $lesson->translateField('title','hi') ?? $lesson->title,
-                    ],
-                    
-                    'description' => [
-                        'en' => $lesson->description,
-                        'hi' => $lesson->translateField('description','hi') ?? $lesson->description,
-                    ],
-
-                    'bunny_video_url' => $lesson->bunny_video_url,
-                    'bunny_signed_url' => $lesson->signed_url,
-
-                    'order'    => $lesson->order,
-                    'is_free_preview' => $lesson->is_free_preview,
-                    'status'          => $lesson->status,
-                    'is_locked'       => $lesson->is_locked,
-                    'published_at'    => $lesson->published_at,
-
-                    'module' => [
-                        'id' => $module?->id,
-                        'title' => [
-                            'en' => $module?->title ?? 'General',
-                            'hi' => $module?->translateField('title', 'hi')
-                                ?? $module?->title
-                                ?? 'General',
-                        ],
-                    ],
-
-                    // Map lesson media files as materials
-                    'materials'       => $lesson->media->map(fn ($file) => [
-                        'id'   => $file->id,
-                        'url'  => asset('storage/' . $file->url),
-                        'name' => $file->original_name ?? basename($file->url),
-                    ]),
-                ];
-            }),     
-        ];
-    }
-
-    /**
-     * Helper card for Similar Courses
-     */
-    private function formatCourseCard(Course $course)
-    {
-        return [
-            'id' => $course->id,
-
-            'title' => [
-                'en' => $course->title,
-                'hi' => $course->translateField('title','hi') ?? $course->title,
+                'hi' => $course->translateField('title', 'hi')
+                        ?? $course->title,
             ],
 
             'price' => $course->price,
@@ -884,16 +823,187 @@ class CourseController extends Controller
 
             'lessons_count' => $course->lessons_count,
 
+            'total_duration' => $course->total_duration ?? 0,
+
             'teacher' => $course->teacher,
 
             'category' => [
                 'id' => $course->category?->id,
                 'name' => [
                     'en' => $course->category?->name,
-                    'hi' => $course->category?->translateField('name','hi')
+                    'hi' => $course->category?->translateField('name', 'hi')
                             ?? $course->category?->name,
-                ]
-            ]
+                ],
+            ],
         ];
+
+        /*
+        |--------------------------------------------------------------------------
+        | Optional course fields
+        |--------------------------------------------------------------------------
+        */
+
+        if (in_array('description', $options)) {
+            $data['description'] = [
+                'en' => $course->description,
+                'hi' => $course->translateField('description', 'hi')
+                        ?? $course->description,
+            ];
+        }
+
+        if (in_array('highlights', $options)) {
+            $data['highlights'] = [
+                'en' => $course->highlights,
+                'hi' => $course->translateField('highlights', 'hi')
+                        ?? $course->highlights,
+            ];
+        }
+
+        if (in_array('language', $options)) {
+            $data['language'] = $course->language;
+        }
+
+        if (in_array('difficulty_level', $options)) {
+            $data['difficulty_level'] = $course->difficulty_level;
+        }
+
+        if (in_array('status', $options)) {
+            $data['status'] = $course->status;
+        }
+
+        if (in_array('published_at', $options)) {
+            $data['published_at'] = $course->published_at;
+        }
+
+        if (in_array('creator', $options)) {
+            $data['creator'] = $course->creator;
+        }
+
+        if (in_array('subcategory', $options)) {
+            $data['subcategory'] = [
+                'id' => $course->subcategory?->id,
+                'name' => [
+                    'en' => $course->subcategory?->name,
+                    'hi' => $course->subcategory?->translateField('name', 'hi')
+                            ?? $course->subcategory?->name,
+                ],
+            ];
+        }
+
+        if (in_array('created_at', $options)) {
+            $data['created_at'] = $course->created_at;
+        }
+
+        if (in_array('updated_at', $options)) {
+            $data['updated_at'] = $course->updated_at;
+        }
+
+        if (in_array('deleted_by', $options)) {
+            $data['deleted_by'] = $course->deleted_by;
+        }
+
+        if (in_array('deleted_at', $options)) {
+            $data['deleted_at'] = $course->deleted_at;
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Modules
+        |--------------------------------------------------------------------------
+        */
+
+        if (in_array('modules', $options)) {
+            $data['modules'] = $course->modules->map(function ($module) {
+
+                return [
+                    'id' => $module->id,
+
+                    'title' => [
+                        'en' => $module->title,
+                        'hi' => $module->translateField('title', 'hi')
+                                ?? $module->title,
+                    ],
+
+                    'order' => $module->order,
+
+                    'lessons_count' => $module->lessons_count,
+
+                    'lessons' => $module->lessons?->map(function ($lesson) {
+                        return [
+                            'id' => $lesson->id,
+
+                            'title' => [
+                                'en' => $lesson->title,
+                                'hi' => $lesson->translateField('title', 'hi')
+                                        ?? $lesson->title,
+                            ],
+
+                            'order' => $lesson->order,
+
+                            'status' => $lesson->status,
+                        ];
+                    }),
+                ];
+            });
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Lessons
+        |--------------------------------------------------------------------------
+        */
+
+        if (in_array('lessons', $options)) {
+            $data['lessons'] = $course->lessons->map(function ($lesson) {
+
+                return [
+                    'id' => $lesson->id,
+
+                    'title' => [
+                        'en' => $lesson->title,
+                        'hi' => $lesson->translateField('title', 'hi')
+                                ?? $lesson->title,
+                    ],
+
+                    'description' => [
+                        'en' => $lesson->description,
+                        'hi' => $lesson->translateField('description', 'hi')
+                                ?? $lesson->description,
+                    ],
+
+                    'bunny_video_url' => $lesson->bunny_video_url,
+
+                    'bunny_signed_url' => $lesson->signed_url,
+
+                    'order' => $lesson->order,
+
+                    'is_free_preview' => $lesson->is_free_preview,
+
+                    'status' => $lesson->status,
+
+                    'is_locked' => $lesson->is_locked,
+
+                    'published_at' => $lesson->published_at,
+
+                    'duration' => $lesson->duration,
+
+                    'module' => $lesson->module ? [
+                        'id' => $lesson->module->id,
+
+                        'title' => [
+                            'en' => $lesson->module->title,
+                            'hi' => $lesson->module->translateField('title', 'hi')
+                                    ?? $lesson->module->title,
+                        ],
+                    ] : null,
+
+                    'materials' => $lesson->materials,
+                ];
+            });
+        }
+
+        return $data;
     }
 }

@@ -8,7 +8,7 @@ const LESSON = `${PREFIX.ADMIN}/lesson`;
 export const PUBLIC_ROUTES = {
   HOME: "/",
   ABOUT: "/about-us",
-  CONTACT: "/contact-us",
+  CONTACT: "/contact-us", 
   COURSES: "/courses",
   COURSE_CARD: "/coursecard",
   COURSE_VIEW: "/courseview/:id/:title",

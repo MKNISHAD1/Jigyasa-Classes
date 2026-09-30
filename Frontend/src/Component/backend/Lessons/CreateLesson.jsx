@@ -368,7 +368,9 @@ const uploadToBunny = async (lesson, index) => {
               ? {
                   ...l,
                   isUploading: false,
-                  uploadStage: "idle",
+                  isUploaded: false,
+                  uploadStage: "failed",
+                  uploadStatus: "failed",
                 }
               : l
           )
@@ -487,19 +489,78 @@ const uploadToBunny = async (lesson, index) => {
             index
           );
 
-        /*
-        |--------------------------------------------------------------------------
-        | Processing was cancelled
-        |--------------------------------------------------------------------------
-        */
+          /*
+          |--------------------------------------------------------------------------
+          | Processing was cancelled
+          |--------------------------------------------------------------------------
+          */
 
-        if (processingResult === "cancelled") {
-          console.log(
-            "Upload processing was cancelled."
-          );
+          if (processingResult === "cancelled") {
+            console.log(
+              "Upload processing was cancelled."
+            );
 
-          return;
-        }
+            setLessons((prev) =>
+              prev.map((l, i) =>
+                i === index
+                  ? {
+                      ...l,
+                      isUploading: false,
+                      isUploaded: false,
+                      uploadProgress: 0,
+                      uploadStage: "idle",
+                      uploadStatus: "cancelled",
+                      videoFile: null,
+                    }
+                  : l
+              )
+            );
+
+            if (pollTimeoutRef.current) {
+              clearTimeout(pollTimeoutRef.current);
+              pollTimeoutRef.current = null;
+            }
+
+            return;
+          }
+
+          /*
+          |--------------------------------------------------------------------------
+          | Processing failed
+          |--------------------------------------------------------------------------
+          */
+
+          if (processingResult === "failed") {
+            console.log(
+              "Upload processing failed."
+            );
+
+            setLessons((prev) =>
+              prev.map((l, i) =>
+                i === index
+                  ? {
+                      ...l,
+                      isUploading: false,
+                      isUploaded: false,
+                      uploadProgress: 0,
+                      uploadStage: "failed",
+                      uploadStatus: "failed",
+                    }
+                  : l
+              )
+            );
+
+            if (pollTimeoutRef.current) {
+              clearTimeout(pollTimeoutRef.current);
+              pollTimeoutRef.current = null;
+            }
+
+            toast.error(
+              "Video processing failed. Please retry."
+            );
+
+            return;
+          }
 
         /*
         |--------------------------------------------------------------------------
@@ -738,7 +799,9 @@ const uploadToBunny = async (lesson, index) => {
               ? {
                   ...l,
                   isUploading: false,
-                  uploadStage: "idle",
+                  isUploaded: false,
+                  uploadStage: "failed",
+                  uploadStatus: "failed",
                 }
               : l
           )
@@ -821,25 +884,79 @@ const uploadToBunny = async (lesson, index) => {
         "XHR upload network error."
       );
 
-      uploadingRef.current = false;
-      activeXhrRef.current = null;
-      activeUploadRef.current = null;
+      /*
+      |--------------------------------------------------------------------------
+      | Network error
+      |--------------------------------------------------------------------------
+      */
 
-      setLessons((prev) =>
-        prev.map((l, i) =>
-          i === index
-            ? {
-                ...l,
-                isUploading: false,
-                uploadStage: "idle",
-              }
-            : l
-        )
-      );
+      xhr.onerror = () => {
+        if (
+          cancelRequestedRef.current
+        ) {
+          console.log(
+            "XHR error ignored because cancellation is in progress."
+          );
 
-      toast.error(
-        "Upload failed due to network error."
-      );
+          return;
+        }
+
+        console.error(
+          "XHR upload network error."
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | Stop active upload state
+        |--------------------------------------------------------------------------
+        */
+
+        uploadingRef.current = false;
+        activeXhrRef.current = null;
+        activeUploadRef.current = null;
+
+        /*
+        |--------------------------------------------------------------------------
+        | Mark lesson as FAILED
+        |--------------------------------------------------------------------------
+        |
+        | This is a genuine upload/network failure,
+        | not a user cancellation.
+        |
+        */
+
+        setLessons((prev) =>
+          prev.map((l, i) =>
+            i === index
+              ? {
+                  ...l,
+                  isUploading: false,
+                  isUploaded: false,
+                  uploadStage: "failed",
+                  uploadStatus: "failed",
+                }
+              : l
+          )
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | Stop polling if any exists
+        |--------------------------------------------------------------------------
+        */
+
+        if (pollTimeoutRef.current) {
+          clearTimeout(
+            pollTimeoutRef.current
+          );
+
+          pollTimeoutRef.current = null;
+        }
+
+        toast.error(
+          "Video upload failed due to a network error."
+        );
+      };
     };
 
     /*
@@ -885,11 +1002,15 @@ const uploadToBunny = async (lesson, index) => {
 const pollUploadStatus = (uploadUuid, index) => {
   return new Promise((resolve, reject) => {
     const check = async () => {
+      if (cancelRequestedRef.current) {
+        resolve("cancelled");
+        return;
+      }
+
       if (
-        cancelRequestedRef.current ||
         activeUploadRef.current?.uploadUuid !== uploadUuid
       ) {
-        resolve("cancelled");
+        resolve("failed");
         return;
       }
 
@@ -913,10 +1034,31 @@ const pollUploadStatus = (uploadUuid, index) => {
         );
 
         if (!response.ok) {
-          throw new Error(
-            data.message ||
-              "Failed to check upload status."
-          );
+            /*
+            |--------------------------------------------------------------------------
+            | Upload session no longer exists
+            |--------------------------------------------------------------------------
+            |
+            | Failed/cancelled uploads are now permanently deleted
+            | after cleanup. Therefore a 404 is a terminal state,
+            | not a temporary polling error.
+            |--------------------------------------------------------------------------
+            */
+
+            if (response.status === 404) {
+                console.log(
+                    "Upload session no longer exists - treating upload as failed:",
+                    uploadUuid
+                );
+
+                resolve("failed");
+                return;
+            }
+
+            throw new Error(
+                data.message ||
+                "Failed to check upload status."
+            );
         }
 
         const status = data.upload_status;
@@ -1090,17 +1232,76 @@ const cancelUpload = async () => {
       }
     );
 
-    const data =
-      await res.json();
+    const data = await res.json();
+
+    /*
+    |--------------------------------------------------------------------------
+    | Upload session already gone
+    |--------------------------------------------------------------------------
+    |
+    | Failed/cancelled upload records are now deleted after cleanup.
+    | If cancellation arrives after that cleanup, 404 means there
+    | is nothing left to cancel.
+    |--------------------------------------------------------------------------
+    */
+
+    if (res.status === 404) {
+        console.log(
+            "Upload session already removed:",
+            uploadUuid
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | Treat as successful cancellation
+        |--------------------------------------------------------------------------
+        */
+
+        if (activeXhrRef.current) {
+            activeXhrRef.current.abort();
+        }
+
+        setLessons((prev) =>
+            prev.map((lesson, i) =>
+                i === index
+                    ? {
+                        ...lesson,
+
+                        isUploading: false,
+                        isUploaded: false,
+                        uploadProgress: 0,
+                        uploadStage: "failed",
+                        uploadStatus: "failed",
+                    }
+                    : lesson
+            )
+        );
+
+        if (pollTimeoutRef.current) {
+            clearTimeout(pollTimeoutRef.current);
+            pollTimeoutRef.current = null;
+        }
+
+        uploadingRef.current = false;
+        activeXhrRef.current = null;
+        activeUploadRef.current = null;
+        cancelRequestedRef.current = false;
+
+        toast.info(
+            "Upload session has already ended."
+        );
+
+        return true;
+    }
 
     if (
-      !res.ok ||
-      !data.status
+        !res.ok ||
+        !data.status
     ) {
-      throw new Error(
-        data.message ||
-          "Failed to cancel upload."
-      );
+        throw new Error(
+            data.message ||
+            "Failed to cancel upload."
+        );
     }
 
     console.log(

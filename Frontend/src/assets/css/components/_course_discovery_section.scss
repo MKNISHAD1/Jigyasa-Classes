@@ -1,0 +1,85 @@
+@use '../base/variables' as *;
+
+.Course_Discovery_Section {
+    margin-bottom: 50px;
+
+    .Course_Discovery_Header {
+        display: flex;
+        align-items:center;
+        justify-content: space-between;
+        gap: 20px;
+        margin-bottom: 22px;
+
+        .Course_Discovery_Header_Content {
+            min-width: 0;
+            .Course_Discovery_Title {
+                margin: 0;
+                font-size: 28px;
+                font-weight: 700;
+                line-height: 1.2;
+            }
+            
+            .Course_Discovery_Subtitle {
+                margin: 7px 0 0;
+                color: #6c757d;
+                font-size: 15px;
+            }
+        }
+
+        .Course_Discovery_View_All {
+
+            border: 1px solid $primary-color;
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            transition: .3s ;
+            color: $fifth-color;
+            background-color: $primary-color;
+            text-decoration: none;
+            &:hover {
+                transform: scale(1.05);
+                background-color: $fifth-color;
+                color: $primary-color;
+            }
+        }
+    }
+
+    .Course_Discovery_Swiper {
+        width: 100%;
+    }
+    .Course_Discovery_Swiper .swiper-slide {
+        margin: 10px 0 5px 0;
+        height: auto;
+    }
+}
+
+
+@media (max-width: 575px) {
+    .Course_Discovery_Section {
+        margin: 40px 0;
+        .Course_Discovery_Header {            
+            .Course_Discovery_Header_Content{
+                .Course_Discovery_Title {
+                    font-size: 23px;
+                }
+                .Course_Discovery_Subtitle {
+                    font-size: 14px;
+                    width: 250px;
+                }
+            }
+            .Course_Discovery_View_All {
+                font-size: 14px;
+            }
+        }
+    }
+
+
+
+}
+
+
+
+
+
+

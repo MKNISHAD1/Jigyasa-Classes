@@ -1,0 +1,265 @@
+@use '../base/variables' as *;
+
+
+.All_Courses_Section {
+    padding: 2rem 2%;
+
+    //  Mobile filter and sort
+    .Mobile_Actions {
+        display: flex;
+        gap: 12px;
+        justify-content: space-between;
+        height: 50px;
+
+        .form-select{
+            flex: 1;
+            border: 1px solid $primary-color;
+            color: $primary-color;
+            background-image: url('../../images/down-arrow2.svg');
+            transition: .25s;
+            font-weight: 600;
+            
+            &:hover{
+                background-color: $primary-color;
+                color: $fifth-color;
+                background-image: url('../../images/down-arrow1.svg');
+            }
+
+            &:focus {
+                outline: none;
+                box-shadow: none;
+                border-color: $primary-color; /* Ensures custom borders don't flash */
+            }
+        }
+    }
+
+    // mobile search
+    .Mobile_Search {
+        .Input_Group_Text {
+            background: $secondary-color;
+            display: flex;
+            align-items: center;
+            color:$primary-color;
+            border-radius: 5px;
+            border: 1px solid $primary-color;
+            height: 50px;
+            font-size: larger;
+            padding: 15px;
+        }
+
+    .form-control {
+        height: 50px;
+
+        &:focus {
+        box-shadow: none;
+        }
+    }
+    }
+    
+    // Filter Does Not Match 
+    .Empty_Courses {
+      padding: 4rem 1rem;
+    
+      .Empty_Img {
+        width: 320px;
+        max-width: 100%;
+        margin-bottom: 1.5rem;
+      }
+    
+      h4 {
+        font-weight: 700;
+        margin-bottom: 0.75rem;
+      }
+    
+      p {
+        color: #6b7280;
+        margin-bottom: 1.5rem;
+      }
+    }
+
+    // Rightside Topbar 
+    .Courses_Topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+
+        // result  count
+        .Courses_Count {
+            color: #64748b;
+            font-size: 0.95rem;
+            margin-bottom: 0;
+        }
+
+        .form-select{
+            width: 250px;
+            border: 1px solid $primary-color;
+            color: $primary-color;
+            background-image: url('../../images/down-arrow2.svg');
+            transition: .25s;
+            font-weight: 600;
+
+
+            &:hover{
+                background-color: $primary-color;
+                color: $fifth-color;
+                background-image: url('../../images/down-arrow1.svg');
+            }
+        }
+    }
+
+    // Pagination Control
+    .Course_Pagination{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        
+        .Course_Pagination_Info{
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .Course_Pagination_Controls{
+            .Primary_Button{
+                padding: 5px;
+                .Icon{
+                    padding: 5px 3px;
+                }
+            }
+        }
+    }
+
+    .Course_List{
+        display: grid;
+        justify-items: center;
+    }
+}
+
+// Sidebar Filter
+.Filter_Sidebar {
+    background: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    position: sticky;
+    top: 100px;
+    border: 1px solid rgba($primary-color, 0.4);
+    
+    .Filter_Group {
+        border-bottom: 1px solid $primary-color;
+        padding-bottom: 1.2rem;
+
+        .Filter_Group_Title{
+            font-weight: 500;
+            font-size: 19px;
+            margin: 15px 0;
+            color: $primary-color;
+        }
+        .Filter_Item {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .Filter_Item .form-check-label {
+            cursor: pointer;
+            flex: 1;
+            transition: .25s ease;
+
+            &:hover{
+                color:$primary-color;
+                transform: translateX(4px);
+            }
+        }
+        
+        .form-check {
+            display: flex;
+            align-items: center;
+            gap: 10px;            
+            margin-bottom: 10px;
+    
+            .form-check-input {
+                width: 20px;
+                height: 20px;
+                cursor: pointer;
+                margin-top: 0;
+                border: 1px solid $primary-color;
+
+                &:focus {
+                    outline: none;
+                    box-shadow: none;
+                    border-color: $primary-color; /* Ensures custom borders don't flash */
+                }
+            }
+        
+            .form-check-label {
+                font-size: 1rem;
+                font-weight: 500;
+                color: #555;
+                cursor: pointer;
+                margin: 0;
+            }
+        }
+
+    }
+}
+
+// Offcanvas Filter OnMobile 
+.offcanvas {
+  width: 320px !important;
+}
+
+.offcanvas .Filter_Sidebar {
+  box-shadow: none !important;
+  border: none;
+  padding: 0;
+}
+
+.Offcanvas_Header { 
+    .Offcanvas_Header_Title{
+        font-size: 20px;
+        font-weight: 700;
+        text-align: center;
+        margin: 0;
+    }
+}
+
+// tablet 
+@media (max-width: 992px) {
+
+  .Filter_Sidebar {
+    margin-bottom: 2rem;
+    position: static;
+  }
+
+  .Courses_Topbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .Sort_Select {
+    width: 100%;
+  }
+}
+
+// mobile
+@media (max-width:768px) {
+
+  // filter and  sorting
+  .Mobile_Search {
+    margin-bottom: 12px;
+  }
+
+  .Mobile_Actions {
+    margin-bottom: 12px;
+  }
+
+  .All_Courses_Section {
+    padding: 2rem 1rem;
+  }
+}
+
+hr {
+    color: $primary-color;
+}

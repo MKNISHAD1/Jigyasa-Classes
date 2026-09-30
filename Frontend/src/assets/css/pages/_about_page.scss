@@ -53,6 +53,7 @@
                     box-shadow: 0 10px 30px rgba(0,0,0,.06);
                     font-weight: 600;
                     transition: 0.25s;
+                    color: $primary-color;
 
                     &:hover{
                         background-color: $primary-color;
@@ -388,6 +389,7 @@
                     .Feature_Item {
                         justify-content: center ;
                         text-align: center ;
+                        font-size: 13px;
                     }
                 }
             }
@@ -396,7 +398,7 @@
                 padding: 0 ;
     
                 .Student_Img {
-                    max-width: 50% ;
+                    max-width: 70% ;
                     padding-top: 30px ;
                     border: none ;
                     border-radius: 0 ;

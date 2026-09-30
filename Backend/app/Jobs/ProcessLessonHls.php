@@ -109,18 +109,14 @@ class ProcessLessonHls implements ShouldQueue
 
         if (!$upload->temporary_file_path) {
 
-            LessonUpload::where('id', $upload->id)
-                ->where('status', 'processing')
-                ->update([
-                    'status' => 'failed',
-                ]);
-
             Log::error(
                 'HLS TEMPORARY SOURCE PATH MISSING',
                 [
                     'upload_uuid' => $upload->upload_uuid,
                 ]
             );
+
+            $upload->delete();
 
             return;
         }
@@ -148,11 +144,7 @@ class ProcessLessonHls implements ShouldQueue
                 ]
             );
 
-            LessonUpload::where('id', $upload->id)
-                ->where('status', 'processing')
-                ->update([
-                    'status' => 'failed',
-                ]);
+            $upload->delete();
 
             return;
         }
@@ -171,12 +163,6 @@ class ProcessLessonHls implements ShouldQueue
 
             if (!mkdir($hlsDirectory, 0755, true)) {
 
-                LessonUpload::where('id', $upload->id)
-                    ->where('status', 'processing')
-                    ->update([
-                        'status' => 'failed',
-                    ]);
-
                 Log::error(
                     'HLS PROCESSING DIRECTORY CREATION FAILED',
                     [
@@ -184,6 +170,8 @@ class ProcessLessonHls implements ShouldQueue
                         'hls_directory' => $hlsDirectory,
                     ]
                 );
+
+                $upload->delete();
 
                 return;
             }
@@ -313,11 +301,7 @@ class ProcessLessonHls implements ShouldQueue
                         $processingDirectory
                     );
 
-                    LessonUpload::where('id', $upload->id)
-                        ->whereIn('status', ['cancelling', 'cancelled'])
-                        ->update([
-                            'status' => 'cancelled',
-                        ]);
+                    $upload->delete();
 
                     Log::info(
                         'LESSON UPLOAD CANCELLED DURING HLS PROCESSING',
@@ -340,8 +324,6 @@ class ProcessLessonHls implements ShouldQueue
             if (!$process->isSuccessful()) {
                 throw new ProcessFailedException($process);
             }
-
-
         } catch (\Throwable $e) {
 
             Log::error(
@@ -363,55 +345,39 @@ class ProcessLessonHls implements ShouldQueue
                 ]
             );
 
-            /*
-            |--------------------------------------------------------------------------
-            | Only processing may become failed
-            |--------------------------------------------------------------------------
-            */
-
-            $updated = LessonUpload::where(
-                'id',
-                $upload->id
-            )
-            ->where('status', 'processing')
-            ->update([
-                'status' => 'failed',
-            ]);
 
             /*
             |--------------------------------------------------------------------------
-            | Cleanup only if processing still owns upload
+            | Cleanup local processing directory
             |--------------------------------------------------------------------------
             */
 
-            if ($updated === 1) {
+            $this->deleteDirectory(
+                $processingDirectory
+            );
 
-                $this->deleteDirectory(
-                    $processingDirectory
-                );
+            /*
+            |--------------------------------------------------------------------------
+            | Upload failed before Bunny upload.
+            |--------------------------------------------------------------------------
+            |
+            | No Bunny HLS cleanup is required here because Bunny upload
+            | has not started yet.
+            |--------------------------------------------------------------------------
+            */
 
-            } else {
+            $upload->delete();
 
-                $upload->refresh();
-
-                Log::info(
-                    'HLS FAILURE DID NOT CHANGE UPLOAD STATE',
-                    [
-                        'upload_uuid' =>
-                            $upload->upload_uuid,
-
-                        'status' =>
-                            $upload->status,
-                    ]
-                );
-            }
+            Log::info(
+                'HLS PROCESSING FAILED AND UPLOAD RECORD DELETED',
+                [
+                    'upload_uuid' => $upload->upload_uuid,
+                ]
+            );
 
             return;
+
         }
-
-
-
-
 
         /*
         |--------------------------------------------------------------------------
@@ -432,21 +398,19 @@ class ProcessLessonHls implements ShouldQueue
                 ]
             );
 
-            $updated = LessonUpload::where(
-                'id',
-                $upload->id
-            )
-            ->where('status', 'processing')
-            ->update([
-                'status' => 'failed',
-            ]);
 
-            if ($updated === 1) {
+            $this->deleteDirectory(
+                $processingDirectory
+            );
 
-                $this->deleteDirectory(
-                    $processingDirectory
-                );
-            }
+            $upload->delete();
+
+            Log::info(
+                'HLS PLAYLIST VERIFICATION FAILED AND UPLOAD RECORD DELETED',
+                [
+                    'upload_uuid' => $upload->upload_uuid,
+                ]
+            );
 
             return;
         }
@@ -474,24 +438,32 @@ class ProcessLessonHls implements ShouldQueue
                 ]
             );
 
-            $updated = LessonUpload::where(
-                'id',
-                $upload->id
-            )
-            ->where('status', 'processing')
-            ->update([
-                'status' => 'failed',
-            ]);
+            $this->deleteDirectory(
+                $processingDirectory
+            );
 
-            if ($updated === 1) {
+            $upload->delete();
 
-                $this->deleteDirectory(
-                    $processingDirectory
-                );
-            }
+            Log::info(
+                'HLS SEGMENT VERIFICATION FAILED AND UPLOAD RECORD DELETED',
+                [
+                    'upload_uuid' => $upload->upload_uuid,
+                ]
+            );
 
             return;
         }
+
+        $duration = $this->getHlsDuration($playlistPath);
+
+        $upload->update([
+            'duration' => $duration,
+        ]);
+        
+        Log::info('HLS VIDEO DURATION CALCULATED', [
+            'upload_uuid' => $upload->upload_uuid,
+            'duration_seconds' => $duration,
+        ]);
 
         /*
         |--------------------------------------------------------------------------
@@ -509,6 +481,8 @@ class ProcessLessonHls implements ShouldQueue
             $this->deleteDirectory(
                 $processingDirectory
             );
+
+            $upload->delete();
 
             Log::info(
                 'HLS PROCESSING CANCELLED BEFORE BUNNY UPLOAD',
@@ -591,26 +565,6 @@ class ProcessLessonHls implements ShouldQueue
             |--------------------------------------------------------------------------
             */
 
-            // try {
-
-            //     if ($upload->hls_storage_path) {
-
-            //         $this->deleteBunnyHlsFolder(
-            //             $upload->hls_storage_path
-            //         );
-            //     }
-
-            // } catch (\Throwable $cleanupException) {
-
-            //     Log::error(
-            //         'FAILED TO CLEANUP PARTIAL BUNNY HLS AFTER CANCELLATION',
-            //         [
-            //             'upload_uuid' => $upload->upload_uuid,
-            //             'error' => $cleanupException->getMessage(),
-            //         ]
-            //     );
-            // }
-
             if ($upload->hls_storage_path) {
 
                 $this->cleanupBunnyHlsWithRetry(
@@ -628,24 +582,25 @@ class ProcessLessonHls implements ShouldQueue
             $this->deleteDirectory(
                 $processingDirectory
             );
-
+                
             /*
             |--------------------------------------------------------------------------
-            | Final cancellation state
+            | Upload record is no longer needed
+            |--------------------------------------------------------------------------
+            |
+            | Bunny cleanup has already been attempted.
+            | If Bunny was unavailable, cleanupBunnyHlsWithRetry()
+            | has created a durable BunnyCleanupTask.
+            |
+            | Therefore the temporary LessonUpload record can be
+            | permanently removed.
             |--------------------------------------------------------------------------
             */
 
-            LessonUpload::where(
-                'id',
-                $upload->id
-            )
-            ->where('status', 'cancelling')
-            ->update([
-                'status' => 'cancelled',
-            ]);
+            $upload->delete();
 
             Log::info(
-                'LESSON UPLOAD CANCELLED DURING BUNNY UPLOAD',
+                'LESSON UPLOAD CANCELLED AND RECORD DELETED',
                 [
                     'upload_uuid' => $upload->upload_uuid,
                 ]
@@ -675,26 +630,6 @@ class ProcessLessonHls implements ShouldQueue
         |--------------------------------------------------------------------------
         */
 
-        // try {
-
-        //     if ($upload->hls_storage_path) {
-
-        //         $this->deleteBunnyHlsFolder(
-        //             $upload->hls_storage_path
-        //         );
-        //     }
-
-        // } catch (\Throwable $cleanupException) {
-
-        //     Log::error(
-        //         'FAILED TO CLEANUP PARTIAL BUNNY HLS',
-        //         [
-        //             'upload_uuid' => $upload->upload_uuid,
-        //             'error' => $cleanupException->getMessage(),
-        //         ]
-        //     );
-        // }
-
         if ($upload->hls_storage_path) {
 
             $this->cleanupBunnyHlsWithRetry(
@@ -705,44 +640,33 @@ class ProcessLessonHls implements ShouldQueue
 
         /*
         |--------------------------------------------------------------------------
-        | Only processing may become failed
+        | Delete local processing directory
         |--------------------------------------------------------------------------
         */
 
-        $updated = LessonUpload::where(
-            'id',
-            $upload->id
-        )
-        ->where('status', 'processing')
-        ->update([
-            'status' => 'failed',
-        ]);
+        $this->deleteDirectory(
+            $processingDirectory
+        );
 
         /*
         |--------------------------------------------------------------------------
-        | Local cleanup
+        | Upload record is no longer needed
+        |--------------------------------------------------------------------------
+        |
+        | Bunny cleanup was already attempted.
+        | If Bunny was unavailable, cleanupBunnyHlsWithRetry()
+        | preserved the cleanup task in bunny_cleanup_tasks.
         |--------------------------------------------------------------------------
         */
 
-        if ($updated === 1) {
+        $upload->delete();
 
-            $this->deleteDirectory(
-                $processingDirectory
-            );
-
-        } else {
-
-            $upload->refresh();
-
-            Log::info(
-                'BUNNY FAILURE DID NOT CHANGE UPLOAD STATE',
-                [
-                    'upload_uuid' => $upload->upload_uuid,
-                    'status' => $upload->status,
-                ]
-            );
-        }
-
+        Log::info(
+            'HLS BUNNY FAILURE CLEANED AND RECORD DELETED',
+            [
+                'upload_uuid' => $upload->upload_uuid,
+            ]
+        );
         return;
     }
 
@@ -765,6 +689,9 @@ class ProcessLessonHls implements ShouldQueue
     ->where('status', 'processing')
     ->update([
         'status' => 'processed',
+        'temporary_file_path' => null,
+        'temporary_storage_path' => null,
+        'temporary_object_name' => null,
     ]);
 
 
@@ -791,26 +718,6 @@ class ProcessLessonHls implements ShouldQueue
         | Bunny HLS is no longer wanted
         |--------------------------------------------------------------------------
         */
-
-        // try {
-
-        //     if ($upload->hls_storage_path) {
-
-        //         $this->deleteBunnyHlsFolder(
-        //             $upload->hls_storage_path
-        //         );
-        //     }
-
-        // } catch (\Throwable $cleanupException) {
-
-        //     Log::error(
-        //         'FAILED TO CLEANUP BUNNY HLS AFTER STATE CHANGE',
-        //         [
-        //             'upload_uuid' => $upload->upload_uuid,
-        //             'error' => $cleanupException->getMessage(),
-        //         ]
-        //     );
-        // }
 
         if ($upload->hls_storage_path) {
 
@@ -1015,7 +922,6 @@ class ProcessLessonHls implements ShouldQueue
                 */
 
                 $streams[$filename] = $stream;
-
                 $requestFiles[] = [
                     'filename' => $filename,
                     'remote_path' => $remotePath,
@@ -1038,7 +944,6 @@ class ProcessLessonHls implements ShouldQueue
                         $requestFiles,
                         $apiKey
                     ) {
-
                         $requests = [];
 
                         foreach ($requestFiles as $requestFile) {
@@ -1221,72 +1126,6 @@ class ProcessLessonHls implements ShouldQueue
     |--------------------------------------------------------------------------
     */
 
-    // private function deleteBunnyHlsFolder(string $folderPath): void
-    // {
-    //     $storageZone = env('BUNNY_STORAGE_ZONE');
-
-    //     $regionHost = env(
-    //         'BUNNY_REGION',
-    //         'de.storage.bunnycdn.com'
-    //     );
-
-    //     $accessKey = env('BUNNY_API_KEY');
-
-    //     $folderPath = trim($folderPath, '/');
-
-    //     if ($folderPath === '') {
-    //         throw new \RuntimeException(
-    //             'Bunny HLS folder path cannot be empty.'
-    //         );
-    //     }
-
-    //     $url =
-    //         "https://{$regionHost}/" .
-    //         "{$storageZone}/" .
-    //         "{$folderPath}/";
-
-    //     $response = Http::withHeaders([
-    //         'AccessKey' => $accessKey,
-    //     ])->delete($url);
-
-    //     if ($response->successful()) {
-
-    //         Log::info(
-    //             'BUNNY HLS FOLDER DELETED',
-    //             [
-    //                 'folder_path' => $folderPath,
-    //                 'status' => $response->status(),
-    //             ]
-    //         );
-
-    //         return;
-    //     }
-
-    //     /*
-    //     |--------------------------------------------------------------------------
-    //     | Already gone
-    //     |--------------------------------------------------------------------------
-    //     */
-
-    //     if ($response->status() === 404) {
-
-    //         Log::info(
-    //             'BUNNY HLS FOLDER ALREADY GONE',
-    //             [
-    //                 'folder_path' => $folderPath,
-    //             ]
-    //         );
-
-    //         return;
-    //     }
-
-    //     throw new \RuntimeException(
-    //         "Failed to delete Bunny HLS folder. " .
-    //         "HTTP: {$response->status()}. " .
-    //         "Response: {$response->body()}"
-    //     );
-    // }
-
     private function deleteBunnyHlsFolder(string $folderPath): void
     {
         app(BunnyStorageService::class)
@@ -1385,5 +1224,34 @@ class ProcessLessonHls implements ShouldQueue
                 ]
             );
         }
+    }
+
+    private function getHlsDuration(string $playlistPath): int
+    {
+        $content = file_get_contents($playlistPath);
+
+        if ($content === false) {
+            throw new \RuntimeException(
+                'Unable to read HLS playlist.'
+            );
+        }
+
+        preg_match_all(
+            '/#EXTINF:([\d.]+),/',
+            $content,
+            $matches
+        );
+
+        if (empty($matches[1])) {
+            throw new \RuntimeException(
+                'Unable to determine HLS duration.'
+            );
+        }
+
+        return (int) round(
+            array_sum(
+                array_map('floatval', $matches[1])
+            )
+        );
     }
 }
