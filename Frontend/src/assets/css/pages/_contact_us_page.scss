@@ -1,2 +1,186 @@
 @use '../base/variables' as *;
 
+
+.Help_Items_Group{
+    .Help_Item{
+        margin-bottom: 10px;
+        transition: .25s ease;
+
+        .Item_Group{
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            transition: .25s ease;
+            
+            .Item_Icon{
+                background-color: $primary-color;
+                padding: 15px;
+                border-radius: 50%;
+                border: 1px  solid $primary-color;
+                color: $fifth-color;
+                font-size: 18px;
+                transition: .25s ease;
+            }
+
+            .Item_Data{
+                margin-left: 10px;
+
+                .Help_Title{
+                    margin: 0;
+                    font-size: 18px;
+                    font-weight: 600;
+                    color: $primary-color;
+                    transition: .25s ease;
+                }
+
+                .Help_Subtitle{
+                    color: $third-color;
+                    transition: .25s ease;
+                }
+            }
+        }
+
+        &:hover{
+            transform: translateX(5px);
+
+            .Item_Icon{
+                color: $primary-color;
+                background-color: $fifth-color;
+            }
+        }
+    }
+
+
+}
+
+.Message_Section{
+
+    background-color: rgba(255, 255, 255, 0.2); 
+    /* Apply the blur effect to the background behind this card */
+    backdrop-filter: blur(3px); 
+    border: 1px solid $primary-color;
+    border-radius: 20px;
+    margin: auto;
+    padding: 30px;
+    box-shadow: 0 0 15px 5px rgba($primary-color, 0.3);
+    .form-select{
+        border: 1px solid $primary-color;
+
+    }
+
+    .Line1{
+      height: 4px;
+      background-color: $primary-color;
+      border-radius: 20px;
+      width: 80px;
+    }
+}
+
+.Help_Card_Section {
+    padding: 20px;
+
+    .Help_Card {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        height: 100%;
+        min-height: 120px;
+        padding: 18px;
+        background-color: $fifth-color;
+        border: 1px solid $primary-color;
+        border-radius: 12px;
+        transition: 0.25s ease;
+
+        .Help_Card_Icon {
+            width: 48px;
+            height: 48px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            border: 1px solid $primary-color;
+            background-color: #d5e7f3;
+            color: $primary-color;
+            font-size: 18px;
+            transition: 0.25s ease;
+        }
+
+        .Help_Card_Body {
+            min-width: 0;
+            flex: 1;
+
+            b {
+                display: block;
+                margin-bottom: 4px;
+                color: $primary-color;
+                font-size: 16px;
+                font-weight: 600;
+            }
+
+            small {
+                display: block;
+                color: $third-color;
+                font-size: 13px;
+                line-height: 1.5;
+                overflow-wrap: anywhere;
+            }
+        }
+
+        &:hover {
+            transform: translateY(-4px);
+
+            .Help_Card_Icon {
+                background-color: $primary-color;
+                color: $fifth-color;
+            }
+        }
+    }
+}
+
+.Help_Faq_Section{
+    padding: 0 20px 20px 20px;
+    background-color: $fifth-color;
+
+    .Img_Section {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .Faq_Img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+    }
+}
+
+@media (max-width: 767.98px) {
+
+    .Help_Card_Section {
+        .col-12 {
+            margin-bottom: 1rem;
+        }
+
+        .Help_Card {
+            min-height: 105px;
+            padding: 15px;
+        }
+    }
+
+    .Message_Section{
+        margin-top: 2rem;
+    }
+
+}
+
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .Message_Section{
+        margin-top: 40px;
+    }
+    .Help_Card_Section{
+        .col-sm-6{
+            margin-bottom: 1rem;
+        }
+    }
+}

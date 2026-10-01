@@ -13,11 +13,11 @@ import { faCirclePlay, faClockFour, faFile, faFileLines, faPaperPlane, faPlayCir
 import InfoItemUi from '../../Common/CommonUI/InfoItemUi';
 import CourseCurriculum from '../../backend/courses/CourseCurriculum';
 import { faFacebookF, faQuora, faTelegram, faTelegramPlane, faTwitter, faWhatsapp } from '@fortawesome/free-brands-svg-icons';
-import CourseFaqs from '../../backend/courses/CourseFaqs';
 import bgImage from '../../../assets/images/herobg6.png'
 import no_lesson from '../../../assets/images/not-found2.jpeg'
 import { Accordion } from 'react-bootstrap';
 import { PUBLIC_ROUTES } from '../../../constants/nevigation/routes';
+import FaqSection from '../../backend/courses/FaqSection';
 
 
 const ViewCourseUi = () => {
@@ -715,7 +715,10 @@ const ViewCourseUi = () => {
           {/* FAQ Section */}
           <div className="faq-section m-2">
 
-            <CourseFaqs faqs={courseFaqs}/>
+            <FaqSection 
+              faqs={courseFaqs}
+              subtitle="Find answers to the most common questions about this course."
+            />
 
           </div>
         </div>
@@ -1021,7 +1024,7 @@ const ViewCourseUi = () => {
               </>
             }>
           <div className="related-course-card">
-            <CourseFaqs
+            <FaqSection
               faqs={courseFaqs}
             />
           </div>

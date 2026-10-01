@@ -27,12 +27,7 @@ const AboutUi = () => {
       <HeaderUi />
 
       {/* [1.] Hero Section  */}
-      <section className="Hero_Section" 
-        // style={{backgroundImage: `url(${bgImage})`,
-        //   backgroundSize: 'cover',
-        //   backgroundPosition: 'center',             
-        //   backgroundRepeat: 'no-repeat'}}
-          >
+      <section className="Hero_Section" >
 
         <div className="container-fluid Hero_Body">
 

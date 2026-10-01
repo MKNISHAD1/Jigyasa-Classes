@@ -2,20 +2,22 @@ import React from 'react'
 import Accordion from "react-bootstrap/Accordion";
 import { useTranslation } from "react-i18next";
 
-const CourseFaqs = ({ faqs = [] }) => {
+const FaqSection = ({ faqs = [],subtitle }) => {
 
   const { i18n } = useTranslation();
 
-
   return (
-    <div className="course-faqs">
+    <div className="Faq_Section">
 
-      <div className="section-title">
+      <div className="Section_Title">
           <div>
               <h4>Frequently Asked <span>Questions</span></h4>
-              <p>
-                  Find answers to the most common questions about this course.
-              </p>
+              
+              {subtitle && (
+                  <p>
+                      {subtitle}
+                  </p>
+              )}
           </div>
       </div>
 
@@ -48,7 +50,7 @@ const CourseFaqs = ({ faqs = [] }) => {
         ))}
           </Accordion>
         ):(
-              <div className="empty-faq">
+              <div className="Empty_Faq">
                 <h5>No FAQs Available</h5>
                 <p>
                     Frequently asked questions will be added soon.
@@ -60,4 +62,4 @@ const CourseFaqs = ({ faqs = [] }) => {
   );
 };
 
-export default CourseFaqs
+export default FaqSection
