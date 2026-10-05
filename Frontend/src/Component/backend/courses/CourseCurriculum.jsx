@@ -8,7 +8,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useTranslation } from 'react-i18next';
 
-const CourseCurriculum = ({ modules = [], lessonsCount = 0 }) => {
+const CourseCurriculum = ({ modules = [], lessonsCount = 0, course }) => {
 
   const { i18n } = useTranslation();
 
@@ -32,25 +32,55 @@ const CourseCurriculum = ({ modules = [], lessonsCount = 0 }) => {
     }
 };
 
+// Duration Formatter
+const formatDuration = (seconds) => {
+    const totalSeconds = Number(seconds || 0);
+
+    if (!totalSeconds) return "0 Min";
+
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+
+    if (hours > 0) {
+        return minutes > 0
+            ? `${hours} hr ${minutes} min`
+            : `${hours} hr`;
+    }
+
+    return `${minutes} min`;
+};
+
+// Lesson duraytion player style
+const formatLessonDuration = (seconds) => {
+    const totalSeconds = Number(seconds || 0);
+
+    if (!totalSeconds) return "0:00";
+
+    const minutes = Math.floor(totalSeconds / 60);
+    const remainingSeconds = totalSeconds % 60;
+
+    return `${minutes}:${String(remainingSeconds).padStart(2, "0")}`;
+};
+
   
 
   return (
-    <div className="course-curriculum">
+    <div className="Course_Curriculum">
  
-      <div className="curriculum-header">
+      <div className="Curriculum_Header">
 
           <div>
 
               <h4>Course <span>Curriculum</span></h4>
 
               <p>
-                  {visibleModules.length} Modules • {lessonsCount} Lessons • 10 Hours
+                  {visibleModules.length} Modules • {lessonsCount} Lessons • {formatDuration(course.total_duration)}
               </p>
 
           </div>
 
         <button
-            className="expand-btn"
+            className="Expand_Button"
             onClick={toggleExpandAll}
         >
 
@@ -72,101 +102,102 @@ const CourseCurriculum = ({ modules = [], lessonsCount = 0 }) => {
         onSelect={setActiveKeys}
       >
 
-        {visibleModules.map((module,index)=>(
+        {visibleModules.map((module,index)=>{
+          const moduleDuration = module.lessons.reduce(
+              (total, lesson) => total + Number(lesson.duration || 0),
+              0
+          );
 
-          <Accordion.Item
-              key={module.id}
-              eventKey={index.toString()}
-          >
+          return (
+                <Accordion.Item
+                    key={module.id}
+                    eventKey={index.toString()}
+                >
 
-            <Accordion.Header>
+                  <Accordion.Header>
 
-              <div className="section-header">
+                    <div className="Section_Header">
 
-                <div className="module-info">
+                      <div className="Module_Info">
 
-                    <h4 className='icon'>
-                      <FontAwesomeIcon icon={faChevronRight}/>
-                    </h4>
+                          <h4 className='Icon'>
+                            <FontAwesomeIcon icon={faChevronRight}/>
+                          </h4>
 
-                    <div className="module-title">
+                          <div className="Module_Title">
 
-                       <span className='title'>Module {index+1} : {module.title?.[i18n.language] || module.title?.en}</span>
+                            <span className='Title'>Module {index+1} : {module.title?.[i18n.language] || module.title?.en}</span>
 
-                    <small className="lesson-count">
-
-                        {module.lessons.length} Lectures • 42 min
-
-                    </small>
-
-                    </div>
-
-
-                </div>
-
-              </div>
-
-            </Accordion.Header>
-
-            <Accordion.Body>
-            {
-              module.lessons.length > 0 ? (
-                module.lessons.map((lesson,idx)=>(
-
-                  <div
-                    className="lesson-item"
-                    key={lesson.id || idx}
-                  >
-
-                    <div className="lesson-left">
-
-                        <div className="lesson-icon">
-                            <FontAwesomeIcon icon={faPlayCircle}/>
-                        </div>
-
-                        <div className="lesson-content">
-
-                            <strong>
-                                {lesson.title?.[i18n.language] || lesson.title?.en||"Untitled Lesson"}
-                            </strong>
-
-                            <small>
-
-                                Preview Available
-
+                            <small className="Lesson_Count">
+                                {module.lessons.length} Lectures • {formatDuration(moduleDuration)}
                             </small>
 
+                          </div>
+
+
+                      </div>
+
+                    </div>
+
+                  </Accordion.Header>
+
+                  <Accordion.Body>
+                  {
+                    module.lessons.length > 0 ? (
+                      module.lessons.map((lesson,idx)=>(
+
+                        <div
+                          className="Lesson_Item"
+                          key={lesson.id || idx}
+                        >
+
+                          <div className="Lesson_Left_Part">
+
+                              <div className="Lesson_Icon">
+                                  <FontAwesomeIcon icon={faPlayCircle}/>
+                              </div>
+
+                              <div className="Lesson_Content">
+
+                                  <strong>
+                                      {lesson.title?.[i18n.language] || lesson.title?.en||"Untitled Lesson"}
+                                  </strong>
+
+                                  <small>
+
+                                      Preview Available
+
+                                  </small>
+
+                              </div>
+
+                          </div>
+
+                          <div className="Lesson_Right_Part">
+
+                            <span className="Lesson_Duration">
+                                <FontAwesomeIcon icon={faClock}/>
+                                {formatLessonDuration(lesson.duration)}
+                            </span>
+
+                          </div>
+
                         </div>
 
-                    </div>
+                      ))):(
+                        <>
+                        <small className='text-success'>
+                          No Lesson added  yet, Pleasse check after some time.
+                        </small>
+                        </>
+                      )}
 
-                    <div className="lesson-right">
+                  </Accordion.Body>
 
-                        <span className="lesson-duration">
+                </Accordion.Item>
+          );
 
-                            <FontAwesomeIcon icon={faClock}/>
-
-                            10:00
-
-                        </span>
-
-                    </div>
-
-                  </div>
-
-                ))):(
-                  <>
-                  <small className='text-success'>
-                    No Lesson added  yet, Pleasse check after some time.
-                  </small>
-                  </>
-                )}
-
-            </Accordion.Body>
-
-          </Accordion.Item>
-
-        ))}
+        })}
 
 
       </Accordion>

@@ -12,11 +12,6 @@ $fifth-color:#FFFFFF;
 @use 'pagehero' ;
 @use 'infoitem' ;
 @use 'breakpoints' ;
-@use 'contactus' ;
-@use 'allcourses' ;
-@use 'viewcourseui' ;
-@use 'coursecurriculum';
-@use  'coursefaqui' ;
 @use 'sidebar';
 @use 'dashboardlayout';
 @use 'dashboardui';
@@ -41,34 +36,23 @@ $fifth-color:#FFFFFF;
 @use '../css/components/coursecard';
 @use '../css/components/course_discovery_section';
 @use '../css/components/faq_section';
+@use '../css/components/share_course_card';
+@use '../css/components/course_curriculum';
+
 
 // Pages CSS
 @use '../css/pages/home_page';
 @use '../css/pages/about_page';
 @use '../css/pages/all_courses_ui_page';
 @use '../css/pages/contact_us_page';
+@use '../css/pages/view_course_ui';
+
 
 
 
 
 .hero img{
   width: 100%;
-}
-
-.cruz{
-  max-height: 450px;
-  border-radius: 20px;
-}
-
-.section-3{
-
-  .card{
-    border-radius: 10px;
-    img{
-        width: 70px;
-        height:50px;
-    }
-}
 }
 
 .dashboard{

@@ -113,6 +113,7 @@ class CourseController extends Controller
             'modules.lessons',
         ])
         ->withCount('lessons')
+        ->withSum('lessons as total_duration', 'duration')
         ->findOrFail($id);
 
         // SIMILAR COURSES
@@ -927,8 +928,6 @@ class CourseController extends Controller
 
                     'order' => $module->order,
 
-                    'lessons_count' => $module->lessons_count,
-
                     'lessons' => $module->lessons?->map(function ($lesson) {
                         return [
                             'id' => $lesson->id,
@@ -939,9 +938,13 @@ class CourseController extends Controller
                                         ?? $lesson->title,
                             ],
 
+                            'duration' => $lesson->duration,
+
                             'order' => $lesson->order,
 
                             'status' => $lesson->status,
+
+                            'has_materials'  => $lesson->materials->isNotEmpty(),
                         ];
                     }),
                 ];

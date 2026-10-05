@@ -1,15 +1,9 @@
-// global variables 
-$primary-color:#1363b8;
-$secondary-color:#ebf1f5;
-$optional-color:#f7f9fc;
-$third-color:#162521;
-$forth-color:#047ba7;
-$fifth-color:#FFFFFF;
 
+@use '../base/variables' as *;
 
-.course-curriculum {
+.Course_Curriculum {
 
-  .curriculum-header{
+  .Curriculum_Header{
     display:flex;
     justify-content:space-between;
     align-items:center;
@@ -30,8 +24,7 @@ $fifth-color:#FFFFFF;
     font-weight: 500 ;
   }
 
-  .expand-btn{
-
+  .Expand_Button{
     border:1px solid  rgba(10, 28, 189, 0.3);
     color:$secondary-color;
     background-color:$primary-color;
@@ -40,6 +33,7 @@ $fifth-color:#FFFFFF;
     font-weight:600;
     cursor:pointer;
     transition: .3s;
+
     &:hover{
       background-color: $fifth-color;
       color: $primary-color;
@@ -51,7 +45,6 @@ $fifth-color:#FFFFFF;
   .accordion-item{
     background-color: $fifth-color;
     overflow:hidden;
-    // margin-bottom:10px;
 
     border-color: rgba(10, 28, 189, 0.3);
     transition: 0.3s;
@@ -82,40 +75,39 @@ $fifth-color:#FFFFFF;
       &:hover{
         background:$secondary-color;
         color:$primary-color;
-        transform: translateX(3px);
+        transform: scaleX(1.02);
       }
   }
 
-  .module-info{
+  .Module_Info{
     display:flex;
     align-items: center;
 
-    .icon{
+    .Icon{
       color: $primary-color;
       font-size: larger;
     } 
   }
 
-  .module-title{
+  .Module_Title{
     font-weight: bold;
     font-size: 14px;
     text-transform: capitalize !important;
     padding-left: 5px;
     display: flex;
     flex-direction: column;
-    .title{
+    .Title{
       color: $primary-color;
       margin-bottom: 5px;
     }
-    .lesson-count{
+    .Lesson_Count{
       align-items:center;
       font-weight: 450;
+      text-transform: none;
     }
   }
 
-
-
-.lesson-icon{
+.Lesson_Icon{
     width:36px;
     height:36px;
     border-radius:50%;
@@ -126,7 +118,7 @@ $fifth-color:#FFFFFF;
     justify-content:center;
 }
 
-.lesson-content{
+.Lesson_Content{
     display:flex;
     flex-direction:column;
     align-content: center;
@@ -143,7 +135,7 @@ $fifth-color:#FFFFFF;
 
 }
 
-.lesson-duration{
+.Lesson_Duration{
     background:$fifth-color;
     padding:6px 10px;
     border-radius:20px;
@@ -153,14 +145,14 @@ $fifth-color:#FFFFFF;
     align-items:center;
     color:$primary-color;
 }
-  .section-header{
+  .Section_Header{
     // width:100%;
     display:flex;
     justify-content:space-between;
     padding-right:10px;
   }
 
-  .lesson-item{
+  .Lesson_Item{
     display:flex;
     justify-content:space-between;
     align-items:center;
@@ -176,8 +168,8 @@ $fifth-color:#FFFFFF;
     }
   }
 
-  .lesson-left,
-  .lesson-right{
+  .Lesson_Left_Part,
+  .Lesson_RIght_Part{
     display:flex;
     align-items:center;
     gap:10px;
@@ -186,9 +178,9 @@ $fifth-color:#FFFFFF;
 }
 
 @media (max-width:576px){
-  .course-curriculum {
+  .Course_Curriculum {
 
-    .curriculum-header{
+    .Curriculum_Header{
       margin: 0%;
       h4{
         font-size:20px;
@@ -199,7 +191,7 @@ $fifth-color:#FFFFFF;
         font-weight: 600 ;
       }
 
-    .expand-btn{
+    .Expand_Button{
       padding:5px 10px;
       font-size: 12px;
       border-radius:4px;
@@ -213,29 +205,29 @@ $fifth-color:#FFFFFF;
       padding:12px 14px;
     }
 
-    .module-info{
-      .icon{
+    .Module_Info{
+      .Icon{
         font-size: medium;
       } 
     }
 
-    .module-title{
+    .Module_Title{
       font-size: 14px;
-      .title{
+      .Title{
         color: $primary-color;
       }
-      .lesson-count{
+      .Lesson_Count{
         font-size: 11px;
         font-weight: 500;
       }
     }
 
-    .lesson-icon{
+    .Lesson_Icon{
       width:30px;
       height:30px;
     }
 
-    .lesson-content{
+    .Lesson_Content{
         strong{
           font-size:12px;
         }
@@ -244,9 +236,6 @@ $fifth-color:#FFFFFF;
           color:#333131;
           font-size:10px;
         }
-
     }
-
-
   }
 } 

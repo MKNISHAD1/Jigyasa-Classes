@@ -1,0 +1,1740 @@
+@use '../base/variables' as *;
+
+// Course  Hero Section
+.Course_View_Hero{
+    background-color:$secondary-color;
+    background-image: url('../../images/herobg8.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    backdrop-filter: blur(7px); 
+
+    .Backdrop {
+      
+      background-color: rgba(255, 255, 255, 0.2); 
+      /* Apply the blur effect to the background behind this card */
+      backdrop-filter: blur(3px);
+      padding: 25px;
+      
+    }
+
+    .Breadcrumb_Section{
+        font-weight: 500;
+        padding: 0 25px;
+
+        .Bread_Link{
+          text-decoration: none;
+          color: $primary-color;
+          font-weight: bold;
+        }
+        .Course_Name{
+            color:$third-color;
+            text-transform: capitalize;
+        }
+    }
+
+    .Thumbnail_Banner{
+      display: flex;
+      align-items: center;
+      padding: 20px;
+        img{
+            width:100%;
+            aspect-ratio:16/9;
+            object-fit:cover;
+            border-radius:13px;
+        }
+    }
+
+    .Thumbnail_Data{
+      .Course_Title{
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        line-clamp: 2;
+        overflow: hidden;
+        text-transform: capitalize;
+        font-size: 2rem;
+        font-weight: 600;
+        padding: 20px 0 5px 0;
+        color: $primary-color;
+      }
+
+      .Category_Pill{
+        color: $fifth-color;
+        background-color: $primary-color;
+        padding: 5px 10px;
+        font-size: small;
+        font-weight: 600;
+        border-radius: 5px;
+        transition: .3s ease;
+        &:hover{
+          color: $primary-color;
+          background-color: $fifth-color;
+        }
+      }
+
+      .Course_Data_Icons{
+          display: flex;
+          align-items: center;
+          padding: 10px 0;
+          gap: 5rem;
+
+          .Data_Set{
+            margin: 10px 0;
+            .Icon{
+                font-size: 18px;
+                color: $primary-color;
+            }
+            span{
+                margin: 0 10px;
+                color: $third-color;
+                text-transform: capitalize;
+                font-size: small;
+                font-weight: 600;
+            }
+          }
+      }
+
+      .Course_Description{
+          font-size: 13px;
+          display: -webkit-box;
+          -webkit-line-clamp: 3;
+          -webkit-box-orient: vertical;
+          line-clamp: 3;
+          overflow: hidden;
+          line-height: 21px;
+      }
+      
+      .Hero_Badges{
+          display: grid;
+          grid-template-columns:repeat(3,1fr);
+          align-items: center;
+          gap:25px;
+          margin-bottom: 20px;
+
+          .Badge_Item{
+              background-color: $fifth-color;
+              padding: 5px 10px;
+              display: flex;
+              border-radius: 10px;
+              justify-content: center;
+              transition: .25s ease-in;
+
+              .Badge_Icon{
+                  // background-color: red;
+                  display: flex;
+                  align-items: center;
+                  font-size: 15px;
+                  color: $primary-color;
+                  padding: 5px;
+              }
+              .Badge_Body{
+                  display: flex;
+                  flex-direction: column;
+                  font-size: medium;
+                  margin: 5px ;
+                  
+                  small{
+                      font-size: 10px;
+                      font-weight: 450;
+                  }
+                  p{
+                      margin: 0;
+                      font-weight: 600;
+                      font-size: 13px;
+                  }
+              }
+
+              &:hover{
+                  color: $fifth-color;
+                  background-color: $primary-color;
+                  transform: scale(1.03);
+
+                  .Badge_Icon{
+                      color: $fifth-color;
+                  }
+                  small{
+                      color: $fifth-color;
+                  }
+                  p{
+                      color: $fifth-color ;
+                  }
+              }
+          }
+      }
+    }
+}
+
+// Course details 
+.Course_Details{
+  .row{
+    --bs-gutter-x: 0;
+  }
+
+  .Left_Side_Card{
+    padding: 0 20px;
+
+    // Mobile
+    .Mobile_Overview_Card{
+      padding: 20px;
+      border: 1px solid rgba($primary-color, 0.4);
+
+      
+      .Price_Section{
+        align-items: center;
+        justify-content: space-evenly;
+        
+        .Price_Header{
+          display: contents;
+          border-bottom:1px solid $fifth-color;
+        }
+
+        .Final_Price {
+          color: #16a34a;
+          font-size: 30px;
+          font-weight: 700;
+          margin-bottom: 0;
+        }
+
+        .Price_Row {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+        } 
+
+        .Old_Price {
+          text-decoration: line-through;
+          color: #999;
+        }
+
+        .Discount_Badge {
+          background: #ef4444;
+          color: white;
+          font-size: 8px;
+          font-weight: 600;
+          padding: 2px 6px;
+          border-radius: 6px;
+        }
+
+        .Sidebar_Button{
+          display: contents;
+          .Enroll_Button {
+            // width: 100%;
+            background-color: $primary-color;
+            color: white;
+            border: 2px solid $primary-color;
+            padding: 4px 15px;
+            border-radius: 7px;
+            // margin-top: 28px;
+            font-weight: 600;
+            font-size: smaller;
+              transition:.3s;
+
+              &:hover{
+                  background-color: $secondary-color;
+                  color: $primary-color;
+                  border: 2px solid $primary-color;
+                  transform:translateY(-2px);
+                  box-shadow:0 10px 20px rgba(13,110,253,.25);
+              }
+          }
+
+          .Wishlist_Button {
+            // width: 100%;
+            background-color: $secondary-color;
+            color: $primary-color;
+            border: 2px solid $secondary-color;
+            padding: 4px 15px;
+            border-radius: 7px;
+            // margin-top: 28px;
+            font-weight: 600;
+              transition:.3s;
+          }
+        }
+      }
+
+      // badges
+      .Hero_Badges{
+        display: grid;
+        grid-template-columns:repeat(3,1fr);
+        align-items: center;
+        gap:25px;
+        margin-bottom: 10px;
+
+
+        .Badge_Item{
+          background-color: $fifth-color;
+          display: flex;
+          border-radius: 10px;
+          justify-content: center;
+          transition: .25s ease-in;
+
+          .Badge_Icon{
+            // background-color: red;
+            display: flex;
+            align-items: center;
+            font-size: 15px;
+            color: $primary-color;
+            padding: 5px;
+          }
+          .Badge_Body{
+            display: flex;
+            flex-direction: column;
+            font-size: medium;
+            margin: 5px ;
+            
+            small{
+              font-size: 13px;
+              font-weight: 450;
+                              color: $primary-color;
+            }
+            p{
+              margin: 0;
+              font-weight: 600;
+              font-size: 16px;
+
+            }
+
+          }
+          &:hover{
+            color: $fifth-color;
+            background-color: $primary-color;
+            transform: scale(1.03);
+            .Badge_Icon{
+              color: $fifth-color;
+            }
+            small{
+              color: $fifth-color;
+            }
+            p{
+              color: $fifth-color ;
+            }
+          }
+        }
+      }
+    
+    }
+
+    // Mobile
+    .Highlights-Section{
+      padding: 20px;
+      .highlights-body{
+        h5{
+          font-size: 25px;
+          font-weight: 600;
+        }
+        .highlights{
+          .Highlight_Items{
+            .Check_Icon{
+              color: $primary-color;
+            }
+            span{
+              color: $third-color;
+            }
+          }
+        }
+
+      }
+
+    }
+
+    //  Tablet  and desktop
+    .course-tabs-card{
+      padding:25px !important;
+      border: 1px solid rgba($primary-color, 0.4);
+      .tabs {
+        border-bottom:1px solid rgba(0,0,0,.2)  !important;
+        gap: 10px;
+
+        .nav-item {
+          margin-right: 10px;
+        }
+
+        .nav-link {
+          border: none !important;
+          padding:18px 24px;
+          font-weight:600;
+          transition:.25s ease;
+          color: $third-color;
+          background: $fifth-color;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          svg {
+            font-size: 1rem;
+          }
+
+          &:hover {
+            transform: scale(1.05);
+            color: $primary-color !important;
+          }
+        }
+
+        .nav-link.active {
+          transform: none;
+          color: $primary-color !important;
+          border-bottom: solid 3px $primary-color !important;
+
+        }
+
+        .nav-link.disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+      }
+
+      .About_Course_Section{
+        h5{
+          color: $third-color;
+          font-weight: bold;
+          padding-top: 10px;
+          margin-bottom:18px;
+          font-size:1.5rem;
+          font-weight:700;
+        }
+        p{
+            margin: auto;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            line-clamp: 3;
+            overflow: hidden;
+            color: $third-color;
+            font-size: small;
+            transition: 0.3s ease;
+            line-height:1.8;
+            color:#353535;
+            margin-bottom:10px;
+          }
+        p.expanded{
+          display: block;
+      }
+
+      .Read_More_Button{
+        border: none;
+        background: transparent;
+        color: $primary-color;
+        font-weight: 600;
+        display:inline-flex;
+        align-items:center;
+        gap:6px;
+        padding: 0;
+        transition: .2s;
+        cursor: pointer;
+
+        &:hover{
+          transform: scale(1.02);
+        }
+      }
+
+      .overview-divider{
+          margin:28px 0;
+      }
+      
+      }
+
+      .Highlights_Section{
+        h5{
+          color: $third-color;
+          font-weight: bold;
+          padding-top: 10px;
+          margin-bottom:18px;
+          font-size:1.5rem;
+          font-weight:700;
+        }
+
+        .Highlights_Grid{
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:18px;
+        }
+
+        .Highlight_Column{
+            display:flex;
+            flex-direction:column;
+            gap:14px;
+        }
+
+        .Highlight_Column:first-child{
+            border-right:1px dashed $fifth-color;
+            padding-right:18px;
+        }
+
+        .Highlight_Column:last-child{
+            padding-left:18px;
+        }
+
+        .Highlight_Items{
+            display:flex;
+            align-items:center;
+            gap:12px;
+            padding:0 12px;
+            transition:.25s;
+            text-transform: capitalize;
+
+            .Check_Icon{
+                color:$primary-color;
+                font-size:15px;
+                flex-shrink:0;
+            }
+
+            span{
+                font-size:12px;
+                color:$third-color;
+                font-weight:600;
+            }
+
+            &:hover{
+              transform:translateX(5px)
+            }
+
+        }
+
+      }
+
+      .Instructor_Section{
+
+        .Teacher_Profile{
+          display:flex;
+          flex-direction:column;
+          align-items:center;
+          text-align:center;
+          padding:20px 0 30px;
+
+          .Teacher_Img{
+            width:130px;
+            height:130px;
+            object-fit:cover;
+            border-radius:50%;
+            border:4px solid #fff;
+            box-shadow:0 10px 30px rgba(0,0,0,.08);
+            margin-bottom:10px;
+          }
+
+          .Teacher_Name{
+            color:$third-color;
+            font-weight:700;
+            margin-bottom:5px;
+          }
+
+          .Teacher_Title{
+            color:$third-color;
+            margin-bottom:20px;
+            font-size:15px;
+          }
+
+          .Teacher_Stats{
+            display:flex;
+            justify-content:center;
+            gap:15px;
+            flex-wrap:wrap;
+
+            .Stat_Box{
+              background:$fifth-color;
+              border:1px solid #e7edf8;
+              padding:10px 18px;
+              border-radius:30px;
+              font-size:14px;
+              font-weight:500;
+              color:$third-color;
+            }
+          }
+        }
+
+        .Teacher_About{
+          border-top:1px solid #edf2f7;
+          padding-top:10px;
+
+          h5{
+            font-weight:700;
+            color:$third-color;
+            margin-bottom:15px;
+          }
+
+          p{
+            color:#555;
+            line-height:1.8;
+            margin:0;
+          }
+        }
+      }
+      // For Instrctor  section 
+      @media(max-width:768px){
+
+        .Instructor_Section{
+
+          .Teacher_Profile{
+
+            .Teacher_Img{
+              width:100px;
+              height:100px;
+            }
+
+            .Teacher_Name{
+              font-size:24px;
+            }
+
+            .Teacher_Stats{
+              flex-direction:column;
+              width:100%;
+
+              .Stat_Box{
+                width:100%;
+              }
+            }
+          }
+        }
+      }
+
+      
+    }
+  }
+
+  .Right-Side-Card{ 
+    padding: 0 20px;
+
+    .Overview_Card{
+      border-radius: 8px;
+      padding: 30px;
+      background: $fifth-color;
+      border: 1px solid rgba($primary-color, 0.4);
+    }
+    
+    .Overview_Title {
+      font-size: 25px;
+      font-weight: 650;
+      text-align: left;
+    }
+
+    .Price_Header{
+      padding-bottom:30px;
+      border-bottom:1px solid $fifth-color;
+    }
+
+    .Final_Price {
+      color: #16a34a;
+      font-size: 30px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .Price_Row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    } 
+
+    .Old_Price {
+      text-decoration: line-through;
+      color: #999;
+    }
+
+    .Discount_Badge {
+      background: #ef4444;
+      color: white;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+
+    .Overview_List{
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      .Overview_Item{
+        display: flex;
+        justify-content: space-between;
+        padding-bottom: 10px;
+        border-bottom: 1px dashed rgba($primary-color, 0.4);
+        .Left_Side{
+          display: flex;
+          align-items: center;
+          
+          .Item_Icon{
+            padding: 8px 6px;
+            font-size: 15px;
+            border-radius: 50%;
+            margin-right: 7px;
+            color: $primary-color;
+            background-color: $secondary-color;
+            border: 1px solid rgba($primary-color, 0.4);
+          }
+          .Item_Body{
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            strong{
+              font-size: 14px;
+              color: $primary-color;
+            }
+            small{
+              font-size: 12px;
+              font-weight: 450; 
+
+            }
+          }
+        }
+        .Right_Side{
+          display: flex;
+          flex-direction: column;
+          text-align: end;
+            strong{
+              font-size: 14px;
+              color: $primary-color;
+            }
+            small{
+              font-size: 12px;
+              font-weight: 450;
+            }
+        }
+        &:last-child{
+          border: none;
+        }
+      }
+    }
+
+    .Sidebar_Button{
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+    .Enroll_Button {
+      width: 100%;
+      background-color: $primary-color;
+      color: white;
+      border: 1px solid $primary-color;
+      padding: 5px;
+      border-radius: 7px;
+
+      font-weight: 600;
+        transition:.3s;
+
+        &:hover{
+            background-color: $secondary-color;
+            color: $primary-color;
+            border: 1px solid $primary-color;
+            transform:translateY(-2px);
+            box-shadow:0 10px 20px rgba(13,110,253,.25);
+        }
+    }
+
+    .Wishlist_Button {
+      width: 100%;
+      background-color: $secondary-color;
+      color: $primary-color;
+      border: 2px solid $secondary-color;
+      padding:5px;
+      border-radius: 7px;
+      // margin-top: 28px;
+      font-weight: 600;
+        transition:.3s;
+    }
+    }
+  }
+}
+
+// Curriculum Card
+.Curriculum_Section{
+  margin-top: 10px;
+  padding: 20px;
+  border: 1px solid rgba($primary-color, 0.4);
+
+  h4{
+    font-size:1.5rem;
+    font-weight:700;
+  }
+  .Empty_Curriculum{
+    // margin: 20px;
+    // background-color: red;
+    img{
+      width: 100%;
+      max-width: 350px;
+    }
+    h5{ 
+      color:$third-color;
+      margin-bottom:10px;
+      font-weight: 600;
+    }
+    p{
+      font-size: small;
+      font-weight: 500;
+    }
+  }
+
+}
+
+// mobile-share Card
+.Share_Card_Mobile{
+  .share-course-card{
+    margin: 0 auto 15px auto;
+    padding: 25px;
+    background: $fifth-color;
+    border: 1px solid rgba($primary-color, 0.4);
+  } 
+  h5 {
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .share-course-card p {
+    color: #666;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .social-icons {
+    display: flex;
+    gap: 14px;
+    margin-top: 18px;
+  }
+
+  .social-icons a {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: $secondary-color;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $primary-color;
+    transition: 0.3s;
+  }
+
+  .social-icons a:hover {
+          background-color: $primary-color;
+          color: $fifth-color;
+          transform:translateY(-2px);
+          box-shadow:0 10px 20px rgba(13,110,253,.25);
+  }
+}
+
+// Accordon For Mobile
+.Course_Accordion{
+  margin-bottom: 20px;
+
+  h4{
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0;
+    padding: 0 10px;
+  }
+
+  p{
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    padding: 5px 10px;
+  }
+
+  .accordion-item{
+      border: 1px solid rgba($primary-color, 0.4);
+      border-radius: 5px;
+      margin-bottom:8px;
+      overflow:hidden;
+      box-shadow:0 6px 18px rgba($primary-color,0.1);
+
+      // What you'll learn 
+      .Highlights_Section{
+        h5{
+          color: $third-color;
+          font-weight: bold;
+          padding-top: 10px;
+          margin-bottom:18px;
+          font-size:1.5rem;
+          font-weight:700;
+        }
+
+        .Highlight_Items{
+            display:flex;
+            align-items:center;
+            gap:12px;
+            padding:0 12px;
+            transition:.25s;
+            text-transform: capitalize;
+
+            .Check_Icon{
+                color:$primary-color;
+                font-size:15px;
+                flex-shrink:0;
+            }
+
+            span{
+                font-size:13px;
+                margin: 5px;
+                color:$third-color;
+                font-weight:500;
+            }
+
+            &:hover{
+              transform:translateX(5px);
+            }
+
+        }
+
+      }
+
+      // About Course 
+      .About_Course_Section{
+        h5{
+          color: $third-color;
+          font-weight: bold;
+          padding-top: 10px;
+          margin-bottom:18px;
+          font-size:1.5rem;
+          font-weight:700;
+        }
+        p{
+            margin: auto;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            line-clamp: 3;
+            font-weight: 450;
+            overflow: hidden;
+            color: $third-color;
+            font-size: small;
+            transition: 0.3s ease;
+            line-height:1.8;
+            color:#353535;
+            margin-bottom:10px;
+            
+          }
+        p.expanded{
+          display: block;
+      }
+
+      .Read_More_Button{
+        border: none;
+        background: transparent;
+        color: $primary-color;
+        font-weight: 600;
+        font-size: small;
+        display:inline-flex;
+        align-items:center;
+        gap:6px;
+        padding-left: 10px;
+        transition: .2s;
+        cursor: pointer;
+
+        &:hover{
+          transform: scale(1.02);
+        }
+      }
+
+      .overview-divider{
+          margin:28px 0;
+      }
+      
+      }
+
+      // About Instructor
+      .Instructor_Section{
+
+        .Teacher_Profile{
+          display:flex;
+          flex-direction:column;
+          align-items:center;
+          text-align:center;
+          padding:20px 0 30px;
+
+          .Teacher_Img{
+            width:130px;
+            height:130px;
+            object-fit:cover;
+            border-radius:50%;
+            border:4px solid #fff;
+            box-shadow:0 10px 30px rgba(0,0,0,.08);
+            margin-bottom:10px;
+          }
+
+          .Teacher_Name{
+            color:$third-color;
+            font-weight:700;
+            font-size: 20px;
+            margin-bottom:5px;
+          }
+
+          .Teacher_Title{
+            color:$third-color;
+            font-size:13px;
+            font-weight: 600;
+          }
+
+          .Teacher_Stats{
+            display:flex;
+            justify-content:center;
+            gap:15px;
+            flex-wrap:wrap;
+
+            .Stat_Box{
+              background:$fifth-color;
+              border:1px solid #e7edf8;
+              padding:10px 18px;
+              border-radius:30px;
+              font-size:14px;
+              font-weight:500;
+              color:$third-color;
+            }
+          }
+        }
+
+        .Teacher_About{
+          border-top:none;
+          text-align: center;
+
+          h5{
+            font-weight:600;
+            color:$third-color;
+            margin-bottom:15px;
+            font-size: 17px;
+          }
+
+          p{
+            color:#555;
+            line-height:1.8;
+            margin:0;
+            font-weight: 500;
+          }
+        }
+      }
+  }
+
+  .accordion-button{
+    font-size: 15px;
+      font-weight:600;
+      color:$third-color;
+      padding:18px;
+      transition: .3s;
+
+      &:focus{
+          box-shadow:none;
+      }
+
+      &:not(.collapsed){
+
+          background:$secondary-color;
+          color:$primary-color;
+
+      }
+      &:hover{
+        color: $primary-color;
+        transform: scale(1.02);
+      }
+  }
+
+  .accordion-body{
+      background:white;
+      padding:20px;
+  }
+}
+
+// Similar  Courses
+.Similar_Courses_Section{
+
+  padding: 0 40px;
+  
+  .Section_Header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .Header_Title{
+      padding: 20px 0;
+
+      h3{
+        font-weight: 700;
+      }
+      p{
+        font-size: 14px;
+        font-weight: 500;
+      }
+    }
+
+    .Header_Link{
+      .View_All_Button{
+        font-size: 16px;
+        font-weight: 600;
+        text-decoration: none;
+        border: none;
+        background-color: $primary-color;
+        color: $secondary-color;
+        padding: 7px 17px;
+        border-radius: 7px;
+        transition: .3s;
+  
+        &:hover{
+          background-color: $secondary-color;
+          color: $primary-color;
+          transform: translateX(10px);
+        }
+      }
+    }
+
+  }
+
+  .Similar_Courses_Grid {
+      margin-bottom: 20px ;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 24px;
+  }
+
+  .Similar_Courses_Swiper {
+      width: 100%;
+
+      .swiper-slide {
+          height: auto;
+      }
+  }
+
+  @media (min-width: 1200px) {
+      .Similar_Courses_Grid {
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+  }
+
+}
+
+// Sticky Sidebar
+@media(min-width:1200px){
+
+  .Overview_Card {
+      position:sticky;
+      top:10px;
+      align-self:flex-start;
+  }
+
+}
+
+/* ==========================================
+            LARGE TABLETS
+========================================== */
+
+@media (max-width:1200px){
+
+  //  Course Hero Section
+  .Course_View_Hero{
+    padding: 0;
+    .Thumbnail_Data{
+
+      .Course_Title{
+        font-size: 1.3rem;
+      }
+
+      .Category_Pill{
+        color: $fifth-color;
+        background-color: $primary-color;
+        padding: 5px 10px;
+        font-size: 10px;
+        font-weight: 700;
+        border-radius: 5px;
+        transition: .3s ease;
+        &:hover{
+          color: $primary-color;
+          background-color: $fifth-color;
+        }
+      }
+
+      .Course_Data_Icons{
+          display: flex;
+          align-items: center;
+          padding: 10px 0;
+          gap: 2rem;
+
+          .Data_Set{
+            margin: 5px 0;
+            .Icon{
+                font-size: 15px;
+                color: $primary-color;
+            }
+            span{
+                margin: 0 10px;
+                color: $third-color;
+                text-transform: capitalize;
+                font-size: 12px;
+                font-weight: 600;
+            }
+          }
+      }
+
+      .Course_Description{
+        font-size: 13px;
+      }
+
+      .Hero_Badges{
+        gap: 10px;
+        .Badge_Item{
+          .Badge_Icon{
+            font-size: 12px;
+          }
+          .Badge_Body{
+            small{
+              font-size: 10px;
+            }
+            p{
+              font-size: 12px;
+
+            }
+          }
+        }
+      }
+
+    }
+
+    .Thumbnail_Banner{
+      img{
+          width:110%;
+          aspect-ratio:16/9;
+          object-fit:cover;
+      }
+    }
+  }
+
+  // Course Details
+  .Course_Details{
+    .Right-Side-Card{
+      .Overview_Card{
+        position:sticky;
+        top:95px;
+        align-self:flex-start;
+      }
+
+    }
+  }
+}
+  
+/* ==========================================
+                TABLETS
+========================================== */
+
+@media (max-width:992.1px){
+
+  //  Course Hero Section
+  .Course_View_Hero{
+
+    .Thumbnail_Banner{
+      img{
+        width:100%;
+        aspect-ratio:4/3;
+        object-fit:cover;
+      }
+    }
+
+    .Thumbnail_Data{
+
+      .Course_Title{
+        font-size: 1.2rem;
+      }
+
+      .Category_Pill{
+        color: $fifth-color;
+        background-color: $primary-color;
+        padding: 5px 10px;
+        font-size: 10px;
+        font-weight: 700;
+        border-radius: 5px;
+        transition: .3s ease;
+        &:hover{
+          color: $primary-color;
+          background-color: $fifth-color;
+        }
+      }
+
+      .Course_Data_Icons{
+          display: flex;
+          align-items: center;
+          padding: 10px 0;
+          gap: 2rem;
+
+          .Data_Set{
+            margin: 5px 0;
+            .Icon{
+                font-size: 15px;
+                color: $primary-color;
+            }
+            span{
+                margin: 0 5px;
+                color: $third-color;
+                text-transform: capitalize;
+                font-size: 10px;
+                font-weight: 600;
+            }
+          }
+      }
+
+      .Course_Description{
+        font-size: 12px;
+      }
+
+      .Hero_Badges{
+        gap: 10px;
+        .Badge_Item{
+          .Badge_Icon{
+            font-size: 12px;
+          }
+          .Badge_Body{
+            small{
+              font-size: 8px;
+            }
+            p{
+              font-size: 10px;
+            }
+          }
+        }
+      }
+
+    }
+
+  }
+
+  // Course Details
+  .Course_Details{
+    .Left_Side_Card{
+      padding: 0 10px;
+      .course-tabs-card{
+        .tabs {
+          .nav-link {
+            font-size: small;
+            font-weight:600;
+            max-width: 150px;
+            padding: 15px;
+          }
+
+        }
+        .About_Course_Section{
+          h5{
+            font-size:1.3rem;
+          }
+
+      
+      }
+
+      .Highlights_Section{
+        h5{
+          font-size:1.3rem;
+        }
+
+        .Highlight_Column{
+            gap:20px;
+        } 
+
+      }
+      }
+    }
+  .Right-Side-Card{ 
+    padding: 0 10px;
+    .Overview_Card{
+      padding: 15px;
+      max-width: 300px;
+
+    }
+    
+    .Overview_Title { 
+      padding-top:10px;
+      font-size: 19px;
+    }
+
+    .Price_Header{
+        padding-bottom:30px;
+        border-bottom:1px solid $fifth-color;
+    }
+
+    .Final_Price {
+      font-size: 25px;
+    }
+
+    .Price_Row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    } 
+
+    .Old_Price {
+      font-size: smaller;
+    }
+
+    .Discount_Badge {
+      font-size: 10px;
+      padding: 2px 8px;
+    }
+
+    .Overview_List{
+      .Overview_Item{
+        .Left_Side{
+          .Item_Icon{
+            padding: 7px 5px;
+            font-size: 17px;
+          }
+          .Item_Body{
+            strong{
+              font-size: 12px;
+            }
+            small{
+              font-size: 8px;
+              font-weight: 500; 
+            }
+          }
+        }
+        .Right_Side{
+          padding-left: 10px;
+            strong{
+              font-size: 12px;
+            }
+            small{
+              font-size: 8px;
+              font-weight: 500;
+            }
+        }
+        &:last-child{
+          border: none;
+        }
+      }
+    }
+
+    .Sidebar_Button{
+      .Enroll_Button {
+        font-size: smaller;
+      }
+
+      .Wishlist_Button {
+        font-size: smaller;
+      }
+    }
+  }
+  }
+
+}
+
+
+
+/* ==========================================
+            SMALL MOBILE
+========================================== */
+
+@media (max-width:767.98px){
+
+  //  Course Hero Section
+  .Course_View_Hero{
+    padding: 0;
+    margin: 0;
+
+    .Backdrop{
+      background-color: $fifth-color;
+      padding: 0 12px;
+      
+    }
+
+    .Breadcrumb_Section{
+      padding: 10px;
+
+      .Bread_Link{
+        font-size: small;
+      }
+      .Course_Name{
+        font-size: small;
+      }
+    }
+
+    .Thumbnail_Data{
+      padding: 10px 5px;
+
+      .Course_Title{
+        padding: 0 10px;
+        color: $third-color;
+        font-size: 1.7rem;
+      }
+
+      .Course_Description{
+        display: none;
+      }
+
+      .Category_Pill{
+        font-size: 12px;
+        margin-left: 10px;
+        border: 1px solid rgba($primary-color, 0.4);
+        &:hover{
+          background-color: $secondary-color;
+          color: $primary-color;
+        }
+      }
+
+      .Course_Data_Icons{
+
+        justify-content: start;
+      
+        .Data_Set{
+          border: 1px solid rgba($primary-color, 0.4);
+          background-color: $secondary-color;
+          padding: 10px 20px;
+          border-radius: 5px;
+          margin: 10px;
+          display: flex;
+          align-items: center;
+          .Icon{
+            color: $primary-color;
+            font-size: 15px;
+          }
+          .Body{
+            display: flex;
+            flex-direction: column;
+            margin: 0 10px;
+            width: max-content;
+            
+            span{
+              color: $primary-color;
+              text-transform: capitalize;
+              font-size: 13px;
+              margin: 0;
+              font-weight: 700;
+            }
+            small{
+              font-size: xx-small;
+              font-weight: 500;
+            }
+          }
+        }
+      }
+
+    }
+    .Thumbnail_Banner{
+      margin: 0;
+      padding: 0;
+      img{
+          border-radius: 0;
+          aspect-ratio:16/9;
+          object-fit:cover;
+      }
+    }
+
+  }
+
+  // Course Details
+  .Course_Details{
+    .Left_Side_Card{
+      .Mobile_Overview_Card{
+        display: block !important;
+      }
+    }
+  }
+
+}
+
+/* ==========================================
+            VERY SMALL
+========================================== */
+
+@media (max-width:576.98px){
+
+  //  Course Hero Section
+  .Course_View_Hero{
+    .Thumbnail_Data{
+      .Course_Title{
+        font-size: 22px;
+      }
+      .Course_Data_Icons{
+        justify-content: center;
+        .Data_Set{
+          margin: 10px  0;
+        }
+      }
+    }
+  }
+
+  .Curriculum_Section{
+    display: block !important;
+  }
+
+  // Course details
+
+  .Course_Details{
+    .Left_Side_Card{
+    
+      .Mobile_Overview_Card{
+        padding: 10px;
+        
+        .Price_Section{
+          align-items: center;
+          justify-content: space-evenly;
+          
+          .Price_Header{
+            display: block;
+          }
+          
+          .Final_Price {
+            margin-bottom: 6px;
+            font-size: 20px;
+          }
+
+
+          .Old_Price {
+            text-decoration: line-through;
+            color: #999;
+            font-size: 12px;
+          }
+
+          .Discount_Badge {
+            font-size: 10px;
+          }
+
+          .Sidebar_Button{
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+
+            .Enroll_Button {
+              border: 1px solid $primary-color;
+              padding: 4px 15px;
+              font-size: small;
+
+                &:hover{
+                    border: 1px solid $primary-color;
+                }
+            }
+
+            .Wishlist_Button {
+              
+              font-size: small;
+              
+            }
+          }
+        }
+
+        // badges
+        .Hero_Badges{
+
+          .Badge_Item{
+
+            .Badge_Body{
+              
+              small{
+                font-size: 10px;
+                font-weight: 600;
+              }
+              p{
+                font-weight: 800;
+                font-size: 12px;
+
+              }
+
+            }
+          }
+        }
+      
+      }
+    }
+  }
+
+  .Similar_Courses_Section{
+    margin: 25px 0;
+    .Section_Header{
+      .Header_Title{
+        p{
+          width: 250px;
+        }
+      }
+      .Header_Link{
+        .Primary_Button{
+          font-size: 11px;
+        }
+      }
+    }
+  }
+
+}
+
+
+
+////////////////* FAQ Page *////////////////
+
+
+
+/* FAQ Form */
+
+.faq-form {
+  width: 100%;
+}
+
+
+.input-with-icon {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  .input-icon {
+    width: 18px;
+    color: #1769d1;
+    flex-shrink: 0;
+  }
+
+  .form-control {
+    flex: 1;
+  }
+}
+
+
+/* FAQ Filters */
+
+.faq-filters {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+
+.faq-filter-type {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 140px;
+
+  svg {
+    color: #1769d1;
+    flex-shrink: 0;
+  }
+}
+
+
+.faq-search {
+  position: relative;
+  flex: 1;
+
+  svg {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #777;
+    z-index: 2;
+  }
+
+  .form-control {
+    padding-left: 38px;
+  }
+}
+
+
+/* FAQ Table */
+
+.faq-table {
+  width: 100%;
+}
+
+
+/* Mobile */
+
+@media (max-width: 768px) {
+
+  .faq-filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .faq-filter-type {
+    width: 100%;
+  }
+
+  .faq-search {
+    width: 100%;
+  }
+
+}
