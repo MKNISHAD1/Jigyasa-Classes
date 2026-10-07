@@ -174,6 +174,51 @@ class CourseController extends Controller
     }
 
     /**
+    * View Teacher Profile publicly (for frontend)
+    */
+
+    public function publicTeacherView($id)
+    {
+        $teacher = User::findOrFail($id);
+
+        $courses = Course::with([
+            'thumbnail',
+            'teacher',
+            'category',
+            'subcategory',
+        ])
+        ->withCount('lessons')
+        ->withSum('lessons as total_duration', 'duration')
+        ->where('teacher_id', $teacher->id)
+        ->where('status', 'published')
+        ->latest()
+        ->get();
+
+        return response()->json([
+            'status' => true,
+
+            'teacher' => [
+                'id' => $teacher->id,
+                'name' => $teacher->name,
+                'professional_title' => $teacher->professional_title,
+                'bio' => $teacher->bio,
+                'profile_pic' => $teacher->profile_pic,
+                // social_links only if you want them public
+            ],
+
+            'courses' => $courses->map(function ($course) {
+                return $this->formatCourse($course, [
+                    'subcategory',
+                    'status',
+                    'difficulty_level',
+                    'created_at',
+                ]);
+            }),
+        ]);
+    }
+
+
+    /**
      * Store a new course
      * - Only teacher/moderator/admin/superadmin allowed
     */

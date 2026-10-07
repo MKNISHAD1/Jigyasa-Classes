@@ -4,11 +4,15 @@ import { AuthContext } from "./context/Auth";
 import { apiUrl } from "../Common/http";
 import HeaderUi from "../Common/CommonUI/HeaderUi";
 import FooterUi from "../Common/CommonUI/FooterUi";
-import otpimg from "../../assets/images/otp-verify.jpeg"
+import otpimg from "../../assets/images/otp-verify-2.png";
 import OtpInput from "../Common/CommonUI/OtpInput";
 import OtpResendTimer from "../Common/CommonUI/OtpResendTimer";
 import maskEmail from "../../utilities/maskEmail";
 import { toast } from "react-toastify";
+import logo from '../../assets/images/Logo2.png';
+import { faGraduationCap } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 
 
 const TwofactOTP = () => {
@@ -118,83 +122,104 @@ const TwofactOTP = () => {
   };
 
   return (
-    <>
-    {/* Header */}
-    <HeaderUi/>
+      <>
+        {/* Header */}
+        <HeaderUi/>
 
-    <div className="container my-5">
+          <div className="container-fluid Form_Section">
+            <div className="row">
 
-      <div className="row align-items-center">
-        {/* Illustrator Img */}
-          <div className="col-lg-6 d-none d-md-flex">
-            <img src={otpimg} alt="" width="100%"/>
+              {/* Illustrator Img */}
+                <div className="col-lg-6 d-none d-lg-flex Illustration_Img">
+                  <img src={otpimg} alt="OTP Verificationn Illustration" width="100%"/>
+                </div>
+
+                <div className="col-lg-6 col-12">
+                  <div className="Form_Body">
+
+                  {/* Logo Emblemb */}
+                  <div className="d-flex d-lg-none Logo_Emblemb">
+                    <img src={logo} alt="login  Illustration"/>
+                  </div>
+
+                  {/* Form Title */}
+                  <div className="Form_Title">
+                    <h1> Welcome <span>Back </span></h1>
+                    <small className='text-muted'>Kindly Enter OTP to Continue</small>
+                  </div>
+
+                  {/* Divide Line */}
+                  <div className="Divider_Line">
+                    <div className="Line"></div>
+                    <FontAwesomeIcon icon={faGraduationCap} className='Icon'/>
+                    <div className="Line"></div>
+                  </div>  
+                  
+                  <p className="text-center text-muted mb-4">
+                      We've sent a verification code to :
+                      <strong>{maskEmail(twoFactorEmail)}</strong>
+                  </p>
+                              
+                  {/* OtpInput */}
+                  <OtpInput
+                      value={otp}
+                      onChange={setOtp}
+                      disabled={loading}
+                  />
+
+                  <br />
+
+                  {/* Otp Resend Timer */}
+                  <OtpResendTimer
+                      initialTime={60}
+                      onResend={handleResendOtp}
+                      disabled={loading}
+                  />
+
+                  {/* Submit Button */}
+                  <button
+                    className="btn blue-btn w-100 mt-4"
+                    disabled={loading || otp.length !== 6}
+                    onClick={verifyOtp}
+                  >
+                    {
+                      loading ? (
+                        <>
+                          <span
+                            className="spinner-border spinner-border-sm me-2 text-primary"
+                            role="status"
+                          />
+
+                          <span className='text-primary'>Verifying OTP... </span>
+
+                        </>
+
+                        ) : (
+
+                          "Verify OTP"
+
+                      )
+                    }
+                    
+                  </button>
+
+                  {/* Back Button */}
+                  <a 
+                    href="/login"
+                    className="btn gray-btn-opp w-100 mt-2"
+                  >
+                    Back to Login
+                  </a>
+
+                </div>
+              </div>
+            </div>
           </div>
-  <div className="col-lg-6 col-12">
-      <div className="card border-0 shadow">
-        <div className="card-body">
-           <h1 className=" text-center fw-bold">  <span>Welcome</span> Back </h1>
-            <p className="mb-3 text-center fw-medium">Kindly Enter OTP to Continue</p>
 
-            <p className="text-center text-muted mb-4">
-              We've sent a verification code to :
-              <strong>{maskEmail(twoFactorEmail)}</strong>
-          </p>
-                   
-            {/* OtpInput */}
-            <OtpInput
-                value={otp}
-                onChange={setOtp}
-                disabled={loading}
-            />
-            {/* Otp Resend Timer */}
-          <OtpResendTimer
-              initialTime={60}
-              onResend={handleResendOtp}
-              disabled={loading}
-          />
-
-          <button
-              className="btn btn-primary w-100 mt-4"
-              disabled={loading || otp.length !== 6}
-              onClick={verifyOtp}
-          >
-
-          {
-          loading
-          ?
-          "Verifying..."
-          :
-          "Verify OTP"
-          }
-
-          </button>
-
-            <a 
-                href="/login"
-                className="btn btn-outline-primary w-100 mt-2"
-            >
-                Back to Login
-            </a>
-
-        </div>
-      </div>
-  
-  </div>
-        {/* <h3>Enter OTP</h3>
-        <input
-          value={otp}
-          onChange={(e) => setOtp(e
-            .target.value)}
-          placeholder="6-digit OTP"
-        />
-        <button onClick={verifyOtp}>Verify</button> */}
-      </div>
-    </div>
-
-    {/* Footer  */}
-    <FooterUi/>
-    
-    </>
+        {/* Footer  */}
+        <FooterUi/>
+      
+      </>
   );
 };
 

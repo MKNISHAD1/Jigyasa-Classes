@@ -3,15 +3,14 @@ import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';  
 import HeaderUi from '../../Common/CommonUI/HeaderUi'
 import FooterUi from '../../Common/CommonUI/FooterUi'
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { apiUrl } from '../../Common/http';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleDown, faAngleRight, faAngleUp, faArrowRight, faArrowTrendUp,faChalkboardTeacher, faCheck, faClock, faDoorOpen, faFolderTree, faHeart, faLanguage, faLayerGroup, faLink,  faPlay,  faPlayCircle,  faStar, faStopwatch, faUsers, faUserTie } from '@fortawesome/free-solid-svg-icons';
+import { faAngleDown, faAngleRight, faAngleUp, faArrowRight, faArrowTrendUp,faChalkboardTeacher, faCheck, faClock, faFolderTree, faHeart, faLanguage, faLayerGroup, faLink,  faPlay,  faPlayCircle,  faStar, faStopwatch, faUsers, faUserTie } from '@fortawesome/free-solid-svg-icons';
 import {  faClockFour, faFile, faFileLines,  } from '@fortawesome/free-regular-svg-icons';
 import CourseCurriculum from '../../backend/courses/CourseCurriculum';
-import { faQuora } from '@fortawesome/free-brands-svg-icons';
 import no_lesson from '../../../assets/images/not-found2.jpeg'
 import { Accordion } from 'react-bootstrap';
 import { PUBLIC_ROUTES } from '../../../constants/nevigation/routes';
@@ -22,7 +21,6 @@ import Share_Course_Card_Ui from '../../Common/CommonUI/Share_Course_Card_Ui';
 
 const ViewCourseUi = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
   const { i18n } = useTranslation();
 
   const [course, setCourse] = useState(null);

@@ -15,7 +15,9 @@ const CourseCardUi = ({ course }) => {
     const courseViewUrl = PUBLIC_ROUTES.COURSE_VIEW
         .replace(":id", course.id)
         .replace(":title", course.title?.en);
-
+    
+    const teacherViewProfile = PUBLIC_ROUTES.Course_Teacher_Profile
+        .replace(":id", course.teacher?.id)
     const formatCourseDuration = (seconds) => {
         const totalMinutes = Math.floor((seconds || 0) / 60);
 
@@ -72,18 +74,23 @@ const CourseCardUi = ({ course }) => {
 
             {/* Teacher Information */}
             <div className="Teacher_Data_Row">
-                <img
-                    src={
-                        course.teacher?.profile_pic ??
-                        "/default-course.png"
-                    }
-                    className="Teacher_Img"
-                    alt={course.teacher?.name}
-                />
 
-                <h6 className="Teacher_Name">
-                    {course.teacher?.name}
-                </h6>
+                <Link to={teacherViewProfile} className="Teacher_Profile_Link">
+                
+                    <img
+                        src={
+                            course.teacher?.profile_pic ??
+                            "/default-course.png"
+                        }
+                        className="Teacher_Img"
+                        alt={course.teacher?.name}
+                    />
+
+                    <h6 className="Teacher_Name">
+                        {course.teacher?.name}
+                    </h6>
+                    
+                </Link>
 
                 <Link
                     className="Category_Button"

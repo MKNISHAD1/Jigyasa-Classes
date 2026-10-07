@@ -15,7 +15,6 @@ import RenderFilterUi from '../../Common/CommonUI/RenderFilterUi'
 import { PUBLIC_ROUTES } from '../../../constants/nevigation/routes'
 import CourseCardUi from '../../Common/CommonUI/CourseCardUi'
 import CourseDiscoverySectionUi from '../../Common/CommonUI/CourseDiscoverySectionUi'
-import { toast } from 'react-toastify'
 
 const AllCoursesUi = () => {
 
@@ -139,8 +138,6 @@ useEffect(() => {
           const categoryName =
               category.name?.[i18n.language] ??
               category.name?.en;
-
-          // toast.success(`${categoryName} filter applied`);
 
           coursesSectionRef.current?.scrollIntoView({
               behavior: "smooth",

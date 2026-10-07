@@ -55,6 +55,7 @@ import MyCourse from "./Component/backend/courses/MyCourse";
 import ViewUserProfile from "./Component/backend/users/ViewUserProfile";
 import LessonManagement from "./Component/backend/Lessons/LessonManagement";
 import SidebarLessonManagement from "./Component/backend/Lessons/SidebarLessonManagement";
+import TeacherProfileVIewUI from "./Component/Frontend/Ui for Frontend/TeacherProfileVIewUI";
 
 
 function App() {
@@ -110,6 +111,9 @@ function App() {
               {/* <Route path="/CourseCard" element={<CourseCardUi />}/> */}
               <Route path={PUBLIC_ROUTES.COURSE_VIEW} element={<ViewCourseUi />}/>
               {/* <Route path="/CourseView/:id/:title" element={<ViewCourseUi />}/> */}
+              <Route path={PUBLIC_ROUTES.Course_Teacher_Profile} element={<TeacherProfileVIewUI />}/>
+              {/* <Route path="/Teacher-Profile-View/:id" element={<ViewCourseUi />}/> */}
+
 
       {/* Authentication */}
 

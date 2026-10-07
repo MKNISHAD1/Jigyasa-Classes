@@ -1,0 +1,185 @@
+@use '../base/variables' as *;
+
+/////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////
+/// 
+//    This control Register, Login, Email_verify, Two_Factor, Forget_Password 
+// 
+/////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////
+
+
+
+.Form_Section{
+    display: flex;
+    align-items: center;
+    background-image: url('../../images/herobg8.png');
+    background-size: cover;
+    background-repeat: no-repeat;   
+    padding: 30px;
+
+    .Illustration_Img{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        img{
+            width: 90%;
+            height: auto;
+        }
+    }
+                        
+    .Form_Body{
+        padding: 20px;
+        box-shadow: 0px 0px 7px 3px rgba($primary-color, 0.3);
+        border-radius: 12px;
+        border: 1px solid rgba($primary-color, 0.5);
+        background-color: rgba(255, 255, 255, 0.5); 
+        backdrop-filter: blur(2px);
+
+        hr{
+            border: 1px solid  $primary-color;
+            margin: 25px 0;
+        }
+
+        .Form_Title{
+            text-align: center;
+            margin: 10px 0;
+
+            h1{
+                font-weight: bold;
+                font-size: 30px;
+                margin-bottom: 5px;
+            }
+            small{
+                font-weight: 500;
+            }
+        }
+
+        .Divider_Line{
+            display: flex;
+            align-items: center;
+            width: 100%;
+            gap: 15px;
+            padding: 20px 10px;
+            .Line{
+                margin: auto;
+                height: 1px;
+                background-color: $primary-color;
+                flex-grow: 1;   
+            }
+            .Icon{
+                font-size: larger;
+                color: $primary-color;
+            }
+        }
+
+        .Input_Title{
+            display: flex;
+            align-items: center;
+            .Icon{
+                color: $primary-color;
+                border-radius: 8px;
+                padding: 8px;
+                font-size: 15px;
+                background-color: $fifth-color;
+                border: 1px solid rgba($primary-color, 0.5);
+                margin-bottom: .5rem;
+                margin-right: 5px;
+            }
+        }
+
+    }
+}
+
+// Checkbox
+.form-check-input {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    margin-top: 0;
+    margin-right: 10px;
+    border: 1px solid $primary-color;
+
+    &:focus {
+        outline: none;
+        box-shadow: none;
+        border-color: $primary-color; /* Ensures custom borders don't flash */
+    }
+}
+
+// Email Verification Status
+.Email_Verification_Status {
+
+    .Status_Icon {
+        font-size: 5rem;
+    }
+
+    .Success_Icon {
+        color: $primary-color;
+    }
+
+    .Error_Icon {
+        color: #dc3545;
+    }
+
+    h3 {
+        font-weight: 700;
+    }
+
+    p {
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+}
+
+
+// Reponsive Design
+@media (max-width: 575.98px) {
+
+    .Form_Section{
+        padding: 15px;
+        background-image: url('../../images/herobg8.png');
+    }
+
+    .Form_Body{
+        margin-top: 60px;
+        margin-bottom: 30px;
+        backdrop-filter: blur(4px) !important;
+
+        .Logo_Emblemb{
+            justify-content: center;    
+            padding-bottom: 20px;       
+            
+            img{
+                border-radius: 50%;
+                width: 30%;
+                padding: 5px;
+                height: auto;
+                background-color: $secondary-color;
+                box-shadow: 0px 0px 10px 5px rgba($primary-color, 0.5) ;
+                margin-top: -60px;
+            }
+        }
+    }
+}
+@media (min-width: 576px) and (max-width: 991.98px) {
+
+    .Form_Section{
+        margin-top: 100px;
+
+        .Logo_Emblemb{
+            justify-content: center;    
+            padding-bottom: 20px;       
+            
+            img{
+                border-radius: 50%;
+                width: 20%;
+                padding: 5px;
+                height: auto;
+                background-color: $secondary-color;
+                box-shadow: 0px 0px 10px 5px rgba($primary-color, 0.5) ;
+                margin-top: -80px;
+            }
+        }
+    }
+}

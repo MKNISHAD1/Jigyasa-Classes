@@ -1,0 +1,521 @@
+@use '../base/variables' as *;
+
+
+//////////////////////////////////////////////////////
+// Teacher Profile Page
+//////////////////////////////////////////////////////
+
+.Teacher_Profile_Page {
+    padding: 20px 24px 0;
+}
+
+
+
+//////////////////////////////////////////////////////
+// Teacher Profile Hero
+//////////////////////////////////////////////////////
+
+.Teacher_Profile_Section {
+    margin-bottom: 25px;
+}
+
+
+.Teacher_Profile_Hero {
+    position: relative;
+
+    overflow: hidden;
+
+    padding: 38px 35px;
+
+    border: 1px solid rgba($primary-color, 0.25);
+    border-radius: 14px;
+
+    background-image: url("../../images/bg-cover.jpeg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+
+    box-shadow: 0 8px 25px rgba($primary-color, 0.6);
+
+
+    // Decorative background
+
+    &::before {
+        content: "";
+
+        position: absolute;
+
+        width: 260px;
+        height: 260px;
+
+        left: -130px;
+        bottom: -150px;
+
+        border: 5px solid rgba($primary-color, 0.18);
+
+        border-radius: 50%;
+    }
+
+
+    &::after {
+        content: "";
+
+        position: absolute;
+
+        width: 180px;
+        height: 180px;
+
+        right: -80px;
+        top: -80px;
+
+        border: 3px solid rgba($primary-color, 0.12);
+
+        border-radius: 50%;
+    }
+}
+
+
+//////////////////////////////////////////////////////
+// Teacher Image
+//////////////////////////////////////////////////////
+
+.Teacher_Profile_Image_Wrapper {
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    z-index: 1;
+}
+
+
+.Teacher_Profile_Image {
+    width: 250px;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 8px solid $fifth-color;
+    box-shadow:
+        0 8px 25px rgba(0, 70, 150, 0.25),
+        0 0 0 2px rgba($primary-color, 0.35);
+}
+
+
+//////////////////////////////////////////////////////
+// Teacher Information
+//////////////////////////////////////////////////////
+
+.Teacher_Profile_Content {
+    position: relative;
+
+    z-index: 1;
+
+    padding: 10px 20px;
+}
+
+
+.Teacher_Profile_Tag {
+    display: inline-block;
+
+    margin-bottom: 8px;
+
+    padding: 5px 14px;
+
+    border-radius: 20px;
+
+    background-color: rgba($primary-color, 0.08);
+
+    color: $primary-color;
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+.Teacher_Profile_Content h1 {
+    margin: 0;
+
+    color: $third-color;
+
+    font-size: 38px;
+    font-weight: 750;
+
+    line-height: 1.15;
+}
+
+
+.Teacher_Profile_Content h4 {
+    margin: 5px 0 8px;
+
+    color: $primary-color;
+
+    font-size: 23px;
+    font-weight: 650;
+}
+
+
+.Teacher_Profile_Bio {
+    max-width: 650px;
+
+    margin: 0 0 18px;
+
+    color: $third-color;
+
+    font-size: 16px;
+    line-height: 1.55;
+}
+
+
+
+//////////////////////////////////////////////////////
+// Teacher Stats
+//////////////////////////////////////////////////////
+
+.Teacher_Profile_Stats {
+    display: inline-flex;
+
+    align-items: center;
+
+    padding: 12px 18px;
+
+    border-radius: 10px;
+
+    background-color: rgba($fifth-color, 0.75);
+
+    box-shadow: 0 4px 15px rgba(0, 70, 150, 0.08);
+}
+
+
+.Teacher_Stat {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 0 20px;
+
+    border-right: 1px solid rgba($primary-color, 0.25);
+
+    &:last-child {
+        border-right: none;
+    }
+}
+
+
+.Teacher_Stat_Icon {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    color: $primary-color;
+
+    font-size: 23px;
+}
+
+
+.Teacher_Stat strong {
+    display: block;
+
+    color: $third-color;
+
+    font-size: 19px;
+    line-height: 1;
+}
+
+
+.Teacher_Stat small {
+    display: block;
+
+    margin-top: 4px;
+
+    color: #6c757d;
+
+    font-size: 12px;
+}
+
+
+.Rating_Icon {
+    color: #f59e0b;
+}
+
+
+
+//////////////////////////////////////////////////////
+// Teacher Courses
+//////////////////////////////////////////////////////
+
+.Teacher_Courses_Section {
+    padding-top: 0;
+    padding-bottom: 25px;
+
+    .Course_List{
+        display: grid;
+        justify-items: center;
+    }
+
+    // Pagination Control
+    .Course_Pagination{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        
+        .Course_Pagination_Info{
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .Course_Pagination_Controls{
+            .Primary_Button{
+                padding: 5px;
+                .Icon{
+                    padding: 5px 3px;
+                }
+            }
+        }
+    }
+}
+
+
+.Teacher_Courses_Header {
+    margin-bottom: 22px;
+
+    h2 {
+        margin: 0;
+
+        color: $third-color;
+
+        font-size: 30px;
+        font-weight: 750;
+
+        line-height: 1.2;
+
+        span {
+            color: $primary-color;
+        }
+    }
+
+    p {
+        margin: 7px 0 0;
+
+        color: #6c757d;
+
+        font-size: 15px;
+    }
+}
+
+
+.Teacher_Courses_Underline {
+    width: 48px;
+    height: 4px;
+
+    margin-top: 10px;
+
+    border-radius: 5px;
+
+    background-color: $primary-color;
+}
+
+
+
+//////////////////////////////////////////////////////
+// No Courses
+//////////////////////////////////////////////////////
+
+.Teacher_No_Courses {
+    padding: 50px 20px;
+
+    text-align: center;
+
+    border: 1px dashed rgba($primary-color, 0.4);
+    border-radius: 10px;
+
+    background-color: rgba($secondary-color, 0.25);
+
+    h5 {
+        margin-bottom: 5px;
+
+        color: $third-color;
+    }
+
+    p {
+        margin: 0;
+
+        color: #6c757d;
+    }
+}
+
+
+
+//////////////////////////////////////////////////////
+// Error
+//////////////////////////////////////////////////////
+
+.Teacher_Profile_Error {
+    max-width: 600px;
+
+    margin: 80px auto;
+
+    padding: 40px;
+
+    text-align: center;
+
+    border: 1px solid rgba($primary-color, 0.3);
+    border-radius: 12px;
+
+    background-color: $fifth-color;
+
+    box-shadow: 0 8px 25px rgba(0, 70, 150, 0.1);
+
+    h3 {
+        color: $third-color;
+    }
+
+    p {
+        color: #6c757d;
+    }
+}
+
+
+
+//////////////////////////////////////////////////////
+// Tablet
+//////////////////////////////////////////////////////
+
+@media (max-width: 991.98px) {
+
+    .Teacher_Profile_Hero {
+        padding: 25px;
+    }
+
+
+    .Teacher_Profile_Image {
+        width: 220px;
+        height: 220px;
+    }
+
+
+    .Teacher_Profile_Content {
+        padding: 15px 5px;
+    }
+
+
+    .Teacher_Profile_Content h1 {
+        font-size: 32px;
+    }
+
+
+    .Teacher_Profile_Content h4 {
+        font-size: 20px;
+    }
+
+
+    .Teacher_Profile_Bio {
+        font-size: 15px;
+    }
+
+
+    .Teacher_Stat {
+        padding: 0 12px;
+    }
+}
+
+
+
+//////////////////////////////////////////////////////
+// Mobile
+//////////////////////////////////////////////////////
+
+@media (max-width: 767.98px) {
+
+    .Teacher_Profile_Page {
+        padding: 12px 12px 0;
+    }
+
+
+    .Teacher_Profile_Hero {
+        padding: 25px 18px;
+        text-align: center;
+
+    }
+
+
+    .Teacher_Profile_Image {
+        width: 190px;
+        height: 190px;
+
+        border-width: 7px;
+    }
+
+
+
+    .Teacher_Profile_Content {
+        padding: 20px 0 5px;
+    }
+
+
+    .Teacher_Profile_Content h1 {
+        font-size: 29px;
+    }
+
+
+    .Teacher_Profile_Content h4 {
+        font-size: 19px;
+    }
+
+
+    .Teacher_Profile_Bio {
+        font-size: 14px;
+    }
+
+
+    .Teacher_Profile_Stats {
+        display: flex;
+
+        width: 100%;
+
+        justify-content: center;
+
+        padding: 12px 5px;
+    }
+
+
+    .Teacher_Stat {
+        flex: 1;
+
+        justify-content: center;
+
+        padding: 0 8px;
+    }
+
+
+    .Teacher_Stat_Icon {
+        font-size: 18px;
+    }
+
+
+    .Teacher_Stat strong {
+        font-size: 16px;
+    }
+
+
+    .Teacher_Stat small {
+        font-size: 11px;
+    }
+
+
+    .Teacher_Courses_Header {
+        margin-bottom: 18px;
+
+        h2 {
+            font-size: 25px;
+        }
+
+        p {
+            font-size: 14px;
+        }
+    }
+}

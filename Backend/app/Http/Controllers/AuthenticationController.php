@@ -107,8 +107,8 @@ class AuthenticationController extends Controller
 
                 // Check if user role requires 2FA
                 // if(true){ // for testing
-                // if($user->hasAnyRole(['admin', 'moderator','super_admin'])) { // for all highlevel users 2FA
-                if($user->hasAnyRole(['super_admin'])) { // for testing only with genuine mail
+                if($user->hasAnyRole(['admin', 'moderator','super_admin'])) { // for all highlevel users 2FA
+                // if($user->hasAnyRole(['super_admin'])) { // for testing only with genuine mail
                     $otp = rand(100000, 999999);// Generate 6 Digit random OTP
                     $user->two_factor_code = Hash::make($otp);
                     $user->two_factor_expires_at = Carbon::now()->addMinutes(config('securitytimer.otp_expiry_minutes'));

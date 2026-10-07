@@ -12,6 +12,7 @@ export const PUBLIC_ROUTES = {
   COURSES: "/courses",
   COURSE_CARD: "/coursecard",
   COURSE_VIEW: "/courseview/:id/:title",
+  Course_Teacher_Profile:"/teacher-profile-view/:id",
 };
 
 // Authenticaton

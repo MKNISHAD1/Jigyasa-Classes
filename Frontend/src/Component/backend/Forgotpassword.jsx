@@ -1,18 +1,18 @@
 import React, { useState } from "react";
-import Header from "../Common/Header";
-import Footercomp from "../Common/footer";
 import { useForm } from "react-hook-form";
 import { apiUrl } from "../Common/http";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import HeaderUi from "../Common/CommonUI/HeaderUi";
 import FooterUi from "../Common/CommonUI/FooterUi";
-import forgetpassword from "../../assets/images/forget-password.jpeg"
+import forgetpassword from "../../assets/images/forgot-pass.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
 import OtpInput from "../Common/CommonUI/OtpInput";
 import OtpResendTimer from "../Common/CommonUI/OtpResendTimer";
 import maskEmail from "../../utilities/maskEmail";
+import { faEnvelope, faGraduationCap, faHashtag, faKey, faLock } from "@fortawesome/free-solid-svg-icons";
+import logo from '../../assets/images/Logo2.png';
 
 
 const Forgotpassword = () => {
@@ -133,215 +133,263 @@ const Forgotpassword = () => {
       {/* Header */}
       <HeaderUi />
 
-      <div className="container my-5">
+      <div className="container-fluid Form_Section">
         <div className="row">
           {/* Illustrator Img */}
-          <div className="col-lg-6 d-none d-md-flex">
-            <img src={forgetpassword} alt="" width="100%" />
+          <div className="col-lg-6 d-none d-lg-flex Illustration_Img">
+            <img src={forgetpassword} alt="Forget Password Illustration" />
           </div>
           
           {/* Login Form */}
           <div className="col-lg-6 col-12 m-auto">
-            <div className="login-form">
-              <div className="card border-0 shadow">
-                <div className="card-body">
-                  {step === 1 && (
-                    <form onSubmit={handleSubmit(onSubmit)}>
-                    <h1 className=" text-center fw-bold"> Forgot Your <span>Password?</span> </h1>
-                    <p className="mb-3 text-center fw-medium">  Don't worry! It happens. We'll help you reset your password.</p>
 
-                      <div className="mb-3">
-                        <label className="form-label">Enter Your Email</label>
-                        <input
-                          {...register("email", {
-                            required: "This field is required",
-                            pattern: {
-                              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                              message: "Invalid email address",
-                            },
-                          })}
-                          type="text"
-                          className={`form-control ${errors.email && "is-invalid"}`}
-                          placeholder="Enter your email..."
+            <div className="Form_Body">
+              {step === 1 && (
+                <form onSubmit={handleSubmit(onSubmit)}>
+
+                {/* Logo Emblemb */}
+                <div className="d-flex d-lg-none Logo_Emblemb">
+                  <img src={logo} alt="login  Illustration"/>
+                </div>
+
+                {/* Form Title */}
+                <div className="Form_Title">
+                  <h1> Forgot Your <span>Password?</span></h1>
+                  <small className='text-muted'>Don't worry! It happens. We'll help you <span>reset your password.</span></small>
+                </div>
+
+                {/* Divide Line */}
+                <div className="Divider_Line">
+                  <div className="Line"></div>
+                  <FontAwesomeIcon icon={faGraduationCap} className='Icon'/>
+                  <div className="Line"></div>
+                </div>  
+
+                  <div className="mb-4">
+                    <div className="Input_Title">
+                      <FontAwesomeIcon icon={faEnvelope} className='Icon' />
+                      <label htmlFor="" className='form-label'>Email Address </label>
+                    </div>      
+
+                    <input
+                      {...register("email", {
+                        required: "This field is required",
+                        pattern: {
+                          value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                          message: "Invalid email address",
+                        },
+                      })}
+                      type="text"
+                      className={`form-control ${errors.email && "is-invalid"}`}
+                      placeholder="Enter your email..."
+                    />
+                      {errors.email && (
+                        <p className="invalid-feedback">
+                          {errors.email?.message}
+                        </p>
+                      )}
+                  </div>
+
+                  <button
+                      className="btn blue-btn w-100"
+                      disabled={loading}
+                  >
+                      {loading ? (
+                          <>
+                              <span
+                                  className="spinner-border spinner-border-sm me-2 text-primary"
+                                  role="status"
+                              />
+                              Sending...
+                          </>
+                      ) : (
+                          "Send Reset Code"
+                      )}
+                  </button>
+
+                  <Link
+                      to="/login"
+                      className="btn gray-btn-opp w-100 mt-2"
+                  >
+                      Back to Login
+                  </Link>
+                </form>
+              )}
+
+              {step === 2 && (
+                <form onSubmit={handleSubmit(onResetWithOtp)}>
+
+                {/* Logo Emblemb */}
+                <div className="d-flex d-lg-none Logo_Emblemb">
+                  <img src={logo} alt="login  Illustration"/>
+                </div>
+
+                {/* Form Title */}
+                <div className="Form_Title">
+                  <h1> Reset Your <span>Password?</span></h1>
+                </div>
+
+                {/* Divide Line */}
+                <div className="Divider_Line">
+                  <div className="Line"></div>
+                  <FontAwesomeIcon icon={faGraduationCap} className='Icon'/>
+                  <div className="Line"></div>
+                </div>  
+
+                  <p className="text-muted mb-4">
+                    We've sent a verification code to : <strong>{maskEmail(email)}</strong>{" "}
+                    <button
+                      type="button"
+                      className="btn btn-link p-0"
+                      onClick={() => setStep(1)}
+                    >
+                      wrong email?
+                    </button>
+                  </p>
+
+                  <div className="mb-2">
+                    <div className="Input_Title">
+                      <FontAwesomeIcon icon={faHashtag} className='Icon' />
+                      <label htmlFor="" className='form-label'>Enter OTP </label>
+                    </div>      
+
+                    {/* OtpInput */}
+                    <OtpInput
+                        value={otp}
+                        onChange={setOtp}
+                    /> 
+                    <br />
+                    {/* Otp Resend Timer */}
+                  <OtpResendTimer
+                      initialTime={60}
+                      onResend={handleResendOtp}
+                  />
+                    {errors.otp && (
+                      <p className="invalid-feedback">{errors.otp?.message}</p>
+                    )}
+                  </div>
+
+                  <div className="mb-4">
+                    <div className="Input_Title">
+                      <FontAwesomeIcon icon={faLock} className='Icon' />
+                      <label htmlFor="" className='form-label'>Create New Password</label>
+                    </div>   
+
+                    <div className="input-group">
+                    <input
+                      {
+                      ...register('password', {
+                        required: "Password is required.",
+                        minLength: {
+                            value: 8,
+                            message: "Password must be at least 8 characters."
+                        },
+                        pattern: {
+                            value:
+                            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?#&]).{8,}$/,
+                            message:
+                            "Password must contain uppercase, lowercase, number and special character."
+                        }
+                      })
+                      }
+                        type={showPassword ? "text" : "password"} className={`form-control ${errors.password && 'is-invalid'}`} placeholder='Enter Password here....'
+                        disabled={loading}
                         />
-                        {errors.email && (
-                          <p className="invalid-feedback">
-                            {errors.email?.message}
-                          </p>
-                        )}
-                      </div>
 
                       <button
-                          className="btn btn-primary w-100"
-                          disabled={loading}
-                      >
-                          {loading ? (
-                              <>
-                                  <span
-                                      className="spinner-border spinner-border-sm me-2 text-light"
-                                      role="status"
-                                  />
-                                  Sending...
-                              </>
-                          ) : (
-                              "Send Reset Code"
-                          )}
-                      </button>
-
-                      <Link
-                          to="/login"
-                          className="btn btn-outline-primary w-100 mt-2"
-                      >
-                          Back to Login
-                      </Link>
-                    </form>
-                  )}
-
-                  {step === 2 && (
-                    <form onSubmit={handleSubmit(onResetWithOtp)}>
-                      <h1 className="mb-4 text-center">Reset Your <span>Password</span> </h1>
-                      <p className="text-muted">
-                        We've sent a verification code to : <strong>{maskEmail(email)}</strong>{" "}
-                        <button
                           type="button"
-                          className="btn btn-link p-0"
-                          onClick={() => setStep(1)}
-                        >
-                          wrong email?
+                          disabled={loading}
+                          className="btn  view-password  btn-outline-secondary"
+                          onClick={()=>setShowPassword(!showPassword)}
+                          >
+
+                          <FontAwesomeIcon
+                          icon={showPassword ? faEyeSlash : faEye}
+                          />
+
                         </button>
-                      </p>
+                      {
+                        errors.password && <p className='invalid-feedback'>{errors.password?.message}</p>
+                      }
+                    </div>
+                  </div>
 
-                      <div className="mb-3">
-                        <label className="form-label">Enter OTP</label>
-                        {/* OtpInput */}
-                        <OtpInput
-                            value={otp}
-                            onChange={setOtp}
-                        /> <br />
-                        {/* Otp Resend Timer */}
-                      <OtpResendTimer
-                          initialTime={60}
-                          onResend={handleResendOtp}
+                  <div className="mb-4">
+                    <div className="Input_Title">
+                      <FontAwesomeIcon icon={faKey} className='Icon' />
+                      <label htmlFor="" className='form-label'>Confirm New Password</label>
+                    </div>  
+
+                    <div className="input-group">
+                    <input
+                      type={showPassword ? "text" : "password"}
+
+                      className={`form-control ${
+                          errors.password_confirmation && "is-invalid"
+                        }`}
+
+                        placeholder="Confirm Password" disabled={loading}
+
+                        {...register("password_confirmation", {
+                          required:"Please confirm your password.",
+
+                          validate:(value)=>
+                          value===watch("password") ||
+                          "Passwords do not match."
+                        })}
+                        
                       />
-                        {errors.otp && (
-                          <p className="invalid-feedback">{errors.otp?.message}</p>
-                        )}
-                      </div>
+                      <button
+                        type="button"
+                        disabled={loading}
+                        className="btn  view-password  btn-outline-secondary"
+                        onClick={()=>setShowPassword(!showPassword)}
+                        >
 
-                      <div className="mb-3">
-                        <label className="form-label">New Password</label>
-                        <div className="input-group">
-                        <input
-                          {
-                          ...register('password', {
-                            required: "Password is required.",
-                            minLength: {
-                                value: 8,
-                                message: "Password must be at least 8 characters."
-                            },
-                            pattern: {
-                                value:
-                                /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?#&]).{8,}$/,
-                                message:
-                                "Password must contain uppercase, lowercase, number and special character."
-                            }
-                          })
-                          }
-                            type={showPassword ? "text" : "password"} className={`form-control ${errors.password && 'is-invalid'}`} placeholder='Enter Password here....'
-                            disabled={loading}
-                            />
+                        <FontAwesomeIcon
+                        icon={showPassword ? faEyeSlash : faEye}
+                        />
 
-                          <button
-                              type="button"
-                              disabled={loading}
-                              className="btn  view-password  btn-outline-secondary"
-                              onClick={()=>setShowPassword(!showPassword)}
-                              >
-
-                              <FontAwesomeIcon
-                              icon={showPassword ? faEyeSlash : faEye}
-                              />
-
-                            </button>
-                          {
-                            errors.password && <p className='invalid-feedback'>{errors.password?.message}</p>
-                          }
-                        </div>
-                      </div>
-
-                      <div className="mb-3">
-                        <label className="form-label">Confirm Password</label>
-                        <div className="input-group">
-                        <input
-                          type={showPassword ? "text" : "password"}
-
-                          className={`form-control ${
-                              errors.password_confirmation && "is-invalid"
-                            }`}
-
-                            placeholder="Confirm Password" disabled={loading}
-
-                            {...register("password_confirmation", {
-                              required:"Please confirm your password.",
-
-                              validate:(value)=>
-                              value===watch("password") ||
-                              "Passwords do not match."
-                            })}
-                            
-                          />
-                          <button
-                            type="button"
-                            disabled={loading}
-                            className="btn  view-password  btn-outline-secondary"
-                            onClick={()=>setShowPassword(!showPassword)}
-                            >
-
-                            <FontAwesomeIcon
-                            icon={showPassword ? faEyeSlash : faEye}
-                            />
-
-                          </button>
-                          {errors.password_confirmation && (
-                            <p className="invalid-feedback">
-                              {errors.password_confirmation?.message}
-                            </p>
-                          )}
-                        </div>
-                      </div>
-
-                    <button
-                      type="submit"
-                      className="btn btn-primary w-100"
-                      disabled={loading}
-                    >
-
-                        {loading ? (
-
-                        <>
-                          <span
-                            className="spinner-border spinner-border-sm me-2 text-light"
-                            role="status"
-                          />
-
-                          <span className='text-light'>Reseting Password... </span>
-
-                        </>
-
-                        ) : (
-
-                          "Reset Password"
-
+                      </button>
+                      {errors.password_confirmation && (
+                        <p className="invalid-feedback">
+                          {errors.password_confirmation?.message}
+                        </p>
                       )}
+                    </div>
+                  </div>
 
-                    </button>
-                    </form>
-                  )}
+                  <button
+                    type="submit"
+                    className="btn blue-btn w-100"
+                    disabled={loading}
+                  >
+
+                      {loading ? (
+
+                      <>
+                        <span
+                          className="spinner-border spinner-border-sm me-2 text-primary"
+                          role="status"
+                        />
+
+                        <span className='text-primary'>Reseting Password... </span>
+
+                      </>
+
+                      ) : (
+
+                        "Reset Password"
+
+                    )}
+
+                  </button>
+                </form>
+              )}
 
 
-                </div>
-              </div>
             </div>
+
           </div>
         </div>
 

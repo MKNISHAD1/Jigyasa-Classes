@@ -19,8 +19,6 @@ use App\Http\Controllers\admin\UserManagementController;
 use App\Models\User;
 
 
-
-
 /*
 |--------------------------------------------------------------------------
 | Public Routes (No Auth Required)/ No Login needed to visit pages
@@ -30,16 +28,12 @@ Route::post('login',[AuthenticationController::class,'authenticate']); // earlie
 Route::post('register',[RegistrationController::class,'register']);
 
 
-
-
 /*
 |--------------------------------------------------------------------------
 | Uniqueness checks
 |--------------------------------------------------------------------------
 */
 Route::get('/check-availability', [AvailabilityCheckController::class, 'checkAvilability']);
-
-
 
 
 /*
@@ -52,8 +46,6 @@ Route::post('forgot-password', [UserProfileController::class, 'forgotPassword'])
 Route::post('reset-password-link', [UserProfileController::class, 'resetPasswordlink']);
 Route::post('reset-password-otp', [UserProfileController::class, 'resetPasswordWithOtp']);
 Route::post('resend-otp', [UserProfileController::class, 'resendOtp']);
-
-
 
 
 /*
@@ -107,8 +99,6 @@ Route::post('email/verification-notification', function (Request $request) {
 })->middleware('auth:sanctum');
 
 
-
-
 /*
 |--------------------------------------------------------------------------
 | 2 Factor Athentication Route
@@ -116,8 +106,6 @@ Route::post('email/verification-notification', function (Request $request) {
 */ 
 Route::post('2fa-otp-verify',[AuthenticationController::class,'otpverify']);
 Route::post('2fa-resend-otp',[AuthenticationController::class,'resend2faOtp']);
-
-
 
 
 /*
@@ -231,6 +219,9 @@ Route::get('public-courses', [CourseController::class, 'publicCourseList']);
  
 // Public Course View
 Route::get('Course-View/{id}', [CourseController::class, 'publicCourseView']);
+
+// Teachers Public Profile
+Route::get('teacher-profile-view/{id}', [CourseController::class, 'publicTeacherView']);
 
 
 // Protected Routes (Teacher, Moderator, Admin, Super Admin) - For Course Management

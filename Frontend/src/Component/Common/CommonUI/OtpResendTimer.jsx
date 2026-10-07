@@ -24,14 +24,14 @@ const OtpResendTimer = ({
 
   return (
 
-    <div className="text-center mt-3">
+    <div className="text-center">
 
       {timeLeft > 0 ? (
 
         <small className="text-muted">
 
           Resend OTP in
-          <strong className="ms-1">
+          <strong className="ms-1 my-2">
             {minutes}:{seconds}
           </strong>
 
@@ -41,7 +41,7 @@ const OtpResendTimer = ({
 
         <button
             type="button"
-            className="btn btn-link p-0"
+            className="btn btn-link p-0 my-2"
             onClick={() => {
                 setTimeLeft(initialTime);
                 onResend?.();
