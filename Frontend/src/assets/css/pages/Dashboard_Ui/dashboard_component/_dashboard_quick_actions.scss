@@ -1,0 +1,197 @@
+@use '../../../base/variables' as *;
+
+
+// =====================================================
+// Dashboard Quick Actions
+// =====================================================
+
+.Dashboard_Quick_Actions {
+    margin-top: 18px;
+
+    background-color: $fifth-color;
+
+    border: 1px solid rgba($primary-color, 1);
+    border-radius: 13px;
+
+    box-shadow: 0 4px 18px rgba(20, 90, 160, 0.05);
+}
+
+// =====================================================
+// Quick Actions List
+// =====================================================
+
+.Dashboard_Quick_Actions_List {
+    display: grid;
+
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+
+    gap: 10px;
+    padding:  10px;
+}
+
+
+// =====================================================
+// Quick Action
+// =====================================================
+
+.Dashboard_Quick_Action {
+    display: flex;
+    align-items: center;
+
+    min-width: 0;
+
+    padding: 10px 12px;
+
+    border: 1px solid transparent;
+    border-radius: 9px;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+
+
+    &:hover {
+        transform: translateY(-2px);
+
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.07);
+    }
+}
+
+
+// =====================================================
+// Quick Action Icon
+// =====================================================
+
+.Dashboard_Quick_Action_Icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    width: 38px;
+    height: 38px;
+
+    margin-right: 10px;
+
+    border-radius: 8px;
+
+    font-size: 16px;
+}
+
+
+// =====================================================
+// Quick Action Title
+// =====================================================
+
+.Dashboard_Quick_Action_Title {
+    min-width: 0;
+
+    overflow: hidden;
+
+    color: inherit;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+// =====================================================
+// Quick Action Variants
+// =====================================================
+
+.Dashboard_Quick_Action_blue {
+    background: #edf6ff;
+    color: #1677e8;
+    border: 1px solid rgba($primary-color,0.5);
+
+
+    .Dashboard_Quick_Action_Icon {
+        background: #dceeff;
+        color: #1677e8;
+        border: 1px solid rgba($primary-color,0.25);
+
+    }
+}
+
+.Dashboard_Quick_Action_green {
+    background: #eefbf5;
+    color: #20a66a;
+    border: 1px solid rgba(green, 0.5);
+
+
+    .Dashboard_Quick_Action_Icon {
+        background: #dff6eb;
+        border: 1px solid rgba(green, 0.25);
+        color: #20a66a;
+    }
+}
+
+
+.Dashboard_Quick_Action_purple {
+    background: #f7f0ff;
+    color: #8246d9;
+    border: 1px solid rgba(purple,0.5); 
+
+
+    .Dashboard_Quick_Action_Icon {
+        background: #ede1ff;
+        color: #8246d9;
+        border: 1px solid rgba(purple,0.25); 
+
+    }
+}
+
+
+.Dashboard_Quick_Action_orange {
+    background: #fff7e9;
+    color: #f59b18;
+    border: 1px solid rgba(orange,0.5);
+
+
+    .Dashboard_Quick_Action_Icon {
+        background: #ffedcf;
+        color: #f59b18;
+        border: 1px solid rgba(orange,0.25);
+
+    }
+}
+
+
+
+// =====================================================
+// Responsive - Tablet
+// =====================================================
+
+@media (max-width: 767.98px) {
+
+    .Dashboard_Quick_Actions_List {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+
+// =====================================================
+// Responsive - Mobile
+// =====================================================
+
+@media (max-width: 575.98px) {
+
+
+    .Dashboard_Quick_Actions_List {
+        grid-template-columns: 1fr;
+        padding: 20px;
+    }
+
+
+    .Dashboard_Quick_Action {
+        min-height: 54px;
+    }
+}
+

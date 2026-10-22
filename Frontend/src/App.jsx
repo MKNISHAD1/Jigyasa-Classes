@@ -1,5 +1,5 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Link,  Navigate } from "react-router-dom";
 import Registration from "./Component/backend/Registration";
 import Login from "./Component/backend/Login";
 import { ToastContainer } from "react-toastify";
@@ -21,7 +21,6 @@ import { AuthContext } from "./Component/backend/context/Auth";
 import TwofactOTP from "./Component/backend/TwofactOTP";
 import SuspendUser from "./Component/backend/users/SuspendUser";
 import SuspendList from "./Component/backend/users/SuspendList";
-import SuperAdmin from "./Component/backend/SuperAdmin";
 import CourseList from "./Component/backend/courses/CourseList";
 import CreateCourse from "./Component/backend/courses/CreateCourse";
 import ViewCourse from "./Component/backend/courses/ViewCourse";
@@ -47,7 +46,7 @@ import ModuleLessonReorder from "./Component/backend/courses/ModuleLessonReorder
 import ContactMessages from "./Component/backend/users/ContactMessages";
 import ContactMessageView from "./Component/backend/users/ContactMessageView";
 import { AUTH_ROUTES, CATEGORY_ROUTES, CONTACT_ROUTES, COURSE_ROUTES, DASHBOARD_ROUTES, FAQ_ROUTES, LESSON_ROUTES, PUBLIC_ROUTES, USER_ROUTES, UTILITY_ROUTES } from "./constants/nevigation/routes";
-import { ROLE_GROUPS } from "./constants/nevigation/roles";
+import { ROLE_GROUPS, ROLES } from "./constants/nevigation/roles";
 import ScrollToTop from "./Component/Common/CommonUI/ScrollToTop";
 import DashboardLayout from "./Component/Frontend/DashboardUi/DashboardLayout";
 import EditProfile from "./Component/backend/EditProfile";
@@ -56,6 +55,11 @@ import ViewUserProfile from "./Component/backend/users/ViewUserProfile";
 import LessonManagement from "./Component/backend/Lessons/LessonManagement";
 import SidebarLessonManagement from "./Component/backend/Lessons/SidebarLessonManagement";
 import TeacherProfileVIewUI from "./Component/Frontend/Ui for Frontend/TeacherProfileVIewUI";
+import TeacherDashboard from "./Component/Frontend/DashboardUi/Role Dashboard/TeacherDashboard";
+import AdminModeratorDashboard from "./Component/Frontend/DashboardUi/Role Dashboard/AdminModeratorDashboard";
+import SuperAdminDashboard from "./Component/Frontend/DashboardUi/Role Dashboard/SuperAdminDashboard";
+import StudentDashboard from "./Component/Frontend/DashboardUi/Role Dashboard/StudentDashboard";
+
 
 
 function App() {
@@ -96,373 +100,405 @@ function App() {
             )}
 
             <Routes>
-      {/* Public Routes */}
+                {/* Public Routes */}
 
-              {/* <Route path="/" element={<Home />} /> */}
-              <Route path={PUBLIC_ROUTES.HOME} element={<HomeUi />} />
-              {/* <Route path="/" element={<HomeUi />} /> */}
-              <Route path={PUBLIC_ROUTES.ABOUT} element={<AboutUi />} />
-              {/* <Route path="/About" element={<AboutUi />} /> */}
-              <Route path={PUBLIC_ROUTES.CONTACT} element={<ContactUi />}/>
-              {/* <Route path="Contact-Us" element={<ContactUi />}/> */}
-              <Route path={PUBLIC_ROUTES.COURSES} element={<AllCoursesUi />}/>
-              {/* <Route path="/Courses" element={<AllCoursesUi />}/> */}
-              <Route path={PUBLIC_ROUTES.COURSE_CARD} element={<CourseCardUi />}/>
-              {/* <Route path="/CourseCard" element={<CourseCardUi />}/> */}
-              <Route path={PUBLIC_ROUTES.COURSE_VIEW} element={<ViewCourseUi />}/>
-              {/* <Route path="/CourseView/:id/:title" element={<ViewCourseUi />}/> */}
-              <Route path={PUBLIC_ROUTES.Course_Teacher_Profile} element={<TeacherProfileVIewUI />}/>
-              {/* <Route path="/Teacher-Profile-View/:id" element={<ViewCourseUi />}/> */}
-
-
-      {/* Authentication */}
-
-              <Route path={AUTH_ROUTES.REGISTER} element={<Registration handleLogin={login} />} />
-              {/* <Route path="/register" element={<Registration handleLogin={login} />} /> */}
-              <Route path={AUTH_ROUTES.LOGIN} element={<Login />} />
-              {/* <Route path="/login" element={<Login />} /> */}
-              <Route path={AUTH_ROUTES.FORGOT_PASSWORD} element={<Forgotpassword />} />
-              {/* <Route path="/forgot-password" element={<Forgotpassword />} /> */}
-              <Route path={AUTH_ROUTES.RESET_PASSWORD} element={<Resetpassword />} />
-              {/* <Route path="/reset-password" element={<Resetpassword />} /> */}
-              <Route path={AUTH_ROUTES.EMAIL_VERIFIED} element={<EmailVerified />} />
-              {/* <Route path="/email-verified" element={<EmailVerified />} /> */}
-              <Route path={AUTH_ROUTES.TWO_FACTOR} element={<TwofactOTP />} />
-              {/* <Route path="/two-factor" element={<TwofactOTP />} /> */}
-              <Route path={AUTH_ROUTES.UNAUTHORIZED} element={<HomeUi />} />
-              {/* <Route path="/unauthorized" element={<HomeUi />} /> */}
-              <Route path={UTILITY_ROUTES.VIDEO_TEST} element={<Videotest />} />
-              {/* <Route path="/videoplay" element={<Videotest />} /> */}
-
-      {/* Dashboard Pages  */}
-
-      <Route
-        element={
-            <RequireAuth>
-                <DashboardLayout />
-            </RequireAuth>
-        }
-    >
-      {/* Dashboard */}
-      <Route path={DASHBOARD_ROUTES.DASHBOARD}
-        element={
-          <RequireAuth>
-            <Dashboard handleLogout={logout} />
-          </RequireAuth>
-        }
-      />
-
-      {/* View  Profile */}
-      <Route path={DASHBOARD_ROUTES.VIEW_PROFILE}
-          element={
-            <RequireAuth>
-              <Profile />
-            </RequireAuth>
-          }
-        />
-
-        {/* Edit  Profile */}
-        <Route path={DASHBOARD_ROUTES.EDIT_PROFILE}
-            element={
-              <RequireAuth>
-                <EditProfile />
-              </RequireAuth>
-            }
-          />
-        
-        {/* Change Password page  */}
-        <Route path={DASHBOARD_ROUTES.CHANGE_PASSWORD}
-          element={
-            <RequireAuth>
-              <Changepassword />
-            </RequireAuth>
-          }
-        />
-
-        {/* Testing role based redirect for admin */}
-        <Route
-          path="/admin"
-          element={
-            <RequireAuth allowedRoles={ROLE_GROUPS.ADMIN_ACCESS}>
-              <Test />
-            </RequireAuth>
-          }
-        />
-
-        <Route
-          path="/superadmin"
-          element={
-            <RequireAuth allowedRoles={ROLE_GROUPS.SUPER_ADMIN_ONLY}>
-              <SuperAdmin />
-            </RequireAuth>
-          }
-        />
+                {/* <Route path="/" element={<Home />} /> */}
+                <Route path={PUBLIC_ROUTES.HOME} element={<HomeUi />} />
+                {/* <Route path="/" element={<HomeUi />} /> */}
+                <Route path={PUBLIC_ROUTES.ABOUT} element={<AboutUi />} />
+                {/* <Route path="/About" element={<AboutUi />} /> */}
+                <Route path={PUBLIC_ROUTES.CONTACT} element={<ContactUi />}/>
+                {/* <Route path="Contact-Us" element={<ContactUi />}/> */}
+                <Route path={PUBLIC_ROUTES.COURSES} element={<AllCoursesUi />}/>
+                {/* <Route path="/Courses" element={<AllCoursesUi />}/> */}
+                <Route path={PUBLIC_ROUTES.COURSE_CARD} element={<CourseCardUi />}/>
+                {/* <Route path="/CourseCard" element={<CourseCardUi />}/> */}
+                <Route path={PUBLIC_ROUTES.COURSE_VIEW} element={<ViewCourseUi />}/>
+                {/* <Route path="/CourseView/:id/:title" element={<ViewCourseUi />}/> */}
+                <Route path={PUBLIC_ROUTES.Course_Teacher_Profile} element={<TeacherProfileVIewUI />}/>
+                {/* <Route path="/Teacher-Profile-View/:id" element={<ViewCourseUi />}/> */}
 
 
-        {/* Manage Users by admin only  */}
-        <Route
-          path={USER_ROUTES.LIST}
-          element={
-            <RequireAuth allowedRoles={ROLE_GROUPS.ADMIN_ACCESS}>
-              <Showusers />
-            </RequireAuth>
-          }
-        />
+        {/* Authentication */}
 
-        {/* Create Users by admin only  */}
-        <Route
-          path={USER_ROUTES.CREATE}
-          element={
-            <RequireAuth allowedRoles={ROLE_GROUPS.ADMIN_ACCESS}>
-              <Createuser />
-            </RequireAuth>
-          }
-        />
+                <Route path={AUTH_ROUTES.REGISTER} element={<Registration handleLogin={login} />} />
+                {/* <Route path="/register" element={<Registration handleLogin={login} />} /> */}
+                <Route path={AUTH_ROUTES.LOGIN} element={<Login />} />
+                {/* <Route path="/login" element={<Login />} /> */}
+                <Route path={AUTH_ROUTES.FORGOT_PASSWORD} element={<Forgotpassword />} />
+                {/* <Route path="/forgot-password" element={<Forgotpassword />} /> */}
+                <Route path={AUTH_ROUTES.RESET_PASSWORD} element={<Resetpassword />} />
+                {/* <Route path="/reset-password" element={<Resetpassword />} /> */}
+                <Route path={AUTH_ROUTES.EMAIL_VERIFIED} element={<EmailVerified />} />
+                {/* <Route path="/email-verified" element={<EmailVerified />} /> */}
+                <Route path={AUTH_ROUTES.TWO_FACTOR} element={<TwofactOTP />} />
+                {/* <Route path="/two-factor" element={<TwofactOTP />} /> */}
+                <Route path={AUTH_ROUTES.UNAUTHORIZED} element={<HomeUi />} />
+                {/* <Route path="/unauthorized" element={<HomeUi />} /> */}
+                <Route path={UTILITY_ROUTES.VIDEO_TEST} element={<Videotest />} />
+                {/* <Route path="/videoplay" element={<Videotest />} /> */}
 
-        {/* View Users by admin only  */}
-          <Route
-            path={USER_ROUTES.VIEW}
-            element={
-            <RequireAuth allowedRoles={ROLE_GROUPS.ADMIN_ACCESS}>
-              <ViewUserProfile />
-            </RequireAuth>
-          }
-        />
+                {/* Dashboard Pages  */}
+                <Route
+                element={
+                    <RequireAuth>
+                        <DashboardLayout />
+                    </RequireAuth>
+                }
+            >
+                {/*Teacher Dashboard */}
+                {/* <Route path={DASHBOARD_ROUTES.DASHBOARD}
+                  element={
+                    <RequireAuth> */}
+                      {/* <Dashboard handleLogout={logout} /> */}
+                      {/* <TeacherDashboard/>
+                    </RequireAuth>
+                  }
+                /> */}
 
-        {/* Edit Users by admin only  */}
-        <Route
-          path={USER_ROUTES.EDIT}
-          element={
-            <RequireAuth allowedRoles={ROLE_GROUPS.ADMIN_ACCESS}>
-              <Edituser />
-            </RequireAuth>
-          }
-        />
+              
+                {/* Dashboard — role-based rendering */}
+                <Route
+                  path={DASHBOARD_ROUTES.DASHBOARD}
+                  element={
 
-        {/* Tarshed User List  */}
-        <Route
-          path={USER_ROUTES.DELETED}
-          element={
-            <RequireAuth allowedRoles={ROLE_GROUPS.ADMIN_ACCESS}>
-              <Deletedusers />
-            </RequireAuth>
-          }
-        />
+                    <RequireAuth>
+                      {user?.roles?.includes("super_admin") ? (
+                        <SuperAdminDashboard />
 
+                      ) : user?.roles?.includes("teacher") ? (
+                        <TeacherDashboard />
 
-        {/* Suspend Users */}
-        <Route
-          path={USER_ROUTES.SUSPEND}
-          element={
-            <RequireAuth allowedRoles={ROLE_GROUPS.ADMIN_ACCESS}>
-              <SuspendUser />
-            </RequireAuth>
-          }
-        />
+                      ) : user?.roles?.some((role) =>
+                          ["moderator", "admin"].includes(role)
+                        ) ? (
+                        <AdminModeratorDashboard />
 
-        {/* Suspended Users List and Unsuspend Action Button*/}
-        <Route
-            path={USER_ROUTES.SUSPENDED}
-            element={
-              <RequireAuth allowedRoles={ROLE_GROUPS.ADMIN_ACCESS}>
-                <SuspendList />
-              </RequireAuth>
-            }
-        />
+                      ) : user?.roles?.includes("student") ? (
+                        <StudentDashboard />
 
-        {/* My Course Only  */}
-        <Route
-          path={COURSE_ROUTES.MY_COURSE}
-          element={
-            <RequireAuth allowedRoles={ROLE_GROUPS.COURSE_ACCESS}>
-              <MyCourse />
-            </RequireAuth>
-          }
-        />
-
-        {/* All Courses List and Action Button*/}
-        <Route
-          path={COURSE_ROUTES.LIST}
-          element={
-            <RequireAuth allowedRoles={ROLE_GROUPS.COURSE_ACCESS}>
-              <CourseList />
-            </RequireAuth>
-          }
-        />
-
-        {/* Create Course */}
-        <Route
-          path={COURSE_ROUTES.CREATE}
-          element={
-            <RequireAuth allowedRoles={ROLE_GROUPS.COURSE_ACCESS}>
-              <CreateCourse />
-            </RequireAuth>
-          }
-        />
-
-        {/* View Courses */}
-        <Route
-          path={COURSE_ROUTES.VIEW}
-          element={
-            <RequireAuth allowedRoles={ROLE_GROUPS.COURSE_ACCESS}>
-              <ViewCourse />
-            </RequireAuth>
-          }
-        />
-
-        
-        {/* Update Courses */}
-        <Route
-          path={COURSE_ROUTES.UPDATE}
-          element={
-            <RequireAuth allowedRoles={ROLE_GROUPS.COURSE_ACCESS}>
-              <UpdateCourse />
-            </RequireAuth>
-          }
-        />
-
-        {/* Deleted Courses */}
-        <Route
-          path={COURSE_ROUTES.DELETED}
-          element={
-            <RequireAuth allowedRoles={ROLE_GROUPS.COURSE_ACCESS}>
-              <DeletedCourses />
-            </RequireAuth>
-          }
-        />
-
-        {/* Create FAQ */}
-        <Route
-        path={FAQ_ROUTES.CREATE}
-        element={
-          <RequireAuth allowedRoles={ROLE_GROUPS.COURSE_ACCESS}>
-            <Faqs />
-          </RequireAuth>
-        }
-        />
+                      ) : (
+                        <Navigate to="/" replace />
+                      )}
+                      
+                    </RequireAuth>
+                  }
+                />
 
 
-        {/* Course Module */}
-        <Route path={COURSE_ROUTES.MODULES} 
-          element={
-            <RequireAuth allowedRoles={ROLE_GROUPS.COURSE_ACCESS}>
-              <CourseModule />
-            </RequireAuth>
-          } />
+                {/* View  Profile */}
+                <Route path={DASHBOARD_ROUTES.VIEW_PROFILE}
+                    element={
+                      <RequireAuth>
+                        <Profile />
+                      </RequireAuth>
+                    }
+                  />
 
-        {/* Reorder Course Module */}
-        <Route path={COURSE_ROUTES.MODULE_ORDER} 
-          element={
-          <RequireAuth allowedRoles={ROLE_GROUPS.COURSE_ACCESS}>
-            <CourseModuleReorder />
-          </RequireAuth>
-          } />
+                  {/* Edit  Profile */}
+                  <Route path={DASHBOARD_ROUTES.EDIT_PROFILE}
+                      element={
+                        <RequireAuth>
+                          <EditProfile />
+                        </RequireAuth>
+                      }
+                    />
+                  
+                  {/* Change Password page  */}
+                  <Route path={DASHBOARD_ROUTES.CHANGE_PASSWORD}
+                    element={
+                      <RequireAuth>
+                        <Changepassword />
+                      </RequireAuth>
+                    }
+                  />
 
-        {/* Reordder Lessons Inside Module  */}
-        <Route path={COURSE_ROUTES.MODULE_LESSON_REORDER} 
-          element={
-            <RequireAuth allowedRoles={ROLE_GROUPS.COURSE_ACCESS}>
-              <ModuleLessonReorder />
-            </RequireAuth>
-          } />
-
-
-        {/* Manage Lessons */}
-        <Route path={LESSON_ROUTES.MANAGE} 
-          element={
-            <RequireAuth allowedRoles={ROLE_GROUPS.COURSE_ACCESS}>
-              <LessonManagement />
-            </RequireAuth>
-          } />
-
-        {/* Sidebar Manage Lessons */}
-        <Route path={LESSON_ROUTES.MANAGE_LESSONS} 
-          element={
-            <RequireAuth allowedRoles={ROLE_GROUPS.COURSE_ACCESS}>
-              <SidebarLessonManagement />
-            </RequireAuth>
-          } />
+                  {/* Testing role based redirect for admin */}
+                  <Route
+                    path="/admin"
+                    element={
+                      <RequireAuth allowedRoles={ROLE_GROUPS.ADMIN_ACCESS}>
+                        <Test />
+                      </RequireAuth>
+                    }
+                  />
 
 
-        {/* Create Lesson */}
-        <Route
-          path={LESSON_ROUTES.CREATE}
-          element={
-            <RequireAuth allowedRoles={ROLE_GROUPS.COURSE_ACCESS}>
-              <CreateLesson />
-            </RequireAuth>
-          }
-        />
+                  {/* Manage Users by admin only  */}
+                  <Route
+                    path={USER_ROUTES.LIST}
+                    element={
+                      <RequireAuth allowedRoles={ROLE_GROUPS.ADMIN_ACCESS}>
+                        <Showusers />
+                      </RequireAuth>
+                    }
+                  />
+
+                  {/* Create Users by admin only  */}
+                  <Route
+                    path={USER_ROUTES.CREATE}
+                    element={
+                      <RequireAuth allowedRoles={ROLE_GROUPS.ADMIN_ACCESS}>
+                        <Createuser />
+                      </RequireAuth>
+                    }
+                  />
+
+                  {/* View Users by admin only  */}
+                    <Route
+                      path={USER_ROUTES.VIEW}
+                      element={
+                      <RequireAuth allowedRoles={ROLE_GROUPS.ADMIN_ACCESS}>
+                        <ViewUserProfile />
+                      </RequireAuth>
+                    }
+                  />
+
+                  {/* Edit Users by admin only  */}
+                  <Route
+                    path={USER_ROUTES.EDIT}
+                    element={
+                      <RequireAuth allowedRoles={ROLE_GROUPS.ADMIN_ACCESS}>
+                        <Edituser />
+                      </RequireAuth>
+                    }
+                  />
+
+                  {/* Tarshed User List  */}
+                  <Route
+                    path={USER_ROUTES.DELETED}
+                    element={
+                      <RequireAuth allowedRoles={ROLE_GROUPS.ADMIN_ACCESS}>
+                        <Deletedusers />
+                      </RequireAuth>
+                    }
+                  />
 
 
-        {/* update lesson */}
-        <Route
-        path={LESSON_ROUTES.EDIT}
-        element={
-          <RequireAuth allowedRoles={ROLE_GROUPS.COURSE_ACCESS}>
-            <UpdateLesson />
-          </RequireAuth>
-        }
-        />
+                  {/* Suspend Users */}
+                  <Route
+                    path={USER_ROUTES.SUSPEND}
+                    element={
+                      <RequireAuth allowedRoles={ROLE_GROUPS.ADMIN_ACCESS}>
+                        <SuspendUser />
+                      </RequireAuth>
+                    }
+                  />
 
-        {/* View lesson UI Page*/}
-        <Route
-        path={LESSON_ROUTES.PLAYER}
-        element={
-          <RequireAuth allowedRoles={ROLE_GROUPS.COURSE_ACCESS}>
-            <LessonViewer />
-          </RequireAuth>
-        }
-      />
-        
-        {/* Change Lesson Order in course by user */}
-        <Route
-        path={LESSON_ROUTES.ORDER}
-        element={
-          <RequireAuth allowedRoles={ROLE_GROUPS.COURSE_ACCESS}>
-            <ChangeLessonOrder />
-          </RequireAuth>
-        }
-        />
-        
-        {/* Deleted Lessons in course by user */}
-        <Route
-        path={LESSON_ROUTES.TRASH}
-        element={
-          <RequireAuth allowedRoles={ROLE_GROUPS.COURSE_ACCESS}>
-            <DeletedLessons />
-          </RequireAuth>
-        }
-        />
+                  {/* Suspended Users List and Unsuspend Action Button*/}
+                  <Route
+                      path={USER_ROUTES.SUSPENDED}
+                      element={
+                        <RequireAuth allowedRoles={ROLE_GROUPS.ADMIN_ACCESS}>
+                          <SuspendList />
+                        </RequireAuth>
+                      }
+                  />
 
-        {/* manage Categoty Page*/}
-        <Route
-          path={CATEGORY_ROUTES.MANAGE}
-          element={
-            <RequireAuth allowedRoles={ROLE_GROUPS.COURSE_ACCESS}>
-              <ManageCategory />
-            </RequireAuth>
-          }
-        />
+                  {/* My Course Only  */}
+                  <Route
+                    path={COURSE_ROUTES.MY_COURSE}
+                    element={
+                      <RequireAuth allowedRoles={ROLE_GROUPS.COURSE_ACCESS}>
+                        <MyCourse />
+                      </RequireAuth>
+                    }
+                  />
 
-       {/* Contact Message List  */}
-        <Route path={CONTACT_ROUTES.LIST} 
-          element={
-            <RequireAuth allowedRoles={ROLE_GROUPS.ADMIN_ACCESS}>
-              <ContactMessages />
-            </RequireAuth>
-          } />
+                  {/* All Courses List and Action Button*/}
+                  <Route
+                    path={COURSE_ROUTES.LIST}
+                    element={
+                      <RequireAuth allowedRoles={ROLE_GROUPS.COURSE_ACCESS}>
+                        <CourseList />
+                      </RequireAuth>
+                    }
+                  />
 
-       {/* Contact Message View  */}
+                  {/* Create Course */}
+                  <Route
+                    path={COURSE_ROUTES.CREATE}
+                    element={
+                      <RequireAuth allowedRoles={ROLE_GROUPS.COURSE_ACCESS}>
+                        <CreateCourse />
+                      </RequireAuth>
+                    }
+                  />
 
-        <Route path={CONTACT_ROUTES.VIEW} 
-          element={
-            <RequireAuth allowedRoles={ROLE_GROUPS.ADMIN_ACCESS}>
-              <ContactMessageView />
-            </RequireAuth>
-          } />
-</Route>
+                  {/* View Courses */}
+                  <Route
+                    path={COURSE_ROUTES.VIEW}
+                    element={
+                      <RequireAuth allowedRoles={ROLE_GROUPS.COURSE_ACCESS}>
+                        <ViewCourse />
+                      </RequireAuth>
+                    }
+                  />
 
+                  
+                  {/* Update Courses */}
+                  <Route
+                    path={COURSE_ROUTES.UPDATE}
+                    element={
+                      <RequireAuth allowedRoles={ROLE_GROUPS.COURSE_ACCESS}>
+                        <UpdateCourse />
+                      </RequireAuth>
+                    }
+                  />
+
+                  {/* Deleted Courses */}
+                  <Route
+                    path={COURSE_ROUTES.DELETED}
+                    element={
+                      <RequireAuth allowedRoles={ROLE_GROUPS.COURSE_ACCESS}>
+                        <DeletedCourses />
+                      </RequireAuth>
+                    }
+                  />
+
+                  {/* Create FAQ */}
+                  <Route
+                  path={FAQ_ROUTES.CREATE}
+                  element={
+                    <RequireAuth allowedRoles={ROLE_GROUPS.COURSE_ACCESS}>
+                      <Faqs />
+                    </RequireAuth>
+                  }
+                  />
+
+
+                  {/* Course Module */}
+                  <Route path={COURSE_ROUTES.MODULES} 
+                    element={
+                      <RequireAuth allowedRoles={ROLE_GROUPS.COURSE_ACCESS}>
+                        <CourseModule />
+                      </RequireAuth>
+                    } />
+
+                  {/* Reorder Course Module */}
+                  <Route path={COURSE_ROUTES.MODULE_ORDER} 
+                    element={
+                    <RequireAuth allowedRoles={ROLE_GROUPS.COURSE_ACCESS}>
+                      <CourseModuleReorder />
+                    </RequireAuth>
+                    } />
+
+                  {/* Reordder Lessons Inside Module  */}
+                  <Route path={COURSE_ROUTES.MODULE_LESSON_REORDER} 
+                    element={
+                      <RequireAuth allowedRoles={ROLE_GROUPS.COURSE_ACCESS}>
+                        <ModuleLessonReorder />
+                      </RequireAuth>
+                    } />
+
+
+                  {/* Manage Lessons */}
+                  <Route path={LESSON_ROUTES.MANAGE} 
+                    element={
+                      <RequireAuth allowedRoles={ROLE_GROUPS.COURSE_ACCESS}>
+                        <LessonManagement />
+                      </RequireAuth>
+                    } />
+
+                  {/* Sidebar Manage Lessons */}
+                  <Route path={LESSON_ROUTES.MANAGE_LESSONS} 
+                    element={
+                      <RequireAuth allowedRoles={ROLE_GROUPS.COURSE_ACCESS}>
+                        <SidebarLessonManagement />
+                      </RequireAuth>
+                    } />
+
+
+                  {/* Create Lesson */}
+                  <Route
+                    path={LESSON_ROUTES.CREATE}
+                    element={
+                      <RequireAuth allowedRoles={ROLE_GROUPS.COURSE_ACCESS}>
+                        <CreateLesson />
+                      </RequireAuth>
+                    }
+                  />
+
+
+                  {/* update lesson */}
+                  <Route
+                  path={LESSON_ROUTES.EDIT}
+                  element={
+                    <RequireAuth allowedRoles={ROLE_GROUPS.COURSE_ACCESS}>
+                      <UpdateLesson />
+                    </RequireAuth>
+                  }
+                  />
+
+                  {/* View lesson UI Page*/}
+                  <Route
+                    path={LESSON_ROUTES.PLAYER}
+                    element={
+                      <RequireAuth allowedRoles={ROLE_GROUPS.COURSE_ACCESS}>
+                        <LessonViewer />
+                      </RequireAuth>
+                    }
+                  />
+                  
+                  {/* Change Lesson Order in course by user */}
+                  <Route
+                  path={LESSON_ROUTES.ORDER}
+                  element={
+                    <RequireAuth allowedRoles={ROLE_GROUPS.COURSE_ACCESS}>
+                      <ChangeLessonOrder />
+                    </RequireAuth>
+                  }
+                  />
+                  
+                  {/* Deleted Lessons in course by user */}
+                  <Route
+                  path={LESSON_ROUTES.TRASH}
+                  element={
+                    <RequireAuth allowedRoles={ROLE_GROUPS.COURSE_ACCESS}>
+                      <DeletedLessons />
+                    </RequireAuth>
+                  }
+                  />
+
+                  {/* manage Categoty Page*/}
+                  <Route
+                    path={CATEGORY_ROUTES.MANAGE}
+                    element={
+                      <RequireAuth allowedRoles={ROLE_GROUPS.COURSE_ACCESS}>
+                        <ManageCategory />
+                      </RequireAuth>
+                    }
+                  />
+
+                {/* Contact Message List  */}
+                  <Route path={CONTACT_ROUTES.LIST} 
+                    element={
+                      <RequireAuth allowedRoles={ROLE_GROUPS.ADMIN_ACCESS}>
+                        <ContactMessages />
+                      </RequireAuth>
+                    } />
+
+                {/* Contact Message View  */}
+
+                  <Route path={CONTACT_ROUTES.VIEW} 
+                    element={
+                      <RequireAuth allowedRoles={ROLE_GROUPS.ADMIN_ACCESS}>
+                        <ContactMessageView />
+                      </RequireAuth>
+                    } />
+                </Route>
+
+              </Routes>
+          </div>
+        </BrowserRouter>
+
+        {/* Toaster */}
+        <ToastContainer position="top-center" />
+    </>
+  );
+}
+
+export default App;
 
               {/* <Route path="/dash" 
                 element={
@@ -702,15 +738,3 @@ function App() {
               {/* <Route path="/admin/contact-message/:id" element={<ContactMessageView />} /> */}
 
 
-
-              </Routes>
-          </div>
-        </BrowserRouter>
-
-        {/* Toaster */}
-        <ToastContainer position="top-center" />
-    </>
-  );
-}
-
-export default App;

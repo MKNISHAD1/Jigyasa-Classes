@@ -78,12 +78,12 @@ $fifth-color:#FFFFFF;
 
   &:hover{
     color:$primary-color ;
-    background-color: $secondary-color;
+    background-color: $fifth-color;
     border: 1px solid $primary-color;
   }
   &:disabled{
     color: $primary-color;
-    background-color: $secondary-color;
+    background-color: $fifth-color;
     border: 1px solid $primary-color;
   }
 }

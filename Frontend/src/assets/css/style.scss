@@ -1,12 +1,4 @@
 
-// global variables 
-$primary-color:#1363b8;
-$secondary-color:#ebf1f5;
-$optional-color:#f7f9fc;
-$third-color:#162521;
-$forth-color:#047ba7;
-$fifth-color:#FFFFFF;
-
 // Importing Partial CSS Files
 
 @use 'pagehero' ;
@@ -48,6 +40,27 @@ $fifth-color:#FFFFFF;
 @use '../css/pages/view_course_ui';
 @use '../css/pages/registration_page';
 @use '../css/pages/teacher_profile_view_ui';
+
+
+// Dashboard Common Component
+@use '../css/pages/Dashboard_Ui/dashboard_component/dashboard_hero_section';
+@use '../css/pages/Dashboard_Ui/dashboard_component/dashboard_teacher_stat_card';
+@use '../css/pages/Dashboard_Ui/dashboard_component/dashboard_admin_stat_card';
+@use '../css/pages/Dashboard_Ui/dashboard_component/dashboard_super_admin_stat_card';
+@use '../css/pages/Dashboard_Ui/dashboard_component/dashboard_section_header';
+@use '../css/pages/Dashboard_Ui/dashboard_component/dashboard_recent_courses';
+@use '../css/pages/Dashboard_Ui/dashboard_component/dashboard_recent_lessons';
+@use '../css/pages/Dashboard_Ui/dashboard_component/dashboard_recent_users';
+@use '../css/pages/Dashboard_Ui/dashboard_component/dashboard_recent_activities';
+@use '../css/pages/Dashboard_Ui/dashboard_component/dashboard_quick_actions';
+
+
+// Dashboard Pages
+@use '../css/pages/Dashboard_Ui/dashboard';
+@use '../css/pages/Dashboard_Ui/admin_moderator_dashboard';
+@use '../css/pages/Dashboard_Ui/dashboard_admin_ui';
+@use '../css/pages/Dashboard_Ui/superadmin_dashboard';
+
 
 
 

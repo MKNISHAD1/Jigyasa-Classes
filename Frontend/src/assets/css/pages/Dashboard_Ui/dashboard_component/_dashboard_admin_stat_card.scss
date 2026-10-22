@@ -1,0 +1,194 @@
+@use '../../../base/variables' as *;
+
+
+// Dashboard State
+.Admin_Moderator_Stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.Admin_Stat_Card {
+    min-width: 0;
+    padding: 14px 16px 12px;
+    overflow: hidden;
+    border: 1px solid rgba($primary-color, 0.12);
+    border-radius: 12px;
+    background: $fifth-color;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+    }
+
+    .Admin_Stat_Card_Main {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 0;
+    }
+
+    .Admin_Stat_Card_Icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 50px;
+        height: 50px;
+        flex-shrink: 0;
+        border-radius: 50%;
+        color: #fff;
+        font-size: 21px;
+    }
+
+    .Admin_Stat_Card_Content {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        min-width: 0;
+        gap: 3px;
+    }
+
+    .Admin_Stat_Card_Title {
+        color: $third-color;
+        font-size: 13px;
+        font-weight: 500;
+    }
+
+    .Admin_Stat_Card_Value {
+        color: $third-color;
+        font-size: 27px;
+        font-weight: 750;
+        line-height: 1.2;
+    }
+
+    .Admin_Stat_Card_Action {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 26px;
+        height: 30px;
+        flex-shrink: 0;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        font-size: 15px;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+
+        &:hover {
+            transform: translateX(3px);
+        }
+    }
+
+    .Admin_Stat_Card_Details {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 7px;
+        margin-top: 12px;
+        padding-top: 10px;
+        border-top: 1px solid rgba($primary-color, 0.5);
+        color: $third-color;
+        font-size: 10px;
+        white-space: nowrap;
+    }
+
+    .Admin_Stat_Card_Divider {
+        width: 1px;
+        height: 13px;
+        flex-shrink: 0;
+        background: rgba($third-color, 0.25);
+    }
+}
+
+// Card colors
+.Admin_Stat_Card_blue {
+    background: #f0f6ff;
+    border: 1px solid $primary-color;
+
+    .Admin_Stat_Card_Icon {
+        background: #1769f5;
+    }
+
+    .Admin_Stat_Card_Action {
+        color: #1769f5;
+    }
+}
+
+.Admin_Stat_Card_green {
+    background: #effaf4;
+    border: 1px solid green;
+
+    .Admin_Stat_Card_Icon {
+        background: #19a56b;
+    }
+
+    .Admin_Stat_Card_Action {
+        color: #19a56b;
+    }
+}
+
+.Admin_Stat_Card_orange {
+    background: #fff6ec;
+    border: 1px solid orange;
+
+    .Admin_Stat_Card_Icon {
+        background: #f28c00;
+    }
+
+    .Admin_Stat_Card_Action {
+        color: #f28c00;
+    }
+}
+
+@media (max-width: 991.98px) {
+    .Admin_Moderator_Stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 575.98px) {
+    .Admin_Moderator_Stats {
+        gap: 10px;
+        grid-template-columns: 1fr;
+    }
+
+    .Admin_Stat_Card {
+
+        .Admin_Stat_Card_Main {
+            margin: 10px 20px;
+            text-align: center;
+        }
+        
+        .Admin_Stat_Card_Icon {
+            width: 45px;
+            height: 45px;
+            font-size: 20px;
+        }
+        
+        .Admin_Stat_Card_Title {
+            font-size: 13px;
+            font-weight: 600;
+        }
+        
+        
+        .Admin_Stat_Card_Value {
+            font-size: 22px;
+        }
+        
+        .Admin_Stat_Card_Action {
+            width: 18px;
+            font-size: 12px;
+            
+        }
+        
+        .Admin_Stat_Card_Details {
+            flex-wrap: wrap;            
+            justify-content: center;
+            gap: 25px;
+            font-size: 12px;
+        }
+    }
+}

@@ -1,0 +1,98 @@
+@use '../../../base/variables' as *;
+
+
+// =====================================================
+// Dashboard Section Header
+// =====================================================
+
+.Dashboard_Recent_Section_Header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 16px;
+    border-bottom: 1px solid rgba($primary-color, 1);
+    background-color: rgba($primary-color, 0.8);
+    border-radius: 10px 10px 0 0;
+
+}
+
+.Dashboard_Recent_Section_Title {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+
+    .Dashboard_Recent_Section_Icon {
+        flex-shrink: 0;
+        margin-right: 9px;
+        color: $fifth-color;
+        font-size: 18px;
+    }
+
+    h5 {
+        margin: 0;
+        color: $fifth-color;
+        font-size: 18px;
+        font-weight: 700;
+    }
+}
+
+// =====================================================
+// View All
+// =====================================================
+
+.Dashboard_Recent_View_All {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    padding: 4px 0;
+    border: 0;
+    background: transparent;
+    color: $fifth-color;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: 0.3s ease;
+    padding: 5px;
+    border-radius: 5px;
+
+    .Icon,
+    svg {
+        margin-left: 5px;
+        font-size: 12px;
+    }
+
+    &:hover {
+        color: $primary-color;
+        transform: scale(1.04);
+        background-color: $fifth-color;
+    }
+}
+
+// =====================================================
+// Responsive
+// =====================================================
+
+@media (max-width: 575.98px) {
+    .Dashboard_Recent_Section_Header {
+        gap: 8px;
+        padding: 16px;
+    }
+
+    .Dashboard_Recent_Section_Title {
+        .Dashboard_Recent_Section_Icon {
+            margin-right: 7px;
+            font-size: 16px;
+        }
+
+        h5 {
+            font-size: 15px;
+        }
+    }
+
+    .Dashboard_Recent_View_All {
+        font-size: 12px;
+    }
+}

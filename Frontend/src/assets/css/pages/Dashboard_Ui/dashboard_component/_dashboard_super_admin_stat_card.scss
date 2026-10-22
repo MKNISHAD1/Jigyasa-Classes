@@ -1,0 +1,237 @@
+@use '../../../base/variables' as *;
+
+.Dashboard_Admin_Stat_Card {
+    width: 100%;
+    min-width: 0;
+    height: 100%;
+    padding: 15px;
+    overflow: hidden;
+    border: 1px solid rgba($primary-color, 0.12);
+    border-radius: 12px;
+    background: $fifth-color;
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+
+    &_blue {
+        background: linear-gradient(
+            120deg,
+            #edf5ff,
+            #ffffff
+        );
+        border: 1px  solid rgba($primary-color, 0.5);
+    }
+
+    &_green {
+        background: linear-gradient(
+            120deg,
+            #eaf9f1,
+            #ffffff
+        );
+        border: 1px  solid rgba(green, 0.5);
+    }
+
+    &_orange {
+        background: linear-gradient(
+            120deg,
+            #fff3e7,
+            #ffffff
+        );
+        border: 1px  solid rgba(orange, 0.5);
+    }
+
+    &_purple {
+        background: linear-gradient(
+            120deg,
+            #f4edff,
+            #ffffff
+        );
+        border: 1px  solid rgba(purple, 0.5);
+    }
+
+    &_red {
+        background: linear-gradient(
+            120deg,
+            #fff0f1,
+            #ffffff
+        );
+    }
+
+    &_yellow {
+        background: linear-gradient(
+            120deg,
+            #fff8df,
+            #ffffff
+        );
+    }
+
+    &[role="button"] {
+        cursor: pointer;
+
+        &:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(0, 0, 0, 0.07);
+        }
+
+        &:focus-visible {
+            outline: 2px solid $primary-color;
+            outline-offset: 3px;
+        }
+    }
+
+    .Dashboard_Admin_Stat_Top {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 0;
+    }
+
+    .Dashboard_Admin_Stat_Icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 50px;
+        height: 50px;
+        flex-shrink: 0;
+        border-radius: 50%;
+        background: $primary-color;
+        color: $fifth-color;
+        font-size: 21px;
+    }
+
+    &_green .Dashboard_Admin_Stat_Icon {
+        background: #159c68;
+    }
+
+    &_orange .Dashboard_Admin_Stat_Icon {
+        background: #f28a00;
+    }
+
+    &_purple .Dashboard_Admin_Stat_Icon {
+        background: #8247e5;
+    }
+
+    &_red .Dashboard_Admin_Stat_Icon {
+        background: #d94352;
+    }
+
+    &_yellow .Dashboard_Admin_Stat_Icon {
+        background: #e6a000;
+    }
+
+    .Dashboard_Admin_Stat_Main {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        min-width: 0;
+        gap: 3px;
+    }
+
+    .Dashboard_Admin_Stat_Title {
+        color: $third-color;
+        font-size: 13px;
+        font-weight: 500;
+        line-height: 1.3;
+        margin-left: 15px;
+    }
+
+    .Dashboard_Admin_Stat_Value {
+        color: $third-color;
+        font-size: 26px;
+        font-weight: 750;
+        line-height: 1.15;
+        overflow-wrap: anywhere;
+        margin-left: 30px;
+    }
+
+    .Dashboard_Admin_Stat_Trend {
+        align-self: center;
+        color: #16834a;
+        font-size: 12px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .Dashboard_Admin_Stat_Details {
+        display: flex;
+        align-items: stretch;
+        justify-content: space-between;
+        gap: 0;
+        margin-top: 12px;
+        padding-top: 10px;
+        border-top: 1px solid rgba($primary-color, 0.4);
+
+        span {
+            display: flex;
+            flex: 1;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-width: 0;
+            color: #526078;
+            font-size: 11px;
+            line-height: 1.4;
+            text-align: center;
+            overflow-wrap: anywhere;
+
+            & + span {
+                padding-left: 8px;
+                border-left: 1px solid rgba($primary-color, 0.4);
+            }
+        }
+        strong {
+            font-size: 14px;
+            font-weight: 650;
+            color: $third-color;
+        }
+
+        small {
+            font-size: inherit;
+            color: inherit;
+        }
+    }
+}
+
+@media (max-width: 575.98px) {
+    .Dashboard_Admin_Stat_Card {
+        padding: 12px;
+        border-radius: 10px;
+
+        .Dashboard_Admin_Stat_Top {
+            gap: 9px;
+        }
+
+        .Dashboard_Admin_Stat_Icon {
+            width: 40px;
+            height: 40px;
+            font-size: 17px;
+        }
+
+        .Dashboard_Admin_Stat_Title {
+            font-size: 12px;
+        }
+
+        .Dashboard_Admin_Stat_Value {
+            font-size: 22px;
+        }
+
+        .Dashboard_Admin_Stat_Trend {
+            font-size: 10px;
+        }
+
+       .Dashboard_Admin_Stat_Details {
+            gap: 0;
+            margin-top: 10px;
+            padding-top: 8px;
+
+            span {
+                font-size: 10px;
+                line-height: 1.5;
+
+                & + span {
+                    padding-left: 5px;
+                }
+            }
+        }
+    }
+}

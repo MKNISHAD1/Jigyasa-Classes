@@ -59,24 +59,9 @@ const TwofactOTP = () => {
     login(userInfo);
     setTwoFactorRequired(false);
 
-    // Redirect
-
-      const roleNames = Array.isArray(result.user.roles)
-        ? result.user.roles.map((r) => (r.name ? r.name : r))
-        : [];
-
-      if (
-        roleNames.includes("admin") ||
-        roleNames.includes("moderator")
-      ) {
-        navigate("/admin");
-      } else if (
-        roleNames.includes("super_admin")
-      ) {
-        navigate("/superadmin");
-      } else {
-        navigate("/dash");
-      }
+    // Redirect everyone to the shared dashboard
+    navigate("/dash");
+      
 
   } catch (error) {
         // Network error (server down, CORS issue, etc.)

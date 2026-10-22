@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Faq;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Helpers\ActivityLogger;
 
 class FaqController extends Controller
 {
@@ -47,6 +48,19 @@ class FaqController extends Controller
         // Auto-generate Hindi translations (same as CourseController)
         $faq->translateFields(['question', 'answer'], 'hi');
 
+        /*
+        |--------------------------------------------------------------------------
+        | ACTIVITY LOG — FAQ CONTROLLER
+        |--------------------------------------------------------------------------
+        */
+
+        ActivityLogger::log('Created_Faq', null, [
+            'entity_type' => 'faq',
+            'entity_id' => $faq->id,
+            'entity_title' => $faq->question,
+            'faq_type' => $faq->type,
+        ]);
+
         return response()->json([
             'status'  => true,
             'message' => 'FAQ created successfully',
@@ -70,6 +84,15 @@ class FaqController extends Controller
 
         $faq->update($validated);
 
+        $updatedFields = array_keys($faq->getChanges());
+
+        $updatedFields = array_intersect($updatedFields, [
+            'question',
+            'answer',
+            'type',
+            'status',
+        ]);
+
         // Auto-update Hindi translations if fields were changed
         $fieldsToTranslate = [];
         if ($request->filled('question')) $fieldsToTranslate[] = 'question';
@@ -79,6 +102,25 @@ class FaqController extends Controller
             // force refresh translation (ignore existing one)
             $faq->translations()->where('locale', 'hi')->delete();
             $faq->translateFields($fieldsToTranslate, 'hi');
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | ACTIVITY LOG — FAQ CONTROLLER
+        |--------------------------------------------------------------------------
+        */
+
+        if (!empty($updatedFields) || !empty($fieldsToTranslate)) {
+            ActivityLogger::log('Updated_Faq', null, [
+                'entity_type' => 'faq',
+                'entity_id' => $faq->id,
+                'entity_title' => $faq->question,
+                'faq_type' => $faq->type,
+                'updated_fields' => array_values(array_unique(array_merge(
+                    $updatedFields,
+                    $fieldsToTranslate
+                ))),
+            ]);
         }
 
         return response()->json([
@@ -94,7 +136,26 @@ class FaqController extends Controller
     public function destroy($id)
     {
         $faq = Faq::findOrFail($id);
+
+        $faqId = $faq->id;
+        $faqQuestion = $faq->question;
+        $faqType = $faq->type;
+
         $faq->delete();
+
+        /*
+        |--------------------------------------------------------------------------
+        | ACTIVITY LOG — FAQ CONTROLLER
+        |--------------------------------------------------------------------------
+        | Preserve the FAQ details because this is a hard delete.
+        */
+
+        ActivityLogger::log('Deleted_Faq', null, [
+            'entity_type' => 'faq',
+            'entity_id' => $faqId,
+            'entity_title' => $faqQuestion,
+            'faq_type' => $faqType,
+        ]);
 
         return response()->json([
             'status'  => true,

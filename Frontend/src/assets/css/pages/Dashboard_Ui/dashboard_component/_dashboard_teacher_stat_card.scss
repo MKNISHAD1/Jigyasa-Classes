@@ -1,0 +1,334 @@
+@use '../../../base/variables' as *;
+
+
+// =====================================================
+// Dashboard Stat Card
+// =====================================================
+
+.Dashboard_Stat_Card {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+
+    min-height: 88px;
+    padding: 14px 16px;
+
+    overflow: hidden;
+
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: 13px;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+
+
+    &:hover {
+        transform: translateY(-3px);
+
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    }
+
+
+    // -------------------------------------------------
+    // Icon
+    // -------------------------------------------------
+
+    .Dashboard_Stat_Icon {
+        flex-shrink: 0;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 48px;
+        height: 48px;
+
+        margin-right: 13px;
+
+        border-radius: 50%;
+
+        font-size: 21px;
+    }
+
+
+    // -------------------------------------------------
+    // Content
+    // -------------------------------------------------
+
+    .Dashboard_Stat_Content {
+        display: flex;
+        flex-direction: column;
+
+        min-width: 0;
+    }
+
+
+    .Dashboard_Stat_Title {
+        color: $third-color;
+
+        font-size: 13px;
+        font-weight: 500;
+        line-height: 1.3;
+    }
+
+
+    .Dashboard_Stat_Value {
+        margin-top: 2px;
+
+        color: $third-color;
+
+        font-size: 25px;
+        font-weight: 700;
+        line-height: 1.15;
+    }
+
+
+    .Dashboard_Stat_Description {
+        margin-top: 2px;
+
+        color: #6c757d;
+
+        font-size: 11px;
+    }
+
+
+    .Dashboard_Stat_Arrow {
+        margin-left: auto;
+        padding-left: 8px;
+
+        color: $primary-color;
+
+        font-size: 22px;
+        font-weight: 600;
+    }
+}
+
+
+// =====================================================
+// Stat Card Variants
+// =====================================================
+
+.Dashboard_Stat_blue {
+    background: linear-gradient(
+        135deg,
+        #edf6ff,
+        #e4f1ff
+    );
+    border: 1px solid $primary-color;
+
+    .Dashboard_Stat_Icon,
+    .Dashboard_Stat_Arrow {
+        color: #1677e8;
+    }
+
+    .Dashboard_Stat_Icon {
+        background-color: #1677e8;
+        color: $fifth-color;
+    }
+}
+
+
+.Dashboard_Stat_green {
+    background: linear-gradient(
+        135deg,
+        #eefbf5,
+        #e4f8ef
+    );
+    border: 1px solid green;
+
+    .Dashboard_Stat_Icon {
+        background-color: #20a66a;
+        color: $fifth-color;
+    }
+
+    .Dashboard_Stat_Arrow {
+        color: #20a66a;
+    }
+}
+
+
+.Dashboard_Stat_orange {
+    background: linear-gradient(
+        135deg,
+        #fff7e9,
+        #fff1d9
+    );
+    border: 1px solid orange;
+
+    .Dashboard_Stat_Icon {
+        background-color: #f59b18;
+        color: $fifth-color;
+    }
+
+    .Dashboard_Stat_Arrow {
+        color: #f59b18;
+    }
+}
+
+
+.Dashboard_Stat_purple {
+    background: linear-gradient(
+        135deg,
+        #f7f0ff,
+        #f0e6ff
+    );
+    border: 1px solid purple;
+
+    .Dashboard_Stat_Icon {
+        background-color: #8246d9;
+        color: $fifth-color;
+    }
+
+    .Dashboard_Stat_Arrow {
+        color: #8246d9;
+    }
+}
+
+
+.Dashboard_Stat_yellow {
+    background: linear-gradient(
+        135deg,
+        #fffbed,
+        #fff6d8
+    );
+    border: 1px solid tan;
+
+    .Dashboard_Stat_Icon {
+        background-color: #e9a91a;
+        color: $fifth-color;
+    }
+
+    .Dashboard_Stat_Arrow {
+        color: #e9a91a;
+    }
+}
+
+
+.Dashboard_Stat_red {
+    background: linear-gradient(
+        135deg,
+        #fff0f0,
+        #ffe7e7
+    );
+    border: 1px solid red;
+
+
+    .Dashboard_Stat_Icon {
+        background-color: #ef5350;
+        color: $fifth-color;
+    }
+
+    .Dashboard_Stat_Arrow {
+        color: #ef5350;
+    }
+}
+
+// =====================================================
+// Dashboard Statistics
+// =====================================================
+
+.Dashboard_Stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+    margin-bottom: 18px;
+}
+
+
+
+// =====================================================
+// Responsive - Large Tablet
+// =====================================================
+
+@media (max-width: 1199.98px) {
+    .Dashboard_Stats {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+// =====================================================
+// Responsive - Tablet
+// =====================================================
+
+@media (max-width: 767.98px) {
+    .Dashboard_Stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+    }
+
+    .Dashboard_Stat_Card {
+        min-width: 0;
+        min-height: 100px;
+        padding: 12px;
+        border-radius: 12px;
+
+        .Dashboard_Stat_Icon {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+            font-size: 18px;
+        }
+
+        .Dashboard_Stat_Title {
+            font-size: 12px;
+            line-height: 1.35;
+            overflow-wrap: anywhere;
+        }
+
+        .Dashboard_Stat_Value {
+            font-size: 22px;
+        }
+
+        .Dashboard_Stat_Description {
+            font-size: 10px;
+            line-height: 1.3;
+        }
+
+        .Dashboard_Stat_Arrow {
+            padding-left: 4px;
+            font-size: 17px;
+        }
+    }
+}
+
+// =====================================================
+// Responsive - Small Mobile
+// =====================================================
+
+@media (max-width: 578px) {
+    .Dashboard_Stats {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 10px;
+    }
+
+    .Dashboard_Stat_Card {
+        min-height: 94px;
+        padding: 10px;
+
+        .Dashboard_Stat_Icon {
+            width: 34px;
+            height: 34px;
+            margin-right: 8px;
+            font-size: 15px;
+        }
+
+        .Dashboard_Stat_Title {
+            font-size: 11px;
+        }
+
+        .Dashboard_Stat_Value {
+            font-size: 20px;
+        }
+
+        .Dashboard_Stat_Description {
+            font-size: 9px;
+        }
+
+        .Dashboard_Stat_Arrow {
+            display: none;
+        }
+    }
+}

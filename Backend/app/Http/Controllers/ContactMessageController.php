@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\ContactMessage;
-
 use Illuminate\Http\Request;
+use App\Helpers\ActivityLogger;
 
 class ContactMessageController extends Controller
 {
@@ -22,6 +22,14 @@ class ContactMessageController extends Controller
         ]);
 
         $message = ContactMessage::create($validated);
+
+        // Activity Log — Contact Message Controller
+        ActivityLogger::log('Submitted_Contact_Message', null, [
+            'entity_type' => 'contact_message',
+            'entity_id' => $message->id,
+            'entity_title' => $message->subject,
+            'category' => $message->category,
+        ], 'GUEST');
 
         return response()->json([
             'status' => true,
@@ -50,6 +58,13 @@ class ContactMessageController extends Controller
             $message->update([
                 'status' => 'read'
             ]);
+
+            // Activity Log — Contact Message Controller
+            ActivityLogger::log('Read_Contact_Message', null, [
+                'entity_type' => 'contact_message',
+                'entity_id' => $message->id,
+                'entity_title' => $message->subject,
+            ]);
         }
 
         return response()->json([
@@ -66,6 +81,13 @@ class ContactMessageController extends Controller
         $message->update([
             'status' => 'closed',
             'closed_at' => now()
+        ]);
+
+        // Activity Log — Contact Message Controller
+        ActivityLogger::log('Closed_Contact_Message', null, [
+            'entity_type' => 'contact_message',
+            'entity_id' => $message->id,
+            'entity_title' => $message->subject,
         ]);
 
         return response()->json([

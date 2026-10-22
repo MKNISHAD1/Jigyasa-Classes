@@ -44,6 +44,7 @@ $fifth-color:#FFFFFF;
         background-color: $secondary-color;
         padding: 5px;
         border-radius: 5px;
+        border: 1px solid rgba($primary-color, 0.5);
     }
 }
 
@@ -101,15 +102,14 @@ $fifth-color:#FFFFFF;
 @media (max-width:768px){
     .space{
         margin: 10px 50px;
-    margin-bottom: 100px;
+        margin-bottom: 100px;
 
     }
 }
 
 @media (max-width:576px){
     .space{
-        margin: 15px;
-    margin-bottom: 100px;
-
+        margin: 0px;
+        margin-bottom: 0px;
     }
 }

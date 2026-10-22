@@ -24,6 +24,8 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
+use App\Helpers\ActivityLogger;
+
 use App\Traits\HasTranslations;
 
 
@@ -64,46 +66,8 @@ class LessonController extends Controller
     {
         $lesson->increment('view_count');
     }
+
     
-    /**
-     * Generate direct client upload URL + headers for Bunny (client will PUT bytes).
-     * Returns upload_url and required headers (AccessKey). WORKING WITH ACCESSKEY IN HEADER
-     */
-    // public function generateSignedUploadUrl(Request $request, $lessonId)
-    // {
-    //     $lesson = Lesson::findOrFail($lessonId);
-
-    //     // Optional MIME type check
-    //     $request->validate([
-    //         'mime' => 'required|string|in:video/mp4,video/mpeg,video/quicktime,video/x-msvideo,video/webm',
-    //     ]);
-
-    //     // Build exact upload path
-    //     $relativePath = "/{$lesson->bunny_storage_path}/{$lesson->storage_object_name}";
-
-    //     $storageZone = env('BUNNY_STORAGE_ZONE');
-    //     $regionHost  = env('BUNNY_REGION', 'de.storage.bunnycdn.com');
-    //     $storageKey  = env('BUNNY_API_KEY'); // ✅ storage key for uploads
-    //     $expiryTime  = time() + 600; // 10 minutes
-
-    //     // ✅ Hash only the object path (NO storage zone name)
-    //     $hashableBase = $storageKey . $relativePath . $expiryTime;
-
-    //     // MD5 → Base64 → URL-safe
-    //     $token = md5($hashableBase, true);
-    //     $token = base64_encode($token);
-    //     $token = strtr($token, '+/', '-_');
-    //     $token = str_replace('=', '', $token);
-
-    //     // ✅ Correct upload URL format
-    //     $signedUrl = "https://{$regionHost}/{$storageZone}{$relativePath}?token={$token}&expires={$expiryTime}";
-
-    //     return response()->json([
-    //         'upload_url' => $signedUrl,
-    //         'expires_at' => $expiryTime,
-    //     ]);
-    // }
-
     public function generateBunnySignedUrl($path)
     {
         $pullZoneUrl = rtrim(env('BUNNY_PULLZONE_URL'), '/');
@@ -1382,6 +1346,21 @@ class LessonController extends Controller
             );
         }
 
+        /*
+        |--------------------------------------------------------------------------
+        | Log lesson creation
+        |--------------------------------------------------------------------------
+        */
+
+        ActivityLogger::log('Created_Lesson', null, [
+            'entity_type' => 'lesson',
+            'entity_id' => $lesson->id,
+            'entity_title' => $lesson->title,
+            'course_id' => $lesson->course_id,
+            'module_id' => $lesson->module_id,
+            'status' => $lesson->status,
+        ]);
+
 
         /*
         |--------------------------------------------------------------------------
@@ -1911,6 +1890,15 @@ class LessonController extends Controller
             'lesson_id' => $lesson->id,
             'materials_count' => count($uploadedMaterials),
             'total_duration_seconds' => $materialsDuration,
+        ]);
+
+        // Activity Log
+        ActivityLogger::log('Uploaded_Lesson_Materials', null, [
+            'entity_type' => 'lesson',
+            'entity_id' => $lesson->id,
+            'entity_title' => $lesson->title,
+            'course_id' => $lesson->course_id,
+            'materials_count' => count($uploadedMaterials),
         ]);
 
         return response()->json([
@@ -2827,6 +2815,15 @@ class LessonController extends Controller
                 'module'
             ]);
 
+            // Activity Log
+            ActivityLogger::log('Updated_Lesson', null, [
+                'entity_type' => 'lesson',
+                'entity_id' => $lesson->id,
+                'entity_title' => $lesson->title,
+                'course_id' => $lesson->course_id,
+                'module_id' => $lesson->module_id,
+            ]);
+
             return response()->json([
                 'status' => true,
                 'message' => 'Lesson updated successfully',
@@ -2925,16 +2922,16 @@ class LessonController extends Controller
                 'message' => 'You are not allowed to delete this lesson.'
             ], 403);
         }
-        // if ($lesson->uploaded_by !== $actor->id 
-        //     && $lesson->course->created_by !== $actor->id 
-        //     && !$actor->hasAnyRole(['admin', 'super_admin','teacher'])) {
-        //     return response()->json([
-        //         'status' => false,
-        //         'message' => 'You are not allowed to delete this lesson.'
-        //     ], 403);
-        // }
         
         $lesson->delete(); // sof delete
+
+        // Activity Log
+        ActivityLogger::log('Soft_Deleted_Lesson', null, [
+            'entity_type' => 'lesson',
+            'entity_id' => $lesson->id,
+            'entity_title' => $lesson->title,
+            'course_id' => $lesson->course_id,
+        ]);
 
         // Fetch course to check status
         $course = $lesson->course;
@@ -2950,7 +2947,6 @@ class LessonController extends Controller
             'message' => 'Lesson deleted successfully'
         ]);
     }
-
 
      /**
      * Delete Multiple lesson
@@ -2994,20 +2990,17 @@ class LessonController extends Controller
                     'message' => "You are not allowed to delete lesson: {$lesson->title}"
                 ], 403);
               }
-            
-            // if (
-            //     $lesson->uploaded_by !== $actor->id &&
-            //     $lesson->course->created_by !== $actor->id &&
-            //     !$actor->hasAnyRole(['admin', 'super_admin'])
-            // ) {
-            //     return response()->json([
-            //         'status' => false,
-            //         'message' => "You are not allowed to delete lesson: {$lesson->title}"
-            //     ], 403);
-            // }
-
 
             $lesson->delete();
+
+            // Activity Log
+            ActivityLogger::log('Soft_Deleted_Lesson', null, [
+                'entity_type' => 'lesson',
+                'entity_id' => $lesson->id,
+                'entity_title' => $lesson->title,
+                'course_id' => $lesson->course_id,
+                'bulk_action' => true,
+            ]);
         }
         
         // ✅ Normalize order after bulk delete
@@ -3064,17 +3057,6 @@ class LessonController extends Controller
                 ], 403);
             }
 
-            // if (
-            //     $lesson->uploaded_by !== $actor->id &&
-            //     $lesson->course->created_by !== $actor->id &&
-            //     !$actor->hasAnyRole(['admin', 'super_admin'])
-            // ) {
-            //     return response()->json([
-            //         'status' => false,
-            //         'message' => "You are not allowed to restore lesson: {$lesson->title}"
-            //     ], 403);
-            // }
-
             // Ensure restored lesson order doesn't collide
             $maxOrder = Lesson::where('course_id', $courseId)
                 ->whereNull('deleted_at')
@@ -3091,7 +3073,17 @@ class LessonController extends Controller
 
 
             $lesson->restore();
+
+            // Activity Log
+            ActivityLogger::log('Restored_Lesson', null, [
+                'entity_type' => 'lesson',
+                'entity_id' => $lesson->id,
+                'entity_title' => $lesson->title,
+                'course_id' => $lesson->course_id,
+                'bulk_action' => true,
+            ]);
         }
+
         // ✅ Normalize order after bulk delete
         $this->normalizeLessonOrder($courseId);
 
@@ -3145,18 +3137,21 @@ class LessonController extends Controller
                 ], 403);
             }
 
-            // if (
-            //     $lesson->uploaded_by !== $actor->id &&
-            //     $lesson->course->created_by !== $actor->id &&
-            //     !$actor->hasAnyRole(['admin', 'super_admin'])
-            // ) {
-            //     return response()->json([
-            //         'status' => false,
-            //         'message' => "You are not allowed to permanently delete lesson: {$lesson->title}"
-            //     ], 403);
-            // }
-
+            $lessonId = $lesson->id;
+            $lessonTitle = $lesson->title;
+            
+            // force delete lessons
             $lesson->forceDelete();
+            
+            //Activity Log
+            ActivityLogger::log('Force_Deleted_Lesson', null, [
+                'entity_type' => 'lesson',
+                'entity_id' => $lessonId,
+                'entity_title' => $lessonTitle,
+                'course_id' => $courseId,
+                'bulk_action' => true,
+            ]);
+
         }
 
         // ✅ Normalize order after bulk force delete
@@ -3242,6 +3237,13 @@ class LessonController extends Controller
 
         $lesson->forceDelete();
 
+        ActivityLogger::log('Force_Deleted_Lesson', null, [
+            'entity_type' => 'lesson',
+            'entity_id' => $lesson->id,
+            'entity_title' => $lesson->title,
+            'course_id' => $courseId,
+        ]);
+
         // Reorder lessons after permanent deletion
         $this->normalizeLessonOrder($courseId);
 
@@ -3273,7 +3275,19 @@ class LessonController extends Controller
             ]);
         }
 
+        $lessonId = $lesson->id;
+        $lessonTitle = $lesson->title;
+
         $lesson->forceDelete();
+
+        // Activity Log
+        ActivityLogger::log('Force_Deleted_Lesson', null, [
+            'entity_type' => 'lesson',
+            'entity_id' => $lessonId,
+            'entity_title' => $lessonTitle,
+            'course_id' => $courseId,
+        ]);
+
         return response()->json([
             'status' => true, 
             'message' => 'Lesson permanently deleted.'
@@ -3305,6 +3319,14 @@ class LessonController extends Controller
         }
 
         $lesson->restore();
+
+        // Activity Log
+        ActivityLogger::log('Restored_Lesson', null, [
+            'entity_type' => 'lesson',
+            'entity_id' => $lesson->id,
+            'entity_title' => $lesson->title,
+            'course_id' => $courseId,
+        ]);
 
         // normalize order if restoring into published course
         $this->normalizeLessonOrder($courseId);
@@ -3350,6 +3372,14 @@ class LessonController extends Controller
         }
 
         $lesson->restore();
+
+        // Activity Log
+        ActivityLogger::log('Restored_Lesson', null, [
+            'entity_type' => 'lesson',
+            'entity_id' => $lesson->id,
+            'entity_title' => $lesson->title,
+            'course_id' => $courseId,
+        ]);
 
         $this->normalizeLessonOrder($courseId);
 

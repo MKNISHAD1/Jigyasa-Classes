@@ -217,11 +217,12 @@ if (loading) {
             courses.length === 0 ? (
                 
                 // if no courses created yet
-                <div className="empty-courses text-center py-5">
+                <div className="empty-courses text-center">
                     <img
                         src={PageNotFound}
                         alt="No courses found"
                         className="empty-img"
+                        
                     />
 
                     <h4>No Course Found</h4>

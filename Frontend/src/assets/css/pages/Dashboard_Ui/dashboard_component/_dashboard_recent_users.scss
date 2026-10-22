@@ -1,0 +1,420 @@
+@use '../../../base/variables' as *;
+
+.Dashboard_Recent_Users {
+    width: 100%;
+    min-width: 0;
+    height: 100%;
+    overflow: hidden;
+    background-color: $fifth-color;
+    border: 1px solid $primary-color;
+    border-radius: 11px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.04);
+
+    .Dashboard_Recent_Users_Table_Wrapper {
+        width: 100%;
+        min-width: 0;
+        padding: 0px;
+        overflow-x: auto;
+
+        &::-webkit-scrollbar {
+            height: 5px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background-color: rgba($primary-color, 0.3);
+            border-radius: 10px;
+        }
+
+        &::-webkit-scrollbar-track {
+            background-color: rgba($primary-color, 0.05);
+        }
+    }
+
+    // Desktop table
+    .Dashboard_Recent_Users_Table {
+        width: 100%;
+        min-width: 650px;
+        border-collapse: separate;
+        border-spacing: 0;
+        table-layout: fixed;
+        font-size: 12px;
+
+        thead th {
+            padding: 11px 20px;
+            background-color: rgba($primary-color, 0.1);
+            color: $third-color;
+            font-size: 11px;
+            font-weight: 700;
+            text-align: left;
+            white-space: nowrap;
+
+            &:first-child {
+                width: 9%;
+                border-radius: 0;
+            }
+            
+            &:nth-child(2) {
+                width: 25%;
+            }
+            
+            &:nth-child(3) {
+                width: 18%;
+            }
+
+            &:nth-child(4) {
+                width: 30%;
+            }
+
+            &:last-child {
+                width: 18%;
+                border-radius: 0;
+            }
+        }
+
+        tbody tr {
+            transition: background-color 0.2s ease;
+
+            &:hover {
+                background-color: rgba($primary-color, 0.035);
+            }
+
+            &:last-child td {
+                border-bottom: none;
+            }
+        }
+
+        tbody td {
+            padding: 10px 20px;
+            border-bottom: 1px solid rgba($primary-color, 0.09);
+            color: $third-color;
+            vertical-align: middle;
+            overflow-wrap: anywhere;
+        }
+    }
+
+    // Profile image and desktop name
+    .Dashboard_Recent_User_Name {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-width: 0;
+
+        img {
+            display: block;
+            width: 30px;
+            height: 30px;
+            flex-shrink: 0;
+            border: 1px solid rgba($primary-color, 0.2);
+            background-color: #dbefff;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        > .Dashboard_Recent_User_Info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .Dashboard_Recent_User_Display_Name {
+            display: block;
+            min-width: 0;
+            max-width: 100%;
+            overflow: hidden;
+            color: $third-color;
+            font-size: 12px;
+            font-weight: 600;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
+
+    // Extra details appear beside the name only on mobile
+    .Dashboard_Recent_User_Info {
+        display: block;
+        min-width: 0;
+    }
+
+    .Dashboard_Recent_User_Display_Name {
+        display: block;
+        color: $third-color;
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 1.4;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .Dashboard_Recent_User_Email {
+        overflow-wrap: anywhere;
+        word-break: break-word;
+    }
+
+    .Dashboard_Recent_User_Date {
+        white-space: nowrap;
+    }
+
+    // Desktop: show only the name beside the profile picture
+    .Dashboard_Recent_User_Info .Dashboard_Recent_User_Email,
+    .Dashboard_Recent_User_Info .Dashboard_Recent_User_Date {
+        display: none;
+    }
+
+    // Desktop email and joining-date columns
+    .Dashboard_Recent_User_Desktop_Email,
+    .Dashboard_Recent_User_Desktop_Date {
+        display: table-cell;
+    }
+
+    // Role badges
+    .Dashboard_User_Role {
+        display: inline-block;
+        max-width: 100%;
+        padding: 4px 8px;
+        border-radius: 5px;
+        background-color: rgba($primary-color, 0.09);
+        color: $primary-color;
+        font-size: 11px;
+        font-weight: 600;
+        line-height: 1.3;
+        overflow-wrap: anywhere;
+        text-align: center;
+    }
+
+    .Dashboard_User_Role_student {
+        background-color: #e5f1ff;
+        color: #1769aa;
+        // width: 100%;
+    }
+    .Dashboard_User_Role_teacher{
+        background:#c9f7d7;
+        color:#107e4b;
+        // width: 100%;
+    }
+
+    .Dashboard_User_Role_moderator {
+        background:#fdeac7;
+        color:#f39c12;
+        // width: 100%;
+    }
+
+    .Dashboard_User_Role_admin{
+        background:#efe1fe;
+        color:#8845fa;
+        // width: 100%;
+    }
+    .Dashboard_User_Role_super_admin {
+        background:#f7dede;
+        color:#dc3545;
+        // width: 100%;
+    }
+
+    // Empty state
+    .Dashboard_Recent_Users_Empty {
+        padding: 28px 12px !important;
+        color: #6c757d !important;
+        text-align: center;
+        font-size: 14px;
+        font-weight: 500;
+    }
+}
+
+// Tablet: preserve the table layout
+@media (max-width: 767.98px) {
+    .Dashboard_Recent_Users {
+        .Dashboard_Recent_Users_Table_Wrapper {
+            padding: 0 10px 10px;
+        }
+
+        .Dashboard_Recent_Users_Table {
+            font-size: 11px;
+
+            thead th,
+            tbody td {
+                padding: 9px 5px;
+            }
+
+            thead th:first-child {
+                width: 25px;
+            }
+
+            thead th:nth-child(2) {
+                width: 28%;
+            }
+
+            thead th:nth-child(3) {
+                width: 16%;
+            }
+
+            thead th:nth-child(4) {
+                width: 29%;
+            }
+
+            thead th:last-child {
+                width: 18%;
+            }
+        }
+
+        .Dashboard_Recent_User_Name {
+            gap: 6px;
+
+            img {
+                width: 28px;
+                height: 28px;
+            }
+        }
+
+        .Dashboard_Recent_User_Date {
+            white-space: normal;
+        }
+    }
+}
+
+// Mobile: each row becomes a compact user card
+@media (max-width: 575.98px) {
+    .Dashboard_Recent_Users {
+        border-radius: 10px;
+
+        .Dashboard_Recent_Users_Table_Wrapper {
+            padding: 0 10px 10px;
+            overflow: visible;
+        }
+
+        .Dashboard_Recent_Users_Table {
+            display: block;
+            width: 100%;
+            min-width: 0;
+            table-layout: auto;
+
+            thead {
+                display: none;
+            }
+
+            tbody {
+                display: grid;
+                gap: 8px;
+            }
+
+            tbody tr:not(.Dashboard_Recent_Users_Empty_Row) {
+                display: grid;
+                grid-template-columns: minmax(0, 1fr) auto;
+                align-items: center;
+                gap: 8px;
+                min-width: 0;
+                padding: 12px 10px;
+                border: 1px solid rgba($primary-color, 0.12);
+                border-radius: 10px;
+                background-color: $fifth-color;
+
+                &:hover {
+                    background-color: rgba($primary-color, 0.025);
+                }
+
+                > td {
+                    display: none;
+                    min-width: 0;
+                    padding: 0;
+                    border: none;
+                    white-space: normal;
+                }
+
+                // Profile, name, email and date
+                > td[data-label="Name"] {
+                    display: block;
+                    grid-column: 1;
+                    grid-row: 1;
+                    min-width: 0;
+                }
+
+                // Role centered vertically against the profile details
+                > td[data-label="Role"] {
+                    display: flex;
+                    grid-column: 2;
+                    grid-row: 1;
+                    align-self: stretch;
+                    align-items: center;
+                    justify-content: flex-end;
+                    min-width: 0;
+                }
+            }
+
+            tbody tr.Dashboard_Recent_Users_Empty_Row {
+                display: block;
+                border: none;
+
+                td {
+                    display: block;
+                    white-space: normal;
+                }
+            }
+        }
+
+        // Hide desktop duplicates
+        .Dashboard_Recent_User_Desktop_Email,
+        .Dashboard_Recent_User_Desktop_Date {
+            display: none !important;
+        }
+
+        // Mobile profile row
+        .Dashboard_Recent_User_Name {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 0;
+
+            img {
+                width: 42px;
+                height: 42px;
+                flex-shrink: 0;
+            }
+
+            > .Dashboard_Recent_User_Info {
+                display: flex;
+                flex: 1;
+                flex-direction: column;
+                gap: 4px;
+                min-width: 0;
+                padding-top: 1px;
+            }
+
+            .Dashboard_Recent_User_Display_Name {
+                display: block;
+                max-width: 100%;
+                font-size: 14px;
+                font-weight: 700;
+                line-height: 1.35;
+                overflow-wrap: anywhere;
+                text-transform: capitalize;
+            }
+
+            .Dashboard_Recent_User_Email {
+                display: block;
+                max-width: 100%;
+                color: $third-color;
+                font-size: 10px;
+                font-weight: 500;
+                line-height: 1.4;
+                overflow-wrap: anywhere;
+                word-break: break-word;
+            }
+
+            .Dashboard_Recent_User_Date {
+                display: block;
+                color: #6c757d;
+                font-size: 10px;
+                font-weight: 400;
+                line-height: 1.4;
+                white-space: normal;
+            }
+        }
+
+        .Dashboard_User_Role {
+            max-width: 100px;
+            padding: 5px 7px;
+            font-size: 10px;
+            text-align: center;
+            white-space: normal;
+            overflow-wrap: anywhere;
+        }
+    }
+}

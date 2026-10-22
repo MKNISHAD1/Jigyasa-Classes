@@ -93,7 +93,7 @@ export const SIDEBAR_SECTIONS = [
     {
         title: "Course Management",
         roles: ROLE_GROUPS.COURSE_ACCESS,
-        icon: faBookOpen,
+        icon: faBook,
 
         items: [
 

@@ -172,6 +172,8 @@ class UserManagementController extends Controller
                 ]);
             }
             
+        $previousRole = $user->getRoleNames()->first();
+
         $validator = Validator::make($request->all(), [
             'name' => 'sometimes|string|max:255',
                 
@@ -280,8 +282,12 @@ class UserManagementController extends Controller
         }
 
         //Log activity 
-        ActivityLogger::log('Updated_User',$user, [
-        'updated_fields' => array_keys($validator->validated()),
+        ActivityLogger::log('Updated_User', $user, [
+            'updated_fields' => array_keys($validator->validated()),
+            'previous_role' => $previousRole,
+            'current_role' => $user->fresh()->getRoleNames()->first(),
+            'profile_picture_updated' => $request->hasFile('profile_pic'),
+            'password_updated' => $request->filled('password'),
         ]);
 
 
@@ -358,7 +364,9 @@ class UserManagementController extends Controller
 
         
         // Activity Log
-        ActivityLogger::log('Restored_User',$user);
+        ActivityLogger::log('Restored_User', $user, [
+            'role' => $user->getRoleNames()->first(),
+        ]);
           
         return response()->json([
             'status' => true,
@@ -380,11 +388,17 @@ class UserManagementController extends Controller
             ], 404);
         }
 
-        $loguser = $user->replicate();
-        
+        $deletedUserDetails = [
+            'deleted_user_id' => $user->id,
+            'email' => $user->email,
+            'username' => $user->username,
+            'role' => $user->getRoleNames()->first(),
+        ];
+
         $user->forceDelete();
 
-        ActivityLogger::log('Force_Deleted_User',$loguser);
+        // Activity Log 
+        ActivityLogger::log('Force_Deleted_User', $user, $deletedUserDetails);
 
         return response()->json([
             'status' => true,
@@ -408,9 +422,7 @@ class UserManagementController extends Controller
         $user->suspension_by = auth()->id();    // <<-- who suspended
         $user->save();
 
-        // Send Suspension Mail
-        // Mail::to($user->email)->send(new AccountSuspendedMail($user->suspension_reason, $user->suspended_until)); 
-        
+        // Sending Suspension Mail
         try {
             Mail::to($user->email)->send(new AccountSuspendedMail($user->suspension_reason, $user->suspended_until));
             } catch (\Exception $e) {
@@ -418,11 +430,11 @@ class UserManagementController extends Controller
         }
 
         // Log Suspending User
-        ActivityLogger::log('Suspended_Account',
-                $user,
-                ['reason' => 'Manual Suspension Added']
-            );
-
+        ActivityLogger::log('Suspended_Account', $user, [
+            'reason' => $user->suspension_reason,
+            'suspended_until' => $user->suspended_until?->toDateTimeString(),
+            'suspended_by' => auth()->id(),
+        ]);
 
 
         return response()->json([
@@ -459,6 +471,12 @@ class UserManagementController extends Controller
             ], 400);
         }
 
+        // Record Suspension Before reseting
+        $previousSuspension = [
+            'reason' => $user->suspension_reason,
+            'suspended_until' => $user->suspended_until?->toDateTimeString(),
+        ];
+
         // Reset suspension fields
         $user->is_suspended = false;
         $user->suspended_at = null;
@@ -468,15 +486,13 @@ class UserManagementController extends Controller
         $user->save();
 
         // Log unsuspension
-        ActivityLogger::log(
-            "Lifted_Suspension",
-            $user,
-            ['reason' => 'Manual suspension lifted']
-        );
-
-        // Send mail
-        // Mail::to($user->email)->send(new AccountUnsuspendedMail($user,'admin'));
-
+        ActivityLogger::log('Lifted_Suspension', $user, [
+            'previous_reason' => $previousSuspension['reason'],
+            'previous_suspended_until' => $previousSuspension['suspended_until'],
+            'unsuspended_by' => auth()->id(),
+        ]);
+        
+        // Send Suspension over mail
         try {
             Mail::to($user->email)->send(new AccountUnsuspendedMail($user,'admin'));
             } catch (\Exception $e) {

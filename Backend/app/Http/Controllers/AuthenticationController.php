@@ -74,16 +74,28 @@ class AuthenticationController extends Controller
                 
                 Mail::to($user->email)->send(new AccountUnsuspendedMail($user,'auto'));
 
-                ActivityLogger::log('Account_Auto_Unsuspended',null, [
-                    'user_id' => $user->id,
-                    'email' => $user->email,
-                ]);
+                // Activity Log
+                ActivityLogger::log(
+                    'Account_Auto_Unsuspended',
+                    $user,
+                        [
+                            'entity_type' => 'account',
+                            'reason' => 'suspension_expired',
+                        ]
+                );
             }
         }
+
         // Check Short Cooldown First
         if ($response = $this->checkTooManyFailedAttempts($request)) {
             // log lockout
-            ActivityLogger::log('Account_Locked',null, ['email' => $request->email]);
+            ActivityLogger::log(
+                'Account_Locked',
+                $user,
+                [
+                    'entity_type' => 'account_security',
+                ]
+            );
             return $response; // return JSON response directly
         }
 
@@ -100,15 +112,16 @@ class AuthenticationController extends Controller
 
                 $this->clearFailedAttempts($request); // reset attempt counter
                 
-                ActivityLogger::log('Login_Attempt',null, ['email' => $user->email]);
+                // Activity Log
+                // ActivityLogger::log('Login_Attempt',null, ['email' => $user->email]);
 
 
             // $user = User::find(Auth::user()->id);
 
                 // Check if user role requires 2FA
                 // if(true){ // for testing
-                if($user->hasAnyRole(['admin', 'moderator','super_admin'])) { // for all highlevel users 2FA
-                // if($user->hasAnyRole(['super_admin'])) { // for testing only with genuine mail
+                // if($user->hasAnyRole(['admin', 'moderator','super_admin'])) { // for all highlevel users 2FA
+                if($user->hasAnyRole(['super_admin'])) { // for testing only with genuine mail
                     $otp = rand(100000, 999999);// Generate 6 Digit random OTP
                     $user->two_factor_code = Hash::make($otp);
                     $user->two_factor_expires_at = Carbon::now()->addMinutes(config('securitytimer.otp_expiry_minutes'));
@@ -152,9 +165,15 @@ class AuthenticationController extends Controller
 
                 // failed login attempt                
                 $this->incrementFailedAttempts($request);// increase failed counter
-                ActivityLogger::log('Login_Failed',null, [
-                    'email' => $request->email,
-                ]);
+
+                // Activity Log
+                ActivityLogger::log(
+                    'Login_Failed',
+                    $user,
+                    [
+                        'entity_type' => 'authentication',
+                    ]
+                );
 
                 // Auto Suspension check (after 10 fails in 24h)
                 if ($user)
@@ -176,10 +195,16 @@ class AuthenticationController extends Controller
                         // testing with mintes
                          Mail::to($user->email)->send(new AccountSuspendedMail('Too many failed login attempts', now()->addMinutes(config('securitytimer.suspension_time'))));
 
-                        ActivityLogger::log('Account_Auto_Suspended',null, [
-                            'email' => $user->email,
-                            'reason' => 'Too many failed login attempts',
-                            ]);
+                        // Activity Log
+                        ActivityLogger::log(
+                            'Account_Auto_Suspended',
+                            $user,
+                            [
+                                'entity_type' => 'account',
+                                'reason' => 'too_many_failed_login_attempts',
+                            ]
+                        );
+                        
                         }
                     }
 

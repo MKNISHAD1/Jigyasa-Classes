@@ -8,8 +8,10 @@ $fifth-color:#FFFFFF;
 .dashboard-sidebar{
     border-radius:0;
     overflow:hidden;
-    background:rgb(1, 1, 78);
-    padding:0;
+    // background:rgb(1, 1, 78);
+    background-image: url('../../assets/images/sidebar-bg.jpeg');
+    background-size:auto;
+    padding:0; 
 }
 
 .close-btn{
@@ -19,7 +21,7 @@ $fifth-color:#FFFFFF;
     margin-left: auto;
 
     .close-btn-icon{
-        color: $primary-color;
+        color: $fifth-color;
         font-size: 30px;
         transition: .4s ease;
 
@@ -43,8 +45,11 @@ $fifth-color:#FFFFFF;
     height:90px;
     border-radius:50%;
     object-fit:cover;
-    border:4px solid #edf4ff;
+    border: 4px solid blue;
+    padding: 3px;
     margin-bottom:15px;
+    background-color: white;
+    box-shadow: 0 0 10px 6px rgba(16, 101, 230, 0.5);
 }
 
 .sidebar-header h5{
@@ -56,18 +61,13 @@ $fifth-color:#FFFFFF;
 .sidebar-role{
     display:inline-block;
     padding:5px 14px;
-    background:#edf4ff;
+    background:$fifth-color;
     color:#0d6efd;
     border-radius:30px;
     font-size:13px;
     text-transform:capitalize;
-    font-weight:600;
+    font-weight:700;
 }
-
-
-// .sidebar-body{
-//     padding:20px;
-// }
 
 
 .sidebar-links{
@@ -81,7 +81,7 @@ $fifth-color:#FFFFFF;
 
 
 .sidebar-link{
-    // background-color: green;
+    background-color:#001357;
     display:flex;
     align-items:center;
     gap:8px;
@@ -95,32 +95,47 @@ $fifth-color:#FFFFFF;
 
     .sidebar-link-icon{
         width:18px;
-        // font-size:16px;
         color: $fifth-color;
     }
 
     .sidebar-link-text{
         color: $fifth-color;
     }
-    &:hover{
+    &:hover {
         background:$fifth-color;
-        color:$primary-color;
-        transform: scale(1.04);
-        .sidebar-link-icon{
+        
+        transform: scale(1.02);
+
+        .sidebar-link-icon,
+        .sidebar-link-text {
             color: $primary-color;
         }
-        .sidebar-link-text{
-            color: $primary-color;
+    }
+
+    &.active {
+        background: linear-gradient(
+            90deg,
+            #087cff,
+            #0649b8
+        );
+        color: $fifth-color;
+        box-shadow: inset 3px 0 0 #22d3ee;
+
+        .sidebar-link-icon,
+        .sidebar-link-text {
+            color: $fifth-color;
+        }
+
+        &:hover {
+            background: linear-gradient(
+                90deg,
+                #087cff,
+                #0649b8
+            );
         }
     }
 }
 
-.sidebar-link.active{
-    background-color:$primary-color;
-    &:hover{
-        background-color: $fifth-color;
-    }
-}
 
 
 // accordon
@@ -131,7 +146,7 @@ $fifth-color:#FFFFFF;
 
 .accordion-item{
     border:none;
-    background:rgb(1, 1, 78);
+    background:#001357;
     transition: .3s;
 
 }
@@ -143,6 +158,7 @@ $fifth-color:#FFFFFF;
     gap:3;
     font-weight:600;
     padding:15px;
+    transition: 0.2s ease;
 
     &:hover{
         background-color: $fifth-color;
@@ -162,46 +178,87 @@ $fifth-color:#FFFFFF;
 
 
 .accordion-button:not(.collapsed){
-    color:$fifth-color;
-   background-color:$primary-color;
+
+        background: linear-gradient(
+            90deg,
+            #087cff,
+            #0649b8
+        );
+        color: $fifth-color;
+        box-shadow: inset 3px 0 0 #22d3ee;
+
+        .sidebar-link-icon,
+        .sidebar-link-text {
+            color: $fifth-color;
+        }
+    
 }
 
 
-.accordion-body{
-    background-color: $secondary-color;
-    // padding:10px 15px 15px;
-    padding: 10px 0;
-    display:flex;
-    flex-direction:column;
-    gap:4px;
+.accordion-body {
+    background: rgb(1, 1, 78);
+    padding: 6px 8px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
 
-    .sidebar-link{
-        border-radius:0;
-        background-color: $secondary-color;
-        padding-left: 30px;
-        
+    .sidebar-link {
+        position: relative;
+        border-radius: 6px;
+        background: transparent;
+        padding: 10px 12px 10px 42px;
+        font-size: 14px;
+        font-weight: 500;
+        transform: none;
+        transition: background 0.2s ease, color 0.2s ease;
 
-    .sidebar-link-icon{
-        width:18px;
-        color: $primary-color;
-    }
+        // .sidebar-link-icon {
+        //     // display: none;
+        // }
 
-    .sidebar-link-text{
-        color: $primary-color;
-    }
-    &:hover{
-        background:$fifth-color;
-        color:$primary-color;
-        transform:scale(1.03);
-
-        .sidebar-link-icon{
-            color: $primary-color;
+        .sidebar-link-text {
+            color: #e7efff;
         }
-        .sidebar-link-text{
-            color: $primary-color;
+
+        &:hover {
+            background: rgba(19, 99, 184, 0.45);
+            transform: none;
+
+            .sidebar-link-text {
+                color: #ffffff;
+            }
+
+            .sidebar-link-icon{
+                color: $fifth-color;
+            }
+        }
+
+        &.active {
+            background: linear-gradient(
+                90deg,
+                #087cff,
+                #0750c9
+            );
+            box-shadow: 0 3px 10px rgba(0, 70, 200, 0.25);
+
+            &::before {
+                content: "";
+                position: absolute;
+                left: 20px;
+                top: 50%;
+                width: 7px;
+                height: 7px;
+                border-radius: 50%;
+                background: #22d3ee;
+                transform: translateY(-50%);
+                box-shadow: 0 0 8px rgba(34, 211, 238, 0.6);
+            }
+
+            .sidebar-link-text {
+                color: #ffffff;
+            }
         }
     }
-}
 }
 }
 
@@ -230,7 +287,9 @@ $fifth-color:#FFFFFF;
         color: red;
         transform: scale(1.04);
         border: 2px solid red;
+
         .logout-icon{
+            transform: scale(1.04);
             color: red;
         }      
         

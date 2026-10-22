@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Validator;
+use App\Helpers\ActivityLogger;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                        THIS CONTROLLER FOR STUDENTS  AND TEACHERS ONLY
@@ -28,10 +29,6 @@ class UserProfileController extends Controller
         $user = Auth::user()->load('roles'); // load roles
 
         $profilePic = $user->media()->where('type', 'profile_pic')->first();
-
-        // $user->profile_pic = $profilePic
-        //     ? asset($profilePic->url)
-        //     : asset('uploads/profiles/default/' . $user->role . '.png');
 
         return response()->json([
             'user' => [
@@ -113,11 +110,14 @@ class UserProfileController extends Controller
         ]);
         }
 
-            // Get updated profile pic
-            // $profilePic = $user->media()->where('type', 'profile_pic')->first();
-            // $profilePicUrl = $profilePic
-            //     ? asset($profilePic->url)
-            //     : asset('uploads/profiles/default/' . $user->role . '.png');
+        // ============================================================
+        // ACTIVITY LOG: USER PROFILE
+        // ============================================================
+        ActivityLogger::log('Updated_Profile', null, [
+            'entity_type' => 'profile',
+            'updated_fields' => array_keys($validator->validated()),
+            'profile_pic_updated' => $request->hasFile('profile_pic'),
+        ]);
 
             return response()->json([
                 'status' => true,
@@ -148,10 +148,18 @@ class UserProfileController extends Controller
                 'status' => false,
                 'message' => 'Current password does not match.'
             ], 403);
-    }
+        }
 
         $user->password = Hash::make($request->new_password);
         $user->save();
+
+
+        // ============================================================
+        // ACTIVITY LOG: PASSWORD SECURITY
+        // ============================================================
+        ActivityLogger::log('Password_Changed', null, [
+            'entity_type' => 'account_security',
+        ]);
 
         return response()->json([
             'status' => true,
@@ -199,12 +207,31 @@ class UserProfileController extends Controller
 
             $this->sendPasswordResetOtp($request->email);
 
+            // ============================================================
+            // ACTIVITY LOG: PASSWORD RECOVERY
+            // ============================================================
+
+            $targetUser = User::where('email', $request->email)->first();
+
+            ActivityLogger::log(
+                'Password_Reset_Requested',
+                $targetUser,
+                ['entity_type' => 'password_recovery']
+            );
+
             return response()->json([
                 'status' => true,
                 'message' => 'Password reset link & OTP sent successfully.'
             ]);
 
         } catch (\Exception $e) {
+
+            // Activity Log  
+            ActivityLogger::log(
+                'Password_Reset_Email_Failed',
+                User::where('email', $request->email)->first(),
+                ['entity_type' => 'password_recovery']
+            );
 
             return response()->json([
                 'status' => false,
@@ -259,6 +286,16 @@ class UserProfileController extends Controller
         // Delete reset token (so it can’t be reused)
         DB::table('password_reset_tokens')->where('email', $request->email)->delete();
 
+        // ============================================================
+        // ACTIVITY LOG: PASSWORD RECOVERY
+        // ============================================================
+
+        ActivityLogger::log(
+            'Password_Reset_Completed',
+            $user,
+            ['method' => 'reset_link']
+        );
+
         return response()->json([
             'status' => true,
             'message' => 'Password reset successfully!'
@@ -307,6 +344,16 @@ class UserProfileController extends Controller
 
         // Delete reset entry
         DB::table('password_reset_tokens')->where('email', $request->email)->delete();
+
+        // ============================================================
+        // ACTIVITY LOG: PASSWORD RECOVERY
+        // ============================================================
+
+        ActivityLogger::log(
+            'Password_Reset_Completed',
+            $user,
+            ['method' => 'otp']
+        );
 
         return response()->json([
             'status' => true,
@@ -368,6 +415,16 @@ class UserProfileController extends Controller
         try {
 
             $this->sendPasswordResetOtp($request->email);
+
+            // ============================================================
+            // ACTIVITY LOG: PASSWORD RECOVERY
+            // ============================================================
+
+            ActivityLogger::log(
+                'Password_Reset_OTP_Resent',
+                User::where('email', $request->email)->first(),
+                ['entity_type' => 'password_recovery']
+            );
 
             return response()->json([
                 'status' => true,

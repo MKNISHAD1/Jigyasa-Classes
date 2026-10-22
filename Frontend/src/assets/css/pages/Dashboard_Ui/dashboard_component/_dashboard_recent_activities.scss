@@ -1,0 +1,76 @@
+@use '../../../base/variables' as *;
+
+.Dashboard_Recent_Activity_Section {
+    min-width: 0;
+    height: 100%;
+    border: 1px solid rgba($primary-color, 1);
+    border-radius: 12px;
+    background: $fifth-color;
+
+}
+
+.Dashboard_Recent_Activities {
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+}
+
+.Dashboard_Recent_Activity_Item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba($primary-color, 0.1);
+
+    &:last-child {
+        border-bottom: none;
+    }
+}
+
+.Dashboard_Recent_Activity_Icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: rgba($primary-color, 0.1);
+    color: $primary-color;
+    font-size: 13px;
+    overflow: hidden;
+
+    .Dashboard_Recent_Activity_Avatar {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+    }
+
+}
+
+.Dashboard_Recent_Activity_Info {
+    flex: 1;
+    min-width: 0;
+
+    p {
+        margin: 0 0 4px;
+        color: $third-color;
+        font-size: 13px;
+        line-height: 1.45;
+        overflow-wrap: anywhere;
+    }
+
+    small {
+        color: #788398;
+        font-size: 11px;
+    }
+}
+
+.Dashboard_Recent_Activity_Empty {
+    padding: 24px 8px;
+    color: #788398;
+    font-size: 13px;
+    text-align: center;
+}

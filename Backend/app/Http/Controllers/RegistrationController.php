@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
+use App\Helpers\ActivityLogger;
 
 class RegistrationController extends Controller
 {
@@ -72,6 +73,14 @@ class RegistrationController extends Controller
 
             //Assigning Deault Student Role
             $user -> assignRole('student');
+
+            // Activity Log
+            ActivityLogger::log('Registered_User', $user, [
+                'entity_type' => 'user',
+                'entity_id' => $user->id,
+                'entity_title' => $user->name,
+                'assigned_role' => 'student',
+            ]);
 
         // Trigerring Verify Mail event 
 

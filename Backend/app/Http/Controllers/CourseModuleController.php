@@ -6,6 +6,7 @@ use App\Models\CourseModule;
 use App\Models\Lesson;
 use App\Models\User;
 use App\Models\Course;
+use App\Helpers\ActivityLogger;
 
 use App\Traits\HasTranslations;
 
@@ -20,15 +21,12 @@ class CourseModuleController extends Controller
     use HasTranslations;
 
     // Helper for General Name Check
-
     private function isGeneralModule($title)
     {
         return strtolower(trim($title)) === 'general';
     }
 
-
     // List Module  
-
     public function listModules($courseId)
     {
         
@@ -60,7 +58,6 @@ class CourseModuleController extends Controller
     }
 
     // Create Module
-
     public function createModule(Request $request)
     {
         $user = Auth::user();
@@ -139,6 +136,19 @@ class CourseModuleController extends Controller
                 $module->translateFields(['title'],'hi');
             }
 
+        /*
+        |--------------------------------------------------------------------------
+        | ACTIVITY LOG — COURSE MODULE CONTROLLER
+        |--------------------------------------------------------------------------
+        */
+
+        ActivityLogger::log('Created_Module', null, [
+            'entity_type' => 'module',
+            'entity_id' => $module->id,
+            'entity_title' => $module->title,
+            'course_id' => $module->course_id,
+        ]);
+
         return response()->json([
             'status' => true,
             'message' => 'Module created successfully',
@@ -154,7 +164,6 @@ class CourseModuleController extends Controller
     }
 
     // Update Module
-
     public function updateModule(Request $request, $id)
     {
         $module = CourseModule::with('translations')
@@ -266,6 +275,12 @@ class CourseModuleController extends Controller
             'order' => $request->order ?? $module->order,
         ]);
 
+        $updatedFields = array_keys($module->getChanges());
+        $updatedFields = array_intersect($updatedFields, [
+            'title',
+            'order',
+        ]);
+
         if ($titleEnChanged && !$titleHiManuallyChanged) {
 
             $translationHi = $module->translations()
@@ -282,6 +297,27 @@ class CourseModuleController extends Controller
             );
         }
 
+        /*
+        |--------------------------------------------------------------------------
+        | ACTIVITY LOG — COURSE MODULE CONTROLLER
+        |--------------------------------------------------------------------------
+        | Include main model changes and Hindi translation changes.
+        */
+
+        if ($titleHiManuallyChanged || ($titleEnChanged && !$titleHiManuallyChanged)) {
+            $updatedFields[] = 'title_hi';
+        }
+
+        if (!empty($updatedFields)) {
+            ActivityLogger::log('Updated_Module', null, [
+                'entity_type' => 'module',
+                'entity_id' => $module->id,
+                'entity_title' => $module->title,
+                'course_id' => $module->course_id,
+                'updated_fields' => array_values(array_unique($updatedFields)),
+            ]);
+        }
+
         return response()->json([
             'status' => true,
             'message' => 'Module updated successfully',
@@ -289,9 +325,7 @@ class CourseModuleController extends Controller
         ]);
     }
 
-
     // Delete Module
-
     public function deleteModule($id)
     {
         $module = CourseModule::findOrFail($id);
@@ -321,6 +355,14 @@ class CourseModuleController extends Controller
 
         $module->delete();
 
+        // Activity Log
+        ActivityLogger::log('Deleted_Module', null, [
+            'entity_type' => 'module',
+            'entity_id' => $module->id,
+            'entity_title' => $module->title,
+            'course_id' => $module->course_id,
+        ]);
+
         return response()->json([
             'status' => true,
             'message' => 'Module deleted successfully'
@@ -328,7 +370,6 @@ class CourseModuleController extends Controller
     }
 
     // Trashed Module 
-
     public function trashedModules()
     {
         $modules = CourseModule::onlyTrashed()
@@ -342,7 +383,6 @@ class CourseModuleController extends Controller
     }
 
     // Restore Module 
-
     public function restoreModule($id)
     {
         $module = CourseModule::onlyTrashed()
@@ -356,6 +396,14 @@ class CourseModuleController extends Controller
         }
 
         $module->restore();
+
+        //Activity Log
+        ActivityLogger::log('Restored_Module', null, [
+            'entity_type' => 'module',
+            'entity_id' => $module->id,
+            'entity_title' => $module->title,
+            'course_id' => $module->course_id,
+        ]);
 
         return response()->json([
             'status' => true,
@@ -387,6 +435,14 @@ class CourseModuleController extends Controller
 
         $module->forceDelete();
 
+        // Activity Log
+        ActivityLogger::log('Force_Deleted_Module', null, [
+            'entity_type' => 'module',
+            'entity_id' => $module->id,
+            'entity_title' => $module->title,
+            'course_id' => $module->course_id,
+        ]);
+
         return response()->json([
             'status' => true,
             'message' => 'Module permanently deleted'
@@ -394,7 +450,6 @@ class CourseModuleController extends Controller
     }
 
     // Adding lessons in module
-
     public function assignLessons(Request $request, $moduleId)
     {
         $module = CourseModule::findOrFail($moduleId);
@@ -404,17 +459,23 @@ class CourseModuleController extends Controller
             'lesson_ids.*' => 'exists:lessons,id',
         ]);
 
-        Lesson::whereIn(
-            'id',
-            $request->lesson_ids
-        )
-        ->where(
-            'course_id',
-            $module->course_id
-        )
-        ->update([
-            'module_id' => $moduleId
-        ]);
+        $updatedCount = Lesson::whereIn('id', $request->lesson_ids)
+            ->where('course_id', $module->course_id)
+            ->where('module_id', '!=', $moduleId)
+            ->update([
+                'module_id' => $moduleId,
+            ]);
+
+        // Activity Log
+        if ($updatedCount > 0) {
+            ActivityLogger::log('Assigned_Lessons_To_Module', null, [
+                'entity_type' => 'module',
+                'entity_id' => $module->id,
+                'entity_title' => $module->title,
+                'course_id' => $module->course_id,
+                'updated_lessons_count' => $updatedCount,
+            ]);
+        }
 
         return response()->json([
             'status' => true,
@@ -423,7 +484,6 @@ class CourseModuleController extends Controller
     }
 
     // Removing Lessons from Module
-
     public function removeLessons(Request $request,$id)
     {
         $module = CourseModule::findOrFail($id);
@@ -444,21 +504,23 @@ class CourseModuleController extends Controller
             ]
         );
 
-        Lesson::whereIn(
-            'id',
-            $request->lesson_ids
-        )
-        ->where(
-            'module_id',
-            $module->id
-        )
-        ->where(
-            'course_id',
-            $module->course_id
-        )
-        ->update([
-            'module_id' => $generalModule->id
-        ]);
+        $updatedCount = Lesson::whereIn('id', $request->lesson_ids)
+            ->where('module_id', $module->id)
+            ->where('course_id', $module->course_id)
+            ->update([
+                'module_id' => $generalModule->id,
+            ]);
+
+        // Activity Log
+        if ($updatedCount > 0) {
+            ActivityLogger::log('Removed_Lessons_From_Module', null, [
+                'entity_type' => 'module',
+                'entity_id' => $module->id,
+                'entity_title' => $module->title,
+                'course_id' => $module->course_id,
+                'updated_lessons_count' => $updatedCount,
+            ]);
+        }
 
         return response()->json([
             'status' => true,
@@ -467,7 +529,6 @@ class CourseModuleController extends Controller
     }
 
     // Bulk Soft delete of module
-
     public function bulkDeleteModules(Request $request)
     {
         $validated = $request->validate([
@@ -505,6 +566,15 @@ class CourseModuleController extends Controller
                 ]);
 
             $module->delete();
+
+            // Activity Log
+            ActivityLogger::log('Deleted_Module', null, [
+                'entity_type' => 'module',
+                'entity_id' => $module->id,
+                'entity_title' => $module->title,
+                'course_id' => $module->course_id,
+                'bulk_action' => true,
+            ]);
         }
 
 
@@ -521,12 +591,22 @@ class CourseModuleController extends Controller
             'module_ids' => 'required|array|min:1',
         ]);
 
-        CourseModule::onlyTrashed()
-            ->whereIn(
-                'id',
-                $request->module_ids
-            )
-            ->restore();
+        $modules = CourseModule::onlyTrashed()
+            ->whereIn('id', $request->module_ids)
+            ->get();
+
+        foreach ($modules as $module) {
+            $module->restore();
+
+            // Activity Log
+            ActivityLogger::log('Restored_Module', null, [
+                'entity_type' => 'module',
+                'entity_id' => $module->id,
+                'entity_title' => $module->title,
+                'course_id' => $module->course_id,
+                'bulk_action' => true,
+            ]);
+        }
 
         return response()->json([
             'status' => true,
@@ -558,6 +638,15 @@ class CourseModuleController extends Controller
             }
 
             $module->forceDelete();
+
+            // Activity Log
+            ActivityLogger::log('Force_Deleted_Module', null, [
+                'entity_type' => 'module',
+                'entity_id' => $module->id,
+                'entity_title' => $module->title,
+                'course_id' => $module->course_id,
+                'bulk_action' => true,
+            ]);
         }
 
         return response()->json([
@@ -567,10 +656,8 @@ class CourseModuleController extends Controller
     }
 
     // reorder for modules
-
     public function reorderModules(Request $request,$courseId)
     {
-
     
         $validated = $request->validate([
             'orders' => 'required|array',
@@ -578,18 +665,25 @@ class CourseModuleController extends Controller
             'orders.*.order' => 'required|integer|min:1',
         ]);
 
+        $changedCount = 0;
+
         foreach ($validated['orders'] as $item) {
 
-            CourseModule::where(
-                'id',
-                $item['id']
-            )
-            ->where(
-                'course_id',
-                $courseId
-            )
-            ->update([
-                'order' => $item['order']
+            $changedCount += CourseModule::where('id', $item['id'])
+                ->where('course_id', $courseId)
+                ->update([
+                    'order' => $item['order'],
+                ]);
+        }
+
+        //  Activity Log
+        if ($changedCount > 0) {
+            ActivityLogger::log('Reordered_Modules', null, [
+                'entity_type' => 'course',
+                'entity_id' => (int) $courseId,
+                'entity_title' => "Course #{$courseId}",
+                'course_id' => (int) $courseId,
+                'updated_modules_count' => $changedCount,
             ]);
         }
 
@@ -600,7 +694,6 @@ class CourseModuleController extends Controller
     }
 
     // get lessons insiide module list 
-
     public function getModuleLessons($courseId, $moduleId)
     {
         $lessons = Lesson::where('course_id', $courseId)
@@ -627,7 +720,6 @@ class CourseModuleController extends Controller
     }
     
     // Reorder lessons inside module
-
     public function reorderModuleLessons(Request $request,$courseId,$moduleId)
     {
         $validated = $request->validate([
@@ -635,6 +727,8 @@ class CourseModuleController extends Controller
             'orders.*.id' => 'required|exists:lessons,id',
             'orders.*.order' => 'required|integer|min:1',
         ]);
+
+        $changedCount = 0;
 
         foreach ($validated['orders'] as $item) {
 
@@ -655,12 +749,21 @@ class CourseModuleController extends Controller
             ]);
         }
 
+        // Activity Log
+        if ($changedCount > 0) {
+            ActivityLogger::log('Reordered_Module_Lessons', null, [
+                'entity_type' => 'module',
+                'entity_id' => (int) $moduleId,
+                'entity_title' => "Module #{$moduleId}",
+                'course_id' => (int) $courseId,
+                'updated_lessons_count' => $changedCount,
+            ]);
+        }
+
         return response()->json([
             'status' => true,
             'message' => 'Lessons reordered successfully'
         ]);
     }
-
-
 
 }

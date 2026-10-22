@@ -1,0 +1,367 @@
+@use '../../../base/variables' as *;
+
+
+// =====================================================
+// Recent Courses
+// =====================================================
+
+.Dashboard_Recent_Courses {
+    width: 100%;
+
+    overflow: hidden;
+
+    background-color: $fifth-color;
+
+    border: 1px solid rgba($primary-color, 1);
+    border-radius: 13px;
+
+    box-shadow: 0 4px 16px rgba(20, 90, 160, 0.04);
+}
+
+
+.Dashboard_Recent_Courses_List {
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+}
+
+/* =====================================================
+   Recent Course Item — Desktop
+===================================================== */
+
+.Dashboard_Recent_Course_Item {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    min-width: 0;
+    min-height: 76px;
+    padding: 10px 14px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    transition: background-color 0.2s ease;
+
+    &:last-child {
+        border-bottom: 0;
+    }
+
+    &:hover {
+        background-color: rgba($primary-color, 0.025);
+    }
+}
+
+.Dashboard_Recent_Course_Info {
+    display: grid;
+    grid-template-columns: 82px minmax(0, 1fr);
+    grid-template-areas:
+        "thumbnail title"
+        "thumbnail teacher"
+        "thumbnail meta";
+    align-items: center;
+    align-content: center;
+    gap: 4px 12px;
+    flex: 1;
+    min-width: 0;
+}
+
+.Dashboard_Recent_Course_Thumbnail {
+    grid-area: thumbnail;
+    flex-shrink: 0;
+    width: 82px;
+    height: 52px;
+    margin: 0;
+    overflow: hidden;
+    border-radius: 6px;
+    background-color: #e9f2fa;
+
+    img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
+
+.Dashboard_Recent_Course_Title {
+    grid-area: title;
+    display: -webkit-box;
+    min-width: 0;
+    margin: 0;
+    overflow: hidden;
+    color: $third-color;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.3;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+}
+
+.Dashboard_Recent_Course_Teacher {
+    grid-area: teacher;
+    min-width: 0;
+    margin: 0;
+    overflow: hidden;
+    color: #333;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1.3;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    .Icon {
+        color: $primary-color;
+    }
+}
+
+.Dashboard_Recent_Course_Meta {
+    grid-area: meta;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 5px 12px;
+    min-width: 0;
+
+    span {
+        display: inline-flex;
+        align-items: center;
+        color: #6c757d;
+        font-size: 11px;
+        white-space: nowrap;
+
+        b{
+            padding-right: 3px;
+        }
+
+        svg {
+            margin-right: 3px;
+            color: $primary-color;
+            font-size: 11px;
+        }
+    }
+}
+
+/* Desktop: details remain in one horizontal row */
+.Dashboard_Recent_Course_Side {
+    display: contents;
+}
+
+.Dashboard_Recent_Course_Difficulty {
+    flex-shrink: 0;
+    margin: 0 15px;
+
+    span {
+        display: inline-block;
+        padding: 4px 8px;
+        border-radius: 5px;
+        background-color: #e9f5ff;
+        color: $primary-color;
+        font-size: 10px;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+}
+
+
+.Dashboard_Recent_Course_Status {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+
+    flex-shrink: 0;
+
+    min-width: 75px;
+
+
+    span {
+        padding: 4px 8px;
+
+        border-radius: 5px;
+
+        font-size: 10px;
+        font-weight: 600;
+        line-height: 1;
+
+        text-transform: capitalize;
+    }
+
+
+    small {
+        margin-top: 5px;
+
+        color: #6c757d;
+
+        font-size: 10px;
+        white-space: nowrap;
+    }
+}
+
+
+// =====================================================
+// Course Status Variants
+// =====================================================
+
+.Course_Status_published {
+    background-color: #e3f7ec;
+    color: #16834a;
+}
+
+
+.Course_Status_draft {
+    background-color: #e8eef7;
+    color: #53657a;
+}
+
+
+.Course_Status_trashed {
+    background-color: #ffe7ea;
+    color: #d83b4d;
+}
+
+
+/* =====================================================
+   Tablet
+===================================================== */
+
+@media (max-width: 767.98px) {
+    .Dashboard_Recent_Course_Item {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 110px;
+        align-items: stretch;
+        gap: 12px;
+        padding: 14px;
+    }
+
+    .Dashboard_Recent_Course_Info {
+        grid-template-columns: 76px minmax(0, 1fr);
+        gap: 4px 10px;
+        align-content: center;
+    }
+
+    .Dashboard_Recent_Course_Thumbnail {
+        width: 76px;
+        height: 54px;
+    }
+
+    .Dashboard_Recent_Course_Title {
+        font-size: 13px;
+        line-height: 1.35;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        overflow-wrap: anywhere;
+    }
+
+    .Dashboard_Recent_Course_Teacher {
+        font-size: 11px;
+    }
+
+    .Dashboard_Recent_Course_Meta {
+        align-items: flex-start;
+        gap: 5px 10px;
+
+        span {
+            font-size: 10px;
+        }
+    }
+
+    .Dashboard_Recent_Course_Side {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 10px;
+        min-width: 0;
+    }
+
+    .Dashboard_Recent_Course_Difficulty {
+        max-width: 100%;
+        margin: 0;
+        text-align: right;
+
+        span {
+            max-width: 100%;
+            padding: 5px 7px;
+            white-space: normal;
+            overflow-wrap: anywhere;
+        }
+    }
+
+    .Dashboard_Recent_Course_Status {
+        min-width: 0;
+        align-items: flex-end;
+        text-align: right;
+
+        span {
+            max-width: 100%;
+            padding: 5px 7px;
+            white-space: normal;
+        }
+
+        small {
+            font-size: 10px;
+        }
+    }
+}
+
+/* =====================================================
+   Mobile
+===================================================== */
+
+@media (max-width: 575.98px) {
+    .Dashboard_Recent_Course_Item {
+        grid-template-columns: minmax(0, 1fr) 94px;
+        gap: 8px;
+        padding: 12px 10px;
+    }
+
+    .Dashboard_Recent_Course_Info {
+        grid-template-columns: 58px minmax(0, 1fr);
+        gap: 4px 8px;
+    }
+
+    .Dashboard_Recent_Course_Thumbnail {
+        width: 58px;
+        height: 48px;
+    }
+
+    .Dashboard_Recent_Course_Title {
+        font-size: 12px;
+        line-height: 1.35;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        margin-left: 10px;
+    }
+    
+
+    .Dashboard_Recent_Course_Teacher {
+        font-size: 10px;
+        margin-left: 10px;
+
+    }
+
+    .Dashboard_Recent_Course_Meta {
+        gap: 15px;
+        margin-left: 10px;
+
+        span {
+            font-size: 10px;
+            line-height: 1.3;
+        }
+    }
+
+    .Dashboard_Recent_Course_Side {
+        gap: 12px;
+    }
+
+    .Dashboard_Recent_Course_Difficulty span,
+    .Dashboard_Recent_Course_Status span {
+        padding: 4px 6px;
+        font-size: 9px;
+    }
+
+    .Dashboard_Recent_Course_Status small {
+        font-size: 9px;
+    }
+
+    .Dashboard_Recent_Course_More {
+        display: none !important;
+    }
+}

@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Subcategory;
 use Illuminate\Http\Request;
 use App\Traits\HasTranslations;
+use App\Helpers\ActivityLogger;
 
 class CategoryCantroller extends Controller
 {
@@ -40,7 +41,6 @@ class CategoryCantroller extends Controller
         ]);
     }
 
-
     // Create new Category
     public function createCategory(Request $request)
     {
@@ -58,13 +58,19 @@ class CategoryCantroller extends Controller
         // Save translations
         $category->saveTranslation('name', 'hi', $request->name_hi);
 
+        // Activity Log — Category Controller
+        ActivityLogger::log('Created_Category', null, [
+            'entity_type' => 'category',
+            'entity_id' => $category->id,
+            'entity_title' => $category->name,
+        ]);
+
         return response()->json([
             'status' => true,
             'message' => 'Category created successfully.',
             'category' => $category
         ]);
     }
-
 
     //  Update Category
     public function updateCategory(Request $request, $id)
@@ -85,33 +91,49 @@ class CategoryCantroller extends Controller
         // Update translation
         $category->saveTranslation('name', 'hi', $request->name_hi);
 
+        // Activity Log — Category Controller
+        ActivityLogger::log('Updated_Category', null, [
+            'entity_type' => 'category',
+            'entity_id' => $category->id,
+            'entity_title' => $category->name,
+        ]);
+
         return response()->json([
             'status' => true,
             'message' => 'Category updated successfully.',
         ]);
     }
 
-
-
     // Delete existing category
     public function deleteCategory($id)
     {
         $category = Category::findOrFail($id);
 
-        // Delete subcategories
+        // Capture details before deletion.
+        $categoryId = $category->id;
+        $categoryTitle = $category->name;
+        $subcategoriesCount = $category->subcategories->count();
+
+        // Delete subcategories — existing behavior preserved.
         foreach ($category->subcategories as $sub) {
             $sub->delete();
         }
 
         $category->delete();
 
+        // Activity Log — Category Controller
+        ActivityLogger::log('Deleted_Category', null, [
+            'entity_type' => 'category',
+            'entity_id' => $categoryId,
+            'entity_title' => $categoryTitle,
+            'deleted_subcategories_count' => $subcategoriesCount,
+        ]);
+
         return response()->json([
             'status' => true,
             'message' => 'Category deleted successfully.',
         ]);
     }
-
-
 
     // fetch single category
     public function getCategory($id)
@@ -126,7 +148,6 @@ class CategoryCantroller extends Controller
             ]
         ]);
     }
-
 
     // Get subcategories for a category with translation
     public function getAllsubcategories($categoryId)
@@ -148,7 +169,6 @@ class CategoryCantroller extends Controller
             ])
         ]);
     }
-
 
     // Create new sub category
     public function createSubcategory(Request $request)
@@ -173,13 +193,20 @@ class CategoryCantroller extends Controller
         $sub->saveTranslation('name', 'hi', $request->name_hi);
         $sub->saveTranslation('who_can_enroll', 'hi', $request->who_enroll_hi);
 
+        // Activity Log — Category Controller
+        ActivityLogger::log('Created_Subcategory', null, [
+            'entity_type' => 'subcategory',
+            'entity_id' => $sub->id,
+            'entity_title' => $sub->name,
+            'category_id' => $sub->category_id,
+        ]);
+
         return response()->json([
             'status' => true,
             'message' => 'Subcategory created successfully.',
             'subcategory' => $sub
         ]);
     }
-
 
     // update subcategory
     public function updateSubcategory(Request $request, $id)
@@ -204,25 +231,45 @@ class CategoryCantroller extends Controller
         $sub->saveTranslation('name', 'hi', $request->name_hi);
         $sub->saveTranslation('who_can_enroll', 'hi', $request->who_enroll_hi);
 
+        // Activity Log — Category Controller
+        ActivityLogger::log('Updated_Subcategory', null, [
+            'entity_type' => 'subcategory',
+            'entity_id' => $sub->id,
+            'entity_title' => $sub->name,
+            'category_id' => $sub->category_id,
+        ]);
+
         return response()->json([
             'status' => true,
             'message' => 'Subcategory updated successfully.'
         ]);
     }
 
-
     // delete subcategory
     public function deleteSubcategory($id)
     {
         $sub = Subcategory::findOrFail($id);
+
+        // Capture details before deletion.
+        $subcategoryId = $sub->id;
+        $subcategoryTitle = $sub->name;
+        $categoryId = $sub->category_id;
+
         $sub->delete();
+
+        // Activity Log — Category Controller
+        ActivityLogger::log('Deleted_Subcategory', null, [
+            'entity_type' => 'subcategory',
+            'entity_id' => $subcategoryId,
+            'entity_title' => $subcategoryTitle,
+            'category_id' => $categoryId,
+        ]);
 
         return response()->json([
             'status' => true,
             'message' => 'Subcategory deleted successfully.',
         ]);
     }
-
 
     // fetch single sub category
     public function getSubcategory($id)

@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Media;
 use App\Models\Course;
 use App\Models\CourseModule;
+use App\Helpers\ActivityLogger;
 
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
@@ -336,6 +337,23 @@ class CourseController extends Controller
 
         }
 
+        /*
+        |--------------------------------------------------------------------------
+        | ACTIVITY LOG — COURSE CONTROLLER
+        |--------------------------------------------------------------------------
+        | Log only after the course, default module, translations,
+        | and optional thumbnail processing have completed.
+        */
+
+        ActivityLogger::log('Created_Course', null, [
+            'entity_type' => 'course',
+            'entity_id' => $course->id,
+            'entity_title' => $course->title,
+            'teacher_id' => $course->teacher_id,
+            'category_id' => $course->category_id,
+            'status' => $course->status,
+        ]);
+
         return response()->json([
             'status' => true,
             'message' => 'Course created successfully',
@@ -588,6 +606,40 @@ class CourseController extends Controller
             $course->save();
         }
 
+        /*
+        |--------------------------------------------------------------------------
+        | ACTIVITY LOG — COURSE CONTROLLER
+        |--------------------------------------------------------------------------
+        */
+
+        $updatedFields = array_keys($course->getChanges());
+
+        $updatedFields = array_intersect($updatedFields, [
+            'title',
+            'description',
+            'category_id',
+            'subcategory_id',
+            'price',
+            'status',
+            'teacher_id',
+            'language',
+            'difficulty_level',
+            'highlights',
+        ]);
+
+        if ($request->hasFile('thumbnail')) {
+            $updatedFields[] = 'thumbnail';
+        }
+
+        if (!empty($updatedFields)) {
+            ActivityLogger::log('Updated_Course', null, [
+                'entity_type' => 'course',
+                'entity_id' => $course->id,
+                'entity_title' => $course->title,
+                'updated_fields' => array_values(array_unique($updatedFields)),
+            ]);
+        }
+
         return response()->json([
             'status' => true,
             'message' => 'Course updated successfully',
@@ -705,6 +757,19 @@ class CourseController extends Controller
 
         $course->delete();
 
+        /*
+        |--------------------------------------------------------------------------
+        | ACTIVITY LOG — COURSE CONTROLLER
+        |--------------------------------------------------------------------------
+        | Log a successful course soft deletion.
+        */
+
+        ActivityLogger::log('Soft_Deleted_Course', null, [
+            'entity_type' => 'course',
+            'entity_id' => $course->id,
+            'entity_title' => $course->title,
+        ]);
+
         return response()->json([
             'status' => true,
             'message' => 'Course deleted successfully'
@@ -770,6 +835,19 @@ class CourseController extends Controller
 
         $course->deleted_by = null;
         $course->save();
+
+        /*
+        |--------------------------------------------------------------------------
+        | ACTIVITY LOG — COURSE CONTROLLER
+        |--------------------------------------------------------------------------
+        | Log a successful course restoration.
+        */
+
+        ActivityLogger::log('Restored_Course', null, [
+            'entity_type' => 'course',
+            'entity_id' => $course->id,
+            'entity_title' => $course->title,
+        ]);
 
         $course->load([
             'thumbnail',
@@ -844,6 +922,20 @@ class CourseController extends Controller
         }
 
         $course->forceDelete();
+
+        /*
+        |--------------------------------------------------------------------------
+        | ACTIVITY LOG — COURSE CONTROLLER
+        |--------------------------------------------------------------------------
+        | Preserve the course details in the activity record because
+        | the course itself is permanently deleted.
+        */
+
+        ActivityLogger::log('Force_Deleted_Course', null, [
+            'entity_type' => 'course',
+            'entity_id' => $course->id,
+            'entity_title' => $course->title,
+        ]);
 
         return response()->json([
             'status' => true,

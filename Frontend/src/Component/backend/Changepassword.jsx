@@ -84,8 +84,7 @@ const Changepassword = () => {
   return (
     <>  
 
-      <form onSubmit={handleSubmit(onSubmit)} 
-      >
+      <form onSubmit={handleSubmit(onSubmit)} className='space'>
 
         {/* Breadcrumbs */}
         <div className="d-flex justify-content-between align-items-center">
@@ -104,7 +103,7 @@ const Changepassword = () => {
           </Link>
         </div>
 
-        <div className="dashboard-card mt-4 space"
+        <div className="dashboard-card mt-4"
         >
 
           {/* Header */}
@@ -134,7 +133,6 @@ const Changepassword = () => {
           </div>
 
           <hr />
-
                                       
           {/* Current Password */}
           <div className="mt-4 mb-4">
@@ -355,7 +353,7 @@ const Changepassword = () => {
 
 
         </div>
-              {/* </div> */}
+        
       </form>
 
     </>

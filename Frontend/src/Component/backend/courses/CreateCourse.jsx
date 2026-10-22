@@ -270,7 +270,7 @@ const CreateCourse = () => {
               {/* Title Eng */}
             <div className="col-md-6">
               <div className="mb-3">
-                <label className="form-label"> 
+                <label className="form-label">
                   <FontAwesomeIcon icon={faA} className="icon" />
                   Course Title (English) <b className="text-danger">*</b>
                 </label>

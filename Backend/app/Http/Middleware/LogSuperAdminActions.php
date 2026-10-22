@@ -25,7 +25,7 @@ class LogSuperAdminActions
             if ($target) {
                 $targetRoleNames = $target->getRoleNames()->toArray();
                 if (in_array('admin', $targetRoleNames) || in_array('moderator', $targetRoleNames)) {
-                    ActivityLogger::log('Superadmin_Action_Warning', $actor, [
+                    ActivityLogger::log('Superadmin_Action_Warning', $target, [
                         'action_uri' => $request->path(),
                         'target_user_id' => $target->id,
                         'target_roles' => $targetRoleNames,

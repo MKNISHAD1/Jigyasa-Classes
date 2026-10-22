@@ -122,7 +122,9 @@ const isRouteActive = (path) => {
                                         <RefreshLink
                                             key={item.path}
                                             to={item.path}
-                                            className="sidebar-link"
+                                            className={`sidebar-link ${
+                                                isRouteActive(item.path) ? "active" : ""
+                                            }`}
                                             onNavigate={onNavigate}
                                         >
                                             <FontAwesomeIcon

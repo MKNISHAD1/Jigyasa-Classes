@@ -10,7 +10,7 @@ import FooterUi from "../Common/CommonUI/FooterUi";
 import HeaderUi from "../Common/CommonUI/HeaderUi";
 import { availabilityValidator} from "../../utilities/validators";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleRight, faArrowLeft, faCamera, faCheck, faCircleExclamation, faPhone, faUserAlt, faWarning } from "@fortawesome/free-solid-svg-icons";
+import { faA, faAngleRight, faArrowLeft, faAt, faBriefcase, faCalendarDay, faCalendarWeek, faCamera, faCheck, faCircleExclamation, faEnvelope, faFile, faFloppyDisk, faGlobe, faIdCard, faLanguage, faMobile, faPhone, faUserAlt, faUserTag, faWarning } from "@fortawesome/free-solid-svg-icons";
 import { DASHBOARD_ROUTES } from "../../constants/nevigation/routes";
 
 const EditProfile = () => {
@@ -206,7 +206,7 @@ if (loading) {
         style={{ minHeight: "350px" }}
       >
         <div
-          className="spinner-border text-success "
+          className="spinner-border text-success text-center "
           style={{ width: "3rem", height: "3rem" }}
         />
 
@@ -297,11 +297,12 @@ if (loading) {
 
                 {/* Full Name */}
 
-                <div className="mb-3">
+                <div className="mb-4">
 
-                    <label className="form-label">
-                        Full Name
-                    </label>
+                <label className="form-label">
+                  <FontAwesomeIcon icon={faA} className="icon" />
+                  Full Name
+                </label>
 
                     <input
                       {...register("name", {
@@ -323,8 +324,9 @@ if (loading) {
 
                 {/*  Only Student can't edit */}
 
-                <div className="mb-3">
+                <div className="mb-4">
                     <label className="form-label">
+                      <FontAwesomeIcon icon={faBriefcase} className="icon" />
                         Professional Title
                     </label>
 
@@ -337,9 +339,10 @@ if (loading) {
                     />
                 </div>
 
-                <div className="mb-3">
+                <div className="mb-4">
 
                     <label className="form-label">
+                      <FontAwesomeIcon icon={faIdCard} className="icon"/>
                         Biography
                     </label>
 
@@ -376,8 +379,11 @@ if (loading) {
 
       <div className="row">
 
-        <div className="mb-3">
-          <label className="form-label">Email</label>
+        <div className="mb-4">
+          <label className="form-label">
+            <FontAwesomeIcon icon={faEnvelope} className="icon" />
+            Email
+          </label>
           <input
             {...register("email")}
             type="text"
@@ -387,8 +393,10 @@ if (loading) {
         </div>
 
         <div className="col-lg-6">
-          <div className="mb-3">
-            <label className="form-label">Username</label>
+          <div className="mb-4">
+            <label className="form-label">
+              <FontAwesomeIcon icon={faAt} className="icon" />
+              Username</label>
             <input
               {...register("username", {
                 required: "Username is required",
@@ -415,8 +423,10 @@ if (loading) {
         </div>
 
         <div className="col-lg-6">
-          <div className="mb-3">
-            <label className="form-label">Mobile</label>
+          <div className="mb-4">
+            <label className="form-label">
+              <FontAwesomeIcon icon={faMobile} className="icon" />
+              Mobile</label>
             <input
               {...register("mobile_no", {
                 required: "Mobile number is required",
@@ -448,8 +458,10 @@ if (loading) {
         </div>
 
         <div className="col-lg-6">
-          <div className="mb-3">
-            <label className="form-label">Country</label>
+          <div className="mb-4">
+            <label className="form-label">
+              <FontAwesomeIcon icon={faGlobe} className="icon" />
+              Country</label>
             <input
               type="text"
               className="form-control"
@@ -460,8 +472,10 @@ if (loading) {
         </div>
 
         <div className="col-lg-6">
-          <div className="mb-3">
-            <label className="form-label">Language</label>
+          <div className="mb-4">
+            <label className="form-label">
+              <FontAwesomeIcon icon={faLanguage} className="icon"/>
+              Language</label>
             <input
               type="text"
               className="form-control"
@@ -480,16 +494,18 @@ if (loading) {
 
       <div className="card-header-custom">
           <div className="header">
-              <FontAwesomeIcon icon={faPhone} className="icon" />
-              <span>Contact Information</span>
+              <FontAwesomeIcon icon={faFile} className="icon" />
+              <span> Overview</span>
           </div>
       </div>
 
       <div className="row">
 
         <div className="col-lg-6">
-          <div className="mb-3">
-            <label className="form-label">Role</label>
+          <div className="mb-4">
+            <label className="form-label">
+              <FontAwesomeIcon icon={faUserTag} className="icon"/>
+              Role</label>
             <input
               type="text"
               className="form-control"
@@ -500,8 +516,10 @@ if (loading) {
         </div>
 
         <div className="col-lg-6">
-          <div className="mb-3">
-            <label className="form-label">Member Since</label>
+          <div className="mb-4">
+            <label className="form-label">
+              <FontAwesomeIcon icon={faCalendarWeek} className="icon"/>
+              Member Since</label>
             <input
               type="text"
               className="form-control"
@@ -512,9 +530,11 @@ if (loading) {
         </div>
 
         <div className="col-lg-6">
-          <label className="form-label">Email Status</label> <br />
+          <label className="form-label"> 
+            <FontAwesomeIcon icon={faEnvelope} className="icon" />
+            Email Status</label> 
 
-          <span className={`badge mb-3 ${
+          <span className={`badge text-center mt-1 mb-4 ${
               user?.email_verified_at
                   ? "badge-verified text-success"
                   : "badge-not-verified text-danger"
@@ -532,8 +552,10 @@ if (loading) {
         </div>
 
         <div className="col-lg-6">
-          <div className="mb-3">
-            <label className="form-label">Last Login</label>
+          <div className="mb-4">
+            <label className="form-label">
+              <FontAwesomeIcon icon={faCalendarDay} className="icon" /> 
+              Last Login</label>
             <input
               type="text"
               className="form-control"
@@ -576,7 +598,7 @@ if (loading) {
 
         <button
             type="button"
-            className="btn btn-outline-primary"
+            className="btn gray-btn-opp"
             onClick={() => navigate(-1)}
         >
             Cancel
@@ -584,7 +606,7 @@ if (loading) {
 
         <button
             type="submit"
-            className="btn btn-primary"
+            className="btn green-btn"
             disabled={loading || !isChanged || isSubmitting}
             
         >
@@ -602,7 +624,9 @@ if (loading) {
 
                 ) : (
 
-                  "Save Changes"
+                  <>
+                  <FontAwesomeIcon icon={faFloppyDisk} /> Save Changes
+                  </>
 
               )}
         </button>

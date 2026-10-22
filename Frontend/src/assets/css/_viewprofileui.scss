@@ -9,26 +9,19 @@ $fifth-color:#FFFFFF;
 
 
 .profile-hero{
+    padding: 10px;
     margin-bottom:30px;
 }
 
 .profile-banner{
     height:200px;
-    // border-radius:20px;
-    background:
-    linear-gradient(
-        135deg,
-        #1e63ff,
-        #5b8cff
-    );
-
-    // position:relative;
-
+    border-radius:10px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;   
 }
 
 .profile-content{
-    // margin-top:-80px;
-    // text-align:center;
 
     display:flex;
     align-items:flex-end;
@@ -75,6 +68,10 @@ $fifth-color:#FFFFFF;
     font-size:1rem;
     color:#6c757d;
     text-transform: capitalize;
+
+    span{
+        font-weight: 600;
+    }
 }
 
 .profile-bio{
@@ -93,7 +90,7 @@ $fifth-color:#FFFFFF;
     box-shadow:0 8px 25px rgba(0,0,0,.08);
     padding:20px;
     margin: auto 15px;
-    // margin-top:10px;
+    border: 1px solid rgba($primary-color,0.5);
 }
 
 .keep{
@@ -130,7 +127,8 @@ $fifth-color:#FFFFFF;
     background:$secondary-color;
     padding: 10px;
     color:$primary-color;
-    font-size:17px;
+    font-size:20x;
+    border: 1px solid rgba($primary-color,0.5);
 }
 
 
@@ -200,6 +198,7 @@ $fifth-color:#FFFFFF;
     padding:30px;
     box-shadow:0 10px 30px rgba(0,0,0,.08);
     margin:0 15px;
+    border: 1px solid rgba($primary-color,0.5);
 }
 
 
@@ -246,7 +245,7 @@ $fifth-color:#FFFFFF;
 
 .role-badge{
     padding:5px 13px;
-    border-radius:20px;
+    border-radius:8px;
     font-weight:600;
 }
 
@@ -261,8 +260,8 @@ $fifth-color:#FFFFFF;
 }
 
 .badge-moderator{
-    background:#f9e1b6;
-    color:#f39c12;
+    background:#fae7c3;
+    color:#ec9408;
 }
 
 .badge-admin{
@@ -295,6 +294,11 @@ $fifth-color:#FFFFFF;
     &:last-child{
         border-bottom:none;
     }
+
+}
+
+.keep{
+        border: 1px solid rgba($primary-color,0.5);
 
 }
 
@@ -464,6 +468,20 @@ $fifth-color:#FFFFFF;
 
 @media (max-width:576px){
 
+    
+.profile-hero{
+    padding: 0px;
+    margin-bottom:30px;
+}
+
+.profile-banner{
+    background-color: #365fe6;
+    border-radius:10px;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;   
+}
+
     .profile-info-row{
         flex-direction:column;
         gap:5px;
@@ -501,4 +519,20 @@ $fifth-color:#FFFFFF;
     font-weight: 600;
     }
 
+}
+
+
+.empty-courses{
+    img{
+        width: 50%;
+    }
+
+    h4{
+        font-weight: 600;
+        color: $primary-color;
+    }
+
+    p{
+        font-weight: 500;
+    }
 }

@@ -131,8 +131,19 @@ Route::middleware(['auth:sanctum','suspenduser'])->group(function ()
         ]);
     });
 
-    // dashboard and logout
-    Route::get('dashurl',[DashboardController::class,'index']);
+    // Teacher Dashboard
+    Route::get('dashboard/teacher',[DashboardController::class, 'teacherDashboard'])
+        ->middleware('role:teacher');
+
+    // Moderator/Admin Dashbooard
+    Route::get('dashboard/admin-moderator',[DashboardController::class, 'adminDashboard'])
+        ->middleware('role:moderator|admin');
+
+    // superAdmin Dashbooard
+    Route::get('dashboard/superadmin',[DashboardController::class, 'superAdminDashboard'])
+        ->middleware('role:super_admin');
+
+    // Logout
     Route::get('logout',[AuthenticationController::class,'logout']);
 
     // Profile routes ( self profile only)

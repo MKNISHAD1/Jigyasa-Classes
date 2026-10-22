@@ -1,17 +1,11 @@
 
 import React, { useState } from "react";
-import Header from "../Common/Header";
-import Sidebar from "../Common/Sidebar";
 import { useForm } from "react-hook-form";
 import { apiUrl, token } from "../Common/http";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import FooterUi from "../Common/CommonUI/FooterUi";
-import HeaderUi from "../Common/CommonUI/HeaderUi";
-import { availabilityValidator} from "../../utilities/validators";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleRight, faCalendar, faCheck, faClock, faEnvelopeOpen, faPen, faPhone, faShield, faShieldHalved, faUserAlt, faWarning } from "@fortawesome/free-solid-svg-icons";
-import { faClockFour, faEnvelope, faUser } from "@fortawesome/free-regular-svg-icons";
+import { faAngleRight, faCalendar, faCheck, faClock, faEnvelope, faPen, faPhone, faShield, faShieldHalved, faUserAlt, faWarning } from "@fortawesome/free-solid-svg-icons";
 import { DASHBOARD_ROUTES } from "../../constants/nevigation/routes";
 import studentBanner from "../../assets/images/banner1.jpeg";
 import teacherBanner from "../../assets/images/banner2.jpeg";
@@ -24,7 +18,6 @@ import defaultBanner from "../../assets/images/herobg5.png";
 
 const ViewProfile = () => {
   const [user, setUser] = useState("");
-  const [isDisable, setIsDisable] = useState(false);
   const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(true);
   
@@ -32,9 +25,7 @@ const ViewProfile = () => {
 
   const {
     register,
-    handleSubmit,
     watch,
-    reset,
     formState: { errors,  isSubmitting  },
   } = useForm({
     mode:"onChange", // onBlur  = after leaving the field and debounce validator 
@@ -102,9 +93,11 @@ const ViewProfile = () => {
     if(!date) return "-";
 
         return new Date(date).toLocaleDateString("en-IN",{
-            day:"numeric",
-            month:"long",
-            year:"numeric",
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        hour: "numeric",
+        minute: "numeric"
         });
 
     };
@@ -185,7 +178,7 @@ if (loading) {
         style={{ minHeight: "350px" }}
       >
         <div
-          className="spinner-border text-success "
+          className="spinner-border text-success text-center"
           style={{ width: "3rem", height: "3rem" }}
         />
 
@@ -209,10 +202,7 @@ if (loading) {
         <div
           className="profile-banner"
           style={{
-              backgroundImage:`url(${bannerImage})`,
-              backgroundSize:'cover',
-              backgroundRepeat:'no-repeat',
-              
+              backgroundImage:`url(${bannerImage})`
           }}
       >
       </div>
@@ -303,10 +293,10 @@ if (loading) {
             </div>
 
         </div>
-
+{/* 
         <div className="profile-stat">
 
-            <FontAwesomeIcon icon={faClockFour} className="icon" />
+            <FontAwesomeIcon icon={faClock} className="icon" />
 
             <div>
 
@@ -318,7 +308,7 @@ if (loading) {
 
             </div>
 
-        </div>
+        </div> */}
 
     </div>
  
