@@ -14,7 +14,7 @@ import student2 from '../../../assets/images/Student2.png';
 import student3 from '../../../assets/images/Student3.png';
 import student4 from '../../../assets/images/Student4.png';
 import student5 from '../../../assets/images/Student5.png';
-import student6 from '../../../assets/images/Student10.png';
+import student6 from '../../../assets/images/student10.png';
 import exam1 from '../../../assets/images/exam1.png';
 import exam2 from '../../../assets/images/exam2.png';
 import exam3 from '../../../assets/images/exam3.png';
