@@ -142,7 +142,6 @@ const AdminModeratorDashboard = () => {
             </div>
 
             {/* Recent users */}
-
             <DashboardRecentUsers 
                 users={recentUsers}
                 limit={5}
