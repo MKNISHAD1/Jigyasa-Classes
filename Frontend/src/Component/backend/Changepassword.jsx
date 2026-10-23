@@ -88,7 +88,7 @@ const Changepassword = () => {
 
         {/* Breadcrumbs */}
         <div className="d-flex justify-content-between align-items-center">
-          <section className="breadcrumb-section">
+          <section className="breadcrumb-section px-4 pt-3 ">
             <h3>Change <span>Password</span></h3>
     
             <Link className='bread-link' to={DASHBOARD_ROUTES.DASHBOARD}>Home</Link>
@@ -103,8 +103,7 @@ const Changepassword = () => {
           </Link>
         </div>
 
-        <div className="dashboard-card mt-4"
-        >
+        <div className="dashboard-card mt-4">
 
           {/* Header */}
           <div className="header-custom d-flex  justify-content-center mb-3">
@@ -355,6 +354,8 @@ const Changepassword = () => {
         </div>
         
       </form>
+
+      {/* <hr className="my-4 d-lg-none d-block" /> */}
 
     </>
   )

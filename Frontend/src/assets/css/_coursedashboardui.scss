@@ -264,6 +264,7 @@ $fifth-color:#FFFFFF;
 }
 
 .action-dropdown{
+
     position: absolute;
     bottom: -50px;
     right: 40px;
@@ -274,27 +275,99 @@ $fifth-color:#FFFFFF;
     border: 1px solid #e9ecef;
     overflow: hidden;
     z-index: 999;
-}
 
-.dropdown-action{
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    /* Mobile dropdown: solid action colors only */
+    .dropdown-action {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        width: 100%;
+        padding: 12px 16px;
+        border: 0;
+        text-decoration: none;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
 
-    width: 100%;
-    padding: 12px 16px;
-
-    border: 0;
-    // background: #fff;
-    // color: #333;
-    text-decoration: none;
-    cursor: pointer;
-
-    span{
-        color: inherit;
+        &:hover{
+            transform: scale(1.10);
+        }
     }
 
+    .btn-view {
+        background-color: #2563eb;
+        color: white;
+        transition: .25s;
+        span{
+            color: white;
+        }
+        &:hover {
+            background-color: $secondary-color;
+            color: #2563eb;
+            span{
+                color: #2563eb;
+            }
+
+        }
+    }
+
+    .btn-edit {
+        background-color:#f59e0b;
+        color: white;
+        transition: .25s;
+        &:hover {
+            background-color: $secondary-color;
+            color: #f59e0b;
+        }
+    }
+
+    .btn-delete, .btn-suspend {
+        background-color: #ef4444;
+        color: white;
+        transition: .25s;
+        span{
+            color: white;
+        }
+        &:hover {
+            background-color: $secondary-color;
+            color: #dc2626;
+            span{
+                color: #dc2626;        
+            }
+        }
+    }
+
+    .btn-restore {
+        background-color: #16a34a;
+        color: white;
+        transition: .25s;
+        span {
+            color: white;
+        }
+        &:hover {
+            background-color: $secondary-color;
+            color: #16a34a;
+            span{
+                color: #16a34a;                
+            }
+        }
+    }
 }
+
+// .dropdown-action{
+//     display: flex;
+//     align-items: center;
+//     gap: 10px;
+//     width: 100%;
+//     padding: 12px 16px;
+//     border: 0;
+//     text-decoration: none;
+//     cursor: pointer;
+
+//     span{
+//         color: inherit;
+//     }
+
+// }
 
 
 

@@ -21,6 +21,7 @@ const CourseView = () => {
   const [loading, setLoading] = useState(true);
   const [selectedModules, setSelectedModules] = useState([]);
   const highlights = course?.highlights?.[i18n.language] || course?.highlights?.en || [];
+  const [showMore, setShowMore] = useState(false);
 
   
     // Accordon Lessoon pagination
@@ -181,7 +182,7 @@ if (!course) return <p className="text-center my-5">Course not found!</p>;
 
       {/* Breadcrumbs */}
       <div className="d-flex justify-content-between align-items-center">
-          <section className="breadcrumb-section">
+          <section className="breadcrumb-section px-4 pt-3">
               <h3>Course  <span>Details</span></h3>
 
               <Link className='bread-link' to={DASHBOARD_ROUTES.DASHBOARD}>Home</Link>
@@ -198,7 +199,7 @@ if (!course) return <p className="text-center my-5">Course not found!</p>;
       </div>
 
       {/* Thumbnail and data */}
-      <div className="dashboard-card mt-4">
+      <div className="dashboard-card mt-3">
         <div className="row">
           {/* Thumbnail Image */}
           <div className="col-lg-6 text-center mb-3">
@@ -355,7 +356,28 @@ if (!course) return <p className="text-center my-5">Course not found!</p>;
               </div>
 
           </div>            
-          <p className="description"> {course.description?.[i18n.language] || course.description?.en} </p>
+                    <p className={showMore ? "expanded" : ""}
+                       style={{whiteSpace:'pre-line'}}
+                    >
+
+                    {course.description?.[i18n.language] ||
+                    course.description?.en}
+
+                    </p>
+
+                    {(course.description?.en?.length > 150 ||
+                    course.description?.hi?.length > 150) && (
+
+                    <button
+                    className="Read_More_Button"
+                    onClick={()=>setShowMore(!showMore)}
+                    >
+
+                    {showMore ? "Read Less" : "Read More"}
+
+                    </button>
+
+                    )}
         </div>
 
       {/* Highlights */}
@@ -875,6 +897,9 @@ if (!course) return <p className="text-center my-5">Course not found!</p>;
               </Link>
             </div>
       </div>
+
+      <hr className="my-4 d-lg-none d-block" />
+
 
       {/* <div className="dashboard-card">
                   Lesson Table

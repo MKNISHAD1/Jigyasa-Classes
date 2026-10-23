@@ -225,415 +225,418 @@ if (loading) {
     <>
 
 
-<form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)} >
 
-    {/* Breadcrumbs */}
-    <div className="d-flex justify-content-between align-items-center">
-      <section className="breadcrumb-section">
-        <h3>Edit <span>Profile</span> </h3>
+          {/* Breadcrumbs */}
+          <div className="d-flex justify-content-between align-items-center">
+            <section className="breadcrumb-section px-4 pt-3">
+              <h3>Edit <span>Profile</span> </h3>
 
-        <Link className='bread-link' to={DASHBOARD_ROUTES.DASHBOARD}>Home</Link>
-        <span><FontAwesomeIcon icon={faAngleRight}/></span>
-        
+              <Link className='bread-link' to={DASHBOARD_ROUTES.DASHBOARD}>Home</Link>
+              <span><FontAwesomeIcon icon={faAngleRight}/></span>
+              
 
-        <Link className='bread-link' to=""><span>Edit Profile</span></Link>
-      </section>
+              <Link className='bread-link' to=""><span>Edit Profile</span></Link>
+            </section>
 
-      <Link to={DASHBOARD_ROUTES.VIEW_PROFILE} className="edit-btn">
-      <FontAwesomeIcon icon={faArrowLeft} className="icon"/>  Return
-      </Link>
-    </div>
+            <Link to={DASHBOARD_ROUTES.VIEW_PROFILE} className="edit-btn">
+            <FontAwesomeIcon icon={faArrowLeft} className="icon"/>  Return
+            </Link>
+          </div>
 
-    {/* Profile Update */}
-    <div className="dashboard-card mt-4">
+          {/* Profile Update */}
+          <div className="dashboard-card mt-3">
 
-        <div className="card-header-custom">
-            <div className="header">
-                <FontAwesomeIcon icon={faUserAlt} className="icon" />
-                <span>Profile Information</span>
-            </div>
-        </div>
+              <div className="card-header-custom">
+                  <div className="header">
+                      <FontAwesomeIcon icon={faUserAlt} className="icon" />
+                      <span>Profile Information</span>
+                  </div>
+              </div>
 
-        <div className="row">
+              <div className="row">
 
-            {/* Left */}
+                  {/* Left */}
 
-            <div className="col-lg-4">
-              <div className="profile-image-box mb-4">
-                  <img
-                      src={preview || user?.profile_pic}
-                      alt={user?.name}
-                      
-                  />
-                  <small>
-                      JPG, PNG , JPEG, WEBP. Max Size 2 MB.
-                  </small>
-                  <input
-                      id="profile_pic"
-                      type="file"
-                      hidden
-                      accept="image/*"
-                      {...profilePicRegister}
-                      onChange={(e)=>{
-                          onChange(e);
-                          handleFileChange(e);
-                      }}
-                      disabled={loading}
-                  />
-                  <label
-                      htmlFor="profile_pic"
-                      className="btn btn-primary mt-3"
-                  >
-                    <FontAwesomeIcon icon={faCamera} className="me-2"/>
-                    Change Photo
-                  </label>
+                  <div className="col-lg-4">
+                    <div className="profile-image-box mb-4">
+                        <img
+                            src={preview || user?.profile_pic}
+                            alt={user?.name}
+                            
+                        />
+                        <small>
+                            JPG, PNG , JPEG, WEBP. Max Size 2 MB.
+                        </small>
+                        <input
+                            id="profile_pic"
+                            type="file"
+                            hidden
+                            accept="image/*"
+                            {...profilePicRegister}
+                            onChange={(e)=>{
+                                onChange(e);
+                                handleFileChange(e);
+                            }}
+                            disabled={loading}
+                        />
+                        <label
+                            htmlFor="profile_pic"
+                            className="btn btn-primary mt-3"
+                        >
+                          <FontAwesomeIcon icon={faCamera} className="me-2"/>
+                          Change Photo
+                        </label>
+
+                    </div>
+                  </div>
+
+                  {/* Right */}
+
+                  <div className="col-lg-8">
+
+                      {/* Full Name */}
+
+                      <div className="mb-4">
+
+                      <label className="form-label">
+                        <FontAwesomeIcon icon={faA} className="icon" />
+                        Full Name
+                      </label>
+
+                          <input
+                            {...register("name", {
+                              required: "Name is required",
+                            })}
+                            type="text"
+                            className={`form-control ${
+                              errors.name && "is-invalid"
+                            }`}
+                            disabled={loading}
+                          />
+                          {errors.name && (
+                            <p className="invalid-feedback">
+                              {errors.name?.message}
+                            </p>
+                          )}
+
+                      </div>
+
+                      {/*  Only Student can't edit */}
+
+                      <div className="mb-4">
+                          <label className="form-label">
+                            <FontAwesomeIcon icon={faBriefcase} className="icon" />
+                              Professional Title
+                          </label>
+
+                          <input
+                              {...register("professional_title")}
+                              className="form-control"
+                              value={watch("professional_title") || professionalTitle}
+                              disabled={isStudent}
+                              placeholder={professionalTitle}
+                          />
+                      </div>
+
+                      <div className="mb-4">
+
+                          <label className="form-label">
+                            <FontAwesomeIcon icon={faIdCard} className="icon"/>
+                              Biography
+                          </label>
+
+                          <textarea
+                              rows={5}
+                              maxLength={300}
+                              {...register("bio")}
+                              className="form-control"
+                              value={watch("bio") || userBio}
+                              disabled={isStudent}
+                              placeholder={userBio}
+                          />
+
+                          <small className="text-muted">
+                              {(watch("bio") || userBio).length}/300
+                          </small>
+
+                      </div>
+                  </div>
 
               </div>
+
+          </div>
+
+          {/* Contact Information Card */}
+          <div className="dashboard-card mt-4">
+
+            <div className="card-header-custom">
+                <div className="header">
+                    <FontAwesomeIcon icon={faPhone} className="icon" />
+                    <span>Contact Information</span>
+                </div>
             </div>
 
-            {/* Right */}
+            <div className="row">
 
-            <div className="col-lg-8">
-
-                {/* Full Name */}
-
-                <div className="mb-4">
-
+              <div className="mb-4">
                 <label className="form-label">
-                  <FontAwesomeIcon icon={faA} className="icon" />
-                  Full Name
+                  <FontAwesomeIcon icon={faEnvelope} className="icon" />
+                  Email
                 </label>
-
-                    <input
-                      {...register("name", {
-                        required: "Name is required",
-                      })}
-                      type="text"
-                      className={`form-control ${
-                        errors.name && "is-invalid"
-                      }`}
-                      disabled={loading}
-                    />
-                    {errors.name && (
-                      <p className="invalid-feedback">
-                        {errors.name?.message}
-                      </p>
-                    )}
-
-                </div>
-
-                {/*  Only Student can't edit */}
-
-                <div className="mb-4">
-                    <label className="form-label">
-                      <FontAwesomeIcon icon={faBriefcase} className="icon" />
-                        Professional Title
-                    </label>
-
-                    <input
-                        {...register("professional_title")}
-                        className="form-control"
-                        value={watch("professional_title") || professionalTitle}
-                        disabled={isStudent}
-                        placeholder={professionalTitle}
-                    />
-                </div>
-
-                <div className="mb-4">
-
-                    <label className="form-label">
-                      <FontAwesomeIcon icon={faIdCard} className="icon"/>
-                        Biography
-                    </label>
-
-                    <textarea
-                        rows={5}
-                        maxLength={300}
-                        {...register("bio")}
-                        className="form-control"
-                        value={watch("bio") || userBio}
-                        disabled={isStudent}
-                        placeholder={userBio}
-                    />
-
-                    <small className="text-muted">
-                        {(watch("bio") || userBio).length}/300
-                    </small>
-
-                </div>
-            </div>
-
-        </div>
-
-    </div>
-
-    {/* Contact Information Card */}
-    <div className="dashboard-card mt-4">
-
-      <div className="card-header-custom">
-          <div className="header">
-              <FontAwesomeIcon icon={faPhone} className="icon" />
-              <span>Contact Information</span>
-          </div>
-      </div>
-
-      <div className="row">
-
-        <div className="mb-4">
-          <label className="form-label">
-            <FontAwesomeIcon icon={faEnvelope} className="icon" />
-            Email
-          </label>
-          <input
-            {...register("email")}
-            type="text"
-            className="form-control"
-            disabled
-          />
-        </div>
-
-        <div className="col-lg-6">
-          <div className="mb-4">
-            <label className="form-label">
-              <FontAwesomeIcon icon={faAt} className="icon" />
-              Username</label>
-            <input
-              {...register("username", {
-                required: "Username is required",
-                validate :availabilityValidator(
-                  "users", // Model name
-                  "username", // Feild Name
-                  user?.id,
-                  user?.username,
-                  "username" // lable Name
-                )
-              })}
-              type="text"
-              disabled={loading}
-              className={`form-control ${
-                errors.username && "is-invalid"
-              }`}
-            />
-            {errors.username && (
-              <p className="invalid-feedback">
-                {errors.username?.message}
-              </p>
-            )}
-          </div>
-        </div>
-
-        <div className="col-lg-6">
-          <div className="mb-4">
-            <label className="form-label">
-              <FontAwesomeIcon icon={faMobile} className="icon" />
-              Mobile</label>
-            <input
-              {...register("mobile_no", {
-                required: "Mobile number is required",
-                pattern: {
-                      value: /^[6-9]\d{9}$/,
-                      message: "Enter a valid 10-digit mobile number."
-                  },
-                validate :availabilityValidator(
-                  "users", // Model name
-                  "mobile_no", // Feild Name
-                  user?.id,
-                  user?.mobile_no,
-                  "Mobile No." // lable Name
-                ),
-              })}
-              type="text"
-              maxLength={10}
-              disabled={loading}
-              className={`form-control ${
-                errors.mobile_no && "is-invalid"
-              }`}
-            />
-            {errors.mobile_no && (
-              <p className="invalid-feedback">
-                {errors.mobile_no?.message}
-              </p>
-            )}
-          </div>
-        </div>
-
-        <div className="col-lg-6">
-          <div className="mb-4">
-            <label className="form-label">
-              <FontAwesomeIcon icon={faGlobe} className="icon" />
-              Country</label>
-            <input
-              type="text"
-              className="form-control"
-              placeholder="India"
-              disabled
-            />
-          </div>
-        </div>
-
-        <div className="col-lg-6">
-          <div className="mb-4">
-            <label className="form-label">
-              <FontAwesomeIcon icon={faLanguage} className="icon"/>
-              Language</label>
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Hindi, English"
-              disabled
-            /> 
-          </div>
-      </div>
-
-      </div>
-
-    </div>
-
-    {/* Account Information */}
-    <div className="dashboard-card mt-4">
-
-      <div className="card-header-custom">
-          <div className="header">
-              <FontAwesomeIcon icon={faFile} className="icon" />
-              <span> Overview</span>
-          </div>
-      </div>
-
-      <div className="row">
-
-        <div className="col-lg-6">
-          <div className="mb-4">
-            <label className="form-label">
-              <FontAwesomeIcon icon={faUserTag} className="icon"/>
-              Role</label>
-            <input
-              type="text"
-              className="form-control"
-              placeholder={formatRole(role)}
-              disabled
-            />
-          </div>
-        </div>
-
-        <div className="col-lg-6">
-          <div className="mb-4">
-            <label className="form-label">
-              <FontAwesomeIcon icon={faCalendarWeek} className="icon"/>
-              Member Since</label>
-            <input
-              type="text"
-              className="form-control"
-              placeholder={formatDate(user?.created_at)}
-              disabled
-            />
-          </div>
-        </div>
-
-        <div className="col-lg-6">
-          <label className="form-label"> 
-            <FontAwesomeIcon icon={faEnvelope} className="icon" />
-            Email Status</label> 
-
-          <span className={`badge text-center mt-1 mb-4 ${
-              user?.email_verified_at
-                  ? "badge-verified text-success"
-                  : "badge-not-verified text-danger"
-          }`}>
-              {user?.email_verified_at
-                  ? 
-                  <>
-                    <FontAwesomeIcon icon={faCheck}/> Verified
-                  </>
-                  : 
-                  <>
-                    <FontAwesomeIcon icon={faWarning}/> Not Verified
-                  </>}
-          </span>
-        </div>
-
-        <div className="col-lg-6">
-          <div className="mb-4">
-            <label className="form-label">
-              <FontAwesomeIcon icon={faCalendarDay} className="icon" /> 
-              Last Login</label>
-            <input
-              type="text"
-              className="form-control"
-              placeholder={user?.last_login_at
-                ? new Date(user.last_login_at).toLocaleString("en-IN", {
-                  day: "numeric",
-                  month: "long",
-                  year: "numeric",
-                  hour: "numeric",
-                  minute: "2-digit",
-              }) : "First Login"}
-              disabled
-            />
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    {/* Note */}
-    <div className="mb-4  mt-4  keep"> 
-
-          <div className="profile-stat">
-
-            <FontAwesomeIcon icon={faCircleExclamation} className="icon"/>
-
-            <div>
-              <h6>Note</h6>
-              <span>Some information is managed bt the system and cannot be edited. Kindly contact support in need of assisstence. Thank You!
-</span>
-            </div>
-          </div>
-    
-    </div>
-
-    <hr className="m-4" />
-
-    {/* buttons */}
-    <div className="d-flex justify-content-end gap-3 m-4">
-
-        <button
-            type="button"
-            className="btn gray-btn-opp"
-            onClick={() => navigate(-1)}
-        >
-            Cancel
-        </button>
-
-        <button
-            type="submit"
-            className="btn green-btn"
-            disabled={loading || !isChanged || isSubmitting}
-            
-        >
-            {loading ? (
-
-              <>
-                <span
-                  className="spinner-border spinner-border-sm me-2 text-light"
-                  role="status"
+                <input
+                  {...register("email")}
+                  type="text"
+                  className="form-control"
+                  disabled
                 />
+              </div>
 
-                  <span className='text-light'>Saving Changes... </span>
+              <div className="col-lg-6">
+                <div className="mb-4">
+                  <label className="form-label">
+                    <FontAwesomeIcon icon={faAt} className="icon" />
+                    Username</label>
+                  <input
+                    {...register("username", {
+                      required: "Username is required",
+                      validate :availabilityValidator(
+                        "users", // Model name
+                        "username", // Feild Name
+                        user?.id,
+                        user?.username,
+                        "username" // lable Name
+                      )
+                    })}
+                    type="text"
+                    disabled={loading}
+                    className={`form-control ${
+                      errors.username && "is-invalid"
+                    }`}
+                  />
+                  {errors.username && (
+                    <p className="invalid-feedback">
+                      {errors.username?.message}
+                    </p>
+                  )}
+                </div>
+              </div>
 
-                </>
+              <div className="col-lg-6">
+                <div className="mb-4">
+                  <label className="form-label">
+                    <FontAwesomeIcon icon={faMobile} className="icon" />
+                    Mobile</label>
+                  <input
+                    {...register("mobile_no", {
+                      required: "Mobile number is required",
+                      pattern: {
+                            value: /^[6-9]\d{9}$/,
+                            message: "Enter a valid 10-digit mobile number."
+                        },
+                      validate :availabilityValidator(
+                        "users", // Model name
+                        "mobile_no", // Feild Name
+                        user?.id,
+                        user?.mobile_no,
+                        "Mobile No." // lable Name
+                      ),
+                    })}
+                    type="text"
+                    maxLength={10}
+                    disabled={loading}
+                    className={`form-control ${
+                      errors.mobile_no && "is-invalid"
+                    }`}
+                  />
+                  {errors.mobile_no && (
+                    <p className="invalid-feedback">
+                      {errors.mobile_no?.message}
+                    </p>
+                  )}
+                </div>
+              </div>
 
-                ) : (
+              <div className="col-lg-6">
+                <div className="mb-4">
+                  <label className="form-label">
+                    <FontAwesomeIcon icon={faGlobe} className="icon" />
+                    Country</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="India"
+                    disabled
+                  />
+                </div>
+              </div>
 
-                  <>
-                  <FontAwesomeIcon icon={faFloppyDisk} /> Save Changes
-                  </>
+              <div className="col-lg-6">
+                <div className="mb-4">
+                  <label className="form-label">
+                    <FontAwesomeIcon icon={faLanguage} className="icon"/>
+                    Language</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Hindi, English"
+                    disabled
+                  /> 
+                </div>
+            </div>
 
-              )}
-        </button>
+            </div>
 
-    </div>
+          </div>
 
-</form>
+          {/* Account Information */}
+          <div className="dashboard-card mt-4">
+
+            <div className="card-header-custom">
+                <div className="header">
+                    <FontAwesomeIcon icon={faFile} className="icon" />
+                    <span>Account Overview</span>
+                </div>
+            </div>
+
+            <div className="row">
+
+              <div className="col-lg-6">
+                <div className="mb-4">
+                  <label className="form-label">
+                    <FontAwesomeIcon icon={faUserTag} className="icon"/>
+                    Role</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder={formatRole(role)}
+                    disabled
+                  />
+                </div>
+              </div>
+
+              <div className="col-lg-6">
+                <div className="mb-4">
+                  <label className="form-label">
+                    <FontAwesomeIcon icon={faCalendarWeek} className="icon"/>
+                    Member Since</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder={formatDate(user?.created_at)}
+                    disabled
+                  />
+                </div>
+              </div>
+
+              <div className="col-lg-6">
+                <label className="form-label"> 
+                  <FontAwesomeIcon icon={faEnvelope} className="icon" />
+                  Email Status</label> 
+
+                <span className={`badge text-center mt-1 mb-4 ${
+                    user?.email_verified_at
+                        ? "badge-verified text-success"
+                        : "badge-not-verified text-danger"
+                }`}>
+                    {user?.email_verified_at
+                        ? 
+                        <>
+                          <FontAwesomeIcon icon={faCheck}/> Verified
+                        </>
+                        : 
+                        <>
+                          <FontAwesomeIcon icon={faWarning}/> Not Verified
+                        </>}
+                </span>
+              </div>
+
+              <div className="col-lg-6">
+                <div className="mb-4">
+                  <label className="form-label">
+                    <FontAwesomeIcon icon={faCalendarDay} className="icon" /> 
+                    Last Login</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder={user?.last_login_at
+                      ? new Date(user.last_login_at).toLocaleString("en-IN", {
+                        day: "numeric",
+                        month: "long",
+                        year: "numeric",
+                        hour: "numeric",
+                        minute: "2-digit",
+                    }) : "First Login"}
+                    disabled
+                  />
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          {/* Note */}
+          <div className="mb-4  mt-4  keep"> 
+
+                <div className="profile-stat">
+
+                  <FontAwesomeIcon icon={faCircleExclamation} className="icon"/>
+
+                  <div>
+                    <h6>Note</h6>
+                    <span>Some information is managed bt the system and cannot be edited. Kindly contact support in need of assisstence. Thank You!
+      </span>
+                  </div>
+                </div>
+          
+          </div>
+
+          <hr className="m-4" />
+
+          {/* buttons */}
+          <div className="d-flex justify-content-end gap-3 m-4">
+
+              <button
+                  type="button"
+                  className="btn gray-btn-opp"
+                  onClick={() => navigate(-1)}
+              >
+                  Cancel
+              </button>
+
+              <button
+                  type="submit"
+                  className="btn green-btn"
+                  disabled={loading || !isChanged || isSubmitting}
+                  
+              >
+                  {loading ? (
+
+                    <>
+                      <span
+                        className="spinner-border spinner-border-sm me-2 text-light"
+                        role="status"
+                      />
+
+                        <span className='text-light'>Saving Changes... </span>
+
+                      </>
+
+                      ) : (
+
+                        <>
+                        <FontAwesomeIcon icon={faFloppyDisk} /> Save Changes
+                        </>
+
+                    )}
+              </button>
+
+          </div>
+
+      </form>
+
+      <hr className="my-4 d-lg-none d-block" />
+
     </>
   );
 };

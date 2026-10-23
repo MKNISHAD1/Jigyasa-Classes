@@ -244,6 +244,8 @@ const Showusers = () => {
 
       </div>
 
+    <hr className="my-4 d-lg-none d-block" />
+
       {/* Confirmation Dialog Box */}
 
       <ConfirmationDialogBoxUi

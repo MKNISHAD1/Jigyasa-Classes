@@ -57,7 +57,7 @@
     .Teacher_Dashboard, 
     .Admin_Moderator_Dashboard,
     .Super_Admin_Dashboard {
-        padding: 0;
+        padding: 12px;
     }
 }
 
@@ -71,7 +71,7 @@
         .dashboard-content {
             width: 100%;
             min-width: 0;
-            padding: 12px;
+            // padding: 12px;
         }
     }
 }

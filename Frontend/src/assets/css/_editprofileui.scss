@@ -32,6 +32,67 @@ $fifth-color:#FFFFFF;
     }
 }
 
+.Summary_Card{
+
+
+    .Card_Data{
+        border-left: 1px  solid rgba($primary-color, 0.3) ;
+        padding-left: 40px;
+
+        .Login_Data{
+
+            strong{
+                font-weight: 600;
+                color: #555;
+                font-size: 14px;
+            }
+
+            .Icon{
+                color: $primary-color;
+                padding: 10px;
+                border: 1px solid rgba($primary-color, 0.5);
+                background-color: $secondary-color;
+                border-radius: 10px;
+                margin-right: 10px;
+            }
+
+        }
+    }
+
+@media (max-width:768px){
+    .Card_Data{
+        border: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding-left: 10px;
+        padding-top: 40px;
+    }
+}
+
+}
+
+.info-stat{
+    background-color: $secondary-color;
+    border: 1px solid rgba($primary-color, 0.5);
+    border-radius: 10px;
+    padding: 10px;
+
+    .icon{
+        background-color: $secondary-color;
+        border: 0;
+        color: $primary-color;
+        font-size: 19px;
+        padding: 0 5px;
+    }
+
+}
+
+.form-select{
+    border: 1px solid $primary-color;
+}
+
 .form-label{
     display: flex;
     align-items: center;
@@ -87,13 +148,13 @@ $fifth-color:#FFFFFF;
 }
 
 .space{
-    margin: 10px 120px;
+    margin: 10px 50px;
     margin-bottom: 100px;
 }
 
 @media (max-width:992px){
     .space{
-        margin: 10px 100px;
+        margin: 10px 30px;
     margin-bottom: 100px;
 
     }
@@ -101,7 +162,7 @@ $fifth-color:#FFFFFF;
 
 @media (max-width:768px){
     .space{
-        margin: 10px 50px;
+        margin: 10px 20px;
         margin-bottom: 100px;
 
     }

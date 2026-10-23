@@ -293,7 +293,7 @@ if (loading) {
             </div>
 
         </div>
-{/* 
+        { /* 
         <div className="profile-stat">
 
             <FontAwesomeIcon icon={faClock} className="icon" />
@@ -314,7 +314,7 @@ if (loading) {
  
     {/* Breadcrumbs */}
     <div className="d-flex justify-content-between align-items-center">
-      <section className="breadcrumb-section">
+      <section className="breadcrumb-section px-4 pt-3">
         <h3>My <span>Profile</span></h3>
 
         <Link className='bread-link' to={DASHBOARD_ROUTES.DASHBOARD}>Home</Link>
@@ -324,13 +324,12 @@ if (loading) {
       </section>
 
       <Link to={DASHBOARD_ROUTES.EDIT_PROFILE} className="edit-btn">
-      <FontAwesomeIcon icon={faPen} className="icon"/>  Edit Profile
+        <FontAwesomeIcon icon={faPen} className="icon"/>  Edit Profile
       </Link>
     </div>
 
-
     {/* About Me */}
-    <div className="dashboard-card mt-4">
+    <div className="dashboard-card mt-3">
 
         <div className="card-header-custom">
 
@@ -460,7 +459,7 @@ if (loading) {
 
     <hr className="m-4" />
 
-    <div className="mb-4 keep"> 
+    <div className="mb-4 keep pb-2"> 
 
           <div className="profile-stat">
 
@@ -475,6 +474,7 @@ if (loading) {
     
     </div>
 
+    <hr className="my-4 d-lg-none d-block" />
 
     </>
   );

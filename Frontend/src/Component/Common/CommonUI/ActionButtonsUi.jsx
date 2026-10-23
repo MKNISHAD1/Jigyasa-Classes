@@ -79,6 +79,7 @@ if (mobile) {
                   {onEdit ? (
                     <button
                       type="button"
+                      className="dropdown-action btn-edit"
                       onClick={() => {
                         onEdit();
                         closeMenu?.();
@@ -90,6 +91,7 @@ if (mobile) {
                   ) : editLink ? (
                     <Link
                       to={editLink}
+                      className="dropdown-action btn-edit"
                       onClick={closeMenu}
                     >
                       <FontAwesomeIcon icon={faPen} />

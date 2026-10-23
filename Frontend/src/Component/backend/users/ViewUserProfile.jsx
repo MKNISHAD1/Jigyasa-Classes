@@ -114,9 +114,11 @@ role
     if(!date) return "-";
 
         return new Date(date).toLocaleDateString("en-IN",{
-            day:"numeric",
-            month:"long",
-            year:"numeric",
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+            hour: "numeric",
+            minute: "numeric"
         });
 
     };
@@ -180,6 +182,9 @@ const {
     }
   };
 
+    const userEditLink = USER_ROUTES.EDIT
+          .replace(":id", user.id)
+
   const navigate = useNavigate();
 
 // spiner while loading data 
@@ -236,7 +241,7 @@ if (loading) {
 
             <div className="profile-details">
 
-              <h1 className="profile-name">
+              <h1 className="profile-name text-capitalize">
 
                   {user?.name}
 
@@ -309,7 +314,7 @@ if (loading) {
             </div>
 
         </div>
-
+{/* 
         <div className="profile-stat">
 
             <FontAwesomeIcon icon={faClockFour} className="icon" />
@@ -324,13 +329,13 @@ if (loading) {
 
             </div>
 
-        </div>
+        </div> */}
 
     </div>
  
     {/* Breadcrumbs */}
     <div className="d-flex justify-content-between align-items-center">
-      <section className="breadcrumb-section">
+      <section className="breadcrumb-section px-4 pt-3">
         <h3> View User <span>Profile</span></h3>
 
         <Link className='bread-link' to={DASHBOARD_ROUTES.DASHBOARD}>Home</Link>
@@ -342,14 +347,14 @@ if (loading) {
         <Link className='bread-link' to=""><span>User Profile</span></Link>
       </section>
 
-      <Link to={USER_ROUTES.EDIT} className="edit-btn">
+      <Link to={userEditLink} className="edit-btn">
       <FontAwesomeIcon icon={faPen} className="icon"/>  Edit User
       </Link>
     </div>
 
 
     {/* About Me */}
-    <div className="dashboard-card mt-4">
+    <div className="dashboard-card mt-3">
 
         <div className="card-header-custom">
 
@@ -362,7 +367,7 @@ if (loading) {
 
         <div className="profile-info-row">
             <span>Full Name</span>
-            <p>{user?.name}</p>
+            <p className="text-capitalize">{user?.name}</p>
         </div>
 
         <div className="profile-info-row">
@@ -476,24 +481,6 @@ if (loading) {
         </div>
 
     </div>
-
-    {/* <hr className="m-4" />
-
-    <div className="mb-4 keep"> 
-
-          <div className="profile-stat">
-
-            <FontAwesomeIcon icon={faShield} className="icon"/>
-
-            <div>
-              <h6>Keep Your Profile Updated</h6>
-              <span>Complete and keep your profile updated to enjoy all features of Jigyasa Classes.
-</span>
-            </div>
-          </div>
-    
-    </div> */}
-
 
     </>
   );

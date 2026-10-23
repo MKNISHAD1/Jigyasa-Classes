@@ -146,7 +146,8 @@ $fifth-color:#FFFFFF;
 
 
 .breadcrumb-section{
-    padding: 25px 0 0 25px;
+    // padding: 25px 0 0 25px;
+    padding: 10px;
     h3{
         font-size: 20px;
         font-weight: 700;
@@ -470,8 +471,8 @@ $fifth-color:#FFFFFF;
 
     
 .profile-hero{
-    padding: 0px;
-    margin-bottom:30px;
+    padding: 12px;
+    margin-bottom:5px;
 }
 
 .profile-banner{
@@ -496,11 +497,10 @@ $fifth-color:#FFFFFF;
     }
 
     .breadcrumb-section{
-
+       
         h3{
             font-size: 18px;
         }
-
 
         .bread-link{
             font-size: 13px;

@@ -10,7 +10,8 @@ $fifth-color:#FFFFFF;
     overflow:hidden;
     // background:rgb(1, 1, 78);
     background-image: url('../../assets/images/sidebar-bg.jpeg');
-    background-size:auto;
+    background-size:cover;
+    background-repeat: no-repeat;
     padding:0; 
 }
 

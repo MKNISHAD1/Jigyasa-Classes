@@ -109,7 +109,7 @@ const openDeleteDialog = (course) => {
 
 if (loading) {
   return (
-    <div className="dashboard-card mt-4">
+    <div className="dashboard-card mt-4 ">
       <div
         className="d-flex flex-column justify-content-center align-items-center"
         style={{ minHeight: "350px" }}
@@ -166,7 +166,7 @@ if (loading) {
     <>
 
     
-      <div className="dashboard-card mt-4">
+      <div className="dashboard-card mt-4 mb-3">
         
         {/* header */}
         <div className="d-flex justify-content-between align-items-center">
@@ -283,6 +283,9 @@ if (loading) {
         }
 
       </div>
+
+          <hr className="my-4 d-lg-none d-block" />
+
 
       {/* Confirmation Dialog Box */}
 
