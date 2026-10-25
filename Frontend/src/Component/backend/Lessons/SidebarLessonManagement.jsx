@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -21,9 +21,12 @@ import {
 } from "../../../constants/nevigation/routes";
 
 import nolesson from "../../../assets/images/not-found2.jpeg";
+import { AuthContext } from "../context/Auth";
 
 const SidebarLessonManagement = () => {
   const { i18n } = useTranslation();
+  const { user } = useContext(AuthContext);
+  
 
   /*
   |--------------------------------------------------------------------------
@@ -56,41 +59,42 @@ const SidebarLessonManagement = () => {
   |--------------------------------------------------------------------------
   */
 
+  /*
+  |--------------------------------------------------------------------------
+  | Fetch courses based on user role
+  |--------------------------------------------------------------------------
+  */
+
   const fetchCourses = async () => {
     try {
       setCoursesLoading(true);
 
-      const res = await fetch(
-        apiUrl + "my-courses",
-        {
-          headers: {
-            Accept: "application/json",
-            Authorization: `Bearer ${token()}`,
-          },
-        }
+      const isAdmin = user?.roles?.some((role) =>
+        ["admin", "super_admin", "moderator"].includes(
+          typeof role === "string" ? role : role.name
+        )
       );
 
-      const result = await res.json();
+      const endpoint = isAdmin ? "courses" : "my-courses";
 
-      if (result.status && result.courses) {
-        setCourses(result.courses);
-      } else {
-        toast.error(
-          result.message ||
-            "Failed to fetch courses."
-        );
+      const res = await fetch(apiUrl + endpoint, {
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token()}`,
+        },
+      });
+
+      const data = await res.json();
+
+      if (!res.ok || !data.status) {
+        throw new Error(data.message || "Failed to fetch courses.");
       }
 
-    } catch (error) {
-      console.error(
-        "Fetch courses error:",
-        error
-      );
-
-      toast.error(
-        "Something went wrong while fetching courses."
-      );
-
+      setCourses(data.courses || []);
+    } catch (err) {
+      console.error("Error fetching courses:", err);
+      toast.error(err.message || "Failed to fetch courses.");
+      setCourses([]);
     } finally {
       setCoursesLoading(false);
     }
@@ -166,9 +170,11 @@ const SidebarLessonManagement = () => {
   */
 
   useEffect(() => {
-    fetchCourses();
-  }, []);
-
+    if (user) {
+      fetchCourses();
+    }
+  }, [user]);
+  
   /*
   |--------------------------------------------------------------------------
   | Course dropdown change
@@ -574,7 +580,7 @@ const SidebarLessonManagement = () => {
 
       {/* Breadcrumbs */}
 
-      <section className="breadcrumb-section">
+      <section className="breadcrumb-section px-4 pt-3">
 
         <h3>
           Lesson{" "}

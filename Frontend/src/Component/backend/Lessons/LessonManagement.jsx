@@ -290,7 +290,7 @@ const LessonManagement = () => {
     <>
           {/* Breadcrumbs */}
           <div className="d-flex justify-content-between align-items-center">
-              <section className="breadcrumb-section">
+              <section className="breadcrumb-section px-4 pt-3">
                   <h3>Course  <span>Details</span></h3>
     
                   <Link className='bread-link' to={DASHBOARD_ROUTES.DASHBOARD}>Home</Link>

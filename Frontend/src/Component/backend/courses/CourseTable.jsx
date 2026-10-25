@@ -140,7 +140,7 @@ const CourseTable = ({
         </div>
       ),
       sortable: true,
-      width:'110px'
+      width:'130px'
     },
 
     // Course Action Buttons

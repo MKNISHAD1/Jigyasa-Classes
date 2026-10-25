@@ -132,7 +132,7 @@ if (loading) {
 
       {/* Breadcrumbs */}
       <div className="d-flex justify-content-between align-items-center">
-          <section className="breadcrumb-section">
+          <section className="breadcrumb-section px-4 pt-3">
               <h3>Course <span>Structure</span></h3>
 
               <Link className='bread-link' to=""><span>My Course</span></Link>
@@ -151,6 +151,8 @@ if (loading) {
       <div className="dashboard-card my-4">
         <h4 className="mb-1 text-center"><span>Reorder</span> Modules </h4>
         <p className='text-muted text-center'>Kindly drag and drop modules to change their order</p>
+
+        <hr className='mb-4' />
 
         <DragDropContext onDragEnd={handleDragEnd}>
           <Droppable droppableId="modules-droppable">

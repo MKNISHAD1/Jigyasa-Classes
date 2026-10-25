@@ -1,19 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import Accordion from "react-bootstrap/Accordion";
-import Header from "../../Common/Header";
-import Sidebar from "../../Common/Sidebar";
 import { apiUrl, token } from "../../Common/http";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
-import HeaderUi from "../../Common/CommonUI/HeaderUi";
-import FooterUi from "../../Common/CommonUI/FooterUi";
 import { COURSE_ROUTES, DASHBOARD_ROUTES } from "../../../constants/nevigation/routes";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft, faAngleRight, faArrowDownShortWide, faArrowLeft, faBook, faCheck, faCircleMinus, faCirclePlay, faCircleXmark, faPen, faPlus, faTractor, faTrash } from "@fortawesome/free-solid-svg-icons";
 import PageNotFound from '../../../assets/images/not-found.jpeg';
 import ConfirmationDialogBoxUi from '../../Common/CommonUI/ConfirmationDialogBoxUi';
-import { faFile, faFileAlt } from "@fortawesome/free-regular-svg-icons";
 
 
 const CourseModule = () => {
@@ -824,7 +819,7 @@ if (loading) {
 
       {/* Breadcrumbs */}
       <div className="d-flex justify-content-between align-items-center">
-          <section className="breadcrumb-section">
+          <section className="breadcrumb-section px-4 pt-3">
               <h3>Course <span>Structure</span></h3>
 
               <Link className='bread-link' to={DASHBOARD_ROUTES.DASHBOARD}>Home</Link>

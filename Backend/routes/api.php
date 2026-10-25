@@ -241,6 +241,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // List courses
     Route::get('courses', [CourseController::class, 'courseList'])
         ->middleware('role:moderator|admin|super_admin');
+
+    // List Teachers
+    Route::get('teachers', [UserManagementController::class, 'getTeachers'])
+        ->middleware('role:moderator|admin|super_admin');
     
     // Show single course (with lessons)
     Route::get('view-course/{id}', [CourseController::class, 'viewCourse'])
@@ -265,7 +269,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('deletedcourses', [CourseController::class, 'deletedCourses'])
         ->middleware('role:teacher|moderator|admin|super_admin');
 
-
     Route::post('restore-course/{id}', [CourseController::class, 'restoreCourse'])
         ->middleware('role:teacher|moderator|admin|super_admin');
 
@@ -273,8 +276,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
         ->middleware('role:teacher|moderator|admin|super_admin');
 
 });
-
-
 
 // ===================================================================================================
 //                                      Module Routes
@@ -590,7 +591,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::put('category/update/{id}', [CategoryCantroller::class, 'updateCategory'])
         ->middleware('role:teacher|admin|super_admin');
     Route::delete('category/delete/{id}', [CategoryCantroller::class, 'deleteCategory'])
-        ->middleware('role:teacher|admin|super_admin');
+        ->middleware('role:super_admin');
     Route::get('category/get-category/{id}', [CategoryCantroller::class, 'getCategory'])
         ->middleware('role:teacher|admin|super_admin');
     
@@ -602,7 +603,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::put('subcategory/update/{id}', [CategoryCantroller::class, 'updateSubcategory'])
         ->middleware('role:teacher|admin|super_admin');
     Route::delete('subcategory/delete/{id}', [CategoryCantroller::class, 'deleteSubcategory'])
-        ->middleware('role:teacher|admin|super_admin');
+        ->middleware('role:super_admin');
     Route::get('subcategory/get-subcategory/{id}', [CategoryCantroller::class, 'getSubcategory'])
         ->middleware('role:teacher|admin|super_admin');
 

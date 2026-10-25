@@ -600,6 +600,7 @@ if (loading) {
                   type="button"
                   className="btn gray-btn-opp"
                   onClick={() => navigate(-1)}
+                  disabled={loading || isSubmitting}
               >
                   Cancel
               </button>

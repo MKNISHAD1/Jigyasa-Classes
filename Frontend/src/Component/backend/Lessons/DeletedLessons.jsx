@@ -262,7 +262,7 @@ const [confirmationLoading, setConfirmationLoading] = useState(false);
     <>
         {/* Breadcrumbs */}
         <div className="d-flex justify-content-between align-items-center">
-            <section className="breadcrumb-section">
+            <section className="breadcrumb-section px-4 pt-3">
                 <h3>Lesson <span>Management</span></h3>
   
                 <Link className='bread-link' to={COURSE_ROUTES.MY_COURSE}>My Course</Link>

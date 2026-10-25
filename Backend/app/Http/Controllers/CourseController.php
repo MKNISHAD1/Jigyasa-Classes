@@ -1045,6 +1045,7 @@ class CourseController extends Controller
         }
 
 
+
         /*
         |--------------------------------------------------------------------------
         | Modules
@@ -1064,6 +1065,8 @@ class CourseController extends Controller
                     ],
 
                     'order' => $module->order,
+
+                    'lessons_count' => $module->lessons->count(),
 
                     'lessons' => $module->lessons?->map(function ($lesson) {
                         return [

@@ -206,13 +206,13 @@ if (loading) {
                 />
             </div>
 
-            <button
+            {/* <button
                 className="btn border-primary text-primary d-flex align-items-center justify-content-center gap-2 flex-shrink-0"
                 disabled
             >
                 <FontAwesomeIcon icon={faFilter} />
                 <span>Filter</span>
-            </button>
+            </button> */}
         </div>
 
 

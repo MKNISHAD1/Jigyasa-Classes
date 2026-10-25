@@ -7,7 +7,7 @@ import Sidebar from "../../Common/Sidebar";
 import { toast } from "react-toastify";
 import HeaderUi from "../../Common/CommonUI/HeaderUi";
 import FooterUi from "../../Common/CommonUI/FooterUi";
-import { faA, faAngleRight, faArrowLeft, faCamera, faChartSimple, faFileEdit, faFlag, faFloppyDisk, faFolderClosed, faFolderTree, faGlobe, faIndianRupee, faL, faPlus, faStar, faTrash, faUpload } from "@fortawesome/free-solid-svg-icons";
+import { faA, faAngleRight, faArrowLeft, faCamera, faChartSimple, faFileEdit, faFlag, faFloppyDisk, faFolderClosed, faFolderTree, faGlobe, faIndianRupee, faL, faPen, faPlus, faStar, faTrash, faUpload } from "@fortawesome/free-solid-svg-icons";
 import { COURSE_ROUTES, DASHBOARD_ROUTES } from "../../../constants/nevigation/routes";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { availabilityValidator } from "../../../utilities/validators";
@@ -420,7 +420,7 @@ if (loading) {
 
       {/* Breadcrumbs */}
       <div className="d-flex justify-content-between align-items-center">
-          <section className="breadcrumb-section">
+          <section className="breadcrumb-section px-4 pt-3">
               <h3>Edit <span>Course</span></h3>
 
               <Link className='bread-link' to={DASHBOARD_ROUTES.DASHBOARD}>Home</Link>
@@ -437,12 +437,40 @@ if (loading) {
       </div>
 
 
-      <div className="dashboard-card my-4">                
+      <div className="dashboard-card my-2">   
+
+        {/* Header */}
+        <div className="header-custom d-flex  justify-content-center ">
+  
+            <div className="header d-flex align-items-center ">
+  
+                <FontAwesomeIcon
+                    icon={faPen}
+                    className="icon p-3"
+                    style={{
+                      background:'#ebf1f5',
+                      color:'#1363b8',
+                      borderRadius:'50%'
+                    }}
+                />
+  
+            </div>
+            <div className=' mt-2 mb-2 px-3'>
+              
+              <span className='text-primary fw-bold '>Edit Course</span><br />
+  
+              <small className="text-muted mb-0">
+                Timely Update To Give Best Content 
+              </small>
+            </div>
+        </div> 
+
+        <hr className="mb-4" />
+
         <form onSubmit={handleSubmit(onSubmit)}>
 
-
           {/* Thumbnail */}
-          <div className="my-4">
+          <div className="mt-2 mb-4">
 
             <label className="form-label"> 
               <FontAwesomeIcon icon={faUpload} className="icon" />
@@ -925,43 +953,50 @@ if (loading) {
 
           </div>
 
-          {/* Submit button */}
-          <button
-            type="submit"
-            className="btn green-btn"
-            disabled={ saving || isSubmitting || (!isDirty && !highlightsChanged && !thumbnailChanged)}
-          >
-            {saving ? (
+          <div className="text-end">
 
-              <>
-                <span
-                  className="spinner-border spinner-border-sm me-2 text-light"
-                  role="status"
-                />
+            {/* Cancel  Button */}
+            <button
+              type="button"
+              className="btn gray-btn mx-4"
+              onClick={() => navigate(COURSE_ROUTES.MY_COURSE)}
+              disabled={saving || isSubmitting}
+            >
+              Cancel
+            </button>
 
-                  <span className='text-light'>Saving Changes... </span>
+            {/* Submit button */}
+            <button
+              type="submit"
+              className="btn green-btn"
+              disabled={ saving || isSubmitting || (!isDirty && !highlightsChanged && !thumbnailChanged)}
+            >
+              {saving ? (
 
-                </>
+                <>
+                  <span
+                    className="spinner-border spinner-border-sm me-2 text-light"
+                    role="status"
+                  />
 
-                ) : (
+                    <span className='text-light'>Saving Changes... </span>
 
-                  <>
-                  <FontAwesomeIcon icon={faFloppyDisk}/> Save Changes
                   </>
 
-              )}
-          </button>
+                  ) : (
 
-          {/* Cancel  Button */}
-          <button
-            type="button"
-            className="btn gray-btn mx-4"
-            onClick={() => navigate(COURSE_ROUTES.MY_COURSE)}
-          >
-            Cancel
-          </button>
+                    <>
+                    <FontAwesomeIcon icon={faFloppyDisk}/> Save Changes
+                    </>
+
+                )}
+            </button>
+
+          </div>
         </form>
       </div>
+
+      <hr className="my-4 d-lg-none d-block" />
 
     </>
   );

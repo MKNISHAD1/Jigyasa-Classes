@@ -341,19 +341,33 @@ useEffect(() => {
       }
   };
 
-  if (loading)
-    return (
-      <div className="d-flex justify-content-center align-items-center vh-100">
-        <ClipLoader color="#007bff" size={50} />
-      </div>
-    );
+if (loading) {
+  return (
+    <div className="dashboard-card mt-4">
+      <div
+        className="d-flex flex-column justify-content-center align-items-center"
+        style={{ minHeight: "350px" }}
+      >
+        <div
+          className="spinner-border text-success "
+          style={{ width: "3rem", height: "3rem" }}
+        />
 
+        <h5 className="mt-3 mb-1">Fetching Lesson Information...</h5>
+
+        <small className="text-muted">
+          Please wait while we fetch lesson information.
+        </small>
+      </div>
+    </div>
+  );
+}
   return (
     <>
 
         {/* Breadcrumbs */}
         <div className="d-flex justify-content-between align-items-center">
-            <section className="breadcrumb-section">
+            <section className="breadcrumb-section px-4 pt-3">
                 <h3>Lesson <span>Update</span></h3>
   
                 <Link className='bread-link' to={COURSE_ROUTES.MY_COURSE}>My Course</Link>
@@ -652,6 +666,7 @@ useEffect(() => {
                 onClick={() =>
                   navigate(`/admin/lesson/${courseId}/course-lessons`)
                 }
+                disabled={isSubmitting || uploading}
               >
                 Cancel
               </button>

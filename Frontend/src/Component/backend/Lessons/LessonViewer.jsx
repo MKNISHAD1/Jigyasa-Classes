@@ -19,9 +19,33 @@ const HLSVideoPlayer = ({ getUrl }) => {
   const signedUrlRef = useRef(null);
 
   const [loadingVideo, setLoadingVideo] = useState(true);
+  const [videoError, setVideoError] = useState("");
+  const [retryCount, setRetryCount] = useState(0);
+
+  const handleRetry = () => {
+    setVideoError("");
+    setLoadingVideo(true);
+    setRetryCount((count) => count + 1);
+  };
 
   useEffect(() => {
     let cancelled = false;
+
+    // Video Loading and stop spinner on  error 
+    let startupTimer;
+    const failVideo = (message) => {
+      if (cancelled) return;
+
+      clearTimeout(startupTimer);
+      setLoadingVideo(false);
+      setVideoError(message);
+    };
+
+    startupTimer = setTimeout(() => {
+      failVideo(
+        "Video is taking too long to load. Please check your connection and try again."
+      );
+    }, 120000);
 
     /*
      * Replace the old Bunny token/expires in a segment URL
@@ -190,6 +214,7 @@ const HLSVideoPlayer = ({ getUrl }) => {
     const startPlayer = async () => {
       try {
         setLoadingVideo(true);
+        setVideoError("");
 
         console.log(
           "Getting initial HLS URL..."
@@ -198,6 +223,10 @@ const HLSVideoPlayer = ({ getUrl }) => {
         const response = await getUrl();
 
         if (cancelled) return;
+
+        if (!response?.url) {
+          throw new Error("The Video URL could not be retrieved.");
+        }
 
         const {
           url,
@@ -313,11 +342,16 @@ const HLSVideoPlayer = ({ getUrl }) => {
           hls.on(
             Hls.Events.MANIFEST_PARSED,
             () => {
+              
               console.log(
                 "✅ HLS manifest loaded"
               );
+              
+              if (cancelled) return;
 
+              clearTimeout(startupTimer);
               setLoadingVideo(false);
+              setVideoError("");
             }
           );
 
@@ -341,6 +375,13 @@ const HLSVideoPlayer = ({ getUrl }) => {
                     data.networkDetails,
                 }
               );
+
+              if (data.fatal) {
+                failVideo(" Unable to play this video. The video server may be unavailable. Please  try again later. ");
+                hls.destroy();
+
+                hlsRef.current=null;
+              }
             }
           );
         }
@@ -369,7 +410,8 @@ const HLSVideoPlayer = ({ getUrl }) => {
           error
         );
 
-        setLoadingVideo(false);
+        failVideo ("Unable to load the video. PLease check your connection and try again.")
+        // setLoadingVideo(false);
       }
     };
 
@@ -382,6 +424,7 @@ const HLSVideoPlayer = ({ getUrl }) => {
      */
     return () => {
       cancelled = true;
+      clearTimeout(startupTimer);
 
       if (refreshTimerRef.current) {
         clearTimeout(
@@ -403,28 +446,64 @@ const HLSVideoPlayer = ({ getUrl }) => {
       }
     };
 
-  }, [getUrl]);
+  }, [getUrl, retryCount]);
 
 
   return (
-    <div className="position-relative w-100 h-100">
-
-      {loadingVideo && (
-        <div className="position-absolute top-50 start-50 translate-middle">
-          <ClipLoader
-            color="#007bff"
-            size={40}
-          />
+    <div
+        className="position-relative w-100 h-100 rounded"
+        style={{
+          background: videoError ? "#f8f9fa" : "#000",
+        }}
+      >
+      {loadingVideo && !videoError && (
+        <div className="position-absolute top-50 start-50 translate-middle text-center">
+        <div
+          className="spinner-border text-primary "
+          style={{ width: "3rem", height: "3rem" }}
+        />
+          <p className="mt-3 mb-0">Loading video...</p>
         </div>
       )}
 
-      <video
-        ref={videoRef}
-        controls
-        playsInline
-        className="w-100 h-100 rounded"
-      />
+      {videoError && (
+        <div className="position-absolute top-50 start-50 translate-middle text-center w-75">
+          <p className="fw-semibold mb-2">
+            Unable to play video
+          </p>
 
+          <p className="text-muted small">
+            {videoError}
+          </p>
+
+          <button
+            type="button"
+            className="btn blue-btn"
+            onClick={handleRetry}
+          >
+            Try Again
+          </button>
+        </div>
+      )}
+
+     {!videoError && (
+        <video
+          ref={videoRef}
+          controls
+          playsInline
+          className="w-100 h-100 rounded"
+          onLoadedMetadata={() => {
+            setLoadingVideo(false);
+            setVideoError("");
+          }}
+          onError={() => {
+            setLoadingVideo(false);
+            setVideoError(
+              "The video could not be played. Please try again."
+            );
+          }}
+        />
+      )}
     </div>
   );
 };
@@ -438,6 +517,8 @@ const LessonViewer = () => {
   const [lessons, setLessons] = useState([]);
   const [currentLesson, setCurrentLesson] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [lessonError, setLessonError] = useState("");
+
 
   // ✅ Fetch all lessons of the course to manage prev/next navigation
   const fetchLessons = async () => {
@@ -465,14 +546,23 @@ const LessonViewer = () => {
   // ✅ Fetch current lesson
   const fetchCurrentLesson = async (id) => {
     setLoading(true);
+    setLessonError("");
+    setCurrentLesson(null);
+
     try {
+
       const res = await fetch(`${apiUrl}courses/${courseId}/view-lesson/${id}`, {
         headers: { Authorization: `Bearer ${token()}` },
       });
+
       const data = await res.json();
-      if (data.status) {
-        setCurrentLesson(data.lesson);
-      } else toast.error(data.message || "Failed to fetch lesson");
+
+      if (!res.ok || !data.status || !data.lesson) {
+        throw new Error(data.message || "Failed to load lesson.");
+      }
+
+      setCurrentLesson(data.lesson);
+
     } catch (err) {
       console.error(err);
       toast.error("Server error while fetching lesson");
@@ -569,13 +659,54 @@ const getHlsUrl = useCallback(async () => {
     }
   };
 
-  if (loading || !currentLesson) {
-    return (
-      <div className="d-flex justify-content-center align-items-center vh-100">
-        <ClipLoader color="#007bff" size={50} />
+if (loading) {
+  return (
+    <div className="dashboard-card mt-4">
+      <div
+        className="d-flex flex-column justify-content-center align-items-center"
+        style={{ minHeight: "350px" }}
+      >
+        <div
+          className="spinner-border text-success "
+          style={{ width: "3rem", height: "3rem" }}
+        />
+
+        <h5 className="mt-3 mb-1">Fetching Lesson Information...</h5>
+
+        <small className="text-muted">
+          Please wait while we fetch your lesson information.
+        </small>
       </div>
-    );
-  }
+    </div>
+  );
+}
+
+if (lessonError || !currentLesson) {
+  return (
+    <div className="dashboard-card my-4 text-center p-5">
+      <h5>Unable to load lesson</h5>
+      <p className="text-muted">
+        {lessonError || "The requested lesson could not be found."}
+      </p>
+
+      <button
+        type="button"
+        className="btn btn-primary"
+        onClick={() => fetchCurrentLesson(lessonId)}
+      >
+        Try Again
+      </button>
+
+      <button
+        type="button"
+        className="btn btn-outline-secondary ms-2"
+        onClick={() => navigate(`/admin/lesson/${courseId}/course-lessons`)}
+      >
+        Return to Lessons
+      </button>
+    </div>
+  );
+}
 
   const index = getLessonIndex();
   const isFirst = index === 0;
@@ -585,7 +716,7 @@ const getHlsUrl = useCallback(async () => {
     <>
         {/* Breadcrumbs */}
         <div className="d-flex justify-content-between align-items-center">
-            <section className="breadcrumb-section">
+            <section className="breadcrumb-section px-4 pt-3">
                 <h3>Video <span>Player</span></h3>
   
                 <Link className='bread-link' to={COURSE_ROUTES.MY_COURSE}>My Course</Link>
@@ -599,7 +730,7 @@ const getHlsUrl = useCallback(async () => {
             </section>
   
             <Link to={`/admin/lesson/${courseId}/course-lessons`} className="edit-btn">
-            <FontAwesomeIcon icon={faArrowLeft} className="icon"/>  Return
+              <FontAwesomeIcon icon={faArrowLeft} className="icon"/>  Return
             </Link>
         </div>
 
@@ -608,12 +739,19 @@ const getHlsUrl = useCallback(async () => {
             {currentLesson.title?.[i18n.language] || currentLesson.title?.en || "Untitled"}
           </h3>
 
-      {/* HLS video playback */}
-      <div className="ratio ratio-16x9 mb-4">
-        <HLSVideoPlayer
-          getUrl={getHlsUrl}
-        />
-      </div>
+          {/* HLS video playback */}
+            <div
+              className="mb-4"
+              style={{
+                width: "100%",
+                aspectRatio: "16 / 9",
+                minHeight: "260px",
+                maxHeight: "650px",
+                position: "relative",
+              }}
+            >
+              <HLSVideoPlayer getUrl={getHlsUrl} />
+            </div>
 
           {/* Description and teacher info */}
           <div className="mb-4">
@@ -681,8 +819,6 @@ const getHlsUrl = useCallback(async () => {
             </button>
           </div>
         </div>
-
-
     </>
   );
 };

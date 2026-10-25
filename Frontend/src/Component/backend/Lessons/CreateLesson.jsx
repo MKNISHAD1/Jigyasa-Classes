@@ -60,24 +60,58 @@ const CreateLesson = () => {
     return () => window.removeEventListener("beforeunload", handleBeforeUnload);
   }, []);
 
-  // Fetch courses for logged-in user
+  // Fetch courses for logged-in user (Working)
+  // useEffect(() => {
+  //   const fetchCourses = async () => {
+  //     try {
+  //       const res = await fetch(apiUrl + "my-courses", {
+  //         headers: {
+  //           Accept: "application/json",
+  //           Authorization: `Bearer ${token()}`,
+  //         },
+  //       });
+  //       const data = await res.json();
+  //       if (data.status && data.courses) setCourses(data.courses);
+  //     } catch (err) {
+  //       console.error("Error fetching courses", err);
+  //     }
+  //   };
+  //   if (user) fetchCourses();
+  // }, [user]);
+
   useEffect(() => {
-    const fetchCourses = async () => {
-      try {
-        const res = await fetch(apiUrl + "my-courses", {
-          headers: {
-            Accept: "application/json",
-            Authorization: `Bearer ${token()}`,
-          },
-        });
-        const data = await res.json();
-        if (data.status && data.courses) setCourses(data.courses);
-      } catch (err) {
-        console.error("Error fetching courses", err);
+  const fetchCourses = async () => {
+    try {
+      const isAdmin = user?.roles?.some((role) =>
+        ["admin", "super_admin", "moderator"].includes(
+          typeof role === "string" ? role : role.name
+        )
+      );
+
+      const endpoint = isAdmin
+        ? "courses"
+        : "my-courses";
+
+      const res = await fetch(apiUrl + endpoint, {
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token()}`,
+        },
+      });
+
+      const data = await res.json();
+
+      if (data.status && data.courses) {
+        setCourses(data.courses);
       }
-    };
-    if (user) fetchCourses();
-  }, [user]);
+    } catch (err) {
+      console.error("Error fetching courses", err);
+    }
+  };
+
+  if (user) fetchCourses();
+}, [user]);
+
 
 
 // 🔹 Utility: handle lesson field change
@@ -1458,7 +1492,7 @@ return (
   <>
       {/* Breadcrumbs */}
       <div className="d-flex justify-content-between align-items-center">
-          <section className="breadcrumb-section">
+          <section className="breadcrumb-section px-4 pt-3 ">
               <h3>Lesson <span>Create</span></h3>
 
               <Link
@@ -1487,13 +1521,14 @@ return (
               type="button"
               className="edit-btn"
               onClick={() =>
-                requestLeave(() => navigate(-1))
+                requestLeave(() => navigate("/dash"))
               }
             >
               <FontAwesomeIcon icon={faArrowLeft} className="icon" />
               Return
             </button>
       </div>
+
       <div className="dashboard-card my-4">
 
         {/* Header */}

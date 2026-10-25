@@ -199,10 +199,10 @@ if (!course) return <p className="text-center my-5">Course not found!</p>;
       </div>
 
       {/* Thumbnail and data */}
-      <div className="dashboard-card mt-3">
-        <div className="row">
+      <div className="Thumbnail_Area m-3">
+        <div className="row align-items-center">
           {/* Thumbnail Image */}
-          <div className="col-lg-6 text-center mb-3">
+          <div className="col-sm-6 text-center">
             <div className="thumbnail-img">
               <img
                 src={course.thumbnail || "/images/default-thumbnail.jpg"}
@@ -211,135 +211,100 @@ if (!course) return <p className="text-center my-5">Course not found!</p>;
             </div>
           </div>
           {/* Thumbnail Data */}
-          <div className="col-lg-6 p-0">
+          <div className="col-sm-6">
             <div className="thumbnail-data">
 
               {/* Course Title */}
-              <h4 className="title">{course.title?.[i18n.language] || course.title?.en}</h4>
+              <h4 className="title mb-3">{course.title?.[i18n.language] || course.title?.en}</h4>
               
               {/* Course Status */}
               <span
                 className={`badge course-status mb-2 ${
-                  course.status === "published" ? "badge-published text-success" : "badge-draft text-warning"
+                  course.status === "published" ? "badge-verified text-success" : "badge-not-verified text-danger"
                 }`}
               >
-                {course.status}
+                <b className="text-capitalize">{course.status}</b>
               </span>
 
-              <div className="additional-data d-flex mb-2">
+              <span
+                className="badge course-status mx-4 badge-verified text-success"
+              >
+                <b>₹ {course.price}</b>
+              </span>
 
-                <div className="left-data mx-2">
-
-                  {/* Teacher Name */}
-                  <div className="data-set">
-                      <FontAwesomeIcon icon={faUserTie} className="icon"/>
-                      <small>{course.teacher?.name}</small>
+              {/* Overview stat */}
+              <div className="overview-grid">
+                {/* Teacher Name */}
+                <div className="overview-item py-1">
+                  <div className="label">
+                    <FontAwesomeIcon icon={faUserTie} className="icon text-primary" />
+                    <span className="d-md-none d-block">Instructor</span>
                   </div>
-                  {/* Category */}
-                  <div className="data-set">
-                      <FontAwesomeIcon icon={faFolderClosed} className="icon"/>
-                      <small>{course.category?.name?.[i18n.language] || course.category?.name?.en}</small> 
-                      <span className="mx-1"> • </span>
-                      <FontAwesomeIcon icon={faFolderTree} className="icon"/>
-                      <small>{course.subcategory?.name?.[i18n.language] || course.subcategory?.name?.en  || "General"}</small>
-                  </div>
-                </div>
-
-
-                <div className="right-data mx-2">
-                  {/* Created At */}
-                  <div className="data-set">
-                      <FontAwesomeIcon icon={faCalendar} className="icon"/>
-                      <small>{formatDate(course.created_at)}</small>
-                  </div>
-
-                  {/* Updated At */}
-                  <div className="data-set">
-                      <FontAwesomeIcon icon={faClockRotateLeft} className="icon"/>
-                      <small>{formatDate(course.updated_at || course.created_at)}</small>
-                  </div>                
-                </div>
-              </div>
-
-              <div className="button-set mt-3">
-                <Link className="btn btn-sm blue-btn" 
-                  to={`/admin/course/update-Course/${course.id}`}
-                >
-                  <FontAwesomeIcon icon={faPen} className="icon"/> Edit Course 
-                </Link>
-
-                <Link className="btn btn-sm blue-btn mx-3" 
-                  to={`/admin/course/${course.id}/course-modules`}              
-                >
-                  <FontAwesomeIcon icon={faSitemap} className="icon"/> Manage Structure
-                </Link>
-              </div>
-
-
-              {/* Price */}
-              {/* <div className="price-section d-flex">
-
-                <h5 className="final-price text-success fw-semibold">
-                  {formatCurrency(price)}
-                </h5>
-
-                {price > 0 ? (
-                  <div className="price-row">
-
-                    <span className="old-price px-2">
-                     <strike className='text-dark'>{formatCurrency(originalPrice)}</strike> 
-                    </span>
-
-                    <span className="badge discount-badge bg-danger ">
-                      {discount}% OFF
-                    </span>
-
-                  </div>
-                ):(
-                  <span className=" badge free-badge bg-success text-light">
-                      100% FREE
+                  <span className="separator">:</span>
+                  <span className="value">
+                    {course.teacher?.name || "Jigyasa"}
                   </span>
-                  )
-                }
-
-              </div> */}
-
-              {/* Course Badges */}
-              {/* <div className="course-badges d-none d-md-grid">
-
-                <div className="badge-item">
-                  <div className="icon">
-                  <FontAwesomeIcon icon={faStar} />
-                  </div>
-                  <div className="body">
-                  <p>4.5 </p><small>120 Reviews</small>
-                  </div>
                 </div>
 
-                <div className="badge-item">
-                  <div className="icon">
-                  <FontAwesomeIcon icon={faUsers} />
+                {/* Category */}
+                <div className="overview-item py-1">
+                  <div className="label">
+                    <FontAwesomeIcon icon={faFolderClosed} className="icon text-primary" />
+                    <span className="d-md-none d-block">Category</span>
                   </div>
-                  <div className="body">
-                  <p>120+ </p><small>Students</small>
-                  </div>
+                  <span className="separator">:</span>
+                  <span className="value">
+                    {course.category?.name?.[i18n.language] || course.category?.name?.en}
+                  </span>
                 </div>
 
-
-                <div className="badge-item">
-                  <div className="icon">
-                  <FontAwesomeIcon icon={faLanguage} /> 
+                {/* Created At  */}
+                <div className="overview-item py-1">
+                  <div className="label">
+                    <FontAwesomeIcon icon={faCalendar} className="icon text-success" />
+                    <span className="d-md-none d-block">Created At</span>
                   </div>
-                  <div className="body">
-                  <p>{course?.language}</p><small>Language</small>
-                  </div>
+                  <span className="separator">:</span>
+                  <span className="value">{formatDate(course.created_at)}</span>
                 </div>
 
-              </div> */}
+                {/* Updated At */}
+                <div className="overview-item py-1">
+                  <div className="label">
+                    <FontAwesomeIcon
+                      icon={faCalendarDay}
+                      className="icon text-purple"
+                    />
+                    <span className="d-md-none d-block">Updated At</span>
+                  </div>
+                  <span className="separator">:</span>
+                  <span className="value">
+                    {formatDate(course.updated_at || course.created_at)}
+                  </span>
+                </div>
+              </div>
+
+              <div className="row mt-3 g-2">
+                <div className="col-md-6">
+                  <Link className="btn blue-btn w-100" 
+                    to={`/admin/course/update-Course/${course.id}`}
+                  >
+                    <FontAwesomeIcon icon={faPen} className="icon"/> Edit Course 
+                  </Link>
+                </div>
+
+                <div className="col-md-6">
+                  <Link className="btn blue-btn w-100" 
+                    to={`/admin/course/${course.id}/course-modules`}              
+                  >
+                    <FontAwesomeIcon icon={faSitemap} className="icon"/> Manage Structure
+                  </Link>
+                </div>
+
+              </div>
+
 
             </div>
-
-            
           </div>
 
         </div>
@@ -347,41 +312,44 @@ if (!course) return <p className="text-center my-5">Course not found!</p>;
       </div>
 
       {/* Description */}
-        <div className="dashboard-card mt-4">
-          <div className="card-header-custom">
+      <div className="dashboard-card">
+        <div className="card-header-custom">
 
-              <div className="header">
-                  <FontAwesomeIcon icon={faFileAlt} className="icon"/>
-                  <span>Course Description</span>
-              </div>
+            <div className="header">
+                <FontAwesomeIcon icon={faFileAlt} className="icon"/>
+                <span>About Course</span>
+            </div>
 
-          </div>            
-                    <p className={showMore ? "expanded" : ""}
-                       style={{whiteSpace:'pre-line'}}
-                    >
+        </div> 
+              <p>
+                Course Name : <b> <p className="text-capitalize"> {course.title?.[i18n.language] || course.title?.en}  </p> </b>
+              </p> 
 
-                    {course.description?.[i18n.language] ||
-                    course.description?.en}
+              <p className={showMore ? "expanded" : ""}
+                  style={{whiteSpace:'pre-line'}}
+              >
 
-                    </p>
+                {course.description?.[i18n.language] ||
+                course.description?.en}
 
-                    {(course.description?.en?.length > 150 ||
-                    course.description?.hi?.length > 150) && (
+              </p>
 
-                    <button
-                    className="Read_More_Button"
-                    onClick={()=>setShowMore(!showMore)}
-                    >
+              {(course.description?.en?.length > 200 ||
+              course.description?.hi?.length > 200) && (
 
-                    {showMore ? "Read Less" : "Read More"}
+                <button
+                  className="Read_More_Button"
+                  onClick={()=>setShowMore(!showMore)}
+                >
 
-                    </button>
+                  {showMore ? "Read Less ▲ " : "Read More ▼"}
 
-                    )}
-        </div>
+                </button>
+            )}
+      </div>
 
       {/* Highlights */}
-        <div className="dashboard-card mt-4 d-none d-md-block">
+      <div className="dashboard-card mt-4 d-none d-md-block">
           <div className="mb-3">
             <div className="card-header-custom">
                 <div className="header">
@@ -606,7 +574,7 @@ if (!course) return <p className="text-center my-5">Course not found!</p>;
       </div>
 
       {/* Lessons Overview*/}
-      <div className="dashboard-card mt-4 mb-4">
+      <div className="dashboard-card Module_Card my-4">
         <div className="card-header-custom">
           <div className="header">
               <FontAwesomeIcon icon={faCirclePlay} className="icon"/>
@@ -615,9 +583,7 @@ if (!course) return <p className="text-center my-5">Course not found!</p>;
 
         </div>  
 
-
         {/*Module  Accordion  */}
-
         <Accordion defaultActiveKey="0">
 
         {paginatedModules.map((module, index) => (
@@ -628,25 +594,6 @@ if (!course) return <p className="text-center my-5">Course not found!</p>;
           >
 
             <Accordion.Header>
-              {/* <input
-                type="checkbox"
-                className="form-check-input me-2"
-                disabled={module.title?.en === "General"}
-                checked={
-                  module.title?.en !== "General" &&
-                  selectedModules.includes(module.id)
-                }
-                onClick={(e) => e.stopPropagation()}
-                onChange={() => {
-                  if (module.title?.en === "General") return;
-
-                  setSelectedModules((prev) =>
-                    prev.includes(module.id)
-                      ? prev.filter((id) => id !== module.id)
-                      : [...prev, module.id]
-                  );
-                }}
-              /> */}
 
               <div className="module-header-content">
                 <span className="module-title text-capitalize fw-semibold">
@@ -659,7 +606,6 @@ if (!course) return <p className="text-center my-5">Course not found!</p>;
                   {module.lessons_count === 1 ? "Lesson" : "Lessons"}
                 </span>
               </div>
-
 
             </Accordion.Header>
 
@@ -696,13 +642,13 @@ if (!course) return <p className="text-center my-5">Course not found!</p>;
                       <>
                         {/* Lessons */}
 
-                        <ul className="list-group mb-2">
+                        <ul className="list-group">
 
                           {currentLessons.map((lesson) => (
 
                             <li
                               key={lesson.id}
-                              className="list-group-item lesson-row"
+                              className="list-group-item lesson-row my-1"
                             >
 
                               <span className="lesson-title">
@@ -718,7 +664,7 @@ if (!course) return <p className="text-center my-5">Course not found!</p>;
                               </span>
 
                               <span
-                                className={`badge course-status mb-2 ${
+                                className={`badge course-status ${
                                   lesson.status === "published"
                                     ? "badge-published text-success"
                                     : "badge-draft"
@@ -853,65 +799,51 @@ if (!course) return <p className="text-center my-5">Course not found!</p>;
 
         </div>
 
-        
-          {/* Lesson Table */}
-          {/* <LessonTable
-            lessons={course.lessons}
-            courseId={course.id}
-            onLessonDeleted={handleLessonDeleted}
-            reloadLessons={fetchCourse}
-          /> */}
+        {/* Buttons */}
+        <div className="row g-3 mt-2">
 
+          <div className="col-lg-3 col-md-6 col-sm-6 col-12">
+            {/* Manage Structure */}
+            <Link className="btn yellow-btn w-100" 
+              to={`/admin/course/${course.id}/course-modules`}              
+            >
+              <FontAwesomeIcon icon={faSitemap} className="icon"/> Manage Structure
+            </Link>
+          </div>
 
-            {/* Buttons */}
-            <div className="d-flex gap-3 mt-4">
+          <div className="col-lg-3 col-md-6 col-sm-6 col-12">
+            {/* Manage Lessons */}
+            <Link className="btn blue-btn w-100" 
+              to={`/admin/lesson/${course.id}/course-lessons`}              
+            >
+              <FontAwesomeIcon icon={faCirclePlay} className="icon"/> Manage Lessons
+            </Link>
+          </div>
 
+          <div className="col-lg-3 col-md-6 col-sm-6 col-12">
+            {/* Update Course Button */}
+            <Link className="btn green-btn w-100" 
+              to={`/admin/course/update-Course/${course.id}`}
+            >
+              <FontAwesomeIcon icon={faPen} className="icon"/> Edit Course 
+            </Link>          
+          </div>
 
-              {/* Manage Structure */}
-              <Link className="btn yellow-btn" 
-                to={`/admin/course/${course.id}/course-modules`}              
-              >
-                <FontAwesomeIcon icon={faSitemap} className="icon"/> Manage Structure
-              </Link>
+          <div className="col-lg-3 col-md-6 col-sm-6 col-12">
+            {/* Return to List */}
+            <Link
+              className="btn gray-btn w-100"
+              to={COURSE_ROUTES.MY_COURSE}
+            >
+              <FontAwesomeIcon icon={faArrowLeft} /> Back To List
+            </Link>
+          </div>
 
-              {/* Manage Lessons */}
-              <Link className="btn blue-btn" 
-                to={`/admin/lesson/${course.id}/course-lessons`}              
-              >
-                <FontAwesomeIcon icon={faCirclePlay} className="icon"/> Manage Lessons
-              </Link>
-
-              {/* Update Course Button */}
-              <Link className="btn green-btn" 
-                to={`/admin/course/update-Course/${course.id}`}
-              >
-                <FontAwesomeIcon icon={faPen} className="icon"/> Edit Course 
-              </Link>
-              
-              {/* Return to List */}
-              <Link
-                className="btn gray-btn"
-                to={COURSE_ROUTES.MY_COURSE}
-              >
-                <FontAwesomeIcon icon={faArrowLeft} /> Back To List
-              </Link>
-            </div>
+        </div>
       </div>
 
       <hr className="my-4 d-lg-none d-block" />
-
-
-      {/* <div className="dashboard-card">
-                  Lesson Table
-          <LessonTable
-            lessons={course.lessons}
-            courseId={course.id}
-            onLessonDeleted={handleLessonDeleted}
-            reloadLessons={fetchCourse}
-          />
-      </div> */}
       
-            
     </>
   );
 };

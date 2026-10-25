@@ -380,7 +380,7 @@ const faqTableStyles = {
 
       {/* Breadcrumbs */}
       <div className="d-flex justify-content-between align-items-center">
-          <section className="breadcrumb-section">
+          <section className="breadcrumb-section px-4 pt-3">
               <h3>Manage <span>FAQ</span></h3>
 
               <Link className='bread-link' to={DASHBOARD_ROUTES.DASHBOARD}>Home</Link>
@@ -391,11 +391,11 @@ const faqTableStyles = {
 
       </div>
          
-          <div className="my-4">
+          <div className="mt-1 mb-3">
 
             {/* Create FAQ */}
 
-            <div className="dashboard-card my-4">
+            <div className="dashboard-card my-2">
 
               <div className="card-header-custom">
 
@@ -557,7 +557,7 @@ const faqTableStyles = {
 
             {/* FAQ List */}
 
-            <div className="dashboard-card">
+            <div className="dashboard-card mt-3">
               
               <div className="card-header-custom">
 
@@ -809,6 +809,7 @@ const faqTableStyles = {
                         <button
                           className="btn gray-btn"
                           onClick={() => setEditFaq(null)}
+                          disabled={loading}
                         >
                           Cancel
                         </button>
@@ -893,7 +894,6 @@ const faqTableStyles = {
               </p>
 
             </ConfirmationDialogBoxUi>
-
     </>
   );
 };
