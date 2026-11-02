@@ -404,7 +404,7 @@ const ManageCategory = () => {
       <section className="category-page">
         {/* Breadcrumbs */}
         <div className="d-flex justify-content-between align-items-center">
-            <section className="breadcrumb-section px-4 pt-3 ">
+            <section className="breadcrumb-section px-2 pt-1 ">
                 <h3>Manage <span>Category</span></h3>
 
                 <Link className='bread-link' to={DASHBOARD_ROUTES.DASHBOARD}>Home</Link>
@@ -414,7 +414,7 @@ const ManageCategory = () => {
             </section>
         </div>
 
-        <div className="category-manager  my-4 mx-2">
+        <div className="category-manager  my-2">
           {/* Card header */}
           <div className="category-manager__header">
             <div className="category-manager__title">

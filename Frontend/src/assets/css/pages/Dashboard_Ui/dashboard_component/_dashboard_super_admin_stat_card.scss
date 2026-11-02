@@ -55,6 +55,7 @@
             #fff0f1,
             #ffffff
         );
+        border: 1px  solid rgba(red, 0.5);
     }
 
     &_yellow {
@@ -84,6 +85,7 @@
         align-items: center;
         gap: 12px;
         min-width: 0;
+        padding: 5px 20px ;
     }
 
     .Dashboard_Admin_Stat_Icon {
@@ -125,6 +127,8 @@
         flex-direction: column;
         min-width: 0;
         gap: 3px;
+        align-items: center;
+        padding-right: 80px;
     }
 
     .Dashboard_Admin_Stat_Title {

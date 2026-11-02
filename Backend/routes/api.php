@@ -644,13 +644,24 @@ Route::post('contact-us',[ContactMessageController::class, 'storeMessages']);
 
 Route::middleware('auth:sanctum')->group(function () {
 
+    // List all message
     Route::get('contact-messages',[ContactMessageController::class, 'messageList'])
         ->middleware('role:moderator|admin|super_admin'); 
 
+    // View message
     Route::get('contact-message/{id}',[ContactMessageController::class, 'showMessage'])
         ->middleware('role:moderator|admin|super_admin'); 
 
+    // Add comment on messsage
+    Route::post('/contact-messages/{id}/comments', [ContactMessageController::class,'addComment'])
+        ->middleware('role:moderator|admin|super_admin');
+
+    // closure request
+    Route::post('/contact-messages/{id}/request-closure', [ContactMessageController::class,'requestClosure'])
+        ->middleware('role:moderator|admin|super_admin');
+
+    // Close message after closure requeest only superadmin allowed
     Route::put('contact-message/{id}/close',[ContactMessageController::class, 'closeMessage'])
-        ->middleware('role:moderator|admin|super_admin'); 
+        ->middleware('role:super_admin'); 
     
 });

@@ -169,8 +169,10 @@ class ActivityPresenter
         $contactMessageActions = [
             'submitted_contact_message' => 'submitted a contact message',
             'read_contact_message' => 'read a contact message',
+            'added_contact_message_comment' => 'added a comment to a contact message',
+            'requested_contact_message_closure' => 'requested closure of a contact message',
             'closed_contact_message' => 'closed a contact message',
-        ];
+        ];  
 
         /*
         |--------------------------------------------------------------------------

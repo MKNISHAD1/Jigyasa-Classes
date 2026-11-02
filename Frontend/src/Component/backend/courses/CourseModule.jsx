@@ -1740,225 +1740,223 @@ if (loading) {
 
         </div>
 
+          {/* Deleted Modules (Trashed)/ restore and Permanently Delete */}
 
-                
-                  {/* Deleted Modules (Trashed)/ restore and Permanently Delete */}
+          {
+            showDeletedModules && (
+              
+              <div
+                className="modal d-block custom-module-modal"
+                style={{ background: "rgba(5, 15, 45, .55)" }}
+              > 
 
-                  {
-                    showDeletedModules && (
-                      
-                      <div
-                        className="modal d-block custom-module-modal"
-                        style={{ background: "rgba(5, 15, 45, .55)" }}
-                      > 
+                <div className="modal-dialog modal-lg">
 
-                        <div className="modal-dialog modal-lg">
+                  <div className="modal-content">
 
-                          <div className="modal-content">
+                    <div className="modal-header">
 
-                            <div className="modal-header">
+                      <h5 className="modal-title">
+                        Deleted Modules
+                      </h5>
 
-                              <h5 className="modal-title">
-                                Deleted Modules
-                              </h5>
+                      <button
+                        className="btn-close"
+                        onClick={() =>
+                          setShowDeletedModules(false)
+                        }
+                      />
 
-                              <button
-                                className="btn-close"
-                                onClick={() =>
-                                  setShowDeletedModules(false)
-                                }
-                              />
+                    </div>
 
-                            </div>
+                    <div className="modal-body">
 
-                            <div className="modal-body">
+                      {deletedModules.length > 0 ? (
 
-                              {deletedModules.length > 0 ? (
-
-                                <table className="table deleted-module-table mb-0">
-                                  <thead>
-                                    <tr>
-                                        <th>
-                                          <input
-                                            type="checkbox"
-                                            checked={
-                                              currentDeletedModuleIds.length > 0 &&
-                                              currentDeletedModuleIds.every(id =>
-                                                selectedDeletedModules.includes(id)
-                                              )
-                                            }
-                                            onChange={(e) => {
-
-                                              if (e.target.checked) {
-
-                                                setSelectedDeletedModules(prev => [
-                                                  ...new Set([
-                                                    ...prev,
-                                                    ...currentDeletedModuleIds
-                                                  ])
-                                                ]);
-
-                                              } else {
-
-                                                setSelectedDeletedModules(prev =>
-                                                  prev.filter(
-                                                    id => !currentDeletedModuleIds.includes(id)
-                                                  )
-                                                );
-
-                                              }
-
-                                            }}
-                                          />
-                                        </th>
-
-                                        <th>Module Name</th>
-
-                                    </tr>
-                                </thead>
-
-
-                                  <tbody>
-
-                                    {paginatedDeletedModules.map((module) => (
-
-                                      <tr
-                                        key={module.id}
-                                        className="deleted-module-row"
-                                        onClick={() => {
-
-                                          setSelectedDeletedModules(prev =>
-                                            prev.includes(module.id)
-                                              ? prev.filter(id => id !== module.id)
-                                              : [...prev, module.id]
-                                          );
-
-                                        }}
-                                      >
-                                        <td>
-                                          <input
-                                            type="checkbox"
-                                            checked={selectedDeletedModules.includes(
-                                              module.id
-                                            )}
-                                            onClick={(e) => e.stopPropagation()}
-                                            onChange={() => {}}
-                                          />
-                                        </td>
-
-                                        <td>
-                                         {module.title}
-                                        </td>
-
-                                      </tr>
-
-                                    ))}
-
-                                  </tbody>
-
-                                </table>
-
-                              ) : (
-
-                                <div className="empty-module-state">
-                                
-                                  <div className="empty-icon">
-                                    <FontAwesomeIcon icon={faTrash} />
-                                  </div>
-
-                                  <h6>No Deleted Modules</h6>
-
-                                  <p>
-                                    Deleted modules will appear here.
-                                  </p>
-
-                                </div>
-
-                              )}
-
-                            {/* Pagination */}
-
-                            {deletedModules.length > deletedModulesPerPage && (
-                              <div className="modal-pagination">
-
-                                <span>
-                                  Showing{" "}
-                                  <strong>
-                                    {deletedModuleFrom} - {deletedModuleTo}
-                                  </strong>{" "}
-                                  of{" "}
-                                  <strong>{deletedModules.length}</strong>{" "}
-                                  Modules
-                                </span>
-
-                                <div className="pagination-buttons">
-
-                                  <button
-                                    type="button"
-                                    disabled={deletedModulePage === 1}
-                                    onClick={() =>
-                                      setDeletedModulePage(page => page - 1)
+                        <table className="table deleted-module-table mb-0">
+                          <thead>
+                            <tr>
+                                <th>
+                                  <input
+                                    type="checkbox"
+                                    checked={
+                                      currentDeletedModuleIds.length > 0 &&
+                                      currentDeletedModuleIds.every(id =>
+                                        selectedDeletedModules.includes(id)
+                                      )
                                     }
-                                  >
-                                    <FontAwesomeIcon icon={faAngleLeft} />
-                                  </button>
+                                    onChange={(e) => {
 
-                                  <button
-                                    type="button"
-                                    disabled={
-                                      deletedModulePage === deletedModuleTotalPages
-                                    }
-                                    onClick={() =>
-                                      setDeletedModulePage(page => page + 1)
-                                    }
-                                  >
-                                    <FontAwesomeIcon icon={faAngleRight} />
-                                  </button>
+                                      if (e.target.checked) {
 
-                                </div>
+                                        setSelectedDeletedModules(prev => [
+                                          ...new Set([
+                                            ...prev,
+                                            ...currentDeletedModuleIds
+                                          ])
+                                        ]);
 
-                              </div>
-                            )}
-                            </div>
+                                      } else {
+
+                                        setSelectedDeletedModules(prev =>
+                                          prev.filter(
+                                            id => !currentDeletedModuleIds.includes(id)
+                                          )
+                                        );
+
+                                      }
+
+                                    }}
+                                  />
+                                </th>
+
+                                <th>Module Name</th>
+
+                            </tr>
+                        </thead>
 
 
-                            <div className="modal-footer">
+                          <tbody>
 
-                              <button
-                                className="btn gray-btn"
-                                onClick={() =>
-                                  setShowDeletedModules(false)
-                                }
+                            {paginatedDeletedModules.map((module) => (
+
+                              <tr
+                                key={module.id}
+                                className="deleted-module-row"
+                                onClick={() => {
+
+                                  setSelectedDeletedModules(prev =>
+                                    prev.includes(module.id)
+                                      ? prev.filter(id => id !== module.id)
+                                      : [...prev, module.id]
+                                  );
+
+                                }}
                               >
-                                Close
-                              </button>
+                                <td>
+                                  <input
+                                    type="checkbox"
+                                    checked={selectedDeletedModules.includes(
+                                      module.id
+                                    )}
+                                    onClick={(e) => e.stopPropagation()}
+                                    onChange={() => {}}
+                                  />
+                                </td>
 
-                              <button
-                                className="btn green-btn"
-                                disabled={!selectedDeletedModules.length}
-                                onClick={bulkRestoreModules}
-                              >
-                                Restore
-                              </button>
+                                <td>
+                                  {module.title}
+                                </td>
 
-                              <button
-                                className="btn red-btn"
-                                disabled={!selectedDeletedModules.length}
-                                onClick={bulkForceDeleteModules}
-                              >
-                                Delete Permanently
-                              </button>
+                              </tr>
 
-                            </div>
+                            ))}
 
+                          </tbody>
+
+                        </table>
+
+                      ) : (
+
+                        <div className="empty-module-state">
+                        
+                          <div className="empty-icon">
+                            <FontAwesomeIcon icon={faTrash} />
                           </div>
+
+                          <h6>No Deleted Modules</h6>
+
+                          <p>
+                            Deleted modules will appear here.
+                          </p>
+
+                        </div>
+
+                      )}
+
+                    {/* Pagination */}
+
+                    {deletedModules.length > deletedModulesPerPage && (
+                      <div className="modal-pagination">
+
+                        <span>
+                          Showing{" "}
+                          <strong>
+                            {deletedModuleFrom} - {deletedModuleTo}
+                          </strong>{" "}
+                          of{" "}
+                          <strong>{deletedModules.length}</strong>{" "}
+                          Modules
+                        </span>
+
+                        <div className="pagination-buttons">
+
+                          <button
+                            type="button"
+                            disabled={deletedModulePage === 1}
+                            onClick={() =>
+                              setDeletedModulePage(page => page - 1)
+                            }
+                          >
+                            <FontAwesomeIcon icon={faAngleLeft} />
+                          </button>
+
+                          <button
+                            type="button"
+                            disabled={
+                              deletedModulePage === deletedModuleTotalPages
+                            }
+                            onClick={() =>
+                              setDeletedModulePage(page => page + 1)
+                            }
+                          >
+                            <FontAwesomeIcon icon={faAngleRight} />
+                          </button>
 
                         </div>
 
                       </div>
+                    )}
+                    </div>
 
-                    )
-                  }
+
+                    <div className="modal-footer">
+
+                      <button
+                        className="btn gray-btn"
+                        onClick={() =>
+                          setShowDeletedModules(false)
+                        }
+                      >
+                        Close
+                      </button>
+
+                      <button
+                        className="btn green-btn"
+                        disabled={!selectedDeletedModules.length}
+                        onClick={bulkRestoreModules}
+                      >
+                        Restore
+                      </button>
+
+                      <button
+                        className="btn red-btn"
+                        disabled={!selectedDeletedModules.length}
+                        onClick={bulkForceDeleteModules}
+                      >
+                        Delete Permanently
+                      </button>
+
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            )
+          }
       </div>
 
         {/* Confirm Dialog Box */}
