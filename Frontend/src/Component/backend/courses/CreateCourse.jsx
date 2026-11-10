@@ -1,16 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
-import Header from "../../Common/Header";
-import Sidebar from "../../Common/Sidebar";
 import { useForm } from "react-hook-form";
 import { apiUrl, token } from "../../Common/http";
 import { toast } from "react-toastify";
 import { AuthContext } from "../context/Auth";
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import HeaderUi from "../../Common/CommonUI/HeaderUi";
-import FooterUi from "../../Common/CommonUI/FooterUi";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faA, faAngleRight, faArrowLeft, faBook, faChartSimple, faFile, faFileEdit, faFlag, faFolderClosed, faFolderTree, faGlobe, faIndianRupee, faPlug, faPlus, faRupee, faStar, faTrash, faUpload, faUserTie } from "@fortawesome/free-solid-svg-icons";
+import { faA, faAngleRight, faArrowLeft, faBook, faChartSimple, faFileEdit, faFlag, faFolderClosed, faFolderTree, faGlobe, faIndianRupee, faPlus, faStar, faTrash, faUpload, faUserTie } from "@fortawesome/free-solid-svg-icons";
 import { COURSE_ROUTES, DASHBOARD_ROUTES } from "../../../constants/nevigation/routes";
 import { availabilityValidator } from "../../../utilities/validators";
 

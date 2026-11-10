@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import logo from "../../../assets/images/Logo2.png";
 
 const BrandLogo = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation("headerUi");
 
     return (
         <>

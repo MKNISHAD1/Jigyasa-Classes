@@ -1,0 +1,41 @@
+{
+  "fields": {
+
+    "name": {
+      "label": "पूरा नाम",
+      "placeholder": "अपना नाम लिखें"
+    },
+
+    "email": {
+      "label": "ईमेल एड्रेस",
+      "placeholder": "अपना ईमेल एड्रेस लिखें"
+    },
+
+    "phone": {
+      "label": "फोन नंबर",
+      "placeholder": "अपना फोन नंबर लिखें"
+    },
+
+    "password": {
+      "label": "पासवर्ड",
+      "placeholder": "अपना पासवर्ड लिखें"
+    },
+
+    "confirmPassword": {
+      "label": "पासवर्ड की पुष्टि करें",
+      "placeholder": "अपना पासवर्ड दोबारा लिखें"
+    }
+  },
+
+  "actions": {
+    "submit": "जमा करें",
+    "cancel": "रद्द करें",
+    "sending": "भेजा जा रहा है...",
+    "sendMessage": "संदेश भेजें"
+  },
+
+  "validation": {
+    "required": "यह जानकारी भरना जरूरी है",
+    "invalidEmail": "कृपया सही ईमेल एड्रेस दर्ज करें"
+  }
+}

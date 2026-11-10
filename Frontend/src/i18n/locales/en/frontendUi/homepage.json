@@ -1,0 +1,147 @@
+ {
+
+  "hero": {
+    "tag": "Start Your Success Journey Today",
+    "title": "Build Your Future With",
+    "qualityEducation": "Quality Education",
+    "and": "&",
+    "expert": "Expert",
+    "mentorship": "Mentorship",
+    "description": "Learn from experienced educators, access structured study materials, and prepare confidently for competitive examinations with guided learning paths.",
+    "startLearning": "Start Learning",
+    "features": {
+      "interactiveSessions": "Interactive Sessions",
+      "expertFaculty": "Expert Faculty",
+      "studyMaterial": "Study Material"
+    }
+  },
+
+
+  "exams": {
+    "title": "We Prepare You For Multiple",
+    "highlight": "Competitive Exams",
+    "subtitle": "Structured courses designed for India's top competitive exams"
+  },
+
+
+  "latestCourses": {
+    "title": "Latest",
+    "highlight": "Courses",
+    "subtitle": "Learn from newly added courses by expert instructors",
+    "loading": "Loading Courses...",
+    "pleaseWait": "Please wait while we fetch courses.",
+    "previous": "Previous courses",
+    "next": "Next courses"
+  },
+
+  
+  "whyChoose": {
+    "title": "Why Choose",
+    "highlight": "Jigyasa Classes?",
+    "subtitle": "Here is why aspirants choose Jigyasa Classes",
+    "items": {
+      "faculty": {
+        "title": "Expert",
+        "highlight": "Faculty",
+        "description": "Learn from experienced teachers with proven success in competitive exam preparation."
+      },
+      "curriculum": {
+        "title": "Structured",
+        "highlight": "Curriculum",
+        "description": "Step-by-step learning paths designed according to the latest exam patterns."
+      },
+      "pricing": {
+        "title": "Affordable",
+        "highlight": "Pricing",
+        "description": "Quality education at student-friendly prices with both free and premium options."
+      },
+      "certification": {
+        "title": "Verified",
+        "highlight": "Certification",
+        "description": "Earn certificates that showcase your learning achievements and skills."
+      }
+    }
+  },
+
+
+  "testimonials": {
+    "title": "Student's",
+    "highlight": "Testimonials",
+    "subtitle": "Hear from our students about how we've helped them succeed",
+    "students": {
+      "priya": {
+        "quote": "The courses are well-structured, the explanations are clear, and the faculty truly understands exam requirements. I especially liked the flexibility of learning anytime.",
+        "role": "UPSC Aspirant"
+      },
+      "rohan": {
+        "quote": "The lessons are simple, focused, and designed exactly for competitive exams. What impressed me most is the balance between concept clarity and practice questions.",
+        "role": "SSC Candidate"
+      },
+      "neha": {
+        "quote": "Each topic is explained step by step, making even difficult concepts easy to understand. I gained confidence in problem-solving and improved my accuracy significantly.",
+        "role": "JEE Aspirant"
+      },
+      "amit": {
+        "quote": "The faculty explains concepts deeply and provides enough practice to strengthen understanding. Regular assessments helped me track my progress and improve continuously.",
+        "role": "JEE Aspirant"
+      },
+      "sneha": {
+        "quote": "The courses are easy to follow, and I could revise topics whenever needed. It helped me manage my studies along with my college schedule effortlessly.",
+        "role": "College Student"
+      }
+    }
+  },
+
+
+  "benefits": {
+    "title": "Benefits Of Learning With",
+    "highlight": "Jigyasa Classes",
+    "subtitle": "Your learning is simplified with us, designed for serious aspirants",
+    "items": {
+      "anytime": {
+        "title": "Learn Anytime, Anywhere",
+        "description": "Access your courses on mobile or desktop and study at your own pace."
+      },
+      "examFocused": {
+        "title": "Exam-Focused & Practical",
+        "description": "Courses designed to match real exam patterns with clarity."
+      },
+      "multipleExams": {
+        "title": "One Platform, Multiple Exams",
+        "description": "Prepare for multiple competitive exams like UPSC, SSC, JEE, Banking and more."
+      },
+      "flexible": {
+        "title": "Flexible & Pressure-Free Learning",
+        "description": "Recorded lessons allow revision anytime without stress."
+      },
+      "interactive": {
+        "title": "Interactive & Easy to Follow",
+        "description": "Engaging lessons with practical examples and materials."
+      }
+    }
+  },
+
+
+  "steps": {
+    "title": "Start Learning in",
+    "highlight": "3 Simple Steps",
+    "subtitle": "Let's start your learning journey with us",
+    "items": {
+      "account": {
+        "title": "Create Your Account",
+        "description": "Sign up in seconds using your valid email to get started."
+      },
+      "course": {
+        "title": "Find Your Course",
+        "description": "Browse courses by exam, category, or subject and choose what fits your goal."
+      },
+      "enroll": {
+        "title": "Enroll & Start Learning",
+        "description": "Complete secure payment and access your course instantly on any device."
+      }
+    },
+
+    
+    "registerNow": "Register Now"
+  }
+}

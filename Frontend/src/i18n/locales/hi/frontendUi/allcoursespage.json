@@ -1,0 +1,83 @@
+{
+  "hero": {
+    "tag": "हमारे कोर्स",
+    "title": "हमारे",
+    "highlight": "कोर्स देखें",
+    "description": "विशेषज्ञों द्वारा तैयार किए गए बेहतरीन कोर्स से सीखें। अनुभवी इंस्ट्रक्टर्स से पढ़ें और अपने सपनों के करियर की तैयारी करें।",
+    "features": {
+      "updatedContent": "अपडेटेड कंटेंट",
+      "expertFaculty": "अनुभवी शिक्षक",
+      "studyMaterial": "स्टडी मटेरियल"
+    },
+    "imageAlt": "जिज्ञासा क्लासेस"
+  },
+
+
+  "search": {
+    "placeholder": "कोर्स खोजें..."
+  },
+
+
+  "filters": {
+    "title": "फ़िल्टर",
+    "course": "कोर्स",
+    "search" : "खोजें",
+    "selectAll": "सभी चुनें",
+    "difficulty": "स्तर",
+    "categories" :"श्रेणियाँ",
+    "button": "फ़िल्टर",
+    "clear": "सभी फ़िल्टर हटाएँ"
+  },
+
+
+  "difficulty": {
+    "beginner": "शुरुआती स्तर",
+    "intermediate": "मध्यम स्तर",
+    "advanced": "एडवांस स्तर",
+    "allLevels": "सभी के लिए"
+  },
+
+
+  "sorting": {
+    "newest": "सबसे नए",
+    "priceLow": "कीमत: कम से ज्यादा",
+    "priceHigh": "कीमत: ज्यादा से कम"
+  },
+
+
+  "loading": {
+    "title": "कोर्स लोड हो रहे हैं...",
+    "description": "कृपया कोर्स लोड होने तक प्रतीक्षा करें।"
+  },
+
+
+  "discovery": {
+    "featuredTitle": "चुनिंदा कोर्स",
+    "featuredSubtitle": "सीखने और आगे बढ़ने में आपकी मदद के लिए चुने गए कोर्स।",
+    "newestTitle": "हाल ही में <span> जोड़े गए कोर्स </span>",
+    "newestSubtitle": "जिज्ञासा क्लासेस में जोड़े गए नए कोर्स देखें।",
+    "viewAll" : "सब देखें"
+  },
+
+
+  "results": {
+    "showingMatching": "आपके फ़िल्टर से मेल खाते",
+    "course": "कोर्स",
+    "courses": "कोर्स",
+    "emptyTitle": "आपके फ़िल्टर से कोई कोर्स नहीं मिला",
+    "emptyDescription": "कोई दूसरा शब्द खोजें या सभी कोर्स देखने के लिए फ़िल्टर हटाएँ।",
+    "showing": "दिखाए जा रहे हैं",
+    "of": "में से"
+  },
+
+
+  "pagination": {
+    "previous": "पिछला पेज",
+    "next": "अगला पेज"
+  },
+
+
+  "imageAlt": {
+    "noCoursesFound": "कोई कोर्स नहीं मिला"
+  }
+}

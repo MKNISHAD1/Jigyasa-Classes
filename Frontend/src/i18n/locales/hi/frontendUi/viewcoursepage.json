@@ -1,0 +1,145 @@
+{
+  "loading": {
+    "title": "कोर्स लोड हो रहा है...",
+    "description": "कृपया कोर्स की जानकारी लोड होने तक प्रतीक्षा करें..."
+  },
+
+
+  "errors": {
+    "fetchFaqs": "सामान्य प्रश्न लोड नहीं हो सके।",
+    "fetchCourse": "कोर्स की जानकारी लोड नहीं हो सकी।",
+    "fetchCourseGeneral": "कोर्स की जानकारी लोड करते समय कुछ गड़बड़ी हुई।",
+    "notFound": "कोर्स नहीं मिला!"
+  },
+
+
+  "breadcrumb": {
+    "home": "होम",
+    "courses": "कोर्स"
+  },
+
+
+  "hero": {
+    "thumbnailAlt": "कोर्स का चित्र",
+    "general": "सामान्य",
+    "subcategory": "सब-कैटेगरी",
+    "defaultInstructor": "जिज्ञासा इंस्ट्रक्टर",
+    "instructor": "शिक्षक",
+    "rating": "रेटिंग",
+    "reviews": "रिव्यू",
+    "student": "विद्यार्थी",
+    "students": "विद्यार्थी",
+    "enrolled": "एडमिशन ले चुके",
+    "lessons": "पाठ",
+    "lectures": "लेक्चर",
+    "level": "स्तर",
+    "language": "भाषा"
+  },
+
+
+  "pricing": {
+    "free": "मुफ़्त",
+    "freeBadge": "100% मुफ़्त",
+    "discount": "की छूट",
+    "enrollNow": "अभी एडमिशन लें",
+    "wishlist": "विशलिस्ट में जोड़ें"
+  },
+
+
+  "courseInfo": {
+    "duration": "अवधि",
+    "materials": "स्टडी मटेरियल",
+    "yes": "हाँ",
+    "not": "नहीं",
+    "lifetime": "लाइफटाइम",
+    "access": "एक्सेस",
+    "everythingAbout": "सब कुछ जानें",
+    "course": "कोर्स के बारे में",
+    "knowMore": "कोर्स की अधिक जानकारी जानें",
+    "overview": "ओवरव्यू",
+    "aboutThis": "इस",
+    "aboutCourse": "कोर्स के बारे में",
+    "whatYouLearn": "आप क्या सीखेंगे",  
+    "whatYou" :"आप क्या",
+    "learn" : "सीखेंगे",
+    "highlightsSoon": "कोर्स की मुख्य बातें जल्द ही जोड़ी जाएँगी।",
+    "highlightsComingSoon": "कोर्स की मुख्य बातें जल्द ही उपलब्ध होंगी।",
+    "readMore": "और पढ़ें",
+    "readLess": "छोटा करें"
+  },
+
+
+  "instructor": {
+    "title": "शिक्षक के बारे में",
+    "defaultTitle": "शिक्षक",
+    "informationSoon": "शिक्षक की जानकारी जल्द ही उपलब्ध होगी।",
+    "students": "विद्यार्थी"
+  },
+
+
+  "tabs": {
+    "overview": "अवलोकन",
+    "instructor": "शिक्षक",
+    "reviews": "समीक्षाएँ"
+  },
+
+
+  "curriculum": {
+    "title": "कोर्स",
+    "heading": "सिलेबस",
+    "module":"मॉड्यूल",
+    "closeAll":"सभी बंद करें",
+    "expandAll":"पूरा देखें",
+    "comingSoon": " सिलेबस जल्द",
+    "soon": "उपलब्ध होगी",
+    "lessonsPreparing": "पाठ तैयार किए ",
+    "prepared": "जा रहे हैं।",
+    "checkBack": "कृपया बाद में",
+    "later": "फिर से देखें।",
+    "emptyImageAlt": "कोई पाठ नहीं मिला"
+  },
+
+
+  "faq": {
+    "subtitle": "इस कोर्स से जुड़े आम सवालों के जवाब यहाँ जानें।"
+  },
+
+
+  "shareCourse":{
+    "highlight" : "शेयर करें",
+    "title":"इस कोर्स को",
+    "subtitle":"अपने दोस्तों और सहपाठियों को साथ शेयर करें",
+    "linkCopied" :"लिंक कॉपी कर लिया गया है!"
+  },
+
+  "overview": {
+    "title": "कोर्स",
+    "heading": "की जानकारी",
+    "totalLectures": "कुल लेक्चर",
+    "structuredLessons": "व्यवस्थित वीडियो पाठ",
+    "lecture": "लेक्चर",
+    "lectures": "लेक्चर",
+    "totalDuration": "कुल अवधि",
+    "learnAtYourPace": "अपनी सुविधानुसार सीखें",
+    "studyMaterials": "स्टडी मटेरियल",
+    "materialsDescription": "नोट्स, PDF और अन्य सामग्री",
+    "available": "उपलब्ध",
+    "language": "भाषा",
+    "multipleLanguages": "कई भाषाओं में उपलब्ध",
+    "courseLevel": "कोर्स का स्तर",
+    "suitableForYou": "आपके लिए उपयुक्त",
+    "level": "स्तर",
+    "learnAnywhere": "कभी भी, कहीं भी सीखें"
+  },
+
+  
+  "similarCourses": {
+    "title": "इसी तरह के",
+    "heading": "कोर्स",
+    "description": "आपकी रुचि के अन्य कोर्स",
+    "interested": "भी देखें।",
+    "viewAll": "सभी देखें"
+  }
+
+
+}

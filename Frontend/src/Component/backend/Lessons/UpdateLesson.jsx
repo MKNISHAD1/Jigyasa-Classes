@@ -3,17 +3,12 @@ import { useForm } from "react-hook-form";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { apiUrl, token } from "../../Common/http";
 import { toast } from "react-toastify";
-import Header from "../../Common/Header";
-import Sidebar from "../../Common/Sidebar";
 import ClipLoader from "react-spinners/ClipLoader";
-import HeaderUi from "../../Common/CommonUI/HeaderUi";
-import FooterUi from "../../Common/CommonUI/FooterUi";
 import { COURSE_ROUTES } from "../../../constants/nevigation/routes";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faA, faAngleRight, faArrowLeft, faCalendarDay, faCalendarTimes, faCalendarWeek, faCheck, faCirclePause, faCirclePlus, faClose, faEdit, faFileCirclePlus, faFlag, faPen, faPlugCirclePlus, faSave, faUpload } from "@fortawesome/free-solid-svg-icons";
-import { faCalendarDays, faFileAlt } from "@fortawesome/free-regular-svg-icons";
+import { faA, faAngleRight, faArrowLeft, faCalendarDay, faCalendarWeek, faCheck, faClose, faFileCirclePlus, faFlag, faPen, faSave, faUpload } from "@fortawesome/free-solid-svg-icons";
+import { faFileAlt } from "@fortawesome/free-regular-svg-icons";
 import ConfirmationDialogBoxUi from "../../Common/CommonUI/ConfirmationDialogBoxUi";
-import { FaCalendarDay } from "react-icons/fa";
 
 const UpdateLesson = () => {
   const { courseId, lessonId } = useParams();

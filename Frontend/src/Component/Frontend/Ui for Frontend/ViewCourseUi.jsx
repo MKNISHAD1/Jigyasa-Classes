@@ -21,7 +21,8 @@ import Share_Course_Card_Ui from '../../Common/CommonUI/Share_Course_Card_Ui';
 
 const ViewCourseUi = () => {
   const { id } = useParams();
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation("viewcoursepage");
+  const {t:commonT} = useTranslation("common")
 
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -69,11 +70,11 @@ const ViewCourseUi = () => {
         setCourse(result.course);
         setSimilarCourses(result.similar_courses || []);
       } else {
-        toast.error("Failed to fetch course details");
+        toast.error(t("errors.fetchCourse"));
       }
     } catch (error) {
       console.error("Fetch error:", error);
-      toast.error("Something went wrong while fetching course");
+      toast.error(t("errors.fetchCourseGeneral"));
     } finally {
       setLoading(false);
     }
@@ -104,17 +105,17 @@ const ViewCourseUi = () => {
 
   //  Language Logic
   const languageLabel = {
-    Both: "Eng / Hi",
-    English: "English",
-    Hindi: "Hindi"
+    Both: commonT("language.both"),
+    English: commonT("language.english"),
+    Hindi: commonT("language.hindi")
   }[course?.language] || course?.language;
 
   //  Difficulty Level
   const difficultyLabel = {
-    Beginner: "Beginner",
-    Intermediate: "Intermediate",
-    Advanced: "Advanced",
-    "All Levels": "For Everyone"
+    Beginner: commonT("difficulty.beginner"),
+    Intermediate: commonT("difficulty.intermediate"),
+    Advanced: commonT("difficulty.advanced"),
+    "All Levels": commonT("difficulty.allLevels")
   }[course?.difficulty_level] || course?.difficulty_level;
 
 
@@ -131,14 +132,14 @@ const ViewCourseUi = () => {
       const minutes = totalMinutes % 60;
 
       if (hours === 0) {
-          return `${minutes} Min`;
+          return `${minutes} ${commonT("duration.minutes")}`;
       }
 
       if (minutes === 0) {
-          return `${hours} ${hours === 1 ? "Hour" : "Hours"}`;
+          return `${hours} ${commonT(hours === 1 ? "duration.hour" : "duration.hours")}`;
       }
 
-      return `${hours} hr  ${minutes} min`;
+      return `${hours} ${commonT("duration.shortHour")}  ${minutes} ${commonT("duration.shortMinutes")}`;
   };
 
   // Similar courses
@@ -156,16 +157,18 @@ const ViewCourseUi = () => {
             style={{ width: "3rem", height: "3rem" }}
           />
 
-          <h5 className="mt-3 mb-1">Loading Course...</h5>
+          <h5 className="mt-3 mb-1">{t("loading.title")}</h5>
 
           <small className="text-muted">
-            Please Wait While Fetching Course Information...
+            {t("loading.description")}
           </small>
         </div>
 
     );
   }
-  if (!course) return <p className="text-center my-5">Course not found!</p>;
+
+  // Not Found
+  if (!course) return <p className="text-center my-5">{t("errors.notFound")}</p>;
 
   return (
     <>
@@ -179,10 +182,10 @@ const ViewCourseUi = () => {
 
             {/* Breadcrubms */}
             <section className="Breadcrumb_Section">
-              <Link className='Bread_Link' to="/">Home</Link>
+              <Link className='Bread_Link' to="/"> {t("breadcrumb.home")} </Link>
               <span><FontAwesomeIcon icon={faAngleRight}/></span>
 
-              <Link className='Bread_Link' to="/courses">Courses</Link>
+              <Link className='Bread_Link' to="/courses">{t("breadcrumb.courses")}</Link>
               <span><FontAwesomeIcon icon={faAngleRight}/></span>
 
               <span className='Course_Name'>{course.title?.[i18n.language] || course.title?.en}</span>
@@ -215,19 +218,20 @@ const ViewCourseUi = () => {
                   <div className="Data_Set">
                     <FontAwesomeIcon icon={faFolderTree} className='Icon'/> 
                      <span className='d-none d-md-inline-flex'>{(course.subcategory?.name?.[i18n.language] ??
-                      course.subcategory?.name?.en) || 'General'}  </span> 
+                      course.subcategory?.name?.en) || `${t("hero.general")}`}  </span> 
                     <div className="Body d-flex d-md-none">
                       <span>{(course.subcategory?.name?.[i18n.language] ??
-                      course.subcategory?.name?.en) || 'General'}  </span>                       <small> Subcategory</small>
+                      course.subcategory?.name?.en) || `${t("hero.general")}`}  </span>
+                      <small> {t("hero.subcategory")} </small>
                     </div>
                   </div>
 
                   <div className="Data_Set">
                     <FontAwesomeIcon icon={faUserTie} className='Icon'/>
-                    <span className='d-none d-md-inline-flex'>{course.teacher?.name || 'Jigaysa Instructor'} </span> 
+                    <span className='d-none d-md-inline-flex'>{course.teacher?.name || `${t("hero.defaultInstructor")}`} </span> 
                     <div className="Body d-flex d-md-none">
-                      <span>{course.teacher?.name || 'Jigaysa Instructor'} </span>                       
-                      <small> Instructor</small>
+                      <span>{course.teacher?.name || `${t("hero.defaultInstructor")}`} </span>                       
+                      <small> {t("hero.instructor")} </small>
                     </div>
                   </div>
                 </div>
@@ -236,19 +240,19 @@ const ViewCourseUi = () => {
 
                   <div className="Data_Set">
                     <FontAwesomeIcon icon={faStar} className='Icon' /> 
-                    <span className='d-none d-md-inline-flex'>5 (100 reviews) </span> 
+                    <span className='d-none d-md-inline-flex'>5 ( 100 {t("hero.reviews")} ) </span> 
                       <div className="Body d-flex d-md-none">
-                        <span>5 (100 reviews) </span>                       
-                        <small> Rating</small>
+                        <span>5 ( 100 {t("hero.reviews")} ) </span>                       
+                        <small> {t("hero.rating")} </small>
                       </div>
                   </div>
                   
                   <div className="Data_Set">
                     <FontAwesomeIcon icon={faUsers} className='Icon'/>
-                    <span className='d-none d-md-inline-flex'>1200 Student enrolled</span> 
+                    <span className='d-none d-md-inline-flex'>1200 {t("hero.students")} {t("hero.enrolled")}</span> 
                       <div className="Body d-flex d-md-none">
-                        <span>1200 students </span>                       
-                        <small> Enrolled</small>
+                        <span>1200 {t("hero.students")} </span>                       
+                        <small> {t("hero.enrolled")} </small>
                       </div>
                   </div>              
 
@@ -266,7 +270,7 @@ const ViewCourseUi = () => {
                     <FontAwesomeIcon icon={faPlayCircle} />
                     </div>
                     <div className="Badge_Body">
-                    <p>{course.lessons_count || 0} Lessons</p><small>Lectures</small>
+                    <p>{course.lessons_count || 0} {t("hero.lessons")}</p><small>{t("hero.lectures")}</small>
                     </div>
                   </div>
 
@@ -275,7 +279,7 @@ const ViewCourseUi = () => {
                     <FontAwesomeIcon icon={faArrowTrendUp}/>
                     </div>
                     <div className="Badge_Body">
-                      <p>{course.difficulty_level || "All Levels"}</p><small>Level</small>
+                      <p>{difficultyLabel || `${commonT("difficulty.allLevel")}`}</p><small> {t("hero.level")} </small>
                     </div>
                   </div>
 
@@ -284,7 +288,7 @@ const ViewCourseUi = () => {
                     <FontAwesomeIcon icon={faLanguage} /> 
                     </div>
                     <div className="Badge_Body">
-                    <p>{course?.language}</p><small>Language</small>
+                    <p>{languageLabel}</p><small> {t("hero.language")} </small>
                     </div>
                   </div>
 
@@ -310,7 +314,7 @@ const ViewCourseUi = () => {
                 <div className="Price_Header">
 
                   <h3 className="Final_Price">
-                    {price ? `₹${price}.00` : "Free"}
+                    {price ? `₹${price}.00` : `${t("pricing.free")}`}
                   </h3>
 
                   {price > 0 ? (
@@ -321,13 +325,13 @@ const ViewCourseUi = () => {
                       </span>
 
                       <span className="Discount_Badge">
-                        {discount}% OFF
+                        {discount}% {t("pricing.discount")}
                       </span>
 
                     </div>
                   ):(
                     <span className="Free_Badge">
-                        100% FREE
+                        {t("pricing.freeBadge")}
                     </span>
                     )
                   }
@@ -337,10 +341,10 @@ const ViewCourseUi = () => {
                 {/* BUTTONS */}
                 <div className="Sidebar_Button">
                   <button className="Enroll_Button">
-                    Enroll Now
+                    {t("pricing.enrollNow")}
                   </button>
                   <button className="Wishlist_Button" disabled>
-                  <FontAwesomeIcon icon={faHeart} className='text-danger'/> Wishlist
+                  <FontAwesomeIcon icon={faHeart} className='text-danger'/> {t("pricing.wishlist")}
                 </button>
                 </div>
               </div>
@@ -355,7 +359,7 @@ const ViewCourseUi = () => {
                     <FontAwesomeIcon icon={faClockFour}/>
                     </div>
                     <div className="Badge_Body">
-                      <p>{formatCourseDuration(course.total_duration)}</p><small>Duration</small>
+                      <p>{formatCourseDuration(course.total_duration)}</p><small>{t("courseInfo.duration")}</small>
                     </div>
                   </div>
 
@@ -364,7 +368,7 @@ const ViewCourseUi = () => {
                     <FontAwesomeIcon icon={faPlayCircle} />
                     </div>
                     <div className="Badge_Body">
-                    <p>{course.lessons_count || 0}</p><small>Lectures</small>
+                    <p>{course.lessons_count || 0}</p><small>{t("hero.lessons")}</small>
                     </div>
                   </div>
 
@@ -373,7 +377,11 @@ const ViewCourseUi = () => {
                     <FontAwesomeIcon icon={faFile}/>
                     </div>
                     <div className="Badge_Body">
-                      <p>Yes</p><small>Materials</small>
+                      <p>{hasMaterials ? `${t("courseInfo.yes")} ` : `${t("courseInfo.not")} `}
+                        {t("overview.available")}
+                      </p>
+                      
+                      <small>{t("courseInfo.materials")}</small>
                     </div>
                   </div>
 
@@ -382,7 +390,7 @@ const ViewCourseUi = () => {
                     <FontAwesomeIcon icon={faLanguage}/>
                     </div>
                     <div className="Badge_Body">
-                      <p>{languageLabel}</p><small>Language</small>
+                      <p>{languageLabel}</p><small>{t("hero.language")}</small>
                     </div>
                   </div>
 
@@ -391,7 +399,7 @@ const ViewCourseUi = () => {
                     <FontAwesomeIcon icon={faLayerGroup}/>
                     </div>
                     <div className="Badge_Body">
-                      <p>{course.difficulty_level || "All Levels"}</p><small>Level</small>
+                      <p>{difficultyLabel || `${commonT("difficulty.allLevel")}`}</p><small>{t("hero.level")}</small>
                     </div>
                   </div>
 
@@ -400,7 +408,7 @@ const ViewCourseUi = () => {
                     <FontAwesomeIcon icon={faStopwatch} /> 
                     </div>
                     <div className="Badge_Body">
-                    <p>Lifetime</p><small>Access</small>
+                    <p>{t("courseInfo.lifetime")}</p><small>{t("courseInfo.access")}</small>
                     </div>
                   </div>
 
@@ -416,14 +424,14 @@ const ViewCourseUi = () => {
               className="Course_Accordion mt-4"
               >
 
-                <h4>Everything About <span>Course</span></h4>
-                <p className='text-muted'>Know more details about course</p>
+                <h4>{t("courseInfo.everythingAbout")} <span>{t("courseInfo.course")}</span></h4>
+                <p className='text-muted'> {t("courseInfo.knowMore")} </p>
 
               {/* What You'll Learn */}
 
               <Accordion.Item eventKey="0">
 
-                <Accordion.Header> What You'll Learn</Accordion.Header>
+                <Accordion.Header> {t("courseInfo.whatYouLearn")} </Accordion.Header>
 
                 <Accordion.Body>
 
@@ -450,7 +458,7 @@ const ViewCourseUi = () => {
                         ) : (
 
                             <small className='fw-bold text-success'>
-                                Course highlights will be added soon.
+                                {t("courseInfo.highlightsSoon")}
                             </small>
                         )
                     }
@@ -465,7 +473,7 @@ const ViewCourseUi = () => {
 
               <Accordion.Item eventKey="1">
 
-                <Accordion.Header> About Course </Accordion.Header>
+                <Accordion.Header> {t("courseInfo.aboutCourse")} </Accordion.Header>
 
                 <Accordion.Body>
 
@@ -488,7 +496,7 @@ const ViewCourseUi = () => {
                     onClick={()=>setShowMore(!showMore)}
                     >
 
-                    {showMore ? "Read Less" : "Read More"}
+                    {showMore ? `${t("courseInfo.readLess")}` : `${t("courseInfo.readMore")}`}
 
                     </button>
 
@@ -504,7 +512,7 @@ const ViewCourseUi = () => {
 
               <Accordion.Item eventKey="2">
 
-                <Accordion.Header> About Instructor </Accordion.Header>
+                <Accordion.Header> {t("instructor.title")} </Accordion.Header>
 
                 <Accordion.Body>
 
@@ -523,7 +531,7 @@ const ViewCourseUi = () => {
                       </h3>
 
                       <p className="Teacher_Title">
-                        {course.teacher?.professional_title || "Instructor"}
+                        {course.teacher?.professional_title || `${t("instructor.defaultTitle")}`}
                       </p>
 
                       {(course.teacher?.overall_rating || course.teacher?.total_students) && (
@@ -549,12 +557,12 @@ const ViewCourseUi = () => {
 
                     <div className="Teacher_About">
 
-                      <h5>About Instructor</h5>
+                      <h5>{t("instructor.title")}</h5>
 
                       <p>
                         {
                           course.teacher?.bio ||
-                          "Instructor information will be available soon."
+                          `${t("instructor.informationSoon")}`
                         }
                       </p>
 
@@ -580,12 +588,12 @@ const ViewCourseUi = () => {
                   <Tab eventKey="Overview"
                     title={
                       <> <FontAwesomeIcon icon={faFileLines} className="me-2" />
-                        Overview
+                        {t("tabs.overview")}
                       </>
                     }
                   >
                     <div className="About_Course_Section">
-                      <h5>About This <span>Course</span> </h5>
+                      <h5>{t("courseInfo.aboutThis")} <span>{t("courseInfo.course")}</span> </h5>
                         <p className={showMore ? "expanded" : ""}
                            style={{whiteSpace:'pre-line'}}                        >
                           {course.description?.[i18n.language] || course.description?.en}
@@ -601,8 +609,8 @@ const ViewCourseUi = () => {
                             }
                           >
                             {showMore
-                              ? (<>Read Less <FontAwesomeIcon icon={faAngleUp} /></> )
-                              : (<>Read More <FontAwesomeIcon icon={faAngleDown} /></> )
+                              ? (<>{t("courseInfo.readLess")} <FontAwesomeIcon icon={faAngleUp} /></> )
+                              : (<>{t("courseInfo.readMore")} <FontAwesomeIcon icon={faAngleDown} /></> )
                               }
                           </button>
                         )
@@ -613,7 +621,7 @@ const ViewCourseUi = () => {
 
                     <div className="Highlights_Section">
 
-                      <h5>What <span>You'll Learn</span></h5>
+                      <h5> {t("courseInfo.whatYou")} <span>{t("courseInfo.learn")}</span></h5>
 
                       {
                           highlights.length > 0 ? (
@@ -663,7 +671,7 @@ const ViewCourseUi = () => {
                           ) : (
 
                               <small className='text-success fw-bold'>
-                                  Course highlights will be coming soon.
+                                  {t("courseInfo.highlightsSoon")}
                               </small>
 
                           )
@@ -681,7 +689,7 @@ const ViewCourseUi = () => {
                           icon={faChalkboardTeacher}
                           className="me-2"
                         />
-                        Instructor
+                       {t("tabs.instructor")}
                       </>
                     }
                   >
@@ -700,7 +708,7 @@ const ViewCourseUi = () => {
                         </h3>
 
                         <p className="Teacher_Title">
-                          {course.teacher?.professional_title || "Instructor"}
+                          {course.teacher?.professional_title || `${t("instructor.defaultTitle")}`}
                         </p>
 
                         {(course.teacher?.overall_rating || course.teacher?.total_students) && (
@@ -726,16 +734,16 @@ const ViewCourseUi = () => {
 
                       <div className="Teacher_About">
 
-                        <h5>About Instructor</h5>
+                      <h5>{t("instructor.title")}</h5>
 
                         <p>
                           {
                             course.teacher?.bio ||
-                            "Instructor information will be available soon."
+                            `${t("instructor.informationSoon")}`
                           }
                         </p>
 
-                      </div>
+                    </div>
 
                     </div>
                   </Tab>
@@ -744,7 +752,7 @@ const ViewCourseUi = () => {
                   <Tab eventKey="Reviews" title={
                       <>
                         <FontAwesomeIcon icon={faStar} className="me-2" />
-                        Reviews
+                        {t("tabs.reviews")}
                       </>
                     } disabled>
                     Tab content for Contact
@@ -766,12 +774,12 @@ const ViewCourseUi = () => {
                   />
                 ) : (
                   <div className="Empty_Curriculum text-center">
-                    <h4>Course <span>Curriculum </span></h4>
+                    <h4> {t("curriculum.title")} <span>{t("curriculum.heading")} </span></h4>
                     <img src={no_lesson} alt="No Lesson Found" />
 
 
-                    <h5>Curriculum Coming <span>Soon</span></h5>
-                    <p> Lessons are being <span>prepared</span>. Please check back <span>later</span> .</p>
+                    <h5> {t("curriculum.comingSoon")} <span> {t("curriculum.soon")} </span></h5>
+                    <p> {t("curriculum.lessonsPreparing")} <span> {t("curriculum.prepared")} </span>. {t("curriculum.checkBack")} <span>{t("curriculum.later")}</span> .</p>
                 </div>
                 )
               }
@@ -782,7 +790,7 @@ const ViewCourseUi = () => {
 
               <FaqSection 
                 faqs={courseFaqs}
-                subtitle="Find answers to the most common questions about this course."
+                subtitle={t("faq.subtitle")}
               />
 
             </div>
@@ -800,7 +808,7 @@ const ViewCourseUi = () => {
             <div className="Overview_Card card border-1 w-100 shadow mt-4 d-none d-md-flex">
 
                   <h5 className="Overview_Title">
-                    Course <span>Overview</span>  
+                    {t("overview.title")} <span>{t("overview.heading")}</span>  
                   </h5>
 
                   <hr />
@@ -809,7 +817,7 @@ const ViewCourseUi = () => {
                   <div className="Price_Header">
 
                     <h3 className="Final_Price">
-                        {price ? `₹${price}.00` : "Free"}
+                        {price ? `₹${price}.00` : `${t("pricing.free")}`}
                     </h3>
 
                     {price > 0 ? (
@@ -820,13 +828,13 @@ const ViewCourseUi = () => {
                         </span>
 
                         <span className="Discount_Badge">
-                          {discount}% OFF
+                          {discount}% {t("pricing.discount")}
                         </span>
 
                       </div>
                     ):(
                       <span className="Free_Badge">
-                          100% FREE
+                          {t("pricing.freeBadge")}
                       </span>
                       )
                     }
@@ -836,11 +844,11 @@ const ViewCourseUi = () => {
                   {/* BUTTONS */}
                   <div className="Sidebar_Button">
                     <button className="Enroll_Button">
-                      Enroll Now 
+                      {t("pricing.enrollNow")}
                     </button>
 
                     <button className="Wishlist_Button" disabled>
-                      <FontAwesomeIcon icon={faHeart} className='text-danger'/> Wishlist
+                      <FontAwesomeIcon icon={faHeart} className='text-danger'/> {t("pricing.wishlist")}
                     </button>
                   </div>
 
@@ -853,13 +861,15 @@ const ViewCourseUi = () => {
                       <div className="Left_Side">
                           <FontAwesomeIcon icon={faPlayCircle} className='Item_Icon'/>
                           <div className="Item_Body">
-                            <strong>Total Lectures</strong>
-                            <small className='text-muted'>Structured Video Lessons </small>
+                            <strong>{t("overview.totalLectures")}</strong>
+                            <small className='text-muted'>{t("overview.structuredLessons")} </small>
                           </div>
                       </div>
                       <div className="Right_Side ">
                         <strong>{course.lessons_count || 0} </strong>
-                         <small className='text-muted'>Lecture{course.lessons_count === 1 ? "" : "s"}</small>
+                         <small className='text-muted'>
+                          {course.lessons_count === 1 ? `${t("overview.lecture")}` : `${t("overview.lectures")}`}
+                        </small>
                       </div>
                     </div>
 
@@ -867,13 +877,13 @@ const ViewCourseUi = () => {
                       <div className="Left_Side">
                           <FontAwesomeIcon icon={faClock} className='Item_Icon'/>
                           <div className="Item_Body">
-                            <strong>Total Duration</strong>
-                            <small className='text-muted'>Learn at your own pace</small>
+                            <strong>{t("overview.totalDuration")}</strong>
+                            <small className='text-muted'>{t("overview.learnAtYourPace")}</small>
                           </div>
                       </div>
                       <div className="Right_Side ">
                         <strong>{formatCourseDuration(course.total_duration)} </strong>
-                         <small className='text-muted'>Duration</small>
+                         <small className='text-muted'>{t("courseInfo.duration")}</small>
                       </div>
                     </div>
 
@@ -881,13 +891,14 @@ const ViewCourseUi = () => {
                       <div className="Left_Side">
                           <FontAwesomeIcon icon={faFileLines} className='Item_Icon'/>
                           <div className="Item_Body">
-                            <strong>Study Materials</strong>
-                            <small className='text-muted'>Notes,PDFs, and More</small>
+                            <strong>{t("overview.studyMaterials")}</strong>
+                            <small className='text-muted'>{t("overview.materialsDescription")}</small>
                           </div>
                       </div>
                       <div className="Right_Side ">
-                        <strong>{hasMaterials ? "Yes" : "Not"} </strong>
-                         <small className='text-muted'>Available</small>
+                        <strong>{hasMaterials ? `${t("courseInfo.yes")} ` : `${t("courseInfo.not")} `}
+                      </strong>
+                         <small className='text-muted'>{t("overview.available")}</small>
                       </div>
                     </div>
 
@@ -895,13 +906,13 @@ const ViewCourseUi = () => {
                       <div className="Left_Side">
                           <FontAwesomeIcon icon={faLanguage} className='Item_Icon'/>
                           <div className="Item_Body">
-                            <strong>Language</strong>
-                            <small className='text-muted'>Availbale in Multiple Language</small>
+                            <strong>{t("overview.language")}</strong>
+                            <small className='text-muted'>{t("overview.multipleLanguages")}</small>
                           </div>
                       </div>
                       <div className="Right_Side ">
                         <strong>{languageLabel}  </strong>
-                         <small className='text-muted'>Language</small>
+                         <small className='text-muted'>{t("overview.language")}</small>
                       </div>
                     </div>
 
@@ -909,13 +920,13 @@ const ViewCourseUi = () => {
                       <div className="Left_Side">
                           <FontAwesomeIcon icon={faLayerGroup} className='Item_Icon'/>
                           <div className="Item_Body">
-                            <strong>Course Level</strong>
-                            <small className='text-muted'>Suitable For You</small>
+                            <strong>{t("overview.courseLevel")}</strong>
+                            <small className='text-muted'>{t("overview.suitableForYou")}</small>
                           </div>
                       </div>
                       <div className="Right_Side ">
                         <strong>{difficultyLabel}  </strong>
-                         <small className='text-muted'>Level</small>
+                         <small className='text-muted'>{t("overview.level")}</small>
                       </div>
                     </div>
 
@@ -923,13 +934,13 @@ const ViewCourseUi = () => {
                       <div className="Left_Side">
                           <FontAwesomeIcon icon={faStopwatch} className='Item_Icon'/>
                           <div className="Item_Body">
-                            <strong>Access</strong>
-                            <small className='text-muted'>Learn anytime, anywhere</small>
+                            <strong>{t("courseInfo.access")}</strong>
+                            <small className='text-muted'>{t("overview.learnAnywhere")}</small>
                           </div>
                       </div>
                       <div className="Right_Side ">
-                        <strong> Lifetime </strong>
-                         <small className='text-muted'>Access</small>
+                        <strong> {t("courseInfo.lifetime")} </strong>
+                         <small className='text-muted'>{t("courseInfo.access")}</small>
                       </div>
                     </div>
 
@@ -952,11 +963,11 @@ const ViewCourseUi = () => {
 
                   <div className='Header_Title'>
                       <h3>
-                          Similar <span>Courses</span>
+                          {t("similarCourses.title")} <span>{t("similarCourses.heading")}</span>
                       </h3>
 
                       <p>
-                          Explore more courses you might be <span>interested in.</span>
+                          {t("similarCourses.description")} <span>{t("similarCourses.interested")}</span>
                       </p>
 
                   </div>
@@ -966,7 +977,7 @@ const ViewCourseUi = () => {
                         to={PUBLIC_ROUTES.COURSES}
                         className="Primary_Button"
                     >
-                      View All <FontAwesomeIcon icon={faArrowRight} />
+                      {t("similarCourses.viewAll")} <FontAwesomeIcon icon={faArrowRight} />
                     </Link>
                   </div>
 

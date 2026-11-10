@@ -1,18 +1,13 @@
 import React, { useEffect, useState } from "react";
-import Header from "../../Common/Header";
-import Sidebar from "../../Common/Sidebar";
 import { apiUrl, token } from "../../Common/http";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import DataTable from "react-data-table-component";
-import { Modal, Button, OverlayTrigger, Popover } from "react-bootstrap";
-import HeaderUi from "../../Common/CommonUI/HeaderUi";
-import FooterUi from "../../Common/CommonUI/FooterUi";
+import { OverlayTrigger, Popover } from "react-bootstrap";
 import { faAngleRight, faBook, faCircleQuestion, faFileAlt, faFilter, faFlag, faList, faMagnifyingGlass, faPlus, faQuestion, faSave } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { DASHBOARD_ROUTES } from "../../../constants/nevigation/routes";
 import { Link } from "react-router-dom";
-import { faQuora } from "@fortawesome/free-brands-svg-icons";
 import ConfirmationDialogBoxUi from "../../Common/CommonUI/ConfirmationDialogBoxUi";
 import ActionButtons from "../../Common/CommonUI/ActionButtonsUi";
 

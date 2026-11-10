@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import Header from '../../Common/Header'
-import Sidebar from '../../Common/Sidebar'
 import { Link, useParams } from 'react-router-dom';
 import { apiUrl, token } from '../../Common/http';
 import { toast } from 'react-toastify';
-import DataTable from "react-data-table-component";
 import { DASHBOARD_ROUTES, USER_ROUTES } from '../../../constants/nevigation/routes';
 import { faAngleRight, faPlus } from '@fortawesome/free-solid-svg-icons';
 import PageNotFound from "../../../assets/images/not-found.jpeg"

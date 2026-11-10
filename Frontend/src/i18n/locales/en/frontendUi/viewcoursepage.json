@@ -1,0 +1,141 @@
+{
+  "loading": {
+    "title": "Loading Course...",
+    "description": "Please Wait While Fetching Course Information..."
+  },
+
+
+  "errors": {
+    "fetchFaqs": "Failed to fetch FAQs",
+    "fetchCourse": "Failed to fetch course details",
+    "fetchCourseGeneral": "Something went wrong while fetching course",
+    "notFound": "Course not found!"
+  },
+
+
+  "breadcrumb": {
+    "home": "Home",
+    "courses": "Courses"
+  },
+
+
+  "hero": {
+    "thumbnailAlt": "Course Thumbnail",
+    "general": "General",
+    "subcategory": "Subcategory",
+    "defaultInstructor": "Jigyasa Instructor",
+    "instructor": "Instructor",
+    "rating": "Rating",
+    "reviews": "reviews",
+    "student": "Student",
+    "students": "Students",
+    "enrolled": "Enrolled",
+    "lessons": "Lessons",
+    "lectures": "Lectures",
+    "level": "Level",
+    "language": "Language"
+  },
+
+
+  "pricing": {
+    "free": "Free",
+    "freeBadge": "100% FREE",
+    "discount": "OFF",
+    "enrollNow": "Enroll Now",
+    "wishlist": "Wishlist"
+  },
+
+
+  "courseInfo": {
+    "duration": "Duration",
+    "materials": "Materials",
+    "yes": "Yes",
+    "not": "Not",
+    "lifetime": "Lifetime",
+    "access": "Access",
+    "everythingAbout": "Everything About",
+    "course": "Course",
+    "knowMore": "Know more details about course",
+    "overview": "Overview",
+    "aboutThis": "About This",
+    "aboutCourse": "About Course",
+    "whatYouLearn": "What You'll Learn",
+    "whatYou" :"What",
+    "learn" : "You'll Learn",
+    "highlightsSoon": "Course highlights will be added soon.",
+    "highlightsComingSoon": "Course highlights will be coming soon.",
+    "readMore": "Read More",
+    "readLess": "Read Less"
+  },
+
+  
+  "instructor": {
+    "title": "About Instructor",
+    "defaultTitle": "Instructor",
+    "informationSoon": "Instructor information will be available soon.",
+    "students": "Students"
+  },
+
+
+  "tabs": {
+    "overview": "Overview",
+    "instructor": "Instructor",
+    "reviews": "Reviews"
+  },
+
+
+  "curriculum": {
+    "title": "Course",
+    "heading": "Curriculum",
+    "module":"Module",
+    "closeAll":"Close All",
+    "expandAll":"Expand All",
+    "comingSoon": "Curriculum Coming",
+    "soon": "Soon",
+    "lessonsPreparing": "Lessons are being",
+    "prepared": "prepared",
+    "checkBack": "Please check back",
+    "later": "later",
+    "emptyImageAlt": "No Lesson Found"
+  },
+
+
+  "faq": {
+    "subtitle": "Find answers to the most common questions about this course."
+  },
+
+  "shareCourse":{
+    "highlight" : "Share",
+    "title":"This Course",
+    "subtitle":"Share with Friends and Classmates",
+    "linkCopied" :"Link Copied!"
+  },
+
+
+  "overview": {
+    "title": "Course",
+    "heading": "Overview",
+    "totalLectures": "Total Lectures",
+    "structuredLessons": "Structured Video Lessons",
+    "lecture": "Lecture",
+    "lectures": "Lectures",
+    "totalDuration": "Total Duration",
+    "learnAtYourPace": "Learn at your own pace",
+    "studyMaterials": "Study Materials",
+    "materialsDescription": "Notes, PDFs, and More",
+    "available": "Available",
+    "language": "Language",
+    "multipleLanguages": "Available in Multiple Languages",
+    "courseLevel": "Course Level",
+    "suitableForYou": "Suitable For You",
+    "level": "Level",
+    "learnAnywhere": "Learn anytime, anywhere"
+  },
+  "similarCourses": {
+    "title": "Similar",
+    "heading": "Courses",
+    "description": "Explore more courses you might be",
+    "interested": "interested in.",
+    "viewAll": "View All"
+  }
+}

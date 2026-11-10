@@ -3,8 +3,6 @@ import { useForm } from "react-hook-form";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { apiUrl } from "../Common/http";
 import { toast } from "react-toastify";
-import Header from "../Common/Header";
-import Footercomp from '../Common/footer';
 import FooterUi from "../Common/CommonUI/FooterUi";
 import HeaderUi from "../Common/CommonUI/HeaderUi";
 import { AUTH_ROUTES } from "../../constants/nevigation/routes";

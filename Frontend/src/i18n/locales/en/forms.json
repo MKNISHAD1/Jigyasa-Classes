@@ -1,0 +1,41 @@
+{
+  "fields": {
+    
+    "name": {
+      "label": "Full Name",
+      "placeholder": "Enter Your Name"
+    },
+
+    "email": {
+      "label": "Email Address",
+      "placeholder": "Enter Your Email"
+    },
+
+    "phone": {
+      "label": "Phone Number",
+      "placeholder": "Enter Your Phone Number"
+    },
+
+    "password": {
+      "label": "Password",
+      "placeholder": "Enter Your Password"
+    },
+
+    "confirmPassword": {
+      "label": "Confirm Password",
+      "placeholder": "Re-enter Your Password"
+    }
+  },
+
+  "actions": {
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "sending": "Sending...",
+    "sendMessage": "Send Message"
+  },
+
+  "validation": {
+    "required": "This field is required",
+    "invalidEmail": "Please enter a valid email address"
+  }
+}

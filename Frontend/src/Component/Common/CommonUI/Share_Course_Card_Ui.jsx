@@ -2,15 +2,19 @@ import { faFacebookF, faTelegramPlane, faWhatsapp } from '@fortawesome/free-bran
 import { faLink } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react'
+import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 
 const Share_Course_Card_Ui = ( {shareUrl}  ) => {
+
+  const {t} = useTranslation("viewcoursepage");
+
   return (
             <div className="Share_Course_Card text-center card border-1 shadow mt-4">
 
-                <h5 className=''> <span>Share</span> This Course</h5>
+                <h5 className=''> <span>{t("shareCourse.highlight")}</span> {t("shareCourse.title")}</h5>
 
-                <p>Share with Friends and Classmates</p>
+                <p>{t("shareCourse.subtitle")}</p>
 
                 <div className="Social_Icons m-auto">
 
@@ -47,9 +51,7 @@ const Share_Course_Card_Ui = ( {shareUrl}  ) => {
                       navigator.clipboard.writeText(
                         shareUrl
                       );
-                      toast.success(
-                        "Link copied!"
-                      );
+                      toast.success(t("shareCourse.linkCopied"));
                     }}
                     >
                     <FontAwesomeIcon icon={faLink} />

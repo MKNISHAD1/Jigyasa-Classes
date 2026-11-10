@@ -1,8 +1,4 @@
     import React from 'react'
-    import Header from '../Common/Header'
-    import Sidebar from '../Common/Sidebar'
-    import HeaderUi from '../Common/CommonUI/HeaderUi'
-    import FooterUi from '../Common/CommonUI/FooterUi'
 
     const Dashboard = () => {
     return (

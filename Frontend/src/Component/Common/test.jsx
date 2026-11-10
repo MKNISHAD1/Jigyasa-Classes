@@ -1,8 +1,4 @@
 import React from "react";
-import { FaBeer } from "react-icons/fa";
-import { toast } from "react-toastify";
-import Sidebar from "./Sidebar";
-import Header from "./Header";
 
 const Test = () => {
 

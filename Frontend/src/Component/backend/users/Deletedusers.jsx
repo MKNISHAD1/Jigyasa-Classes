@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 import { apiUrl, token } from "../../Common/http";
-import Header from "../../Common/Header";
-import Sidebar from "../../Common/Sidebar";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { DASHBOARD_ROUTES } from "../../../constants/nevigation/routes";

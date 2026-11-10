@@ -1,0 +1,38 @@
+{
+  "Logo": {
+    "title": "जिज्ञासा क्लासेस",
+    "tagline": "सीखें • आगे बढ़ें • सफल बनें"
+  },
+
+  "header": {
+    "home": "होम",
+    "courses": "कोर्स",
+    "pages": "अन्य पेज",
+    "courseCard": "कोर्स कार्ड",
+    "instructors": "शिक्षक",
+    "becomeInstructor": "शिक्षक बनें",
+    "instructorDetails": "शिक्षक की जानकारी",
+    "faq": "अक्सर पूछे जाने वाले प्रश्न",
+    "privacyPolicy": "प्राइवेसी पॉलिसी",
+    "about": "हमारे बारे में",
+    "contact": "संपर्क करें",
+    "login": "लॉगिन",
+    "signup": "साइन अप",
+    "loginSignup": "लॉगिन/साइन अप"
+  },
+
+  "welcomeCard": {
+    "welcome": "स्वागत है",
+    "back": "वापस आने पर!",
+    "student": "छात्र",
+    "viewDashboard": "डैशबोर्ड देखें"
+  },
+
+  "motivationCard": {
+    "title": "सीखते रहें, आगे बढ़ते रहें!",
+    "description": "नए कोर्स देखें और अपने लक्ष्य पूरे करें।"
+  },
+  
+  "logout": "लॉग आउट",
+  "responsiveTest": "रिस्पॉन्सिव टेस्ट"
+}

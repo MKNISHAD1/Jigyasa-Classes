@@ -1,0 +1,33 @@
+{
+  "roles": {
+    "student": "Student",
+    "teacher": "Teacher",
+    "moderator": "Moderator",
+    "admin": "Admin",
+    "super_admin": "Super Admin"
+  },
+
+
+  "difficulty": {
+    "beginner": "Beginner",
+    "intermediate": "Intermediate",
+    "advanced": "Advanced",
+    "allLevels": "For Everyone"
+  },
+
+  
+  "language": {
+    "both": "Eng / Hi",
+    "english": "English",
+    "hindi": "Hindi"
+  },
+
+
+  "duration": {
+    "minutes": "Min",
+    "hour": "Hour",
+    "hours": "Hours",
+    "shortHour": "hr",
+    "shortMinutes": "min"
+  }
+}

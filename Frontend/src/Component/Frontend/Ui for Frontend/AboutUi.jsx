@@ -19,8 +19,13 @@ import PageHero from '../../Common/CommonUI/PageHeroUi'
 import { Link } from 'react-router-dom'
 import { PUBLIC_ROUTES } from '../../../constants/nevigation/routes'
 import SectionHeading from '../../Common/CommonUI/SectionHeading'
+import { useTranslation } from 'react-i18next'
+import WhyChooseUs from '../../Common/CommonUI/WhyChooseUs'
 
 const AboutUi = () => {
+
+  const { t, i18n } = useTranslation("aboutpage");
+  
   return (
     <>
       {/* Header component  */}
@@ -36,24 +41,20 @@ const AboutUi = () => {
             {/* LEFT CONTENT */}
             <div className="col-lg-6 Hero_Content pb-2">
 
-              <small className="Hero_Tag">ABOUT US </small>
+              <small className="Hero_Tag">{t("hero.tag")}</small>
 
               <h1>
-                Building
-                <span> Aspirants. </span>
-                <br /> Empowering
-                <span> Futures.</span>
+                {t("hero.title")}
+                <span> {t("hero.highlight1")} </span>
+                <br /> {t("hero.subtitle")}
+                <span> {t("hero.highlight2")}</span>
               </h1>
 
-              <p>
-                Helping thousands of students prepare for <br />
-                competitive exams with structured courses, <br />
-                expert guidance and practical learning.            
-                </p>
+              <p>{t("hero.description")}</p>
 
               <div className="Hero_Buttons">
                 <Link to={PUBLIC_ROUTES.COURSES} className="Primary_Button_2">
-                  Explore Courses  <FontAwesomeIcon icon={faArrowRight} className='Icon'/>
+                {t("hero.exploreCourses")}  <FontAwesomeIcon icon={faArrowRight} className='Icon'/>
                 </Link>
               </div>
 
@@ -87,25 +88,33 @@ const AboutUi = () => {
                   <div className="col-lg-5 Heading">
 
                       <span className="Section_Tag">
-                          OUR STORY
+                          {t("story.tag")}
                       </span>
 
                       <h2 className="Section_Title">
-                          A Journey Of <span>Trust</span> <br />
-                          And <span>Excellence</span>
+                        {i18n.language === "hi" ? (
+                          <>
+                           <span> {t("story.title")} </span>
+                             {t("story.highlight1")}
+                            <br />
+                            {t("story.middle")}{" "}
+                            <span>{t("story.highlight2")}</span>
+                          </>
+                        ) : (
+                          <>
+                            {t("story.title")} <span>{t("story.highlight1")}</span>
+                            <br />
+                            {t("story.middle")} <span>{t("story.highlight2")}</span>
+                          </>
+                        )}
                       </h2>
 
                       <p className="Story_Text">
-                          Jigyasa Classes was created with one simple goal —
-                          to make quality competitive exam preparation accessible,
-                          affordable, and effective for every student.
+                        {t("story.paragraph1")}
                       </p>
 
                       <p className="Story_Text">
-                          We believe success comes from consistency,
-                          expert guidance and structured learning.
-                          Every course is designed to help aspirants
-                          confidently achieve their dream career.
+                        {t("story.paragraph2")}
                       </p>
 
                   </div>
@@ -123,12 +132,10 @@ const AboutUi = () => {
                                       <FontAwesomeIcon icon={faRoute} />
                                   </div>
 
-                                  <h4>Our Mission</h4>
+                                  <h4>{t("story.mission.title")}</h4>
 
                                   <p>
-                                      To provide affordable, high-quality,
-                                      structured education that helps every
-                                      aspirant achieve success through effective learning.
+                                     {t("story.mission.description")}
                                   </p>
 
                               </div>
@@ -143,12 +150,10 @@ const AboutUi = () => {
                                       <FontAwesomeIcon icon={faEye}/>
                                   </div>
 
-                                  <h4>Our Vision</h4>
+                                  <h4>{t("story.vision.title")}</h4>
 
                                   <p>
-                                      To become India's trusted online learning
-                                      platform that empowers millions of students
-                                      preparing for competitive exams.
+                                      {t("story.vision.description")}
                                   </p>
 
                               </div>
@@ -164,86 +169,9 @@ const AboutUi = () => {
           </div>
       </section>
 
-      {/* [3.1] Why Choose Us Section */}
-      <SectionHeading 
-        title={
-          <>
-            Why Choose <span className='span2'> Jigyasa Classes ?</span>
-          </>
-        }
-        subtitle="Here Reason Why aspirants Choosen Jigyasa Classes"
-      />
+      {/* [3.] Why Choose Us Section  */}
 
-      {/* [3.2] Why Choose Us Section */}
-      <section className="Why_Choose">
-        <div className="row ">
-          <div className="col-12 col-sm-6 col-lg-3">
-            <div className="Why_Item">
-              <div className="Icon_Wrapper">
-                <ProfessorIcon className="Why_Icon" />
-              </div>
-
-              <div className="Why_Content">
-                <h3>Expert <span>Faculty</span></h3>
-                <p>
-                  Learn from experienced teachers with proven success in competitive
-                  exam preparation.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="col-12 col-sm-6 col-lg-3">
-            <div className="Why_Item">
-              <div className="Icon_Wrapper">
-                <VideoIcon className="Why_Icon" />
-              </div>
-
-              <div className="Why_Content">
-                <h3>Structured <span>Curriculum</span></h3>
-                <p>
-                  Step-by-step learning paths designed according to the latest exam
-                  patterns.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="col-12 col-sm-6 col-lg-3">
-            <div className="Why_Item">
-              <div className="Icon_Wrapper">
-                <MoneyIcon className="Why_Icon" />
-              </div>
-
-              <div className="Why_Content">
-                <h3>Affordable <span>Pricing</span></h3>
-                <p>
-                  Quality education at student-friendly prices with both free and
-                  premium options.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="col-12 col-sm-6 col-lg-3">
-            <div className="Why_Item">
-              <div className="Icon_Wrapper">
-                <CertificateIcon className="Why_Icon" />
-              </div>
-
-              <div className="Why_Content">
-                <h3>Verified <span>Certification</span></h3>
-                <p>
-                  Earn certificates that showcase your learning achievements and
-                  skills.
-                </p>
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-      </section>
+      <WhyChooseUs />
 
       <br />
 
@@ -254,24 +182,24 @@ const AboutUi = () => {
           <div className="col-md-6 Approach_Body">
 
             <span className="Section_Tag">
-                OUR APPROACH
+                {t("approach.tag")}
             </span>
 
             <h2 className="Section_Title">
-                Learning Made <span>Simple</span> <br />
-                And <span>Effective</span>
+                {t("approach.title")} <span>{t("approach.highlight1")}</span> <br />
+                {t("approach.middle")} <span>{t("approach.highlight2")}</span>
             </h2>
 
                     
             <p className="Story_Text">
-              We believe that the right guidance, regular practice and consistent effort can help any student succeed.
+              {t("approach.description")}
             </p>
 
             <div className="Approach_List">
               {/* <div className="Icon_Body"> */}
-                <small className='Text_Icon'><FontAwesomeIcon icon={faCircleCheck} className='Check_Icon'/>Concept-based learning with clear explanation</small>
-                <small className='Text_Icon'><FontAwesomeIcon icon={faCircleCheck} className='Check_Icon'/>Practice with tests and real exam questions</small>
-                <small className='Text_Icon'><FontAwesomeIcon icon={faCircleCheck} className='Check_Icon'/>Continuous support and doubt clarification</small>
+                <small className='Text_Icon'><FontAwesomeIcon icon={faCircleCheck} className='Check_Icon'/>{t("approach.points.concept")}</small>
+                <small className='Text_Icon'><FontAwesomeIcon icon={faCircleCheck} className='Check_Icon'/>{t("approach.points.practice")}</small>
+                <small className='Text_Icon'><FontAwesomeIcon icon={faCircleCheck} className='Check_Icon'/>{t("approach.points.support")}</small>
               {/* </div> */}
             </div>
           </div>
@@ -288,15 +216,14 @@ const AboutUi = () => {
 
           <div className="col-lg-7 col-md-7 col-12">
             <div className="CTA_Info">
-              <h3>Ready To Start Your Learning Journey?</h3>
+              <h3>{t("cta.title")}</h3>
 
               <p>
-                Join thousands of aspirants preparing for competitive
-                exams with Jigyasa Classes.
+                {t("cta.description")}
               </p>
 
               <Link  to={PUBLIC_ROUTES.COURSES} className="Primary_Button_Opposite_2">
-                Explore Courses
+                {t("cta.exploreCourses")}
                 <FontAwesomeIcon icon={faArrowRight} className="Icon" />
               </Link>
             </div>

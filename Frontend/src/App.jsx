@@ -63,7 +63,7 @@ import StudentDashboard from "./Component/Frontend/DashboardUi/Role Dashboard/St
 
 
 function App() {
-  const {user, logout, login} = useContext(AuthContext);
+  const {user, login} = useContext(AuthContext);
 
   const resendVerification = () => {
     fetch(apiUrl + "email/verification-notification", {

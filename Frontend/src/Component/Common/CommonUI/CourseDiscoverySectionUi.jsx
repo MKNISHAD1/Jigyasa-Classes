@@ -6,6 +6,7 @@ import "swiper/css";
 import CourseCardUi from "./CourseCardUi";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { useTranslation } from "react-i18next";
 
 const CourseDiscoverySectionUi = ({
     title,
@@ -13,6 +14,8 @@ const CourseDiscoverySectionUi = ({
     courses = [],
     viewAllLink,
 }) => {
+
+    const { t } = useTranslation("allcourses");
 
     if (!courses.length) {
         return null;
@@ -43,7 +46,7 @@ const CourseDiscoverySectionUi = ({
                         to={viewAllLink}
                         className="Course_Discovery_View_All"
                     >
-                        View All <FontAwesomeIcon icon={faArrowRight}/>
+                        {t("discovery.viewAll")} <FontAwesomeIcon icon={faArrowRight}/>
                     </Link>
                 )}
 

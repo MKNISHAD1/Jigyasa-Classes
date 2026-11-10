@@ -16,7 +16,8 @@ import BrandLogo from "./BrandLogo";
 const HeaderUi = () => {
 
   const { categories, subcategories, loading } = useCategories();
-  const { t, i18n } = useTranslation();
+  const { i18n } = useTranslation();
+  const { t } = useTranslation("headerUi","common");
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -26,7 +27,7 @@ const HeaderUi = () => {
     <>
       {/* Repsonsive Text Ribbon  */}
       <div className="py-0">
-        <div className="line text-center text-light">Responsive Test</div>
+        <div className="line text-center text-light">{t("responsiveTest")}</div>
       </div>
 
       {/* Navbar Production Code */}
@@ -58,7 +59,7 @@ const HeaderUi = () => {
                 </li>
 
                 {/* Dropdown Exams  */}
-                <li className="Menu_Item has-dropdown">
+                {/* <li className="Menu_Item has-dropdown">
                   <span className="nav-link">Exams <FontAwesomeIcon icon={faAngleDown}/></span>
                   <ul className="Dropdown_Menu_Custom Nav_Dropdown">
                       {loading && (
@@ -103,62 +104,62 @@ const HeaderUi = () => {
                           );
                         })}
                   </ul>
-                </li>
+                </li> */}
 
                 {/* Courses Link */}
                 <li>
                   <Link to={PUBLIC_ROUTES.COURSES} className="nav-link">
-                    Courses
+                    {t("header.courses")}
                   </Link>
                 </li>
 
                 {/* Dropdown Pages */}
                 <li className="Menu_Item has-dropdown">
-                  <span className="nav-link">Pages <FontAwesomeIcon icon={faAngleDown}/></span>
+                  <span className="nav-link">{t("header.pages")} <FontAwesomeIcon icon={faAngleDown}/></span>
 
                   <ul className="Dropdown_Menu_Custom">
-                    <li>
+                    {/* <li>
                       <Link to="/CourseCard" className="Dropdown_Item">
                         Course Card
                       </Link>
-                    </li>
+                    </li> */}
 
                     <li className="has-submenu">
                       <span className="Dropdown_Item Submenu_Title">
-                        Instructors <span className="Arrow"> › </span>
+                        {t("header.instructors")} <span className="Arrow"> › </span>
                       </span>
 
                       <ul className="Submenu">
                         <li>
                           <Link to="/instructors" className="Dropdown_Item">
-                            Instructors
+                            {t("header.instructors")}
                           </Link>
                         </li>
                         <li>
                           <Link to="/become-instructor" className="Dropdown_Item">
-                            Become Instructor
+                            {t("header.becomeInstructor")}
                           </Link>
                         </li>
-                        <li>
+                        {/* <li>
                           <Link
                             to="/instructor-details"
                             className="Dropdown_Item"
                           >
                             Instructor Details
                           </Link>
-                        </li>
+                        </li> */}
                       </ul>
                     </li>
 
                     <li>
                       <Link to="/faq" className="Dropdown_Item">
-                        FAQ
+                        {t("header.faq")}
                       </Link>
                     </li>
 
                     <li>
                       <Link to="/privacy-policy" className="Dropdown_Item">
-                        Privacy Policy
+                        {t("header.privacyPolicy")}
                       </Link>
                     </li>
                   </ul>
@@ -174,7 +175,7 @@ const HeaderUi = () => {
                 {/* Contact Link */}
                 <li>
                   <Link to={PUBLIC_ROUTES.CONTACT} className="nav-link">
-                    Contact Us
+                    {t("header.contact")}
                   </Link>
                 </li>
 
@@ -217,7 +218,7 @@ const HeaderUi = () => {
                         />
 
                         <h5 className="Welcome_Text">
-                          Welcome <span>Back!</span>
+                          {t("welcomeCard.welcome")} <span>{t("welcomeCard.back")}</span>
                         </h5>
 
                         <p className="Welcome_User_Name">
@@ -225,22 +226,24 @@ const HeaderUi = () => {
                         </p>
 
                         <small className="Welcome_User_Role">
-                          {
-                            Array.isArray(user?.roles)
-                              ? (
-                                  user.roles[0]?.name ||
-                                  user.roles[0] ||
-                                  "Student"
-                                )
-                              : "Student"
-                          }
+                          {t(
+                            `roles.${(
+                              user?.roles?.[0]?.name ||
+                              user?.roles?.[0] ||
+                              "student"
+                            ).toLowerCase()}`,
+                            {
+                              ns: "common",
+                              defaultValue: "Student"
+                            }
+                          )}
                         </small>
 
                         <Link
                           to={DASHBOARD_ROUTES.DASHBOARD}
                           className="Dashboard_Button"
                         >
-                          View Dashboard <FontAwesomeIcon icon={faArrowRight} />
+                          {t("welcomeCard.viewDashboard")} <FontAwesomeIcon icon={faArrowRight} />
                         </Link>
 
                       </div>
@@ -255,14 +258,14 @@ const HeaderUi = () => {
                           to={AUTH_ROUTES.REGISTER}
                           className="Signup_Btn"
                         >
-                          Sign Up
+                          {t("header.signup")}
                         </Link>
 
                         <Link
                           to={AUTH_ROUTES.LOGIN}
                           className="Login_Btn"
                         >
-                          Login
+                         {t("header.login")}
                         </Link>
 
                       </div>
@@ -276,27 +279,27 @@ const HeaderUi = () => {
                     {/* Home Link */}
                     <Link to={PUBLIC_ROUTES.HOME} className="Sidebar_Link">
                       <FontAwesomeIcon icon={faHouse} className="Sidebar_Icon"/>
-                      <span className="Sidebar_Icon_Text">Home</span>
+                      <span className="Sidebar_Icon_Text">{t("header.home")}</span>
                     </Link>
 
                     {/* About Us Link */}
                     <Link to={PUBLIC_ROUTES.ABOUT} className="Sidebar_Link">
                       <FontAwesomeIcon icon={faUser} className="Sidebar_Icon"/>
-                      <span className="Sidebar_Icon_Text">About Us</span>
+                      <span className="Sidebar_Icon_Text">{t("header.about")}</span>
                     </Link>
 
-                    {/* Coourses Link */}
+                    {/* Courses Link */}
                     <Link to={PUBLIC_ROUTES.COURSES} className="Sidebar_Link">
                       <FontAwesomeIcon icon={faBookOpen} 
                       className="Sidebar_Icon"/>
-                      <span className="Sidebar_Icon_Text">Courses</span>
+                      <span className="Sidebar_Icon_Text">{t("header.courses")}</span>
                     </Link>
 
                   </div>
 
                   {/* Exams Dropdown */}
 
-                  <Accordion flush className="Sidebar_Accordion">
+                  {/* <Accordion flush className="Sidebar_Accordion">
 
                     <Accordion.Item eventKey="1">
 
@@ -327,7 +330,7 @@ const HeaderUi = () => {
 
                     </Accordion.Item>
 
-                  </Accordion>
+                  </Accordion> */}
 
                   {/* Pages Dropdown */}
 
@@ -339,7 +342,7 @@ const HeaderUi = () => {
 
                         <div className="Menu_Header">
                           <FontAwesomeIcon icon={faBookOpen} className="Sidebar_Icon"/>
-                          <span className="Sidebar_Icon_Text">Pages</span>
+                          <span className="Sidebar_Icon_Text">{t("header.pages")}</span>
                         </div>
 
                       </Accordion.Header>
@@ -347,11 +350,11 @@ const HeaderUi = () => {
                       <Accordion.Body>
 
                         <Link to="/faq" className="Sidebar_SubLink">
-                          FAQ
+                          {t("header.faq")}
                         </Link>
 
                         <Link to="/privacy-policy" className="Sidebar_SubLink">
-                          Privacy Policy
+                          {t("header.privacyPolicy")}
                         </Link>
 
                       </Accordion.Body>
@@ -363,7 +366,7 @@ const HeaderUi = () => {
                   {/* Contact Link */}
                   <Link to={PUBLIC_ROUTES.CONTACT} className="Sidebar_Link">
                     <FontAwesomeIcon icon={faEnvelope} className="Sidebar_Icon"/>
-                    <span className="Sidebar_Icon_Text">Contact Us</span>
+                    <span className="Sidebar_Icon_Text">{t("header.contact")}</span>
                   </Link>
 
                   {/* Motivation Card */}
@@ -376,10 +379,10 @@ const HeaderUi = () => {
 
                     <div className="d-flex flex-column align-self-center">
 
-                      <h6 className="Trophy_Text">Keep Learning, Keep Growing!</h6>
+                      <h6 className="Trophy_Text">{t("motivationCard.title")}</h6>
 
                       <p className="Trophy_Paragraph">
-                        Explore new courses and achieve your goals.
+                        {t("motivationCard.description")}
                       </p>
 
                     </div>
@@ -398,7 +401,7 @@ const HeaderUi = () => {
                           }}
                         >
                           <FontAwesomeIcon icon={faArrowRightFromBracket} />
-                          <span className="logout">Log out</span>
+                          <span className="logout">{t("logout")}</span>
                         </button>
                       </div>
                     )
@@ -421,10 +424,10 @@ const HeaderUi = () => {
 
               {/* Add To Wishlist icon */}
               <Link
-                    to="#"
-                    className="d-none d-sm-block d-xl-none "
-                  >
-                    <FontAwesomeIcon icon={faHeart} className="Heart_Icon d-flex"/>
+                to="#"
+                className="d-none d-sm-block d-xl-none "
+              >
+                <FontAwesomeIcon icon={faHeart} className="Heart_Icon d-flex"/>
               </Link>
 
               {/* Login-Button */}
@@ -452,7 +455,7 @@ const HeaderUi = () => {
                     to={AUTH_ROUTES.LOGIN}
                     className="Primary_Button_Opposite d-none d-xl-block"
                   >
-                    Login/SignUp
+                    {t("header.loginSignup")}
                   </Link>
                 )
               }

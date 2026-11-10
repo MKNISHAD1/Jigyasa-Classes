@@ -4,7 +4,14 @@ import { useTranslation } from 'react-i18next';
 const LanguageSwitch = () => {
   const { i18n } = useTranslation();
 
-  const isHindi = i18n.language === "hi";
+  const isHindi = i18n.language.startsWith("hi");
+
+  const handleLanguageChange = (event) => {
+    const language = event.target.checked ? "hi" : "en";
+
+    i18n.changeLanguage(language);
+    localStorage.setItem("appLanguage", language);
+  };
 
   return (
     <div className="lang-switch">
@@ -14,9 +21,7 @@ const LanguageSwitch = () => {
         <input
           type="checkbox"
           checked={isHindi}
-          onChange={() =>
-            i18n.changeLanguage(isHindi ? "en" : "hi")
-          }
+          onChange={handleLanguageChange}
         />
         <span className="slider"></span>
       </label>

@@ -1,0 +1,68 @@
+{
+  "hero": {
+    "tag": "Contact Us",
+    "title": "We Are Here To",
+    "highlight": "Help You!",
+    "description": "Have questions or need guidance? Reach out to us and we'll get back to you as soon as possible.",
+    "team": {
+      "title": "Talk to Our Team",
+      "description": "We are available to assist you."
+    },
+    "email": {
+      "title": "Email Us",
+      "description": "Send us an email anytime."
+    },
+    "office": {
+      "title": "Visit Our Office",
+      "description": "We'd love to meet you in person."
+    }
+  },
+  "form": {
+    "title": "Send Us A",
+    "highlight": "Message",
+    "subject": {
+      "placeholder": "Enter Subject"
+    },
+    "message": {
+      "placeholder": "Have questions or need guidance? Reach out to us and we'll get back to you as soon as possible."
+    },
+    "categories": {
+      "general": "General Enquiry",
+      "course": "Course Related Enquiry",
+      "technical": "Technical Issue",
+      "payment": "Payment Issue",
+      "teacher": "Become A Teacher",
+      "feedback": "Feedback / Suggestions",
+      "other": "Other"
+    },
+    "submit": "Send Message",
+    "sending": "Sending Message..."
+  },
+  "helpCards": {
+    "email": {
+      "title": "Email Us",
+      "description": "We reply within 24 hours."
+    },
+    "phone": {
+      "title": "Call Us"
+    },
+    "office": {
+      "title": "Visit Us"
+    },
+    "hours": {
+      "title": "Working Hours",
+      "schedule": "Mon - Sat, 9:00 AM - 6:00 PM",
+      "closed": "Sunday: Closed"
+    }
+  },
+  "faq": {
+    "title" : "Frequently Asked",
+    "highlight":"Questions",
+    "loading": "Loading FAQs...",
+    "subtitle": "Find answers to the most common questions about Jigyasa Classes"
+  },
+  "notifications": {
+    "fetchFaqFailed": "Failed to fetch FAQs",
+    "sendFailed": "Failed to send message"
+  }
+}

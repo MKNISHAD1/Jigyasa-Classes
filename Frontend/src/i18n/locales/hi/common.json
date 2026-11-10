@@ -1,0 +1,33 @@
+{
+  "roles": {
+    "student": "छात्र",
+    "teacher": "शिक्षक",
+    "moderator": "मॉडरेटर",
+    "admin": "एडमिन",
+    "super_admin": "सुपर एडमिन"
+  },
+
+
+  "difficulty": {
+    "beginner": "शुरुआती",
+    "intermediate": "मध्यम ",
+    "advanced": "एडवांस ",
+    "allLevels": "सभी के लिए"
+  },
+
+
+  "language": {
+    "both": "अंग्रेज़ी / हिंदी",
+    "english": "अंग्रेज़ी",
+    "hindi": "हिंदी"
+  },
+
+
+  "duration": {
+    "minutes": "मिनट",
+    "hour": "घंटा",
+    "hours": "घंटे",
+    "shortHour": "घंटे",
+    "shortMinutes": "मिनट"
+  }
+}

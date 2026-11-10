@@ -7,11 +7,14 @@ import help from '../../../assets/images/help3.png';
 import { apiUrl } from '../../Common/http';
 import { toast } from 'react-toastify';
 import FaqSection from '../../backend/courses/FaqSection';
+import { useTranslation } from 'react-i18next'
 
 const ContactUi = () => {
 
     const [faqs, setFaqs] = useState([]);
     const [faqLoading, setFaqLoading] = useState(true);
+    const {t:Tforms} = useTranslation("forms");
+    const {t:Tcontact} = useTranslation("contactuspage");
 
     // Fetch FAQ List
     useEffect(() => {
@@ -25,7 +28,7 @@ const ContactUi = () => {
                 }
             } catch (error) {
                 console.error("Failed to fetch FAQs:", error);
-                toast.error("Failed to fetch FAQs");
+                toast.error(Tcontact("notifications.fetchFaqFailed"));
             } finally {
                 setFaqLoading(false);
             }
@@ -96,9 +99,7 @@ const ContactUi = () => {
 
     } catch (error) {
 
-        toast.error(
-        "Failed to send message"
-        );
+        toast.error(Tcontact("notifications.sendFailed"));
 
     } finally {
 
@@ -120,13 +121,11 @@ return (
                     {/* Hero Content */}
                     <div className="col-lg-6 Hero_Content" >
 
-                        <small className="Hero_Tag">Contact Us </small>
+                        <small className="Hero_Tag">{Tcontact("hero.tag")} </small>
 
-                        <h1> We Are Here To <br /> <span> Help You !</span> </h1>
+                        <h1> {Tcontact("hero.title")} <br /> <span> {Tcontact("hero.highlight")}</span> </h1>
 
-                        <p> Have questions or need guidance? <br />
-                            Reach out to us and we'll get back to you as soon as possible.
-                        </p>
+                        <p> {Tcontact("hero.description")}</p>
 
                         <div className="Help_Items_Group">
 
@@ -134,8 +133,8 @@ return (
                                 <div className="Item_Group">
                                     <FontAwesomeIcon icon={faPhone} className='Item_Icon'/>
                                     <div className="Item_Data">
-                                        <h4 className="Help_Title">Talk to Our Team </h4>
-                                        <small className="Help_Subtitle">We are available to assist you.</small>
+                                        <h4 className="Help_Title">{Tcontact("hero.team.title")} </h4>
+                                        <small className="Help_Subtitle">{Tcontact("hero.team.description")}</small>
                                     </div>
                                 </div>
                             </div>
@@ -144,8 +143,8 @@ return (
                                 <div className="Item_Group">
                                     <FontAwesomeIcon icon={faMailBulk} className='Item_Icon'/>
                                     <div className="Item_Data">
-                                        <h4 className="Help_Title">Email Us </h4>
-                                        <small className="Help_Subtitle">Send us an email anytime</small>
+                                        <h4 className="Help_Title">{Tcontact("hero.email.title")} </h4>
+                                        <small className="Help_Subtitle">{Tcontact("hero.email.description")}</small>
                                     </div>
                                 </div>
                             </div>
@@ -154,8 +153,8 @@ return (
                                 <div className="Item_Group">
                                     <FontAwesomeIcon icon={faLocationDot} className='Item_Icon'/>
                                     <div className="Item_Data">
-                                        <h4 className="Help_Title">Visit Our Office</h4>
-                                        <small className="Help_Subtitle">we'd love to meet you in person.</small>
+                                        <h4 className="Help_Title">{Tcontact("hero.office.title")}</h4>
+                                        <small className="Help_Subtitle">{Tcontact("hero.office.description")}</small>
                                     </div>
                                 </div>
                             </div>
@@ -166,7 +165,7 @@ return (
 
                     {/* Contact Us Form */}
                     <div className="col-lg-6  Message_Section">
-                        <h4>Send Us A <span>Message</span></h4>
+                        <h4>{Tcontact("form.title")} <span>{Tcontact("form.highlight")} </span></h4>
                         <div className="Line1"></div><br />
 
                         <form onSubmit={handleSubmit} >
@@ -177,7 +176,7 @@ return (
                                     <input
                                     type="text"
                                     className="form-control"
-                                    placeholder="Enter Your Name"
+                                    placeholder={Tforms("fields.name.placeholder")}
                                     value={formData.name}
                                     onChange={(e) =>
                                         setFormData({
@@ -194,7 +193,7 @@ return (
                                     <input
                                         type="tel"
                                         className="form-control"
-                                        placeholder="Enter Your Phone Number"
+                                        placeholder={Tforms("fields.phone.placeholder")}
                                         value={formData.phone}
                                         onChange={(e) => {
                                             const val = e.target.value;
@@ -222,7 +221,7 @@ return (
                                 <input
                                         type="email"
                                         className="form-control"
-                                        placeholder="Enter Your Email"
+                                        placeholder={Tforms("fields.email.placeholder")}
                                         value={formData.email}
                                         onChange={(e) =>
                                             setFormData({
@@ -245,13 +244,35 @@ return (
                                                 })
                                             }
                                             required>
-                                        <option value="General Enquiry">General Enquiry</option>
-                                        <option value="Course Related Enquiry">Course Related Enquiry</option>
-                                        <option value="Technical Issue">Technical Issue</option>
-                                        <option value="Payment Issue">Payment Issue</option>
-                                        <option value="Become A Teacher">Become A Teacher</option>
-                                        <option value="Feedback / Suggestions">Feedback / Suggestions </option>
-                                        <option value="Other">Other</option>
+
+                                            <option value="General Enquiry">
+                                                {Tcontact("form.categories.general")}
+                                            </option>
+
+                                            <option value="Course Related Enquiry">
+                                                {Tcontact("form.categories.course")}
+                                            </option>
+
+                                            <option value="Technical Issue">
+                                                {Tcontact("form.categories.technical")}
+                                            </option>
+
+                                            <option value="Payment Issue">
+                                                {Tcontact("form.categories.payment")}
+                                            </option>
+
+                                            <option value="Become A Teacher">
+                                                {Tcontact("form.categories.teacher")}
+                                            </option>
+
+                                            <option value="Feedback / Suggestions">
+                                                {Tcontact("form.categories.feedback")}
+                                            </option>
+
+                                            <option value="Other">
+                                                {Tcontact("form.categories.other")}
+                                            </option>
+                                            
                                         </select>
                                 </div>
 
@@ -260,7 +281,7 @@ return (
                                     <input
                                         type="text"
                                         className="form-control"
-                                        placeholder="Enter Subject"
+                                        placeholder={Tcontact("form.subject.placeholder")}
                                         value={formData.subject}
                                         onChange={(e) =>
                                             setFormData({
@@ -277,7 +298,7 @@ return (
                                 <textarea
                                     className="form-control"
                                     rows="4"
-                                    placeholder ="Have questions or need guidance? Reach out to us and we'll get back to you as soon as possible"
+                                    placeholder ={Tcontact("form.message.placeholder")}
                                     value={formData.message}
                                     onChange={(e) =>
                                         setFormData({
@@ -289,7 +310,7 @@ return (
                                 />
                                 </div>
 
-                                {/* Send MEssage Button */}
+                                {/* Send Message Button */}
                                 <button 
                                     disabled={loading} 
                                     type='submit' 
@@ -303,14 +324,16 @@ return (
                                             role="status"
                                         />
                         
-                                            <span className='text-primary'>Sending Message... </span>
+                                            <span className='text-primary'>
+                                                {Tcontact("form.sending")}
+                                            </span>
                         
                                         </>
                         
                                         ) : (
                         
                                             <>
-                                            Send Message <FontAwesomeIcon icon={faPaperPlane} />
+                                            {Tcontact("form.submit")} <FontAwesomeIcon icon={faPaperPlane} />
                                             </>
                         
                                         )}
@@ -334,8 +357,12 @@ return (
                             <FontAwesomeIcon icon={faEnvelope} /> 
                         </div>
                         <div className="Help_Card_Body">
-                            <b> Email Us </b>
-                            <small>support@jigyasaclasses.com <br /> we reply within 24 hours</small>
+                            <b> {Tcontact("helpCards.email.title")} </b>
+                            <small>
+                                support@jigyasaclasses.com 
+                                    <br /> 
+                                {Tcontact("helpCards.email.description")}
+                            </small>
                         </div>
                     </div>
                 </div>
@@ -346,8 +373,8 @@ return (
                             <FontAwesomeIcon icon={faPhone} /> 
                         </div>
                         <div className="Help_Card_Body">
-                            <b> Call Us </b>
-                            <small>+91 9867543210 <br />Mon - Sat, 9:00 AM - 6:00 PM</small>
+                            <b>{Tcontact("helpCards.phone.title")} </b>
+                            <small>+91 9867543210 <br />{Tcontact("helpCards.hours.schedule")}</small>
                         </div>
                     </div>
                 </div>
@@ -358,7 +385,7 @@ return (
                             <FontAwesomeIcon icon={faLocationDot} /> 
                         </div>
                         <div className="Help_Card_Body">
-                            <b> Visit Us </b>
+                            <b> {Tcontact("helpCards.office.title")} </b>
                             <small>123 Education Hub, Knowledge City,Pune - 411057, India</small>
                         </div>
                     </div>
@@ -370,8 +397,12 @@ return (
                             <FontAwesomeIcon icon={faClock} /> 
                         </div>
                         <div className="Help_Card_Body">
-                            <b> Working Hours </b>
-                            <small>Mon - Sat, 9:00 AM - 6:00 PM <br />Sunday : Closed</small>
+                            <b> {Tcontact("helpCards.hours.title")} </b>
+                            <small>
+                                {Tcontact("helpCards.hours.schedule")} 
+                                    <br />
+                                {Tcontact("helpCards.hours.closed")}
+                                </small>
                         </div>
                     </div>
                 </div>
@@ -396,14 +427,26 @@ return (
                 <div className="col-md-6 Questions_Section">
 
                     {faqLoading ? (
-                        <div className="Faq_Loading">
-                            Loading FAQs...
-                        </div>
+                        <>
+                            <div className="Faq_Loading text-center">
+                                <div
+                                    className="d-flex flex-column justify-content-center align-items-center"
+                                    style={{ minHeight: "350px" }}
+                                >
+                                    <div
+                                    className="spinner-border text-primary mb-2 text-center"
+                                    style={{ width: "3rem", height: "3rem" }}
+                                    />
+                                {Tcontact("faq.loading")}
+                                </div>
+                            </div>
+                        </>
+                        
                     ) : generalFaqs.length > 0 && (
 
                         <FaqSection 
                             faqs={generalFaqs}
-                            subtitle="Find answers to the most common questions about Jigyasa Classes"
+                            subtitle={Tcontact("faq.subtitle")}
                         />
 
                     )}

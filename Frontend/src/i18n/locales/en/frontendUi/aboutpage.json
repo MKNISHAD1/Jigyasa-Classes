@@ -1,0 +1,52 @@
+{
+  "hero": {
+    "tag": "ABOUT US",
+    "title": "Building",
+    "highlight1": "Aspirants.",
+    "subtitle": "Empowering",
+    "highlight2": "Futures.",
+    "description": "Helping thousands of students prepare for competitive exams with structured courses, expert guidance and practical learning.",
+    "exploreCourses": "Explore Courses"
+  },
+
+  
+  "story": {
+    "tag": "OUR STORY",
+    "title": "A Journey Of",
+    "highlight1": "Trust",
+    "middle": "And",
+    "highlight2": "Excellence",
+    "paragraph1": "Jigyasa Classes was created with one simple goal — to make quality competitive exam preparation accessible, affordable, and effective for every student.",
+    "paragraph2": "We believe success comes from consistency, expert guidance and structured learning. Every course is designed to help aspirants confidently achieve their dream career.",
+    "mission": {
+      "title": "Our Mission",
+      "description": "To provide affordable, high-quality, structured education that helps every aspirant achieve success through effective learning."
+    },
+    "vision": {
+      "title": "Our Vision",
+      "description": "To become India's trusted online learning platform that empowers millions of students preparing for competitive exams."
+    }
+  },
+
+
+  "approach": {
+    "tag": "OUR APPROACH",
+    "title": "Learning Made",
+    "highlight1": "Simple",
+    "middle": "And",
+    "highlight2": "Effective",
+    "description": "We believe that the right guidance, regular practice and consistent effort can help any student succeed.",
+    "points": {
+      "concept": "Concept-based learning with clear explanations",
+      "practice": "Practice with tests and real exam questions",
+      "support": "Continuous support and doubt clarification"
+    }
+  },
+
+
+  "cta": {
+    "title": "Ready To Start Your Learning Journey?",
+    "description": "Join thousands of aspirants preparing for competitive exams with Jigyasa Classes.",
+    "exploreCourses": "Explore Courses"
+  }
+}

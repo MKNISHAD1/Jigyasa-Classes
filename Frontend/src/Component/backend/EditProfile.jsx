@@ -1,13 +1,9 @@
 
 import React, { useState } from "react";
-import Header from "../Common/Header";
-import Sidebar from "../Common/Sidebar";
 import { useForm } from "react-hook-form";
 import { apiUrl, token } from "../Common/http";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import FooterUi from "../Common/CommonUI/FooterUi";
-import HeaderUi from "../Common/CommonUI/HeaderUi";
 import { availabilityValidator} from "../../utilities/validators";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faA, faAngleRight, faArrowLeft, faAt, faBriefcase, faCalendarDay, faCalendarWeek, faCamera, faCheck, faCircleExclamation, faEnvelope, faFile, faFloppyDisk, faGlobe, faIdCard, faLanguage, faMobile, faPhone, faUserAlt, faUserTag, faWarning } from "@fortawesome/free-solid-svg-icons";

@@ -318,14 +318,14 @@ if (!course) return <p className="text-center my-5">Course not found!</p>;
             <div className="header">
                 <FontAwesomeIcon icon={faFileAlt} className="icon"/>
                 <span>About Course</span>
-            </div>
+            </div> 
 
         </div> 
               <p>
                 Course Name : <b> <p className="text-capitalize"> {course.title?.[i18n.language] || course.title?.en}  </p> </b>
               </p> 
 
-              <p className={showMore ? "expanded" : ""}
+              <p className={`description-body ${showMore ? "expanded" : ""}`}
                   style={{whiteSpace:'pre-line'}}
               >
 

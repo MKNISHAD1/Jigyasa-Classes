@@ -1,17 +1,11 @@
 import React, { useEffect, useState } from "react";
-import Header from "../../Common/Header";
-import Sidebar from "../../Common/Sidebar";
 import { Link } from "react-router-dom";
 import { apiUrl, token } from "../../Common/http";
 import { toast } from "react-toastify";
-import DataTable from "react-data-table-component";
 import { useTranslation } from "react-i18next";
-import HeaderUi from "../../Common/CommonUI/HeaderUi";
-import FooterUi from "../../Common/CommonUI/FooterUi";
 import { COURSE_ROUTES, DASHBOARD_ROUTES } from "../../../constants/nevigation/routes";
-import { faAngleRight, faFilter, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faAngleRight, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faEye } from "@fortawesome/free-regular-svg-icons";
 import CourseTable from "./CourseTable";
 import MobileCourseCard from "./MobileCourseCard";
 import PageNotFound from "../../../assets/images/not-found.jpeg"

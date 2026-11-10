@@ -4,14 +4,14 @@ import { useTranslation } from "react-i18next";
 
 const FaqSection = ({ faqs = [],subtitle }) => {
 
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation("contactuspage");
 
   return (
     <div className="Faq_Section">
 
       <div className="Section_Title">
           <div>
-              <h4>Frequently Asked <span>Questions</span></h4>
+              <h4>{t("faq.title")} <span>{t("faq.highlight")}</span></h4>
               
               {subtitle && (
                   <p>

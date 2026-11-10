@@ -1,15 +1,10 @@
 import React, { useContext, useState } from "react";
-import Header from "../../Common/Header";
-import Sidebar from "../../Common/Sidebar";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { apiUrl, token } from "../../Common/http";
 import { toast } from "react-toastify";
 import { AuthContext } from "../context/Auth";
-import HeaderUi from "../../Common/CommonUI/HeaderUi";
-import FooterUi from "../../Common/CommonUI/FooterUi";
-import { AUTH_ROUTES, DASHBOARD_ROUTES, USER_ROUTES } from "../../../constants/nevigation/routes";
-import { DASHBOARD_LINKS } from "../../../constants/nevigation/sidebarlinks";
+import { DASHBOARD_ROUTES, USER_ROUTES } from "../../../constants/nevigation/routes";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faA, faAngleRight, faArrowLeft, faAt, faEnvelope, faEye, faEyeSlash, faKey, faLock, faMobileScreen, faUserPlus, faUserTag } from "@fortawesome/free-solid-svg-icons";
 import { availabilityValidator } from "../../../utilities/validators";

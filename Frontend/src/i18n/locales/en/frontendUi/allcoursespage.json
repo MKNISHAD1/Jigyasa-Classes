@@ -1,0 +1,83 @@
+{
+  "hero": {
+    "tag": "Our Courses",
+    "title": "Explore Our",
+    "highlight": "Courses",
+    "description": "High Quality Courses designed by experts, Learn from expert instructor and prepare for your dream career.",
+    "features": {
+      "updatedContent": "Updated Content",
+      "expertFaculty": "Expert Faculty",
+      "studyMaterial": "Study Material"
+    },
+    "imageAlt": "Jigyasa Classes"
+  },
+
+
+  "search": {
+    "placeholder": "Search courses..."
+  },
+
+
+  "filters": {
+    "title": "Filter",
+    "course": "Course",
+    "search" : "Search",
+    "selectAll": "Select All",
+    "difficulty": "Difficulty",
+    "categories" :"Categories",
+    "button": "Filter",
+    "clear": "Clear Filters"
+  },
+
+
+  "difficulty": {
+    "beginner": "Beginner",
+    "intermediate": "Intermediate",
+    "advanced": "Advanced",
+    "allLevels": "All Levels"
+  },
+
+
+  "sorting": {
+    "newest": "Newest",
+    "priceLow": "Price: Low to High",
+    "priceHigh": "Price: High to Low"
+  },
+
+
+  "loading": {
+    "title": "Loading Courses...",
+    "description": "Please wait while we fetch courses.."
+  },
+
+
+  "discovery": {
+    "featuredTitle": "Featured Courses",
+    "featuredSubtitle": "Handpicked courses to help you learn and grow.",
+    "newestTitle": "Newly <span> Added Courses </span>",
+    "newestSubtitle": "Explore the latest courses added to Jigyasa Classes.",
+    "viewAll" : "View All"
+  },
+
+
+  "results": {
+    "showingMatching": "Showing matching",
+    "course": "course",
+    "courses": "courses",
+    "emptyTitle": "No Courses Match Your Filters",
+    "emptyDescription": "Try another search or clear your filters to see all courses.",
+    "showing": "Showing",
+    "of": "of"
+  },
+
+
+  "pagination": {
+    "previous": "Previous Page",
+    "next": "Next Page"
+  },
+
+
+  "imageAlt": {
+    "noCoursesFound": "No courses found"
+  }
+}

@@ -10,7 +10,8 @@ import { useTranslation } from 'react-i18next';
 
 const CourseCurriculum = ({ modules = [], lessonsCount = 0, course }) => {
 
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation("viewcoursepage");
+  const { t:commonT } = useTranslation("common");
 
   // only Module with lessons
   const visibleModules = modules.filter(
@@ -43,11 +44,11 @@ const formatDuration = (seconds) => {
 
     if (hours > 0) {
         return minutes > 0
-            ? `${hours} hr ${minutes} min`
-            : `${hours} hr`;
+            ? `${hours} ${commonT("duration.shortHour")} ${minutes} ${commonT("duration.shortMinutes")}`
+            : `${hours} ${commonT("duration.shortHour")}`;
     }
 
-    return `${minutes} min`;
+    return `${minutes} ${commonT("duration.shortMinutes")}`;
 };
 
 // Lesson duraytion player style
@@ -71,10 +72,10 @@ const formatLessonDuration = (seconds) => {
 
           <div>
 
-              <h4>Course <span>Curriculum</span></h4>
+            <h4> {t("curriculum.title")} <span>{t("curriculum.heading")} </span></h4>
 
               <p>
-                  {visibleModules.length} Modules • {lessonsCount} Lessons • {formatDuration(course.total_duration)}
+                  {visibleModules.length} {t("curriculum.module")} • {lessonsCount} {t("hero.lessons")} • {formatDuration(course.total_duration)}
               </p>
 
           </div>
@@ -86,8 +87,8 @@ const formatLessonDuration = (seconds) => {
 
             {
                 activeKeys.length === visibleModules.length
-                ? "Close All"
-                : "Expand All"
+                ? `${t("curriculum.closeAll")}`
+                : `${t("curriculum.expandAll")}`
             }
 
         </button>
@@ -129,7 +130,7 @@ const formatLessonDuration = (seconds) => {
                             <span className='Title'>Module {index+1} : {module.title?.[i18n.language] || module.title?.en}</span>
 
                             <small className="Lesson_Count">
-                                {module.lessons.length} Lectures • {formatDuration(moduleDuration)}
+                                {module.lessons.length} {t("hero.lessons")} • {formatDuration(moduleDuration)}
                             </small>
 
                           </div>

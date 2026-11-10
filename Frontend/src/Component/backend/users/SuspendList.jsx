@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Header from "../../Common/Header";
-import Sidebar from "../../Common/Sidebar";
 import { apiUrl, token } from "../../Common/http";
 import { Link } from "react-router-dom";
 import { DASHBOARD_ROUTES, USER_ROUTES } from "../../../constants/nevigation/routes";

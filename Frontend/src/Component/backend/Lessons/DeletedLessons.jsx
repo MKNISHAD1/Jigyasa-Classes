@@ -4,15 +4,11 @@ import { apiUrl, token } from "../../Common/http";
 import { toast } from "react-toastify";
 import DataTable from "react-data-table-component";
 import { Link, useParams } from "react-router-dom";
-import Header from "../../Common/Header";
-import Sidebar from "../../Common/Sidebar";
-import HeaderUi from "../../Common/CommonUI/HeaderUi";
-import FooterUi from "../../Common/CommonUI/FooterUi";
 import ActionButtons from "../../Common/CommonUI/ActionButtonsUi";
 import ConfirmationDialogBoxUi from "../../Common/CommonUI/ConfirmationDialogBoxUi";
 import { faAngleRight, faArrowLeft, faRotate, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { COURSE_ROUTES, DASHBOARD_ROUTES } from "../../../constants/nevigation/routes";
+import { COURSE_ROUTES } from "../../../constants/nevigation/routes";
 
 const DeletedLessons = () => {
   const { courseId } = useParams();

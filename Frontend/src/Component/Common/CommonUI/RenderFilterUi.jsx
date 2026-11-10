@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next';
 
 const RenderFilterUi = ({
   categories,
@@ -16,20 +17,46 @@ const RenderFilterUi = ({
   setOrder,
   handleClearFilters,
 }) => {
-  
 
+  const { t } = useTranslation("allcourses");
+  
+  const allCategoriesSelected =
+    categories.length > 0 &&
+    selectedCategories.length === categories.length;
+
+  const handleSelectAllCategories = () => {
+    if (allCategoriesSelected) {
+      setSelectedCategories([]);
+    } else {
+      setSelectedCategories(categories.map((category) => category.id));
+    }
+  };
+
+  const allDifficultySelected =
+    difficultyLevels.length > 0 &&
+    difficulty.length === difficultyLevels.length;
+
+  const handleSelectAllDifficulty = () => {
+    if (allDifficultySelected) {
+      setDifficulty([]);
+    } else {
+      setDifficulty(difficultyLevels.map((level) => level.value));
+    }
+  };
     
   return (
     <>
-      <h5 className='text-center Filter_Group fw-semibold d-none d-lg-block'> <span>Filter</span> Courses</h5>
+      <h5 className='text-center Filter_Group fw-semibold d-none d-lg-block'>
+         <span>{t("filters.title")}</span> {t("filters.course")}
+      </h5>
         {/* Search */}
         <div className="Filter_Group">
-          <label className='Filter_Group_Title'>Search</label>
+          <label className='Filter_Group_Title'>{t("filters.search")}</label>
 
           <input
             type="text"
             className="form-control"
-            placeholder="Search courses..."
+            placeholder={t("search.placeholder")}
             value={search}
             onChange={(e) =>
               setSearch(e.target.value)
@@ -39,36 +66,66 @@ const RenderFilterUi = ({
 
         {/* Categories */}
         <div className="Filter_Group">
-          <label className='Filter_Group_Title'>Categories</label>
+          <label className='Filter_Group_Title'>{t("filters.categories")}</label>
 
-            {categories.map((category) => (
-              <label
-                  htmlFor={`category-${category.id}`}
-                  className="form-check Filter_Item"
-              >
-                <input
-                    id={`category-${category.id}`}
-                    className="form-check-input"
-                    type="checkbox"
-                    checked={selectedCategories.includes(category.id)}
-                    onChange={() =>
-                        handleCategoryChange(category.id)
-                    }
-                />
+          {/* Select All checkbox  */}
+          <label className="form-check Filter_Item">
+            <input
+              type="checkbox"
+              className="form-check-input"
+              checked={allCategoriesSelected}
+              onChange={handleSelectAllCategories}
+            />
 
-                <span className="form-check-label">
-                    {category?.name?.[i18n.language] ??
-                        category?.name?.en}
-                </span>
-              </label>
-            ))}
+            <span className="form-check-label">
+              {t("filters.selectAll")}
+            </span>
+          </label>
+
+          {/* Categories check box */}
+          {categories.map((category) => (
+            <label
+                htmlFor={`category-${category.id}`}
+                className="form-check Filter_Item"
+            >
+              <input
+                  id={`category-${category.id}`}
+                  className="form-check-input"
+                  type="checkbox"
+                  checked={selectedCategories.includes(category.id)}
+                  onChange={() =>
+                      handleCategoryChange(category.id)
+                  }
+              />
+
+              <span className="form-check-label">
+                  {category?.name?.[i18n.language] ??
+                      category?.name?.en}
+              </span>
+            </label>
+          ))}
         
         </div>
 
         {/* Difficulty Level  */}
         <div className="Filter_Group">
-          <label className="Filter_Group_Title"> Difficulty </label>
+          <label className="Filter_Group_Title"> {t("filters.difficulty")} </label>
 
+          {/* Select All checkbox  */}
+          <label className="form-check Filter_Item">
+            <input
+              type="checkbox"
+              className="form-check-input"
+              checked={allDifficultySelected}
+              onChange={handleSelectAllDifficulty}
+            />
+
+            <span className="form-check-label">
+              {t("filters.selectAll")}
+            </span>
+          </label>
+
+          {/* Difficulty check box */}
           {difficultyLevels.map((level) => (
               <label
                 key={level.value}
@@ -97,7 +154,7 @@ const RenderFilterUi = ({
           className="Primary_Button w-100 mt-4"
           onClick={handleClearFilters}
         >
-          Clear Filters
+          {t("filters.clear")}
         </button>
     </>
   )

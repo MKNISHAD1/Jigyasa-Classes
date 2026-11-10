@@ -3,7 +3,7 @@ import HeaderUi from '../../Common/CommonUI/HeaderUi'
 import FooterUi from '../../Common/CommonUI/FooterUi'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFile } from '@fortawesome/free-regular-svg-icons'
-import { faAngleLeft, faAngleRight, faClockRotateLeft, faClose, faUserGroup } from '@fortawesome/free-solid-svg-icons'
+import { faAngleLeft, faAngleRight, faClockRotateLeft, faClose, faFilter, faSearch, faUserGroup } from '@fortawesome/free-solid-svg-icons'
 import herocourses from '../../../assets/images/courses1.png'
 import PageNotFound from '../../../assets/images/not-found.jpeg'
 import { useTranslation } from 'react-i18next'
@@ -18,7 +18,8 @@ import CourseDiscoverySectionUi from '../../Common/CommonUI/CourseDiscoverySecti
 
 const AllCoursesUi = () => {
 
-const { i18n } = useTranslation();
+const { t, i18n } = useTranslation("allcourses");
+const {t:commonT} = useTranslation("common")
 const { categories } = useCategories();
 const { courses,loading } = useCourses({ status: "published" });
 const [searchParams, setSearchParams] = useSearchParams();
@@ -52,19 +53,19 @@ const [difficulty, setDifficulty] = useState([]);
 const difficultyLevels = [
   {
     value: "Beginner",
-    label: "Beginner",
+    label: commonT("difficulty.beginner"),
   },
   {
     value: "Intermediate",
-    label: "Intermediate",
+    label: commonT("difficulty.intermediate"),
   },
   {
     value: "Advanced",
-    label: "Advanced",
+    label: commonT("difficulty.advanced"),
   },
   {
     value: "All Levels",
-    label: "All Levels",
+    label: commonT("difficulty.allLevels"),
   },
 ];
 
@@ -283,31 +284,29 @@ const courseTo = Math.min(
             <div className="col-lg-6 Hero_Content pb-2">
 
               <small className="Hero_Tag">
-                Our Courses
+                {t("hero.tag")}
               </small>
 
               <h1>
-                Explore Our<span> Courses </span>
+                {t("hero.title")}<span> {t("hero.highlight")} </span>
               </h1>
 
-              <p>
-                High Quality Courses designed by experts, Learn from expert instructor and prepare for your dream career.
-              </p>
+              <p> {t("hero.description")} </p>
 
 
               <div className="Hero_Features">
 
                 <div className="Feature_Item">
-                  <FontAwesomeIcon icon={faClockRotateLeft} /> Updated Content
+                  <FontAwesomeIcon icon={faClockRotateLeft} /> {t("hero.features.updatedContent")}
                 </div>
 
                 <div className="Feature_Item">
-                  <FontAwesomeIcon icon={faUserGroup}/> Expert Faculty
+                  <FontAwesomeIcon icon={faUserGroup}/> {t("hero.features.expertFaculty")}
                 </div>
 
 
                 <div className="Feature_Item">
-                  <FontAwesomeIcon icon={faFile} /> Study Material
+                  <FontAwesomeIcon icon={faFile} /> {t("hero.features.studyMaterial")}
                 </div>
 
               </div>
@@ -318,7 +317,7 @@ const courseTo = Math.min(
             <div className="col-lg-6 Hero_Img text-center">
               <img
                 src={herocourses}
-                alt="Student"
+                alt={t("hero.imageAlt")}
                 className="Student_Img"
               />
 
@@ -338,13 +337,13 @@ const courseTo = Math.min(
             <div className="input-group">
 
               <span className="Input_Group_Text">
-                <i className="fa-solid fa-search"></i>
+                <FontAwesomeIcon icon={faSearch} />
               </span>
 
               <input
                 type="text"
                 className="form-control"
-                placeholder="Search courses..."
+                placeholder={t("search.placeholder")}
                 value={search}
                 onChange={(e) =>
                   setSearch(e.target.value)
@@ -362,8 +361,8 @@ const courseTo = Math.min(
               className="Primary_Button"
               onClick={handleFilterShow}
             >
-              <i className="fa-solid fa-filter me-2"></i>
-              Filter
+              <FontAwesomeIcon icon={faFilter} className='me-2'/>
+              {t("filters.title")}
             </button>
 
             <select
@@ -387,12 +386,12 @@ const courseTo = Math.min(
                 }
               }}
             >
-              <option value="newest">Newest</option>
+              <option value="newest"> {t("sorting.newest")} </option>
               <option value="price-low">
-                Price: Low to High
+                {t("sorting.priceLow")}
               </option>
               <option value="price-high">
-                Price: High to Low
+                {t("sorting.priceHigh")}
               </option>
             </select>
 
@@ -438,10 +437,10 @@ const courseTo = Math.min(
                       style={{ width: "3rem", height: "3rem" }}
                     />
 
-                    <h5 className="mt-3 mb-1">Loading Courses...</h5>
+                    <h5 className="mt-3 mb-1">{t("loading.title")}</h5>
 
                     <small className="text-muted">
-                      Please wait while we fetch courses..
+                      {t("loading.description")}
                     </small>
                   </div>
                 </div>          
@@ -451,15 +450,15 @@ const courseTo = Math.min(
               {isDiscoveryMode && !loading && (
                 <>
                   <CourseDiscoverySectionUi
-                      title="Featured Courses"
-                      subtitle="Handpicked courses to help you learn and grow."
+                      title={t("discovery.featuredTitle")}
+                      subtitle={t("discovery.featuredSubtitle")}
                       courses={featuredCourses}
                       viewAllLink={PUBLIC_ROUTES.COURSES}
                       />
 
                   <CourseDiscoverySectionUi
-                      title="Newly <span> Added Courses </span>"
-                      subtitle="Explore the latest courses added to Jigyasa Classes."
+                      title={t("discovery.newestTitle")}
+                      subtitle={t("discovery.newestSubtitle")}
                       courses={freshlyAddedCourses}
                       viewAllLink={`${PUBLIC_ROUTES.COURSES}?view=catalog&sort=created_at&order=desc`}
                   />
@@ -474,8 +473,11 @@ const courseTo = Math.min(
 
                     {/* Result Count */}
                     <p className="Courses_Count">
-                      Showing matching <strong>{filteredCourses.length}</strong>  course
-                      {filteredCourses.length !== 1 ? "s" : ""} 
+                      {t("results.showingMatching")}{" "}
+                      <strong>{filteredCourses.length}</strong>{" "}
+                      {filteredCourses.length !== 1
+                        ? t("results.courses")
+                        : t("results.course")}
                     </p>
                     
                     {/* Sort Button Desktop */}
@@ -500,17 +502,11 @@ const courseTo = Math.min(
                         }
                       }}
                     >
-                      <option value="newest">
-                        Newest
-                      </option>
+                      <option value="newest"> {t("sorting.newest")} </option>
 
-                      <option value="price-low">
-                        Price: Low to High
-                      </option>
-
-                      <option value="price-high">
-                        Price: High to Low
-                      </option>
+                      <option value="price-low"> {t("sorting.priceLow")} </option>
+                      
+                      <option value="price-high"> {t("sorting.priceHigh")} </option>
                     </select>
                   </div>
                   
@@ -522,21 +518,19 @@ const courseTo = Math.min(
                       <div className="Empty_Courses text-center py-5">
                         <img
                           src={PageNotFound}
-                          alt="No courses found"
+                          alt={t("imageAlt")}
                           className="Empty_Img"
                         />
 
-                        <h4>No Courses Match Your Filters</h4>
+                        <h4> {t("results.emptyTitle")} </h4>
 
-                        <p>
-                          Try another search or clear your filters to see all courses.
-                        </p>
+                        <p> {t("results.emptyDescription")} </p>
 
                         <button
                           className="btn blue-btn"
                           onClick={handleClearFilters}
                         >
-                          Clear Filters
+                          {t("filters.clear")}
                         </button>
                       </div>
                     )}
@@ -554,13 +548,25 @@ const courseTo = Math.min(
                     {!loading && filteredCourses.length > 0 && (
                       <div className="Course_Pagination">
 
-                        <span className="Course_Pagination_Info">
-                            Showing{" "}
-                            <strong>{courseFrom} - {courseTo}</strong>{" "}
-                            of{" "}
-                            <strong>{filteredCourses.length}</strong>{" "}
-                            Course{filteredCourses.length !==1 ? "s":""}
-                        </span>
+                        {
+                          i18n.language ==="hi" ? (
+                            <span className="Course_Pagination_Info">
+                                <strong>{filteredCourses.length}</strong>{" "}
+                                {t("results.course")} {t("results.of")} 
+                                {""} <strong>{courseFrom} - {courseTo}</strong>{" "}
+                                  {t("results.course")} {t("results.showing")}                           
+                             </span>
+
+                          ) : (
+                            <span className="Course_Pagination_Info">
+                              {t("results.showing")} {" "}
+                              <strong>{courseFrom} - {courseTo}</strong>{" "}
+                              {t("results.of")}{" "}
+                              <strong>{filteredCourses.length}</strong>{" "}
+                              {t("results.course")}{filteredCourses.length !==1 ? "s":""}
+                          </span>
+                          )
+                        }
 
                         {totalPages > 1 && (
                             <div className="Course_Pagination_Controls d-flex align-items-center">
@@ -572,7 +578,9 @@ const courseTo = Math.min(
                                     onClick={() => changePage(currentPage - 1)}
                                     aria-label="Previous page"
                                 >
-                                  <small className="d-none d-md-block mx-2"> Previous Page</small>
+                                  <small className="d-none d-md-block mx-2"> 
+                                    {t("pagination.previous")}
+                                  </small>
                                   <FontAwesomeIcon icon={faAngleLeft} className='d-block d-md-none Icon'/>
                                 </button>
 
@@ -587,7 +595,9 @@ const courseTo = Math.min(
                                     onClick={() => changePage(currentPage + 1)}
                                     aria-label="Next page"
                                 >
-                                  <small className="d-none d-md-block mx-2"> Next Page</small>
+                                  <small className="d-none d-md-block mx-2"> 
+                                    {t("pagination.next")}
+                                  </small>
                                   <FontAwesomeIcon icon={faAngleRight} className='d-block d-md-none Icon' />
                                 </button>
 
@@ -612,7 +622,7 @@ const courseTo = Math.min(
             {/* Header Section*/}
             <Offcanvas.Header className="Offcanvas_Header d-flex align-items-center">
 
-              <h3 className="Offcanvas_Header_Title"><span>Filter</span> Course</h3>
+              <h3 className="Offcanvas_Header_Title"><span> {t("filters.title")} </span> {t("filters.course")} </h3>
 
               {/* Canvas Close Button */}
               <button className="Offcanvas_Close_Btn" onClick={handleFilterClose}>

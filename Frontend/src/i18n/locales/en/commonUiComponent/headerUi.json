@@ -1,0 +1,38 @@
+{
+  "Logo": {
+    "title": "JIGYASA CLASSES",
+    "tagline": "Learn • Grow • Succeed"
+  },
+
+  "header": {
+    "home": "Home",
+    "courses": "Courses",
+    "pages": "Pages",
+    "courseCard": "Course Card",
+    "instructors": "Instructors",
+    "becomeInstructor": "Become Instructor",
+    "instructorDetails": "Instructor Details",
+    "faq": "FAQ",
+    "privacyPolicy": "Privacy Policy",
+    "about": "About Us",
+    "contact": "Contact Us",
+    "login": "Login",
+    "signup": "Sign Up",
+    "loginSignup": "Login/SignUp"
+  },
+
+  "welcomeCard": {
+    "welcome": "Welcome",
+    "back": "Back!",
+    "student": "Student",
+    "viewDashboard": "View Dashboard"
+  },
+
+  "motivationCard": {
+    "title": "Keep Learning, Keep Growing!",
+    "description": "Explore new courses and achieve your goals."
+  },
+  
+  "logout": "Log out",
+  "responsiveTest": "Responsive Test"
+}
